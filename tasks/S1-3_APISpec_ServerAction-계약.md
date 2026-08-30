@@ -18,9 +18,9 @@ assignees: ''
 - **공통 규약**: `DS/[DS]hilit-DSv1.1.md` §3.1 — 🔴 **인증·오류 형식·멱등성·속도 제한**
 - **Server Action 배분**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §5.1 — 무엇이 Action이고 무엇이 Route Handler인가
 - **공통 규약(스택)**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §5.2
-- **엔드포인트 목록**: `SRS/[SRS]hilit-SRSv1.7.md` §6.1
-- **비즈니스 규칙**: `SRS/[SRS]hilit-SRSv1.7.md` §6.3
-- 시퀀스: `SRS/[SRS]hilit-SRSv1.7.md` §3.5 · §6.4
+- **엔드포인트 목록**: `SRS/[SRS]hilit-SRSv1.8.md` §6.1
+- **비즈니스 규칙**: `SRS/[SRS]hilit-SRSv1.8.md` §6.3
+- 시퀀스: `SRS/[SRS]hilit-SRSv1.8.md` §3.5 · §6.4
 
 ## ✅ Task Breakdown (실행 계획)
 - [ ] `lib/contracts/` 디렉터리 구성 — 도메인별 파일 분리

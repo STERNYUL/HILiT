@@ -14,13 +14,13 @@ assignees: ''
 
 ## 🔗 References (Spec & Context)
 > 💡 AI Agent & Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.
-- **데이터 모델 (ERD)**: `SRS/[SRS]hilit-SRSv1.7.md` §6.2 — 16 엔티티 관계·타입·CHECK
-- **요구사항이 정한 제약 5건**: `SRS/[SRS]hilit-SRSv1.7.md` §6.2.1 — 🔴 **반드시 읽을 것**
+- **데이터 모델 (ERD)**: `SRS/[SRS]hilit-SRSv1.8.md` §6.2 — 16 엔티티 관계·타입·CHECK
+- **요구사항이 정한 제약 5건**: `SRS/[SRS]hilit-SRSv1.8.md` §6.2.1 — 🔴 **반드시 읽을 것**
 - **속성 상세**: `DS/[DS]hilit-DSv1.1.md` §4.2 — 인덱스·보존 정책·Cascade
 - **명칭 매핑**: `DS/[DS]hilit-DSv1.1.md` §4.3 — PRD ↔ SRS 개명 5건
 - **Prisma 사상**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §4.1
 - **RLS 전제**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §4.2 *(정책 자체는 S1-2)*
-- 비즈니스 규칙: `SRS/[SRS]hilit-SRSv1.7.md` §6.3
+- 비즈니스 규칙: `SRS/[SRS]hilit-SRSv1.8.md` §6.3
 
 ## ✅ Task Breakdown (실행 계획)
 - [ ] Supabase 로컬 스택 기동 · `prisma init` · `DATABASE_URL` 연결 확인
@@ -83,7 +83,7 @@ assignees: ''
 ## ⚙️ Technical & Non-Functional Constraints
 - **PK**: `uuid` (`gen_random_uuid()`) — DS는 ULID를 제안했으나 **Prisma·PG 기본 지원을 우선**해 uuid로 확정
 - **시각**: `TIMESTAMPTZ` · UTC 저장
-- **삭제 정책**: 🔴 **개인정보·영상은 물리 삭제**, 사업 자원만 `deleted_at` 논리 삭제 — 논리 삭제는 REQ-NF-014의 *"전량 삭제"* 를 만족하지 않는다
+- **삭제 정책**: 🔴 **개인정보·영상은 물리 삭제**, 사업 자원만 `deleted_at` 논리 삭제 — 논리 삭제는 REQ-NF-019의 *"전량 삭제"* 를 만족하지 않는다
 - **마이그레이션**: `prisma migrate deploy` 를 **빌드 단계에 넣지 않는다** (롤백 불가) — 수동 실행 후 배포
 - 인덱스: 조회 패턴이 확정되지 않은 곳에 선제 인덱스를 만들지 않는다
 

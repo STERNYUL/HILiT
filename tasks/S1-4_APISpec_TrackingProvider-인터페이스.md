@@ -20,8 +20,8 @@ assignees: ''
 - **후보 조사**: `실행 계획/04_SP-1_API후보조사.md` — 두 후보(AWS · Replicate)의 응답 형태 차이
 - **벤치마크 항목**: `실행 계획/03_스파이크_실행계획.md` §1.3 — B1~B8
 - **연동 시퀀스**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §7.4
-- **요구사항**: `SRS/[SRS]hilit-SRSv1.7.md` REQ-FUNC-002 · 003 · 027 · REQ-NF-003
-- 모델 교체 독립성: `SRS/[SRS]hilit-SRSv1.7.md` §1.5.2 ADR-2
+- **요구사항**: `SRS/[SRS]hilit-SRSv1.8.md` REQ-FUNC-002 · 003 · 027 · REQ-NF-003
+- 모델 교체 독립성: `SRS/[SRS]hilit-SRSv1.8.md` §1.5.2 ADR-2
 
 ## ✅ Task Breakdown (실행 계획)
 - [ ] `lib/inference/types.ts` — **`TrackingProvider` 인터페이스** 정의
