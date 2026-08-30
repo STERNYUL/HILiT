@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SP-1 API 후보 조사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv1" href="#h0">SP-1 사전 조사 — 추론 API 후보</a><a class="lv2" href="#h1">0. 결론</a><a class="lv2" href="#h2">1. Google Cloud Video Intelligence — 🔴 K2 결격</a><a class="lv2" href="#h3">2. AWS Rekognition Video — 🟡 조건부 통과</a><a class="lv2" href="#h4">3. Replicate + SAM 2 — 🟡 조건부 통과</a><a class="lv2" href="#h5">4. 검토했으나 후보에서 제외</a><a class="lv2" href="#h6">5. 🔺 후속 조치</a><a class="lv2" href="#h7">6. 벤치마크 대상 확정</a></nav>
+<main>
+<h1 id="h0">SP-1 사전 조사 — 추론 API 후보</h1>
+<p><strong>목적</strong> <code>03_스파이크_실행계획.md</code> SP-1의 <strong>결격 기준(K1~K5) 1차 판정</strong> — 벤치마크에 올릴 후보를 좁힌다 <strong>조사일</strong> 2026-08-30 · <strong>방법</strong> 공식 문서·약관 확인 <strong>성격</strong> 🔴 <strong>문서 기반 사전 판정이며 실측이 아니다.</strong> 탐지율·오인식률은 SP-1 벤치마크에서만 나온다</p>
+<hr>
+<h2 id="h1">0. 결론</h2>
+<p><strong>결격 기준을 완전히 통과하는 후보는 없다. 둘이 조건부로 남고, 하나는 탈락한다.</strong></p>
+<div class="tw"><table><thead><tr><th>후보</th><th style="text-align:center">K1 학습</th><th style="text-align:center">K2 bbox</th><th style="text-align:center">K3 async</th><th style="text-align:center">K4 정책</th><th style="text-align:center">K5 40분</th><th style="text-align:center">판정</th></tr></thead><tbody><tr><td><strong>Google Cloud Video Intelligence</strong></td><td style="text-align:center">✅</td><td style="text-align:center">🔴</td><td style="text-align:center">🟡</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">🔴 <strong>탈락</strong></td></tr><tr><td><strong>AWS Rekognition Video</strong></td><td style="text-align:center">🟡</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">🟡 <strong>조건부</strong></td></tr><tr><td><strong>Replicate + SAM 2</strong></td><td style="text-align:center">🟢</td><td style="text-align:center">🟡</td><td style="text-align:center">✅</td><td style="text-align:center">🟢</td><td style="text-align:center">🔴</td><td style="text-align:center">🟡 <strong>조건부</strong></td></tr></tbody></table></div>
+<blockquote><h3 class="bq-h">🔴 두 조건부 후보는 <strong>서로 다른 위험을 남긴다</strong></h3>
+<p><strong>AWS는 얼굴로 신원을 풀고, SAM 2는 클릭으로 푼다.</strong></p>
+<div class="tw"><table><thead><tr><th></th><th>AWS</th><th>SAM 2</th></tr></thead><tbody><tr><td>신원 지정 방법</td><td>얼굴 벡터 대조</td><td><strong>화면 클릭 좌표</strong></td></tr><tr><td>남는 위험</td><td>🔴 <strong>생체정보 처리</strong> — REQ-NF-010·017의 무게가 크게 는다</td><td>🔴 <strong>40분 처리 미검증</strong> — 원가·시간 미지수</td></tr></tbody></table></div>
+<p><strong>이것은 기술 선택이 아니라 어느 위험을 감수할지의 선택이다.</strong> SP-1 벤치마크는 성능만이 아니라 <strong>이 판단의 근거</strong>를 만들어야 한다.</p></blockquote>
+<hr>
+<h2 id="h2">1. Google Cloud Video Intelligence — 🔴 K2 결격</h2>
+<h3 id="h3">판정 근거</h3>
+<p><strong>bbox 시계열은 나온다.</strong> <code>includeBoundingBoxes: true</code>로 정규화 좌표(left·top·right·bottom)를 얻는다.</p>
+<p><strong>그런데 "누구인지"가 없다.</strong></p>
+<div class="tw"><table><thead><tr><th>확인 항목</th><th>결과</th></tr></thead><tbody><tr><td>지속 track ID</td><td>🔴 응답에 <strong>없다</strong> — <code>tracks[].segment</code>의 시간 구간만 반환</td></tr><tr><td>대상 지정 입력</td><td>🔴 <strong>불가</strong> — <code>PersonDetectionConfig</code>는 <code>includeBoundingBoxes</code> · <code>includePoseLandmarks</code> · <code>includeAttributes</code> 셋뿐이며 <strong>참조 이미지나 bbox를 입력으로 받지 않는다</strong></td></tr></tbody></table></div>
+<blockquote><p>**REQ-FUNC-002가 요구하는 것은 <em>"사용자가 자기를 1회 지정하면 가려졌다 나타나도 동일 인물로 인식"</em> 이다.<strong> GCVI는 </strong>사람이 있다<strong>를 알려줄 뿐 </strong>그 사람이 당신이다**를 알려주지 않는다.</p>
+<p>이것은 성능 문제가 아니라 <strong>작업 종류가 다른 것</strong>이다. 벤치마크에 올릴 이유가 없다.</p></blockquote>
+<h3 id="h3">통과한 항목 (참고)</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">K</th><th>근거</th></tr></thead><tbody><tr><td style="text-align:center"><strong>K1</strong> ✅</td><td>Service Specific Terms의 Training Restriction — <em>"Google won't use customer data to train or fine-tune any AI/ML models without prior permission"</em></td></tr><tr><td style="text-align:center"><strong>K4</strong> ✅</td><td>Cloud Data Processing Addendum</td></tr><tr><td style="text-align:center"><strong>K5</strong> ✅</td><td><strong>최대 3시간 · 50GB</strong> — 40분·4GB에 여유</td></tr><tr><td style="text-align:center"><strong>K3</strong> 🟡</td><td>Long Running Operation <strong>폴링</strong> 방식. 네이티브 webhook 없음 → Pub/Sub 경유 필요</td></tr></tbody></table></div>
+<hr>
+<h2 id="h3">2. AWS Rekognition Video — 🟡 조건부 통과</h2>
+<h3 id="h4">재식별을 <strong>두 API 조합</strong>으로 푼다</h3>
+<div class="tw"><table><thead><tr><th>단계</th><th>API</th><th>역할</th></tr></thead><tbody><tr><td>① 대상 지정</td><td><code>IndexFaces</code></td><td>사용자 얼굴을 <strong>face collection에 벡터로</strong> 저장</td></tr><tr><td>② 신원 탐지</td><td><code>StartFaceSearch</code></td><td>영상에서 그 벡터와 일치하는 <strong>시각(time)</strong> 반환</td></tr><tr><td>③ 궤적</td><td><code>StartPersonTracking</code></td><td>영상 내 인물별 <strong>bbox 경로</strong> 반환</td></tr></tbody></table></div>
+<p><strong>REQ-FUNC-002의 "1회 지정"이 ①에 대응한다.</strong> GCVI에 없던 부분이 여기 있다.</p>
+<h3 id="h4">🔴 K1 — 기본값이 학습 사용이다</h3>
+<blockquote><p>AWS는 입력을 <em>"solely to provide and maintain the service and, <strong>unless you opt out as provided below</strong>, to improve and develop the quality of Amazon Rekognition and other Amazon machine-learning/artificial-intelligence technologies"</em> 에 사용한다. 옵트아웃은 <strong>AWS Organizations opt-out policy</strong>로 한다.</p></blockquote>
+<p><strong>이것이 파일럿 동의서와 직접 충돌한다.</strong> 클럽·학부모에게 <em>"학습 데이터로 쓰지 않습니다"</em> 라고 약속했는데, <strong>옵트아웃 정책을 설정하지 않으면 그 약속이 자동으로 깨진다.</strong></p>
+<div class="tw"><table><thead><tr><th>조치</th><th style="text-align:center">상태</th></tr></thead><tbody><tr><td>AWS Organizations 옵트아웃 정책 적용</td><td style="text-align:center">🔴 <strong>필수 선행 조건</strong></td></tr><tr><td>적용 여부를 배포 게이트에서 검증</td><td style="text-align:center">🔺 <strong><code>gates/</code> 항목 신설 제안</strong> — §5-2</td></tr></tbody></table></div>
+<blockquote><p><strong>이것은 "설정하면 되는 일"이 아니라 "설정을 잊으면 약속이 깨지는 일"이다.</strong> 사람의 기억이 아니라 <strong>게이트로 강제</strong>해야 한다.</p></blockquote>
+<h3 id="h4">🔴 얼굴 벡터가 새 부담을 만든다</h3>
+<p>face collection은 <strong>생체정보</strong>다. 한국 개인정보보호법상 <strong>민감정보</strong>에 해당하며, REQ-NF-010(얼굴 정보 동의·보관·파기·위탁 4종)의 무게가 크게 늘어난다.</p>
+<p><strong>파일럿 대상이 미성년자라는 점과 겹친다</strong> — REQ-NF-017(영상 내 미성년자)과 결합하면 <strong>법정대리인 동의 + 민감정보 처리 동의</strong>가 동시에 필요해질 수 있다.</p>
+<p>🔺 <strong>법무 검토 항목으로 올린다</strong>(§5-1).</p>
+<h3 id="h4">통과한 항목</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">K</th><th>근거</th></tr></thead><tbody><tr><td style="text-align:center"><strong>K2</strong> ✅</td><td><code>StartPersonTracking</code>이 bbox 반환 · 영상 내 인물 식별자 유지</td></tr><tr><td style="text-align:center"><strong>K3</strong> ✅</td><td>비동기 Job + <strong>SNS 완료 통지</strong> → HTTP 엔드포인트 연결 가능 ⚠️ 세부는 착수 시 확인</td></tr><tr><td style="text-align:center"><strong>K5</strong> ✅</td><td><strong>최대 6시간 · 10GB</strong>(S3 경유) — 40분·4GB 수용</td></tr></tbody></table></div>
+<hr>
+<h2 id="h4">3. Replicate + SAM 2 — 🟡 조건부 통과</h2>
+<h3 id="h5">🟢 상호작용 모델이 요구사항과 정확히 일치한다</h3>
+<p>SAM 2는 <strong>첫 프레임에 클릭한 지점의 대상을 이후 프레임으로 전파</strong>한다.</p>
+<pre class="code"><code>click_coordinates : '[x,y]'   ← 사용자가 자기를 1회 지정
+click_frames      : 0
+click_object_ids  : 'me'
+  ↓
+이후 프레임 전체로 마스크 전파</code></pre>
+<p>**REQ-FUNC-002의 <em>"자기를 1회 지정"</em> 이 문자 그대로 이 모델의 입력이다.** 별도 설계 없이 대응된다.</p>
+<h3 id="h5">🟢 얼굴을 쓰지 않는다 — 가장 큰 이점</h3>
+<p>클릭 좌표와 외형 기반이라 <strong>얼굴 벡터를 생성·저장하지 않는다.</strong> REQ-NF-010의 적용 범위가 <strong>AWS 대비 현저히 좁아진다.</strong></p>
+<blockquote><p><strong>DS v1.0 §4.2의 설계 결정 DD-5</strong>(얼굴 특징 벡터 미저장)와 정합한다. 그 결정이 여기서 실현된다.</p></blockquote>
+<h3 id="h5">🟢 K1·K4 — 보존 정책이 가장 강하다</h3>
+<blockquote><p>API 예측의 <em>"all input parameters, output values, output files, and logs are <strong>automatically removed after an hour</strong>, by default."</em></p></blockquote>
+<p><strong>1시간 후 자동 삭제</strong>는 조사한 셋 중 가장 짧다. 학습 관련 조항은 <strong>파인튜닝용 업로드 데이터</strong>를 가리키며 추론 입력과 구분된다.</p>
+<p>🔺 다만 <em>"추론 입력을 학습에 쓰지 않는다"</em> 는 <strong>명시 문구를 문서에서 확인하지 못했다.</strong> 계약·지원 문의로 확정해야 한다(§5-3).</p>
+<h3 id="h5">🔴 K5 — 40분이 최대 미지수</h3>
+<div class="tw"><table><thead><tr><th>항목</th><th>확인 결과</th></tr></thead><tbody><tr><td>영상 길이 상한</td><td>🔴 <strong>문서에 명시 없음</strong></td></tr><tr><td>표시 실행 시간</td><td>약 44초 · <em>"predict time varies significantly based on the inputs"</em></td></tr><tr><td>표시 단가</td><td>약 <strong>$0.043/run</strong> (L40S)</td></tr></tbody></table></div>
+<p><strong>SAM 2는 짧은 클립을 전제로 설계된 모델이다.</strong> 40분·30fps면 약 <strong>72,000 프레임</strong>이고, 메모리와 시간이 길이에 따라 증가한다.</p>
+<blockquote><p>🔴 <strong>표시된 $0.043은 짧은 입력 기준이며 40분의 원가가 아니다.</strong> 이 값을 REQ-NF-013 산정에 그대로 쓰면 안 된다.</p>
+<p><strong>분할 처리</strong>(구간을 나눠 호출)로 우회할 수 있으나, <strong>구간 경계에서 동일성이 끊긴다</strong> — 재식별이 목적인데 그것을 깨는 우회다. SP-2(Gemini 보조 경로)로 <strong>구간을 먼저 좁히면</strong> 이 문제가 완화된다.</p></blockquote>
+<h3 id="h5">🟡 K2 — 마스크는 나오나 bbox는 파생해야 한다</h3>
+<p>출력이 <strong>마스크(masklet)</strong> 다. bbox는 마스크의 외접 사각형으로 <strong>파생 가능</strong>하나 후처리가 필요하다.</p>
+<blockquote><p><strong>정보량은 오히려 많다</strong> — 마스크가 있으면 구도 보정(REQ-FUNC-006)에서 인물 외곽을 정확히 쓸 수 있다. K2를 <em>"bbox 또는 그로부터 파생 가능한 출력"</em> 으로 완화할 것을 제안한다(§5-4).</p></blockquote>
+<h3 id="h5">🔺 신뢰도 값 — 확인 실패</h3>
+<p><strong>REQ-FUNC-027(저신뢰 후보 제외)에는 구간별 신뢰도가 필요한데, Replicate 모델 페이지에서 확인하지 못했다.</strong> SAM 2는 내부적으로 가림 예측 점수를 갖지만 <strong>API가 노출하는지는 미확인</strong>이다.</p>
+<p>이것이 확인되지 않으면 <strong>B3(신뢰도 값 제공)가 실패</strong>하고 REQ-FUNC-027의 제외 로직이 성립하지 않는다.</p>
+<hr>
+<h2 id="h5">4. 검토했으나 후보에서 제외</h2>
+<div class="tw"><table><thead><tr><th>대상</th><th>제외 사유</th></tr></thead><tbody><tr><td><strong>Modal · RunPod 등 서버리스 GPU</strong></td><td>모델을 <strong>직접 배포·운영</strong>하는 방식이다. C-TEC-005의 <em>"자체 서버 구축 없이"</em> 와 경계가 모호하고, T1이 유지하려던 <strong>운영 부담 없음</strong>이 사라진다</td></tr><tr><td>Azure Video Indexer</td><td>🔺 미조사 — 필요 시 4순위로 추가</td></tr><tr><td>스포츠 전용 추적 서비스</td><td>🔺 미조사 — 대부분 <strong>팀·클럽 계약</strong>이라 개인 대상 API 제공 여부가 불확실(VPS의 ③ 계층 문제와 동일)</td></tr></tbody></table></div>
+<hr>
+<h2 id="h6">5. 🔺 후속 조치</h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>조치</th><th>담당</th><th>시점</th></tr></thead><tbody><tr><td style="text-align:center"><strong>5-1</strong></td><td>🔴 <strong>얼굴 벡터(생체정보) 처리의 법적 요건 검토</strong> — AWS 경로 채택 시 REQ-NF-010·017의 요건이 얼마나 늘어나는가</td><td>법무</td><td><strong>벤치마크 전</strong></td></tr><tr><td style="text-align:center"><strong>5-2</strong></td><td>🔴 <strong>AWS 학습 옵트아웃을 배포 게이트 항목으로</strong> — <code>gates/inference-optout.gate.json</code> 신설</td><td>백엔드 · 법무</td><td>AWS 채택 시</td></tr><tr><td style="text-align:center"><strong>5-3</strong></td><td>Replicate의 <strong>추론 입력 학습 사용 여부</strong> 계약 확인</td><td>사업</td><td>벤치마크 전</td></tr><tr><td style="text-align:center"><strong>5-4</strong></td><td><strong>K2 기준 완화</strong> — <em>"bbox 또는 파생 가능한 출력(마스크 포함)"</em></td><td>제품 아키텍트</td><td>즉시</td></tr><tr><td style="text-align:center"><strong>5-5</strong></td><td><strong>SAM 2의 40분 처리 가능성·원가</strong>를 벤치마크 최우선 항목으로</td><td>AI 리드</td><td>SP-1</td></tr><tr><td style="text-align:center"><strong>5-6</strong></td><td><strong>SAM 2의 신뢰도 노출 여부</strong> 확인 — 없으면 REQ-FUNC-027 재설계</td><td>AI 리드</td><td>SP-1</td></tr></tbody></table></div>
+<hr>
+<h2 id="h7">6. 벤치마크 대상 확정</h2>
+<p><strong>SP-1 벤치마크는 2개 후보로 진행한다.</strong></p>
+<div class="tw"><table><thead><tr><th>후보</th><th>최우선 확인</th></tr></thead><tbody><tr><td><strong>AWS Rekognition</strong> (PersonTracking + FaceSearch)</td><td>B1 탐지율 · B2 오인식률 · <strong>생체정보 부담의 실제 크기</strong></td></tr><tr><td><strong>Replicate + SAM 2</strong></td><td>🔴 <strong>40분 처리 가능 여부·원가</strong> · <strong>신뢰도 노출</strong> · B1 탐지율</td></tr></tbody></table></div>
+<p><strong>GCVI는 제외한다.</strong> 다만 <strong>SP-2(Gemini 보조 경로)의 비교군으로는 유용</strong>하다 — 사람이 있는 구간을 값싸게 좁히는 용도라면 신원 없이도 쓸 수 있다.</p>
+<blockquote><h3 class="bq-h">이 조사가 SP-1에 남기는 것</h3>
+<p><strong>벤치마크 항목이 하나 늘어야 한다.</strong> 원래 B1~B6은 성능·원가뿐이었으나, 두 후보가 <strong>서로 다른 법적 부담</strong>을 남기므로 —</p>
+<p><strong>B7 · 규제 부담</strong> — 채택 시 REQ-NF-010·016·017의 산출물이 몇 종 늘어나는가, 파일럿 동의서를 다시 받아야 하는가.</p>
+<p>성능이 좋아도 <strong>파일럿을 다시 시작해야 한다면 그것이 더 비싸다.</strong></p></blockquote>
+<hr>
+<p><em>이 조사는 공식 문서와 약관에 근거한 사전 판정이며 실측이 아니다. 탐지율·오인식률·40분 처리 원가는 SP-1 벤치마크에서만 확정된다. 문서에 명시되지 않아 확인하지 못한 항목은 🔺로 표시했고 추정으로 채우지 않았다.</em></p>
+<p class="meta">SP-1 API 후보 조사 · 원본 04_SP-1_API후보조사.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>
