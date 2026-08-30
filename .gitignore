@@ -2,3 +2,10 @@ Thumbs.db
 desktop.ini
 .DS_Store
 *.tmp
+
+# IEEE 라이선스 제한 문서 — 공개 배포 불가
+*.pdf
+29148*
+
+# 사내 양식 참조본
+reference/

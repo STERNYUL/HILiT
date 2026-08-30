@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HILiT SRS v1.0 · 소프트웨어 요구사항 명세서</title>
+<style>
+/* HILiT PRD v0.1 — 단일 HTML · 외부 폰트/CDN/이미지 의존 없음 */
+:root{
+  --bg:#111310; --bg-soft:#181b17; --surface:#20231e; --surface-strong:#292d27;
+  --line:#3b4038; --line-soft:#2d312b;
+  --ink:#f6f3ea; --ink-soft:#c6c9be; --ink-muted:#90968a;
+  --mint:#b9f0d5; --mint-soft:#d9f8e9; --mint-deep:#5eb58d; --brown:#4b2d20;
+  --amber:#e7bf75; --danger:#df8a7d; --violet:#b9b6ef; --sky:#9fd2ef;
+  --font-sans:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-display:"Arial Black","Pretendard","Noto Sans KR",sans-serif;
+  --font-mono:"D2Coding","Consolas","Menlo",monospace;
+  --s-2:.68rem; --s-1:.8rem; --s0:.94rem; --s1:1.12rem; --s2:1.45rem; --s3:2rem; --s4:2.7rem;
+  --sp1:.35rem; --sp2:.6rem; --sp3:.9rem; --sp4:1.25rem; --sp5:1.75rem; --sp6:2.6rem;
+  --r-s:.6rem; --r-m:1rem; --r-l:1.5rem;
+  --rail:15.5rem; --max:74rem;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color-scheme:dark;scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{
+  margin:0;padding:0;
+  background:radial-gradient(circle at 88% 4%,color-mix(in srgb,var(--mint-deep) 10%,transparent),transparent 34rem),var(--bg);
+  color:var(--ink);font-family:var(--font-sans);font-size:var(--s0);line-height:1.62;letter-spacing:-.02em;
+}
+h1,h2,h3,h4,h5,p,ul,ol,figure,blockquote{margin:0}
+ul,ol{padding-left:1.15rem}
+h1,h2,h3,h4,h5,li,td,th,strong,b,blockquote,caption,summary,.kb{word-break:keep-all;overflow-wrap:break-word}
+h1,h2,h3,h4{text-wrap:balance}
+a{color:var(--sky)}
+svg{display:block;max-width:100%}
+:focus-visible{outline:.16rem solid var(--mint);outline-offset:.2rem}
+
+/* ---------- 좌측 레일 ---------- */
+.rail{
+  position:fixed;inset:0 auto 0 0;z-index:30;width:var(--rail);
+  display:flex;flex-direction:column;gap:var(--sp3);
+  padding:var(--sp4) var(--sp3);border-right:1px solid var(--line-soft);
+  background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(1rem);overflow-y:auto;
+}
+.rail-brand{display:flex;align-items:center;gap:.55rem}
+.rail-brand svg{width:2.5rem;flex:none}
+.rail-brand b{font-size:var(--s-1);line-height:1.25;color:var(--ink-soft)}
+.rail-brand b small{display:block;color:var(--ink-muted);font-size:var(--s-2);font-weight:600}
+.rail-nav{display:grid;gap:.15rem;margin-top:var(--sp2)}
+.rail-nav a{
+  display:grid;grid-template-columns:1.6rem 1fr;gap:.4rem;align-items:baseline;
+  padding:.4rem .5rem;border-radius:var(--r-s);color:var(--ink-soft);font-size:var(--s-1);
+  text-decoration:none;border:1px solid transparent;transition:background-color 150ms var(--ease)
+}
+.rail-nav a b{color:var(--mint-deep);font-variant-numeric:tabular-nums;font-size:var(--s-2)}
+.rail-nav a:hover{background:var(--surface)}
+.rail-nav a.is-current{background:var(--surface-strong);border-color:var(--line);color:var(--ink)}
+.rail-nav a.is-current b{color:var(--mint)}
+.rail-foot{margin-top:auto;padding-top:var(--sp3);border-top:1px solid var(--line-soft);color:var(--ink-muted);font-size:var(--s-2);line-height:1.5}
+.brand-defs{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.brand-mark__field{fill:var(--mint)}
+.brand-mark__spark{fill:var(--ink)}
+.brand-mark__letter{fill:var(--brown)}
+
+/* ---------- 본문 ---------- */
+.doc{margin-left:var(--rail);padding:clamp(1.8rem,3.4vw,3.6rem) clamp(1.2rem,4vw,4rem) 6rem}
+.doc-inner{width:min(100%,var(--max));margin:0 auto;display:grid;gap:var(--sp6)}
+
+/* 표지 */
+.cover{display:grid;gap:var(--sp4);padding-bottom:var(--sp5);border-bottom:1px solid var(--line)}
+.cover-wordmark{width:clamp(9rem,20vw,13rem);overflow:visible}
+.cover-wordmark__field{fill:var(--mint-soft)}
+.cover-wordmark__detail{fill:var(--mint);opacity:.7}
+.cover h1{font-family:var(--font-display);font-size:clamp(1.8rem,1.3rem + 2.1vw,3rem);line-height:1.14;letter-spacing:-.045em;max-width:20ch}
+.cover h1 em{color:var(--mint);font-style:normal}
+.cover-lead{max-width:60ch;color:var(--ink-soft);font-size:var(--s1)}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.1rem;border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden;background:var(--line-soft)}
+.meta-cell{display:grid;gap:.2rem;padding:var(--sp3) var(--sp3);background:var(--bg-soft)}
+.meta-cell b{color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.05em}
+.meta-cell span{font-size:var(--s-1);line-height:1.45}
+
+/* 섹션 */
+.sec{display:grid;gap:var(--sp4);scroll-margin-top:1.5rem}
+.sec-head{display:grid;gap:.45rem;padding-bottom:var(--sp2);border-bottom:.14rem solid var(--line)}
+.sec-num{display:flex;align-items:center;gap:.6rem;color:var(--mint);font-size:var(--s-1);font-weight:900;letter-spacing:.09em}
+.sec-num::before{content:"";width:1.9rem;height:.14rem;background:var(--mint)}
+.sec h2{font-family:var(--font-display);font-size:var(--s3);line-height:1.2;letter-spacing:-.038em;max-width:30ch}
+.sec h3{font-size:var(--s1);line-height:1.35;color:var(--ink)}
+.sec h3 .kb{color:var(--mint)}
+.sec h4{font-size:var(--s0);line-height:1.4;color:var(--ink-soft)}
+.block{display:grid;gap:var(--sp3)}
+.lead{max-width:76ch;color:var(--ink-soft)}
+
+/* 쉬운 말 상자 */
+.easy{
+  display:grid;gap:.4rem;padding:var(--sp3) var(--sp4);
+  border-left:.22rem solid var(--mint);border-radius:0 var(--r-s) var(--r-s) 0;background:var(--bg-soft)
+}
+.easy b{color:var(--mint);font-size:var(--s-2);font-weight:900;letter-spacing:.06em}
+.easy p{color:var(--ink-soft);font-size:var(--s-1);line-height:1.6}
+.note{padding:var(--sp3) var(--sp4);border-left:.2rem solid var(--amber);background:var(--bg-soft);color:var(--ink-muted);font-size:var(--s-1);line-height:1.58}
+.note b{color:var(--amber)}
+.note.danger{border-left-color:var(--danger)}
+.note.danger b{color:var(--danger)}
+
+/* 표 */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-m)}
+table{width:100%;border-collapse:collapse;font-size:var(--s-1)}
+table.wide{min-width:58rem}
+table.mid{min-width:44rem}
+caption{padding:.55rem .8rem;color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.05em;text-align:left}
+thead th{padding:.55rem .7rem;background:var(--surface-strong);color:var(--ink-soft);font-size:var(--s-2);font-weight:900;letter-spacing:.04em;text-align:left;vertical-align:bottom}
+tbody td,tbody th{padding:.6rem .7rem;border-top:1px solid var(--line-soft);vertical-align:top;line-height:1.5;text-align:left}
+tbody th{font-weight:800;color:var(--ink)}
+tbody tr:nth-child(odd) td,tbody tr:nth-child(odd) th{background:var(--bg-soft)}
+td b,th b{color:var(--mint)}
+td .bad{color:var(--danger);font-weight:800}
+td .good{color:var(--mint);font-weight:800}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 태그 */
+.tag{display:inline-flex;align-items:center;gap:.25rem;padding:.14rem .45rem;border:1px solid var(--line);border-radius:999px;font-size:var(--s-2);font-weight:800;white-space:nowrap;color:var(--ink-soft)}
+.tag.mint{border-color:var(--mint-deep);color:var(--mint)}
+.tag.amber{border-color:var(--amber);color:var(--amber)}
+.tag.danger{border-color:var(--danger);color:var(--danger)}
+.tag.sky{border-color:var(--sky);color:var(--sky)}
+.tag.violet{border-color:var(--violet);color:var(--violet)}
+.tag.solid{background:var(--mint);border-color:var(--mint);color:var(--bg)}
+.tags{display:flex;flex-wrap:wrap;gap:.3rem}
+
+/* 카드 */
+.cards{display:grid;gap:var(--sp3)}
+.cards[data-c="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cards[data-c="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cards[data-c="4"]{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{display:grid;align-content:start;gap:var(--sp2);padding:var(--sp4);border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface)}
+.card.soft{background:var(--bg-soft)}
+.card h4{font-size:var(--s0);line-height:1.35;color:var(--ink)}
+.card p{color:var(--ink-soft);font-size:var(--s-1);line-height:1.55}
+.card ul{display:grid;gap:.25rem;color:var(--ink-soft);font-size:var(--s-1);line-height:1.5}
+.card ul li::marker{color:var(--ink-muted)}
+
+/* KPI 카드 */
+.kpi{display:grid;gap:.3rem;padding:var(--sp4);border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface)}
+.kpi.north{border-color:var(--mint-deep);background:linear-gradient(150deg,color-mix(in srgb,var(--mint) 12%,var(--surface)),var(--bg-soft))}
+.kpi b.k-label{color:var(--ink-muted);font-size:var(--s-2);font-weight:900;letter-spacing:.06em}
+.kpi .k-name{font-size:var(--s0);font-weight:800;line-height:1.35}
+.kpi .k-val{font-family:var(--font-display);font-size:var(--s2);line-height:1.1;letter-spacing:-.03em;color:var(--mint)}
+.kpi .k-sub{color:var(--ink-muted);font-size:var(--s-2);line-height:1.5}
+
+/* 스토리 */
+.story{display:grid;gap:var(--sp3);padding:var(--sp4);border:1px solid var(--line);border-left-width:.32rem;border-left-color:var(--mint-deep);border-radius:var(--r-m);background:var(--surface)}
+.story-head{display:grid;gap:.35rem;padding-bottom:var(--sp2);border-bottom:1px solid var(--line-soft)}
+.story-id{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.story-id strong{font-family:var(--font-display);font-size:var(--s0);letter-spacing:-.02em;color:var(--mint)}
+.story-sent{font-size:var(--s0);font-weight:750;line-height:1.5}
+.story-sent i{color:var(--mint);font-style:normal}
+.ac{display:grid;gap:var(--sp2)}
+.ac-row{display:grid;grid-template-columns:2.6rem 1fr;gap:var(--sp2);padding:var(--sp2) var(--sp3);border-radius:var(--r-s);background:var(--bg-soft)}
+.ac-row>b{color:var(--mint);font-size:var(--s-2);font-weight:900;padding-top:.15rem}
+.gwt{display:grid;gap:.22rem;font-size:var(--s-1);line-height:1.55}
+.gwt span{display:grid;grid-template-columns:3.4rem 1fr;gap:.5rem}
+.gwt span>i{font-style:normal;color:var(--ink-muted);font-weight:800;font-size:var(--s-2);letter-spacing:.05em;padding-top:.12rem}
+.gwt em{font-style:normal;color:var(--mint);font-weight:800;font-variant-numeric:tabular-nums}
+
+/* 다이어그램 */
+figure.dg{display:grid;gap:var(--sp2);margin:0;padding:var(--sp4);border:1px solid var(--line);border-radius:var(--r-m);background:var(--bg-soft)}
+figure.dg figcaption{color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.05em}
+.dg-scroll{overflow-x:auto}
+.dg-scroll svg{min-width:38rem}
+.dg text{font-family:var(--font-sans);fill:var(--ink)}
+details.src{border:1px solid var(--line-soft);border-radius:var(--r-s);background:var(--surface)}
+details.src>summary{cursor:pointer;padding:.45rem .7rem;color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.04em;list-style:none}
+details.src>summary::-webkit-details-marker{display:none}
+details.src>summary::before{content:"▸ ";color:var(--mint-deep)}
+details.src[open]>summary::before{content:"▾ "}
+details.src pre{margin:0;padding:.7rem .9rem;border-top:1px solid var(--line-soft);overflow-x:auto;color:var(--ink-soft);font-family:var(--font-mono);font-size:var(--s-2);line-height:1.55;white-space:pre}
+
+/* 기타 */
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp3)}
+.stack{display:grid;gap:var(--sp3)}
+hr.rule{border:0;border-top:1px solid var(--line-soft);margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:.55rem;color:var(--ink-muted);font-size:var(--s-2)}
+.legend span{display:inline-flex;align-items:center;gap:.28rem}
+.dot{width:.55rem;height:.55rem;border-radius:50%;flex:none}
+.top{position:fixed;right:1.1rem;bottom:1.1rem;z-index:40;padding:.55rem .85rem;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink-soft);font-size:var(--s-2);font-weight:800;cursor:pointer}
+.top:hover{border-color:var(--mint-deep);color:var(--mint)}
+.mobile-head{display:none}
+
+@media (max-width:78rem){
+  .cards[data-c="4"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:64rem){
+  .cards[data-c="3"],.cards[data-c="2"],.split{grid-template-columns:1fr}
+}
+@media (max-width:52rem){
+  .rail{display:none}
+  .doc{margin-left:0;padding-top:4.6rem}
+  .mobile-head{display:flex;position:fixed;z-index:35;inset:0 0 auto;height:3.5rem;align-items:center;gap:.6rem;padding:0 1rem;border-bottom:1px solid var(--line-soft);background:var(--bg)}
+  .mobile-head svg{width:2.1rem;flex:none}
+  .mobile-head strong{flex:1;font-size:var(--s-1);color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cards[data-c="4"]{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:1ms!important;scroll-behavior:auto!important}}
+@media print{.rail,.top,.mobile-head{display:none}.doc{margin-left:0}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>.fig{margin:1.1rem 0;padding:1.2rem .8rem;background:#F7F4EF;border:1px solid #E3DCD2;border-radius:.7rem;overflow-x:auto}.fig .mermaid{background:transparent;text-align:center}.fig .mermaid, .fig .mermaid *{color:#2E2119 !important}.fig .mermaid .edgeLabel{background:#F7F4EF !important}pre.src{white-space:pre-wrap;font-size:.8rem;background:var(--bg-soft,#f6f3ef);padding:.9rem 1.1rem;border-radius:.6rem;overflow-x:auto}h4{margin:1.4rem 0 .5rem;font-size:1rem;color:var(--mint-deep,#33A992)}.meta-cell span{overflow-wrap:anywhere;word-break:break-word;line-height:1.5}.meta-cell code{font-size:.72rem}.doc-divider{margin:3rem 0 1.5rem;text-align:center;border-top:1px solid var(--line,#E7DFD5);}.doc-divider span{display:inline-block;transform:translateY(-.85em);padding:0 1.2rem;background:var(--bg,#0f1512);color:var(--mint-deep,#33A992);font-weight:800;letter-spacing:.05em}</style>
+</head>
+<body>
+
+<svg class="brand-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="hilit-wordmark-shape" viewBox="0 0 700 210">
+      <path class="brand-mark__letter" d="M67 52 Q66 42 77 41 L104 39 Q114 38 115 50 L121 94 L162 90 L157 46 Q156 36 167 35 L194 33 Q204 32 205 44 L217 160 Q218 171 207 173 L181 176 Q170 177 169 165 L165 122 L126 127 L132 169 Q133 180 122 181 L95 184 Q84 184 82 172 Z"/>
+      <path class="brand-mark__letter" d="M271 51 Q270 42 280 41 L305 41 Q315 41 315 52 L313 165 Q313 176 302 176 L278 175 Q267 175 268 164 Z"/>
+      <path class="brand-mark__letter" d="M356 50 Q356 39 367 40 L393 42 Q404 43 403 54 L398 150 L446 154 Q457 155 456 166 L454 183 Q453 193 442 192 L365 184 Q354 183 355 172 Z"/>
+      <path class="brand-mark__letter" d="M493 70 Q492 60 503 59 L527 58 Q538 58 538 69 L536 166 Q536 176 525 177 L502 177 Q491 177 492 166 Z"/>
+      <path class="brand-mark__letter" d="M493 27 Q492 16 503 15 L527 14 Q538 14 539 25 L539 42 Q539 52 528 53 L503 53 Q492 53 492 42 Z"/>
+      <path class="brand-mark__letter" d="M565 48 Q565 37 576 38 L665 42 Q676 43 675 54 L673 73 Q672 83 661 82 L633 80 L628 171 Q627 182 616 181 L590 178 Q579 177 580 166 L585 77 L576 77 Q565 76 565 65 Z"/>
+    </symbol>
+    <symbol id="hilit-app-mark" viewBox="0 0 100 100">
+      <rect class="brand-mark__field" x="6" y="6" width="88" height="88" rx="24"/>
+      <path class="brand-mark__spark" d="M27 18 L31 22 L27 26 L23 22 Z M73 18 L77 22 L73 26 L69 22 Z M27 74 L31 78 L27 82 L23 78 Z M73 74 L77 78 L73 82 L69 78 Z"/>
+      <circle class="brand-mark__spark" cx="18" cy="50" r="2.5"/>
+      <circle class="brand-mark__spark" cx="82" cy="50" r="2.5"/>
+      <use href="#hilit-wordmark-shape" x="14" y="35" width="72" height="24"/>
+    </symbol>
+  </defs>
+</svg>
+
+<aside class="rail" aria-label="문서 목차">
+  <div class="rail-brand">
+    <svg viewBox="0 0 100 100" role="img" aria-label="HILiT 앱 로고"><use href="#hilit-app-mark"/></svg>
+    <b>HILiT SRS v1.0<small>소프트웨어 요구사항 명세서</small></b>
+  </div>
+  <nav class="rail-nav" id="railNav">
+    <a href="#s1"><b>01</b><span>서론</span></a>
+    <a href="#s2"><b>02</b><span>이해관계자</span></a>
+    <a href="#s3"><b>03</b><span>시스템 맥락 및 인터페이스</span></a>
+    <a href="#s4"><b>04</b><span>구체적 요구사항</span></a>
+    <a href="#s5"><b>05</b><span>추적성 매트릭스</span></a>
+    <a href="#s6"><b>06</b><span>부록</span></a>
+    <a href="#s7"><b>07</b><span>향후 개선 사항</span></a>
+    <a href="#s8"><b>08</b><span>제품 목표 및 성공 지표</span></a>
+    <a href="#s9"><b>09</b><span>사용자 특성</span></a>
+    <a href="#s10"><b>10</b><span>검증</span></a>
+    <a href="#s11"><b>11</b><span>운영 시나리오 및 상세 수용 기준</span></a>
+    <a href="#s12"><b>12</b><span>시스템 모드 및 상태</span></a>
+    <a href="#s13"><b>13</b><span>가정, 의존성 및 제약</span></a>
+  </nav>
+  <div class="rail-foot">
+    좌우 방향키로 이전·다음 장으로 이동한다.<br>
+    <b style="color:var(--mint-deep)">민트색</b> 수치는 확정 지표,
+    <b style="color:var(--amber)">주황색</b> 표시는 초안 또는 미정이다.
+  </div>
+</aside>
+
+<header class="mobile-head">
+  <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#hilit-app-mark"/></svg>
+  <strong>HILiT SRS v1.0 · 소프트웨어 요구사항 명세서</strong>
+</header>
+
+<main class="doc">
+<div class="doc-inner">
+
+<!-- ================= 표지 ================= -->
+<header class="cover">
+  <svg class="cover-wordmark" viewBox="0 0 360 120" role="img" aria-label="HILiT">
+    <path class="cover-wordmark__field" d="M24 13 Q15 15 14 29 L10 91 Q10 106 27 108 L329 113 Q345 113 347 98 L350 26 Q350 11 333 10 Z"/>
+    <path class="cover-wordmark__detail" d="M25 28 L30 33 L25 38 L20 33 Z M333 83 L338 88 L333 93 L328 88 Z"/>
+    <use href="#hilit-wordmark-shape" x="25" y="22" width="310" height="92"/>
+  </svg>
+  <p class="sec-num">HILiT SRS v1.0 · 소프트웨어 요구사항 명세서</p>
+  <h1>[SRS 문서] HILiT</h1>
+  <p class="cover-lead">
+    이 문서는 무엇을 만들지, 무엇을 만들지 않을지, 그리고 그것이 잘 됐는지를
+    어떤 숫자로 판정할지를 정한 개발 착수 기준 문서다.
+  </p>
+  <div class="meta-grid"><div class="meta-cell"><b>문서 ID</b><span>SRS-HILIT-MVP-001</span></div><div class="meta-cell"><b>개정 버전</b><span>1.0 (확정판)</span></div><div class="meta-cell"><b>판 이력</b><span>v0.1 (PRD v1.0 → 29148 SRS 양식 이관 초안) → <b>v1.0</b> (추적성 매트릭스 30건 확정 · 운영 시나리오 33건에 <code>연결 REQ</code> 부여 · 매트릭스 범위 명문화)</span></div><div class="meta-cell"><b>날짜</b><span>2026-08-29</span></div><div class="meta-cell"><b>표준</b><span>ISO/IEC/IEEE 29148:2018</span></div><div class="meta-cell"><b>원천 문서</b><span><a href="../PRD/hilit-prd-v1_0.md"><code>docs/PRD/hilit-prd-v1_0.md</code></a> (PRD v1.0) · <a href="../VPS/VPS_v0_3.html"><code>docs/VPS/VPS_v0_3.html</code></a> · <a href="../prototype/prototype_v0_6.html"><code>docs/prototype/prototype_v0_6.html</code></a></span></div></div>
+</header>
+
+<!-- ================= 00 한눈에 보기 ================= -->
+<section class="sec" id="s1">
+  <div class="sec-head">
+    <p class="sec-num">서론</p>
+    <h2>서론</h2>
+  </div>
+  <div class="block">
+    <h3>1.1 목적</h3>
+<p class="lead">본 문서는 ISO/IEC/IEEE 29148:2018 표준에 따라, <b>이미 촬영된 장시간 원본 영상에서 사용자 본인을 자동 추적해 하이라이트를 생성하고, 공개 여부와 무관하게 개인 기록으로 보관하는 모바일 애플리케이션</b>의 요구사항을 정의한다.</p>
+<p>제품의 핵심 명제는 다음 한 문장이다.</p>
+<div class="note"><p><b>40분 원본에서 나를 끝까지 추적해 15초 하이라이트를 만들고, 올리지 않아도 내 기록으로 남긴다.</b></p></div>
+  </div>
+  <div class="block">
+    <h3>1.2 범위</h3>
+<p class="lead"><b>포함 (MVP · 요구사항 17건)</b></p>
+<ul><li>휴대폰 갤러리의 <b>장시간 원본 영상(40~50분 · 4GB급) 불러오기</b></li><li><b>사용자 인물 추적</b> — 본인 1회 지정 후 재식별, 등장 구간 자동 탐지</li><li>추적 좌표 기반 <b>크롭·리프레이밍</b>으로 인물 중심 구도 재구성</li><li>장면 후보 제시와 <b>사용자 최종 선택</b>, 합치기·렌더링, 음악 삽입</li><li><b>공개 여부와 분리된 개인 기록 자동 저장</b> 및 기록 단위 공개 범위</li><li><b>소그룹(그룹) 단위 비공개 공유</b> — 인원 상한 20명, 링크 초대(가입자 한정)</li><li>팔로워·팔로잉 관계, 3탭 피드, 좋아요·댓글·신고·공유</li></ul>
+<p><b>제외 (이번 범위 밖)</b></p>
+<ul><li>앱 내 촬영 기능 — 촬영은 이미 사용자 습관이므로 제공하지 않는다</li><li>게시 이후의 결과 문제(팔로워 성장·조회수·수익화)</li><li>한 원본을 여러 사용자가 공동 편집하는 기능 (REQ-FUNC-024, P3)</li><li>앱 내 DM — 카카오톡·문자 링크 공유로 대체</li><li>수익 모델·가격·구독 — 전부 미정</li><li>첫 카테고리(농구·구기) 외 종목 확장 — 시점 미정</li></ul>
+  </div>
+  <div class="block">
+    <h3>1.3 정의, 약어, 축약어</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>용어</th><th>정의</th></tr></thead>
+<tbody>
+<tr><td>원본(Source Video)</td><td>사용자가 이미 촬영해 갤러리에 보관 중인 장시간 영상 (40~50분 · 4GB급)</td></tr>
+<tr><td>기록(Record)</td><td>원본에서 생성된 15초 내외의 완성 결과물. 공개 여부와 무관하게 저장된다</td></tr>
+<tr><td>인물 추적(Person Tracking)</td><td>사용자가 1회 지정한 대상을 영상 전체에서 따라가는 처리. 말하는 사람이 아니라 <b>움직이는 사람</b>을 대상으로 한다</td></tr>
+<tr><td>재식별(Re-identification)</td><td>대상이 가려졌다 다시 나타났을 때 같은 사람으로 인식하는 처리</td></tr>
+<tr><td>리프레이밍(Reframing)</td><td>추적 좌표로 프레임을 다시 구성해 화면 구석의 인물을 중앙·확대 배치하는 처리</td></tr>
+<tr><td>공개 범위(Visibility)</td><td>기록 하나마다 부여되는 노출 범위 — <code>전체공개</code> / <code>그룹에만 공개</code> / <code>나만 보기</code></td></tr>
+<tr><td>그룹(Group)</td><td>비공개 공유 단위. 승인 절차 없이 생성하며 인원 상한은 20명</td></tr>
+<tr><td>Gate A</td><td>인물 추적 정확도 관문. 등장 구간 탐지율 85% 미달 시 이후 공정이 무의미해진다</td></tr>
+<tr><td>Gate B</td><td>개인 기록 공간 관문. 기록 공간이 계정 분리(부계정)를 대체할 만큼 편한지 판정</td></tr>
+<tr><td>IoU</td><td>Intersection over Union — 정답 구간과 탐지 구간의 겹침 비율. 0.5 이상을 정탐으로 본다</td></tr>
+<tr><td>북극성 KPI</td><td>제품 성공을 판정하는 단일 지표. 본 제품은 <b>기록 3편 이상 보유 사용자 수</b></td></tr>
+<tr><td>코호트(Cohort)</td><td>같은 기간에 진입한 사용자 집단. 30일 단위로 전환·잔존을 측정한다</td></tr>
+<tr><td>p95</td><td>95 백분위수 응답 시간</td></tr>
+<tr><td>상태(Status) 표기</td><td><code>Approved</code> = 원천 문서에서 확정 · <code>Proposed</code> = 1년차 가설(실측 전) · <code>Draft</code> = 본 SRS의 초안, 착수 전 팀 확정 필요</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="s2">
+  <div class="sec-head">
+    <p class="sec-num">이해관계자</p>
+    <h2>이해관계자</h2>
+  </div>
+  <div class="block">
+<div class="tw"><table class="wide">
+<thead><tr><th>역할</th><th>이름 / 부서</th><th>책임</th></tr></thead>
+<tbody>
+<tr><td>제품 리드</td><td>HILiT Product</td><td>요구사항 확정 및 우선순위 결정, 북극성 KPI 판정</td></tr>
+<tr><td>제품 아키텍트</td><td>HILiT Product</td><td>요구사항 문서화 및 시스템 구조 결정</td></tr>
+<tr><td>AI 리드</td><td>AI 팀</td><td>인물 추적·리프레이밍 모델 설계, Gate A 판정</td></tr>
+<tr><td>AI 엔지니어</td><td>AI 팀</td><td>탐지·재식별·구도 보정 구현 및 정답셋 회귀 검증</td></tr>
+<tr><td>백엔드 리드</td><td>백엔드 팀</td><td>API·데이터 모델 설계 승인, 파이프라인 완주율 관리</td></tr>
+<tr><td>백엔드 온콜</td><td>백엔드 팀</td><td>기록 저장 성공률·큐 적체 대응 (1차 SLA 보유)</td></tr>
+<tr><td>클라이언트 개발자</td><td>클라이언트 팀</td><td>앱 셸·편집 흐름·피드 화면 구현</td></tr>
+<tr><td>보안 담당자</td><td>보안</td><td>공개 범위 강제 검증, 얼굴 정보 처리 정책 (ADR-11)</td></tr>
+<tr><td>법무 담당자</td><td>법무</td><td>얼굴 정보 동의·보관·파기 절차 승인 — <b>배포 게이트</b></td></tr>
+<tr><td>데이터 담당자</td><td>데이터</td><td>계측 이벤트 스키마 확정 및 지표 산식 구현</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="s3">
+  <div class="sec-head">
+    <p class="sec-num">시스템 맥락 및 인터페이스</p>
+    <h2>시스템 맥락 및 인터페이스</h2>
+  </div>
+  <div class="block">
+<ul><li><b>클라이언트 애플리케이션</b><ol><li>모바일 앱 (iOS / Android) — 촬영 기능 없음, 갤러리 접근 권한 필요</li><li>진입 화면은 로그인 화면이 아니라 <b>팔로잉 탭의 영상 재생</b></li></ol></li><li><b>내부 서비스</b><ul><li>Client Shell : 3탭 내비·편집 흐름·마이페이지 등 앱 화면 계층 (모바일 앱 내부)</li><li>Media Ingest Service : 장시간 원본 업로드·이어올리기·코덱 사전 검증</li><li>Vision Tracking Engine : 추적 대상 지정·재식별·등장 구간 탐지·리프레이밍 (<b>Gate A 판정 대상</b>)</li><li>Highlight Composer : 장면 후보 산출, 사용자 선택 반영, 합치기·렌더링, 음악 삽입</li><li>Record Store Service : 기록 자동 저장, 공개 범위 강제 (<b>Gate B 판정 대상</b>)</li><li>Social Graph Service : 팔로워·팔로잉, 그룹 생성·초대·탈퇴 회수</li><li>Feed Service : 3탭 피드(팔로잉 · 추천 · 그룹) 구성</li><li>Engagement Service : 좋아요·댓글·신고·공유</li><li>Telemetry Service : 계측 이벤트 수집 및 지표 집계</li></ul></li><li><b>외부 시스템</b><ul><li>휴대폰 갤러리 (OS 미디어 라이브러리) — 원본 입력원</li><li>음악 라이브러리 공급처 — 저작권이 정리된 곡만 앱 내 제공 (확보 경로 미정)</li><li>카카오톡 / 문자 — 공유 링크 전달 채널</li><li>GPU 처리 인프라 — 처리 물량이 원가에 직접 비례</li></ul></li></ul>
+    <h4>그림 3-1. 컴포넌트 구성도 (Component Diagram)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — 위에 글로 적은 서비스들이 실제로 어떤 순서로 연결되는지를 그림으로 옮긴 것이다.</p>
+<p><b>읽는 법</b> — 실선 화살표는 데이터가 흐르는 주 경로, 점선은 보조 연결(외부 위탁·이벤트 전송)이다. <b>주황 테두리</b>는 Gate A 판정 대상, <b>노랑 테두리</b>는 Gate B 판정 대상이다. 원통 모양은 우리가 만들지 않는 외부 시스템이다.</p></div>
+<figure class="fig"><pre class="mermaid">flowchart TB
+    subgraph CLIENT["클라이언트 (모바일 앱)"]
+        SHELL["Client Shell&lt;br/&gt;3탭 내비 · 편집 흐름 · 마이페이지"]
+    end
+
+    subgraph EDIT["편집 계층 — 영상 한 편을 만든다"]
+        ING["Media Ingest Service&lt;br/&gt;업로드 · 이어올리기 · 코덱 검증"]
+        VIS["Vision Tracking Engine&lt;br/&gt;대상 지정 · 재식별 · 구간 탐지 · 리프레이밍"]
+        CMP["Highlight Composer&lt;br/&gt;후보 산출 · 선택 반영 · 음악 · 렌더"]
+    end
+
+    subgraph KEEP["기록 계층 — 공개와 무관하게 남긴다"]
+        REC["Record Store Service&lt;br/&gt;기록 저장 · 공개 범위 서버 강제"]
+    end
+
+    subgraph SOCIAL["관계·소비 계층"]
+        SOC["Social Graph Service&lt;br/&gt;팔로우 · 그룹 · 초대링크"]
+        FEED["Feed Service&lt;br/&gt;팔로잉 · 추천 · 그룹 탭"]
+        ENG["Engagement Service&lt;br/&gt;좋아요 · 댓글 · 신고 · 공유"]
+    end
+
+    TEL["Telemetry Service&lt;br/&gt;계측 이벤트 수집 · 지표 집계"]
+
+    GAL[("휴대폰 갤러리")]
+    GPU[("GPU 처리 인프라")]
+    MUS[("음악 라이브러리 공급처")]
+    MSG[("카카오톡 · 문자")]
+
+    GAL --&gt; SHELL
+    SHELL --&gt; ING
+    ING --&gt; VIS
+    VIS --&gt; CMP
+    CMP --&gt; REC
+    SHELL --&gt; FEED
+    FEED --&gt; REC
+    SOC --&gt; REC
+    ENG --&gt; REC
+    SHELL --&gt; SOC
+    SHELL --&gt; ENG
+    VIS -.연산 위탁.-&gt; GPU
+    CMP -.곡 제공.-&gt; MUS
+    ENG -.링크 전달.-&gt; MSG
+    SHELL -.이벤트.-&gt; TEL
+    ING -.이벤트.-&gt; TEL
+    VIS -.이벤트.-&gt; TEL
+    CMP -.이벤트.-&gt; TEL
+    REC -.이벤트.-&gt; TEL
+
+    style VIS fill:#FBEDE4,stroke:#C2673F,stroke-width:2px
+    style REC fill:#FFF3C4,stroke:#8A6A22,stroke-width:2px</pre></figure>
+<p><b>세 계층으로 읽으면 쉽다.</b> ①편집 계층이 영상 한 편을 만들고 → ②기록 계층이 공개 여부와 무관하게 보관하고 → ③관계·소비 계층이 그것을 사람들에게 보여준다. Telemetry는 모든 계층에서 이벤트를 받아 지표를 만든다.</p>
+  </div>
+</section>
+
+<section class="sec" id="s4">
+  <div class="sec-head">
+    <p class="sec-num">구체적 요구사항</p>
+    <h2>구체적 요구사항</h2>
+  </div>
+  <div class="block">
+    <h4>그림 4-1. 유스케이스 다이어그램 (Use Case Diagram)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — "누가 이 시스템으로 무엇을 하는가"를 한 장에 담은 것이다. 아래 요구사항 표를 읽기 전에 전체 그림을 잡는 용도다.</p>
+<p><b>읽는 법</b> — 왼쪽 둥근 상자가 <b>사람(액터)</b>, 가운데 초록 영역이 <b>시스템이 제공하는 기능(유스케이스)</b>, 오른쪽은 사람이 아닌 <b>외부 시스템</b>이다. 각 유스케이스에 붙은 <code>REQ-FUNC-0NN</code>이 §4.1 표의 요구사항 번호와 그대로 대응한다.</p></div>
+<figure class="fig"><pre class="mermaid">flowchart LR
+    subgraph ACTORS[" "]
+        direction TB
+        U1(["기록 생성자&lt;br/&gt;원본을 가진 사용자"])
+        U2(["그룹 멤버"])
+        U3(["팔로워 · 방문자"])
+    end
+
+    subgraph SYS["HILiT 시스템 경계"]
+        direction TB
+        UC1("UC-01 원본 불러오기&lt;br/&gt;REQ-FUNC-001")
+        UC2("UC-02 내 장면 자동 탐색&lt;br/&gt;REQ-FUNC-002·003")
+        UC3("UC-03 하이라이트 선택&lt;br/&gt;REQ-FUNC-004·005")
+        UC4("UC-04 구도 보정·음악·렌더&lt;br/&gt;REQ-FUNC-006·007·008")
+        UC5("UC-05 기록 저장·공개범위 설정&lt;br/&gt;REQ-FUNC-009·010")
+        UC6("UC-06 그룹 만들기·초대·탈퇴&lt;br/&gt;REQ-FUNC-013")
+        UC7("UC-07 피드 보기&lt;br/&gt;REQ-FUNC-011·014")
+        UC8("UC-08 반응·공유&lt;br/&gt;REQ-FUNC-015·016·017")
+        UC9("UC-09 관계 맺기&lt;br/&gt;REQ-FUNC-012")
+    end
+
+    subgraph EXT["외부 · 보조 액터"]
+        direction TB
+        A1(["AI 추적 엔진&lt;br/&gt;시스템 액터"])
+        A2(["휴대폰 갤러리"])
+        A3(["카카오톡 · 문자"])
+    end
+
+    U1 --&gt; UC1 --&gt; UC2 --&gt; UC3 --&gt; UC4 --&gt; UC5
+    U1 --&gt; UC6
+    U1 --&gt; UC9
+    U2 --&gt; UC6
+    U2 --&gt; UC7
+    U3 --&gt; UC7 --&gt; UC8
+    A2 -.원본 제공.-&gt; UC1
+    A1 -.탐지·재식별 수행.-&gt; UC2
+    A1 -.리프레이밍 수행.-&gt; UC4
+    UC8 -.링크 전달.-&gt; A3
+
+    style SYS fill:#F2FBF8,stroke:#33A992
+    style UC2 fill:#FBEDE4,stroke:#C2673F,stroke-width:2px
+    style UC5 fill:#FFF3C4,stroke:#8A6A22,stroke-width:2px</pre></figure>
+<p><b>주황 표시(UC-02)</b>는 실패하면 나머지가 무의미해지는 관문(Gate A)이고, <b>노랑 표시(UC-05)</b>는 이 제품의 핵심 주장인 "올리지 않아도 남는다"가 성립하는 지점(Gate B)이다.</p>
+  </div>
+  <div class="block">
+    <h3>4.1 기능 요구사항</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>제목</th><th>출처</th><th>우선순위</th><th>유형</th><th>검증 방식</th><th>인수 기준</th><th>상태</th><th>담당자</th></tr></thead>
+<tbody>
+<tr><th><b>REQ-FUNC-001</b></th><td>장시간 원본 영상 업로드</td><td>PRD 4-1 (F1)</td><td>Must Have</td><td>Functional</td><td>1) 대용량 업로드 테스트&lt;br&gt;2) 이어올리기 복구 테스트&lt;br&gt;3) QA 검증</td><td>40~50분·4GB급 원본을 업로드할 수 있어야 하며, 네트워크 단절 후 재연결 시 이어올리기로 복구되어야 한다 (재개 성공률 ≥ 99%)</td><td>Approved</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-FUNC-002</b></th><td>추적 대상 지정 및 재식별</td><td>PRD 4-1 (F2a)</td><td>Must Have</td><td>Functional</td><td>1) 재식별 정확도 테스트&lt;br&gt;2) 가림 구간 라벨 정답셋 검증&lt;br&gt;3) QA 검증</td><td>사용자가 자기를 1회 지정하면, 대상이 가려졌다 다시 나타나도 같은 사람으로 인식해야 한다. 재식별 정확도 ≥ 90%, 오인식 ≤ 2%</td><td>Draft</td><td>AI 엔지니어</td></tr>
+<tr><th><b>REQ-FUNC-003</b></th><td>사용자 등장 구간 자동 탐지</td><td>PRD 4-1 (F2b)</td><td>Must Have</td><td>Functional</td><td>1) 정답셋 회귀 배치&lt;br&gt;2) IoU 기반 정탐 판정&lt;br&gt;3) QA 검증</td><td>사람이 표시한 정답 구간 대비 탐지 구간 비율이 <b>85% 이상</b>이어야 한다 (IoU ≥ 0.5를 정탐으로 판정). <b>Gate A 판정 요구사항</b></td><td>Approved</td><td>AI 리드</td></tr>
+<tr><th><b>REQ-FUNC-004</b></th><td>장면 후보 제시</td><td>PRD 4-1 (F3)</td><td>Must Have</td><td>Functional</td><td>1) 후보 산출 테스트&lt;br&gt;2) 온전도 우선순위 검증&lt;br&gt;3) QA 검증</td><td>탐지 결과를 사용자가 판단 가능한 개수의 후보로 좁혀 제시해야 한다. 후보 수 30개는 초안이며 베타 A/B로 확정한다</td><td>Proposed</td><td>AI 엔지니어</td></tr>
+<tr><th><b>REQ-FUNC-005</b></th><td>사용자 장면 선택</td><td>PRD 4-1 (F4)</td><td>Must Have</td><td>Functional</td><td>1) 선택 이벤트 검증&lt;br&gt;2) 자동 확정 차단 테스트&lt;br&gt;3) QA 검증</td><td>최종 선택권은 사람에게 있어야 한다. 사용자의 명시적 선택(<code>selection_confirmed</code>) 없이 렌더링이 시작된 건이 <b>0건</b>이어야 한다</td><td>Approved</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-FUNC-006</b></th><td>사용자 중심 크롭·리프레이밍</td><td>PRD 4-1 (F5a)</td><td>Must Have</td><td>Functional</td><td>1) 주관 평가(5점 척도)&lt;br&gt;2) 출력 해상도 검증&lt;br&gt;3) QA 검증</td><td>화면 구석에 작게 잡힌 대상을 중앙·확대 배치해야 한다. 렌더 직후 5점 척도에서 <b>4점 이상 응답 ≥ 80%</b>, 출력 ≥ 1080×1920</td><td>Approved</td><td>AI 엔지니어</td></tr>
+<tr><th><b>REQ-FUNC-007</b></th><td>음악 라이브러리</td><td>PRD 4-1 (F18a)</td><td>Must Have</td><td>Functional</td><td>1) 곡 선택·삽입 테스트&lt;br&gt;2) 저작권 메타 검증&lt;br&gt;3) QA 검증</td><td>저작권이 정리된 곡만 앱 안에서 제공해야 하며, 사용자가 외부에서 곡을 가져오게 하지 않아야 한다</td><td>Approved</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-FUNC-008</b></th><td>합치기 및 렌더링</td><td>PRD 4-1 (F6)</td><td>Must Have</td><td>Functional</td><td>1) 렌더 시간 측정&lt;br&gt;2) 실패 복구 테스트&lt;br&gt;3) QA 검증</td><td>선택된 장면이 하나의 완성 영상으로 합쳐져야 한다. 렌더 p95 ≤ 90초, 외부 앱 전환 이벤트 0건. 3회 연속 실패 시 선택 결과를 보존하고 원본을 삭제하지 않아야 한다</td><td>Draft</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-FUNC-009</b></th><td>개인 기록 자동 저장</td><td>PRD 4-1 (F7)</td><td>Must Have</td><td>Functional</td><td>1) 저장 성공률 측정&lt;br&gt;2) 공개 범위 결정 전 존재 검증&lt;br&gt;3) QA 검증</td><td>공개 범위를 정하기 <b>전에</b> 이미 기록이 저장돼 있어야 한다. 저장 성공률 ≥ 99.9%, 렌더 성공 대비 기록 누락 0건. <b>Gate B 판정 요구사항</b></td><td>Approved</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-FUNC-010</b></th><td>기록 단위 공개 범위</td><td>PRD 4-1 (F8)</td><td>Must Have</td><td>Functional</td><td>1) 3단계 전환 테스트&lt;br&gt;2) 기본값 검증&lt;br&gt;3) QA 검증</td><td>기록마다 <code>전체공개</code> / <code>그룹에만 공개</code> / <code>나만 보기</code>를 선택할 수 있어야 하며, <b>기본값은 <code>나만 보기</code></b>여야 한다. 공개했다 내려도 기록은 유실되지 않아야 한다</td><td>Approved</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-FUNC-011</b></th><td>앱 셸 — 3탭 내비 · 마이페이지</td><td>PRD 4-1 (F22)</td><td>Must Have</td><td>Functional</td><td>1) 진입 시간 측정&lt;br&gt;2) 탭 전환 테스트&lt;br&gt;3) QA 검증</td><td>앱 진입 시 로그인 화면 없이 <b>팔로잉 탭</b>에서 영상이 재생되어야 한다. 탭은 팔로잉·추천·그룹 셋, 가운데 +버튼이 편집 진입, 마이페이지가 기록 보관함</td><td>Approved</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-FUNC-012</b></th><td>팔로워 · 팔로잉 관계</td><td>PRD 4-1 (F11)</td><td>Must Have</td><td>Functional</td><td>1) 관계 CRUD 테스트&lt;br&gt;2) 공개 범위 경계 검증&lt;br&gt;3) QA 검증</td><td>관계는 <b>공개 기록만</b> 정해야 한다. 팔로우 관계만으로 그룹 공개 기록에 접근한 건이 0건이어야 한다</td><td>Approved</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-FUNC-013</b></th><td>그룹 — 소그룹 공유</td><td>PRD 4-1 (F23)</td><td>Must Have</td><td>Functional</td><td>1) 생성·초대·탈퇴 테스트&lt;br&gt;2) 3경로 노출 차단 검증&lt;br&gt;3) QA 검증</td><td>승인 절차 없이 생성되며 <b>인원 상한 20명</b>(생성자 포함). 그룹 밖에서는 검색·피드·직접 URL 세 경로 모두 노출 0건. 탈퇴 시 해당 멤버 기록을 그룹에서 회수하되 본인 기록에는 남긴다</td><td>Approved</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-FUNC-014</b></th><td>피드 — 팔로잉 · 추천 · 그룹</td><td>PRD 4-1 (F13)</td><td>Must Have</td><td>Functional</td><td>1) 피드 구성 테스트&lt;br&gt;2) 빈 피드 대체 노출 검증&lt;br&gt;3) QA 검증</td><td>MVP는 팔로잉·인기 기준으로 구성한다(취향 설문 반영은 REQ-FUNC-021 이후). 팔로잉이 0명일 때 빈 화면 대신 추천 탭으로 대체 노출해야 한다</td><td>Approved</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-FUNC-015</b></th><td>좋아요</td><td>PRD 4-1 (F19)</td><td>Must Have</td><td>Functional</td><td>1) 반응 기록 테스트&lt;br&gt;2) 공개 범위 연동 검증&lt;br&gt;3) QA 검증</td><td>공개 범위 안에서만 노출되어야 한다. <code>나만 보기</code> 기록에 반응 UI가 붙은 건이 0건이어야 한다</td><td>Approved</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-FUNC-016</b></th><td>댓글 및 신고</td><td>PRD 4-1 (F20)</td><td>Must Have</td><td>Functional</td><td>1) 댓글 CRUD 테스트&lt;br&gt;2) 신고 접수 테스트&lt;br&gt;3) QA 검증</td><td>댓글에 신고 기능이 포함되어야 하며 접수 성공률 ≥ 99%. <b>신고 처리 기준과 운영 주체는 미정</b>이므로 접수까지만 검증 대상으로 한다</td><td>Proposed</td><td>서비스 운영자</td></tr>
+<tr><th><b>REQ-FUNC-017</b></th><td>공유 — 링크 · 카카오톡/메시지</td><td>PRD 4-1 (F21)</td><td>Must Have</td><td>Functional</td><td>1) 링크 생성 테스트&lt;br&gt;2) 공개 범위 승계 검증&lt;br&gt;3) QA 검증</td><td>공유 링크도 <b>기록의 공개 범위를 따라야</b> 한다. 앱 내 DM은 범위에 포함하지 않는다</td><td>Approved</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-FUNC-018</b></th><td>촬영 노하우 기반 구도 규칙</td><td>PRD 4-1 (F5b)</td><td>Should Have</td><td>Functional</td><td>1) 구도 규칙 적용 테스트&lt;br&gt;2) 주관 평가 비교&lt;br&gt;3) QA 검증</td><td>추적 좌표 활용을 넘어 촬영 노하우 기반 구도·앵글 연출을 적용해 결과물 완성도를 높여야 한다</td><td>Proposed</td><td>AI 엔지니어</td></tr>
+<tr><th><b>REQ-FUNC-019</b></th><td>원본 삭제 안내 및 저장공간 회수</td><td>PRD 4-1 (F9)</td><td>Should Have</td><td>Functional</td><td>1) 삭제 안내 노출 테스트&lt;br&gt;2) 실행률 측정&lt;br&gt;3) QA 검증</td><td>결과물 확보 후 원본 삭제를 안내해야 하며, 삭제 실행률 ≥ 50%를 목표로 한다</td><td>Proposed</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-FUNC-020</b></th><td>기록 타임라인 (날짜별 축적 뷰)</td><td>PRD 4-1 (F10)</td><td>Should Have</td><td>Functional</td><td>1) 타임라인 렌더 테스트&lt;br&gt;2) 정렬 검증&lt;br&gt;3) QA 검증</td><td>날짜별로 기록 축적을 확인할 수 있는 뷰를 제공해야 한다</td><td>Proposed</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-FUNC-021</b></th><td>온보딩 카테고리 취향 설문</td><td>PRD 4-1 (F12)</td><td>Should Have</td><td>Functional</td><td>1) 설문 흐름 테스트&lt;br&gt;2) 피드 반영 검증&lt;br&gt;3) QA 검증</td><td>취향 설문 결과가 추천 피드 구성에 반영되어야 한다</td><td>Proposed</td><td>제품 아키텍트</td></tr>
+<tr><th><b>REQ-FUNC-022</b></th><td>카테고리별 조회수 랭킹</td><td>PRD 4-1 (F15)</td><td>Should Have</td><td>Functional</td><td>1) 랭킹 산정 테스트&lt;br&gt;2) 노출 정책 검증&lt;br&gt;3) QA 검증</td><td>시점은 MVP 직후로 확정했으나 <b>도입 여부 자체는 미정</b>이다. 순위 경쟁이 제품 정서와 충돌하는지 먼저 판정한다</td><td>Proposed</td><td>제품 리드</td></tr>
+<tr><th><b>REQ-FUNC-023</b></th><td>선택 데이터 학습 기반 정확도 개선</td><td>PRD 4-1 (F14)</td><td>Could Have</td><td>Functional</td><td>1) 학습 파이프라인 테스트&lt;br&gt;2) 정확도 개선 측정&lt;br&gt;3) QA 검증</td><td>사용자 선택 데이터가 축적되어 탐지 후보의 정확도를 실제로 높여야 한다. 학습 데이터가 사용자 없이는 생기지 않으므로 순서상 후순위다</td><td>Proposed</td><td>AI 리드</td></tr>
+<tr><th><b>REQ-FUNC-024</b></th><td>팀 공유 편집 (한 원본 다중 사용자)</td><td>PRD 4-1 (F16)</td><td>Won't Have (P3)</td><td>Functional</td><td>기획 확정 후 재판정</td><td>팀 계정 · 원본 공유 권한 · 얼굴 정보 동의 · 인원 비례 원가 <b>넷이 전부 미정</b>이므로 본 범위에서 제외한다. MVP에서는 각자 자기 원본을 업로드한다</td><td>Draft</td><td>제품 리드</td></tr>
+<tr><th><b>REQ-FUNC-025</b></th><td>촬영 가이드</td><td>PRD 4-1 (F17)</td><td>Won't Have (P3)</td><td>Functional</td><td>기획 확정 후 재판정</td><td>원본이 없는 사용자를 유입시키기 위한 기능. 본 범위에서 제외한다</td><td>Draft</td><td>제품 리드</td></tr>
+<tr><th><b>REQ-FUNC-026</b></th><td>자막 편집</td><td>PRD 4-1 (F18b)</td><td>Won't Have (P3)</td><td>Functional</td><td>기획 확정 후 재판정</td><td>기획 미정. 음악(REQ-FUNC-007)과 분리해 본 범위에서 제외한다</td><td>Draft</td><td>제품 리드</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>4.2 비기능 요구사항</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>제목</th><th>출처</th><th>우선순위</th><th>유형</th><th>검증 방식</th><th>인수 기준</th><th>상태</th><th>담당자</th></tr></thead>
+<tbody>
+<tr><th><b>REQ-NF-001</b></th><td>앱 진입 응답 시간 ≤ 1.5초</td><td>PRD 5-1</td><td>Must Have</td><td>Performance</td><td>콜드/웜 스타트 부하 테스트</td><td>앱 실행부터 첫 영상 프레임까지 p95 ≤ 1.5초, 빈 피드 노출률 &lt; 5%</td><td>Draft</td><td>클라이언트 개발자</td></tr>
+<tr><th><b>REQ-NF-002</b></th><td>원본 업로드 ≤ 6분 · 이어올리기</td><td>PRD 5-1</td><td>Must Have</td><td>Performance</td><td>LTE 환경 대용량 업로드 테스트</td><td>40분·4GB 원본 업로드 p95 ≤ 6분, 업로드 실패율 &lt; 0.5%, 재개 성공률 ≥ 99%</td><td>Draft</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-NF-003</b></th><td>탐지 처리 시간 ≤ 8분</td><td>PRD 5-1</td><td>Must Have</td><td>Performance</td><td>정답셋 100편 배치 처리 시간 측정</td><td>40분 원본의 탐지 완료 p95 ≤ 8분. 체감 탐색 시간 중앙값 ≤ 5분, p90 ≤ 10분을 만족하기 위한 상한이다</td><td>Draft</td><td>AI 리드</td></tr>
+<tr><th><b>REQ-NF-004</b></th><td>렌더링 시간 ≤ 90초</td><td>PRD 5-1</td><td>Must Have</td><td>Performance</td><td>15초 결과물 렌더 반복 측정</td><td>15초 결과물 렌더 p95 ≤ 90초</td><td>Draft</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-NF-005</b></th><td>조회 API 응답 시간</td><td>PRD 5-1</td><td>Must Have</td><td>Performance</td><td>API 부하 테스트</td><td>피드·목록 API p95 ≤ 400ms, 그룹 멤버 필터 p95 ≤ 300ms, 후보 목록 렌더 p95 ≤ 1초, 그룹 생성 p95 ≤ 500ms</td><td>Draft</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-NF-006</b></th><td>가용성 — 앱 99.5% · AI 99.0%</td><td>PRD 5-2</td><td>Must Have</td><td>Reliability</td><td>월간 가용성 모니터링 및 SLA 검증</td><td>앱 셸·피드·기록 조회 월 가용성 ≥ 99.5%, AI 처리 파이프라인 ≥ 99.0%. 비동기 큐로 처리 지연은 허용하되 <b>유실은 불허</b>한다</td><td>Draft</td><td>백엔드 온콜</td></tr>
+<tr><th><b>REQ-NF-007</b></th><td>기록 저장 성공률 ≥ 99.9%</td><td>PRD 5-2</td><td>Must Have</td><td>Reliability</td><td>저장 성공률 상시 모니터링</td><td>렌더 성공 대비 기록 저장 성공률 ≥ 99.9%. <b>Gate B의 전제이며, 여기서 유실되면 제품의 핵심 주장이 무너진다.</b> 1차 대응 SLA 15분</td><td>Draft</td><td>백엔드 온콜</td></tr>
+<tr><th><b>REQ-NF-008</b></th><td>오류율 및 재시도 정책</td><td>PRD 5-2</td><td>Must Have</td><td>Reliability</td><td>오류 주입 테스트</td><td>API 5xx 오류율 ≤ 0.1%. 처리 실패 시 원본·중간 산출물을 보존한 채 <b>재시도 3회 이상</b> 수행해야 한다</td><td>Draft</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-NF-009</b></th><td>공개 범위 서버 측 강제</td><td>PRD 5-3</td><td>Must Have</td><td>Security</td><td>회귀 테스트 스위트 · 우회 시도 테스트</td><td>공개 범위는 <b>서버에서 강제</b>해야 한다. 클라이언트 필터링만으로는 불충분하다. 조작된 요청의 우회 성공 0건, 감사 로그 기록률 100%, 위반 시도 감지 시 즉시 알림</td><td>Draft</td><td>보안 담당자</td></tr>
+<tr><th><b>REQ-NF-010</b></th><td>얼굴 정보 처리 동의 및 파기</td><td>PRD 5-3 (ADR-11)</td><td>Must Have</td><td>Security</td><td>법무 산출물 체크리스트 승인</td><td>동의 문구 · 보관 기간 · 파기 절차 · 처리 위탁 <b>4종이 전부 승인되기 전 프로덕션 배포 0건</b>. 미승인 시 CI 배포를 차단한다. <b>Gate A 착수 전 결정 필요</b></td><td>Draft</td><td>법무 담당자</td></tr>
+<tr><th><b>REQ-NF-011</b></th><td>저장·전송 암호화</td><td>PRD 5-3</td><td>Must Have</td><td>Security</td><td>주간 스캔 및 핸드셰이크 검사</td><td>영상 저장 시 at-rest 암호화, 전송 구간 TLS 1.2 이상. 미암호화 객체 0건, TLS 1.1 이하 핸드셰이크 0건</td><td>Draft</td><td>보안 담당자</td></tr>
+<tr><th><b>REQ-NF-012</b></th><td>공유 링크 만료 및 회수</td><td>PRD 5-3</td><td>Should Have</td><td>Security</td><td>만료·회수 동작 테스트</td><td>공유 링크 기본 만료 30일, 만료 후 접근 성공 0건, 회수 반영 지연 ≤ 60초</td><td>Draft</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-NF-013</b></th><td>GPU 편당 처리 원가 가드레일</td><td>PRD 5-4 (ADR-05)</td><td>Must Have</td><td>Cost</td><td>처리 물량 대비 원가 추적</td><td>처리 물량은 <b>연 12만 편</b>(1만 명 × 월 1편)에 직접 비례한다. <b>편당 처리 원가 상한이 확정되기 전에는 무제한 업로드를 열지 않는다.</b> 일일 예산 80% 초과 시 알림</td><td>Draft</td><td>백엔드 리드</td></tr>
+<tr><th><b>REQ-NF-014</b></th><td>모니터링 · 알림 · 대응 SLA</td><td>PRD 5-5</td><td>Must Have</td><td>Operability</td><td>알림 발화 테스트 및 대응 훈련</td><td>게이트 지표·저장 성공률·보안 위반·큐 적체·완주율·비용에 대해 <b>알림 기준 · 수신자 · 1차 대응 SLA</b>가 정의되어야 한다 (§10.3 참조)</td><td>Draft</td><td>백엔드 온콜</td></tr>
+<tr><th><b>REQ-NF-015</b></th><td>유지보수성 — 열거형 확장 방식</td><td>PRD 6-1</td><td>Could Have</td><td>Maintainability</td><td>코드 리뷰 및 확장성 테스트</td><td>공개 범위·피드 탭·계측 이벤트 등 분류값을 추가할 때 열거형(enum) 패턴을 통해 코드 변경을 최소화해야 한다</td><td>Draft</td><td>백엔드 리드</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="s5">
+  <div class="sec-head">
+    <p class="sec-num">추적성 매트릭스</p>
+    <h2>추적성 매트릭스</h2>
+  </div>
+  <div class="block">
+<div class="note"><p><b>본 매트릭스의 범위</b> — 1차 출시 대상인 <b>Must Have 요구사항 30건</b>에 한정한다 — 기능 17건(REQ-FUNC-001~017) · 비기능 13건(REQ-NF-001~011 · 013 · 014).</p>
+<p>2차 이후 항목(REQ-FUNC-018~026 · REQ-NF-012·015)은 §4의 우선순위 열을 참조한다. 이 중 <b>REQ-FUNC-024·025·026은 인수 기준이 "기획 확정 후 재판정"</b> 이므로,</p>
+<p>기획 확정 전까지는 모듈·검증 대상을 특정할 수 없어 본 표에 올리지 않는다.</p>
+<p><code>구현 클래스</code> 열의 <b><code>설계 시 확정</code></b> 은 상세 설계 단계에서 채울 자리를 뜻한다 — 임의로 이름을 붙이지 않는다.</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>요구사항 ID</th><th>모듈</th><th>구현 클래스</th><th>테스트 케이스 ID</th></tr></thead>
+<tbody>
+<tr><td>REQ-FUNC-001</td><td>Media Ingest Service</td><td>SourceVideoUploader</td><td>TC-FUNC-001</td></tr>
+<tr><td>REQ-FUNC-002</td><td>Vision Tracking Engine</td><td>SubjectReIdentifier</td><td>TC-FUNC-002</td></tr>
+<tr><td>REQ-FUNC-003</td><td>Vision Tracking Engine</td><td>AppearanceIntervalDetector</td><td>TC-FUNC-003</td></tr>
+<tr><td>REQ-FUNC-004</td><td>Highlight Composer</td><td>CandidateRanker</td><td>TC-FUNC-004</td></tr>
+<tr><td>REQ-FUNC-005</td><td>Highlight Composer</td><td>SelectionController</td><td>TC-FUNC-005</td></tr>
+<tr><td>REQ-FUNC-006</td><td>Vision Tracking Engine</td><td>SubjectReframer</td><td>TC-FUNC-006</td></tr>
+<tr><td>REQ-FUNC-007</td><td>Highlight Composer</td><td>MusicLibraryService</td><td>TC-FUNC-007</td></tr>
+<tr><td>REQ-FUNC-008</td><td>Highlight Composer</td><td>RenderPipeline</td><td>TC-FUNC-008</td></tr>
+<tr><td>REQ-FUNC-009</td><td>Record Store Service</td><td>RecordPersister</td><td>TC-FUNC-009</td></tr>
+<tr><td>REQ-FUNC-010</td><td>Record Store Service</td><td>VisibilityManager</td><td>TC-FUNC-010</td></tr>
+<tr><td>REQ-FUNC-011</td><td>Client Shell</td><td>AppShellNavigator</td><td>TC-FUNC-011</td></tr>
+<tr><td>REQ-FUNC-012</td><td>Social Graph Service</td><td>FollowRelationService</td><td>TC-FUNC-012</td></tr>
+<tr><td>REQ-FUNC-013</td><td>Social Graph Service</td><td>GroupService · GroupInviteLinkService</td><td>TC-FUNC-013</td></tr>
+<tr><td>REQ-FUNC-014</td><td>Feed Service</td><td>FeedComposer</td><td>TC-FUNC-014</td></tr>
+<tr><td>REQ-FUNC-015</td><td>Engagement Service</td><td>ReactionService</td><td>TC-FUNC-015</td></tr>
+<tr><td>REQ-FUNC-016</td><td>Engagement Service</td><td>CommentService · ReportIntake</td><td>TC-FUNC-016</td></tr>
+<tr><td>REQ-FUNC-017</td><td>Engagement Service</td><td>ShareLinkService</td><td>TC-FUNC-017</td></tr>
+<tr><td>REQ-NF-001</td><td>Client Shell</td><td>ColdStartProfiler</td><td>TC-NF-001</td></tr>
+<tr><td>REQ-NF-002</td><td>Media Ingest Service</td><td>설계 시 확정</td><td>TC-NF-002</td></tr>
+<tr><td>REQ-NF-003</td><td>Vision Tracking Engine</td><td>DetectionBenchmarkRunner</td><td>TC-NF-003</td></tr>
+<tr><td>REQ-NF-004</td><td>Highlight Composer</td><td>설계 시 확정</td><td>TC-NF-004</td></tr>
+<tr><td>REQ-NF-005</td><td>Feed Service · Highlight Composer · Social Graph Service</td><td>설계 시 확정</td><td>TC-NF-005</td></tr>
+<tr><td>REQ-NF-006</td><td><b>전 서비스 공통</b></td><td>설계 시 확정</td><td>TC-NF-006</td></tr>
+<tr><td>REQ-NF-007</td><td>Record Store Service</td><td>PersistenceHealthMonitor</td><td>TC-NF-007</td></tr>
+<tr><td>REQ-NF-008</td><td><b>전 서비스 공통</b></td><td>설계 시 확정</td><td>TC-NF-008</td></tr>
+<tr><td>REQ-NF-009</td><td>Record Store Service</td><td>VisibilityEnforcer (서버 측)</td><td>TC-NF-009</td></tr>
+<tr><td>REQ-NF-010</td><td>Vision Tracking Engine · Record Store Service</td><td>설계 시 확정</td><td>TC-NF-010</td></tr>
+<tr><td>REQ-NF-011</td><td><b>전 서비스 공통</b></td><td>설계 시 확정</td><td>TC-NF-011</td></tr>
+<tr><td>REQ-NF-013</td><td>Telemetry Service</td><td>CostGuardrailMonitor</td><td>TC-NF-013</td></tr>
+<tr><td>REQ-NF-014</td><td>Telemetry Service</td><td>AlertDispatcher</td><td>TC-NF-014</td></tr>
+</tbody></table></div>
+<div class="note"><p><b><code>전 서비스 공통</code> 3건에 대하여</b> — REQ-NF-006(가용성) · 008(오류율·재시도) · 011(암호화)은 단일 서비스가 아니라 파이프라인 전 구간에 걸린다.</p>
+<p>특정 서비스 하나를 임의로 지정하면 나머지 서비스가 책임 범위에서 빠지므로 공통으로 표기한다. 검증은 §10의 게이트 판정에서 전 구간을 대상으로 수행한다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="s6">
+  <div class="sec-head">
+    <p class="sec-num">부록</p>
+    <h2>부록</h2>
+  </div>
+  <div class="block">
+    <h3>6.1 API 엔드포인트 목록</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>서비스 유형</th><th>메서드</th><th>엔드포인트</th><th>설명</th></tr></thead>
+<tbody>
+<tr><th><b>Media Ingest Service</b></th><td>POST</td><td><code>/api/v1/uploads</code></td><td>업로드 세션 생성 및 이어올리기 토큰 발급 (최대 60분 / 6GB)</td></tr>
+<tr><th><b>Vision Tracking Engine</b></th><td>POST</td><td><code>/api/v1/detections</code></td><td>추적 대상 지정 후 탐지 실행 (비동기)</td></tr>
+<tr><th><b>Vision Tracking Engine</b></th><td>GET</td><td><code>/api/v1/detections/{detectionId}</code></td><td>탐지 상태 · 등장 구간 배열 · 탐지율 조회</td></tr>
+<tr><th><b>Highlight Composer</b></th><td>GET</td><td><code>/api/v1/candidates?detectionId=</code></td><td>장면 후보 목록 조회 (온전히 잡힌 구간 우선)</td></tr>
+<tr><th><b>Highlight Composer</b></th><td>POST</td><td><code>/api/v1/records</code></td><td>선택 후보와 음악을 받아 렌더링 요청 (렌더 전 기록 행 선생성)</td></tr>
+<tr><th><b>Record Store Service</b></th><td>PATCH</td><td><code>/api/v1/records/{recordId}/visibility</code></td><td>공개 범위 변경 (<code>private</code> / <code>group</code> / <code>public</code>)</td></tr>
+<tr><th><b>Social Graph Service</b></th><td>POST</td><td><code>/api/v1/groups</code></td><td>그룹 생성 — 승인 절차 없음 · 인원 상한 20명 · 이름 중복 허용</td></tr>
+<tr><th><b>Social Graph Service</b></th><td>POST</td><td><code>/api/v1/groups/{groupId}/invite-link</code></td><td>초대 링크 발급 — 유효기간 7일 · 참여는 가입자만 · 생성자 회수 가능</td></tr>
+<tr><th><b>Social Graph Service</b></th><td>DELETE</td><td><code>/api/v1/groups/{groupId}/members/me</code></td><td>그룹 나가기 — 회수 대상 수 사전 반환, 실행 시 일괄 회수(삭제 아님)</td></tr>
+<tr><th><b>Feed Service</b></th><td>GET</td><td><code>/api/v1/feed?tab=</code></td><td>피드 조회 (<code>following</code> / <code>recommend</code> / <code>group</code>) · 진입 기본 <code>following</code></td></tr>
+<tr><th><b>Record Store Service</b></th><td>GET</td><td><code>/api/v1/users/{userId}/profile</code></td><td>타인 프로필 조회 — 전체공개 기록만, 비공개·그룹은 개수에도 미포함</td></tr>
+<tr><th><b>Engagement Service</b></th><td>POST</td><td><code>/api/v1/records/{recordId}/reactions</code></td><td>좋아요 · 댓글 · 신고 접수</td></tr>
+<tr><th><b>Telemetry Service</b></th><td>POST</td><td><code>/api/v1/telemetry/events</code></td><td>계측 이벤트 일괄 수집</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>6.2 데이터 모델 정의</h3>
+    <h4>그림 6-1. 클래스 다이어그램 (Class Diagram)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — 아래 코드로 적은 데이터 구조를 그림으로 옮긴 것이다. 어떤 객체가 어떤 객체를 몇 개씩 가지는지 한눈에 보인다.</p>
+<p><b>읽는 법</b> — 상자 하나가 개념(클래스) 하나다. <code>+</code>는 외부에서 접근 가능한 항목, <code>&lt;&lt;enumeration&gt;&gt;</code>은 정해진 값 중 하나만 갖는 분류값이다. 화살표 옆 <code>1</code>·<code>0..<em></code>는 개수 관계다 — 예를 들어 <code>SourceVideo "1" --&gt; "0..</em>" Detection</code>은 <b>원본 하나에 탐지 실행이 여러 번 붙을 수 있다</b>는 뜻이다.</p></div>
+<figure class="fig"><pre class="mermaid">classDiagram
+    direction LR
+
+    class SourceVideo {
+        +UUID id
+        +int durationSec
+        +long sizeBytes
+        +validateCodec() Result
+        +resumeUpload(token) Result
+    }
+    class Detection {
+        +UUID id
+        +String subjectRef
+        +List~Interval~ intervals
+        +float detectionRate
+        +String modelVersion
+        +isGateAPassed() boolean
+    }
+    class Candidate {
+        +int startSec
+        +int endSec
+        +float score
+        +float completeness
+    }
+    class Selection {
+        +int orderNo
+        +boolean learningConsent
+        +confirm() void
+    }
+    class Record {
+        +UUID id
+        +int durationSec
+        +Visibility visibility
+        +UUID groupId
+        +changeVisibility(v) void
+        +isViewableBy(user) boolean
+    }
+    class Group {
+        +UUID id
+        +String name
+        +int memberCount
+        +int MAX_MEMBERS$
+        +invite(user) Result
+        +issueInviteLink() InviteLink
+        +leave(user) RecallResult
+    }
+    class InviteLink {
+        +String token
+        +Instant expiresAt
+        +boolean revoked
+        +requiresSignup() boolean
+    }
+    class VisibilityEnforcer {
+        +assertViewable(record, viewer) void
+        +filterFeed(records, viewer) List~Record~
+    }
+
+    class Visibility {
+        &lt;&lt;enumeration&gt;&gt;
+        PRIVATE
+        GROUP
+        PUBLIC
+    }
+    class EditStage {
+        &lt;&lt;enumeration&gt;&gt;
+        STAGE_SOURCE
+        STAGE_DETECT
+        STAGE_SELECT
+        STAGE_REFRAME
+        STAGE_MUSIC
+        STAGE_VISIBILITY
+    }
+    class TelemetryEvent {
+        &lt;&lt;enumeration&gt;&gt;
+        UPLOAD_COMPLETED
+        DETECTION_STARTED
+        SELECTION_OPENED
+        SELECTION_CONFIRMED
+        RENDER_STARTED
+        RENDER_SUCCEEDED
+        SOURCE_DELETED
+        REFRAME_RATING
+    }
+
+    SourceVideo "1" --&gt; "0..*" Detection : 탐지 실행
+    Detection "1" --&gt; "0..*" Candidate : 후보 산출
+    Candidate "1" --&gt; "0..1" Selection : 사용자 선택
+    Selection "1..*" --&gt; "1" Record : 합쳐서 생성
+    Record --&gt; Visibility : 공개 범위
+    Record "0..*" --&gt; "0..1" Group : 그룹 공개 대상
+    Group "1" --&gt; "0..*" InviteLink : 초대링크 발급
+    VisibilityEnforcer ..&gt; Record : 조회 시 강제</pre></figure>
+<p><b>흐름으로 읽으면</b> — 원본(SourceVideo) → 탐지(Detection) → 후보(Candidate) → 선택(Selection) → <b>기록(Record)</b> 순으로 좁혀진다. <code>VisibilityEnforcer</code>는 클래스가 아니라 <b>조회할 때마다 반드시 거쳐야 하는 검문소</b>이며, 이것이 서버 측 공개 범위 강제(REQ-NF-009)의 구현체다.</p>
+<pre class="src">// 공개 범위 — 기록 하나마다 부여, 기본값 PRIVATE
+public enum Visibility {
+    PRIVATE("나만 보기", "아무에게도 보이지 않는다. 기본값"),
+    GROUP("그룹에만 공개", "선택한 그룹의 멤버만 볼 수 있다. 그룹 밖에서는 검색되지 않는다"),
+    PUBLIC("전체공개", "HILiT을 쓰는 누구나 볼 수 있다");
+}
+
+// 영상 만들기 6단계 — 화면 06~11에 순서대로 대응
+public enum EditStage {
+    STAGE_SOURCE(1, "원본 고르기", "갤러리 격자에서 장시간 원본을 선택"),
+    STAGE_DETECT(2, "내 장면 찾기", "대상 지정 · 재식별 · 등장 구간 탐지"),
+    STAGE_SELECT(3, "하이라이트 선택", "후보 중 사용자가 최종 선택"),
+    STAGE_REFRAME(4, "구도 보정", "추적 좌표 기반 크롭 · 리프레이밍"),
+    STAGE_MUSIC(5, "음악 넣기", "저작권 정리된 라이브러리에서 선택"),
+    STAGE_VISIBILITY(6, "공개 범위 정하기", "저장은 이미 완료된 상태에서 범위만 결정");
+
+    private final int stageNumber;
+    private final String stageName;
+    private final String description;
+}
+
+// 검증 관문 — 순서를 바꿀 수 없다
+public enum Gate {
+    GATE_A("추적 정확도", "등장 구간 탐지율 85% 이상", "실패 시 이후 공정 전부 무의미"),
+    GATE_B("기록 공간", "개인 기록 공간이 계정 분리를 대체할 만큼 편한가", "비공개 기록 비율 30% 이상");
+}
+
+// 피드 상단 탭
+public enum FeedTab {
+    FOLLOWING("팔로잉", "내가 보기로 한 사람의 공개 기록 · 진입 기본값"),
+    RECOMMEND("추천", "팔로잉·인기 기준 · 취향 설문 반영은 이후"),
+    GROUP("그룹", "내가 속한 소그룹 목록과 그룹 피드");
+}
+
+// 반응 유형
+public enum ReactionType {
+    LIKE("좋아요", "공개 범위 안에서만 노출"),
+    COMMENT("댓글", "신고 기능 포함"),
+    REPORT("신고", "접수까지가 MVP 범위 · 처리 기준 미정"),
+    SHARE("공유", "링크 · 카카오톡 · 문자 · 공개 범위 승계");
+}
+
+// 계측 이벤트 — 모든 지표 산식이 이 8종에 의존한다 (데이터팀 확정 필요)
+public enum TelemetryEvent {
+    UPLOAD_COMPLETED("upload_completed", "원본 업로드 완료"),
+    DETECTION_STARTED("detection_started", "탐지 시작 · 탐색 시간 측정 시점"),
+    SELECTION_OPENED("selection_opened", "선택 화면 도달 · 탐색 시간 종료 시점"),
+    SELECTION_CONFIRMED("selection_confirmed", "사용자 최종 선택 확정"),
+    RENDER_STARTED("render_started", "렌더링 시작"),
+    RENDER_SUCCEEDED("render_succeeded", "렌더링 성공 · 기록 생성 기준"),
+    SOURCE_DELETED("source_deleted", "원본 삭제 실행"),
+    REFRAME_RATING("reframe_rating", "리프레이밍 5점 척도 응답");
+}
+
+// 그룹 탈퇴 시 기록 처리
+public enum GroupLeavePolicy {
+    RECALL_FROM_GROUP("그룹에서 회수", "그룹 화면에서 사라진다"),
+    KEEP_IN_OWN_STORE("본인 기록 유지", "개인 기록 저장소에는 그대로 남는다"),
+    WARN_BEFORE_LEAVE("나가기 전 경고", "회수될 영상 개수를 실제 값으로 표시한다");
+}</pre>
+  </div>
+  <div class="block">
+    <h3>6.3 비즈니스 규칙 요약</h3>
+<ol><li><b>기록 우선</b>: 공개 범위를 정하기 전에 기록이 이미 저장돼 있어야 한다. 저장과 공개는 분리된 행위다</li><li><b>기본값은 나만 보기</b>: 저장 직후 공개 범위는 <code>PRIVATE</code>이다. 기본이 공개면 "올리지 않아도 남는다"는 제품 주장이 성립하지 않는다</li><li><b>최종 선택권은 사람에게</b>: 사용자의 명시적 선택 없이 결과물을 확정하지 않는다</li><li><b>공개 범위 서버 강제</b>: 모든 조회 경로에서 서버가 범위를 강제한다. 클라이언트 필터링만으로는 불충분하다</li><li><b>그룹 인원 상한 20명</b>: 생성자를 포함하며, 초과 초대는 부분 생성 없이 롤백한다</li><li><b>그룹 탈퇴 시 회수</b>: 나가면 그 그룹에 올린 기록도 함께 내려간다. 본인 기록에는 남으며, 나가기 전 회수될 개수를 실제 값으로 경고한다</li><li><b>링크 초대는 가입자 한정</b>: 링크는 누구에게나 보낼 수 있으나 참여는 가입·로그인한 사용자만 가능하다. 유효기간 7일</li><li><b>관계와 공개의 분리</b>: 팔로우 관계는 공개 기록만 정한다. 비공개 공유는 그룹이 맡는다</li><li><b>원본 보관 범위</b>: 원본은 결과물 확보 시점까지만 보관하는 것을 기본으로 한다</li><li><b>게이트 순서 불변</b>: Gate A → Gate B 순서를 바꿀 수 없다. Gate A 실패 시 이후 단계에 착수하지 않는다</li></ol>
+  </div>
+  <div class="block">
+    <h3>6.4 데이터베이스 스키마 개요</h3>
+    <h4>그림 6-2. 개체-관계 다이어그램 (ERD)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — 데이터베이스에 실제로 만들 표(테이블)와 그 사이의 연결이다. 아래 스키마 목록의 상세판이다.</p>
+<p><b>읽는 법</b> — 상자가 테이블, 안의 줄이 열(컬럼)이다. <code>PK</code>는 그 행을 구분하는 열쇠, <code>FK</code>는 다른 표를 가리키는 참조다. 선 끝의 <b>까치발(◦{)</b> 은 "여럿", <b>막대(||)</b> 는 "하나"를 뜻한다 — <code>USERS ||--o{ RECORDS</code>는 <b>사용자 한 명이 기록을 여럿 가진다</b>는 뜻이다.</p></div>
+<figure class="fig"><pre class="mermaid">erDiagram
+    USERS ||--o{ SOURCE_VIDEOS : "업로드한다"
+    USERS ||--o{ RECORDS : "소유한다"
+    USERS ||--o{ FOLLOWS : "팔로우한다"
+    USERS ||--o{ GROUP_MEMBERS : "소속된다"
+    USERS ||--o{ REACTIONS : "반응한다"
+
+    SOURCE_VIDEOS ||--o{ DETECTIONS : "탐지 대상이 된다"
+    DETECTIONS ||--o{ CANDIDATES : "후보를 낳는다"
+    CANDIDATES ||--o{ SELECTIONS : "선택된다"
+    SELECTIONS }o--|| RECORDS : "합쳐져 기록이 된다"
+
+    GROUPS ||--o{ GROUP_MEMBERS : "멤버를 가진다"
+    GROUPS ||--o{ GROUP_INVITE_LINKS : "초대링크를 발급한다"
+    GROUPS ||--o{ RECORDS : "그룹 공개 대상이 된다"
+
+    RECORDS ||--o{ REACTIONS : "반응을 받는다"
+    USERS ||--o{ TELEMETRY_EVENTS : "이벤트를 남긴다"
+    TELEMETRY_EVENTS }o--|| METRICS_DAILY : "집계된다"
+
+    USERS {
+        uuid id PK
+        string handle
+        string display_name
+        timestamp created_at
+    }
+    SOURCE_VIDEOS {
+        uuid id PK
+        uuid user_id FK
+        int duration_sec
+        bigint size_bytes
+        string resolution
+        timestamp captured_at
+        timestamp deleted_at "소프트 삭제"
+    }
+    DETECTIONS {
+        uuid id PK
+        uuid source_video_id FK
+        string subject_ref "사용자가 1회 지정한 대상"
+        json intervals "등장 구간 배열"
+        float detection_rate "Gate A 판정값"
+        string model_version
+    }
+    CANDIDATES {
+        uuid id PK
+        uuid detection_id FK
+        int start_sec
+        int end_sec
+        float score
+        float completeness "온전히 잡힌 정도"
+    }
+    SELECTIONS {
+        uuid id PK
+        uuid candidate_id FK
+        int order_no
+        bool learning_consent "F14 학습 데이터원"
+    }
+    RECORDS {
+        uuid id PK
+        uuid user_id FK
+        uuid group_id FK "visibility=group 일 때만 유효"
+        int duration_sec
+        string visibility "private/group/public · 기본 private"
+        uuid music_id
+        timestamp created_at
+    }
+    GROUPS {
+        uuid id PK
+        string name "중복 허용"
+        string place
+        uuid owner_id FK
+        int member_count "상한 20"
+    }
+    GROUP_MEMBERS {
+        uuid id PK
+        uuid group_id FK
+        uuid user_id FK
+        timestamp joined_at
+        timestamp left_at "탈퇴 시 기록 회수 트리거"
+    }
+    GROUP_INVITE_LINKS {
+        uuid id PK
+        uuid group_id FK
+        string token
+        timestamp expires_at "발급 후 7일"
+        bool revoked
+    }
+    FOLLOWS {
+        uuid id PK
+        uuid follower_id FK
+        uuid followee_id FK
+    }
+    REACTIONS {
+        uuid id PK
+        uuid record_id FK
+        uuid user_id FK
+        string type "like/comment/report/share"
+        bool reported
+    }
+    TELEMETRY_EVENTS {
+        uuid id PK
+        uuid user_id FK
+        string event_name "계측 이벤트 8종"
+        json payload
+        timestamp occurred_at
+    }
+    METRICS_DAILY {
+        date metric_date PK
+        string metric_key "북극성 · 보조 KPI"
+        float value
+    }</pre></figure>
+<p><b>설계상 중요한 두 지점</b> — ① <code>RECORDS.visibility</code>가 기본값 <code>private</code>이며 <code>group_id</code>는 <code>visibility=group</code>일 때만 유효하다. ② <code>SOURCE_VIDEOS.deleted_at</code>과 <code>GROUP_MEMBERS.left_at</code>은 <b>삭제하지 않고 표시만 하는 열</b>이다. 그룹 탈퇴 시 기록은 지워지지 않고 공개 범위만 <code>private</code>으로 되돌아간다.</p>
+<pre class="src">-- 핵심 테이블 요약
+users                       -- 사용자 · 핸들 · 표시이름 · 프로필
+source_videos               -- 원본 메타 (길이 · 바이트 · 해상도 · 촬영일시 · 삭제여부)
+detections                  -- 추적 실행 (대상 참조 · 구간 배열 · 탐지율 · 모델 버전)
+candidates                  -- 장면 후보 (시작초 · 종료초 · 점수 · 온전도)
+selections                  -- 사용자 선택 (선택 순서 · 학습 동의) — 학습 데이터원
+records                     -- 완성 기록 (길이 · visibility · group_id · 음악 · 생성일시)
+groups                      -- 그룹 (이름 · 장소 · 생성자 · 멤버수 · 상한 20)
+group_members               -- 그룹 멤버십 (가입 · 탈퇴 이력)
+group_invite_links          -- 초대 링크 (만료일시 · 회수 여부)
+follows                     -- 팔로워 · 팔로잉 관계
+reactions                   -- 좋아요 · 댓글 · 신고
+telemetry_events            -- 계측 이벤트 (대용량 · 파티셔닝)
+metrics_daily               -- 지표 집계 (북극성 · 보조 KPI 스냅샷)</pre>
+  </div>
+  <div class="block">
+    <h3>6.5 다이어그램 색인</h3>
+<p class="lead">본 문서에 포함된 설계 다이어그램 14종이다. 배경지식 없이 문서를 처음 읽는다면 <b>그림 4-1 → 3-1 → 12-2</b> 순서로 보면 제품의 전체 구조가 가장 빨리 잡힌다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>그림</th><th>종류</th><th>위치</th><th>무엇을 답하는가</th></tr></thead>
+<tbody>
+<tr><td>3-1</td><td>Component Diagram</td><td>§3</td><td>어떤 서비스가 어떤 순서로 연결되는가</td></tr>
+<tr><td>4-1</td><td>Use Case Diagram</td><td>§4</td><td>누가 이 시스템으로 무엇을 하는가</td></tr>
+<tr><td>6-1</td><td>Class Diagram</td><td>§6.2</td><td>데이터 구조가 서로 몇 개씩 물려 있는가</td></tr>
+<tr><td>6-2</td><td>ERD</td><td>§6.4</td><td>데이터베이스 표와 참조 관계는 어떻게 되는가</td></tr>
+<tr><td>9-1</td><td>Flow Chart</td><td>§9.4</td><td>사용자는 어디서 포기하고, 무엇이 그것을 막는가</td></tr>
+<tr><td>10-1</td><td>Flow Chart</td><td>§10.1</td><td>어떤 순서로 검증하고 실패하면 무엇을 하는가</td></tr>
+<tr><td>11-1</td><td>Sequence Diagram</td><td>§11.1</td><td>업로드부터 후보 제시까지 무슨 일이 일어나는가</td></tr>
+<tr><td>11-2</td><td>Sequence Diagram</td><td>§11.2</td><td>그룹을 나가면 올린 영상은 어떻게 되는가</td></tr>
+<tr><td>11-3</td><td>Sequence Diagram</td><td>§11.3</td><td>선택부터 저장까지의 순서는 어떻게 되는가</td></tr>
+<tr><td>11-4</td><td>Sequence Diagram</td><td>§11.4</td><td>남이 내 비공개 기록에 접근하면 어떻게 막는가</td></tr>
+<tr><td>11-5</td><td>Sequence Diagram</td><td>§11.5</td><td>그룹을 만들고 초대하면 무슨 일이 일어나는가</td></tr>
+<tr><td>11-6</td><td>Sequence Diagram</td><td>§11.6</td><td>앱을 열면 무엇이 뜨고 반응은 어떻게 처리되는가</td></tr>
+<tr><td>12-1</td><td>State Diagram</td><td>§12.1</td><td>기록의 공개 상태는 어떻게 바뀌는가</td></tr>
+<tr><td>12-2</td><td>Flow Chart</td><td>§12.2</td><td>영상 한 편이 만들어지는 6단계와 실패 경로는</td></tr>
+</tbody></table></div>
+<p><b>공통 표기 규약</b> — 주황은 <b>Gate A</b>(추적 정확도) 관련, 노랑은 <b>Gate B</b>(기록 공간) 관련, 점선 테두리는 <b>실패·중단 경로</b>, 원통은 <b>외부 시스템</b>이다.</p>
+  </div>
+</section>
+
+<section class="sec" id="s7">
+  <div class="sec-head">
+    <p class="sec-num">향후 개선 사항</p>
+    <h2>향후 개선 사항</h2>
+  </div>
+  <div class="block">
+<p>현재 MVP 설계는 <b>결정론적 인물 추적과 단일 카테고리(농구·구기)</b>에 초점을 두고 있다. 다음 개선 사항은 향후 버전에서 계획된다.</p>
+  </div>
+  <div class="block">
+    <h3>7.1 선택 데이터 학습 순환 (REQ-FUNC-023)</h3>
+<ul><li>사용자 선택 데이터를 축적해 탐지 후보의 정확도를 높이는 순환 구축</li><li>화면 복제로 따라올 수 없는 방어선이나, 학습 데이터가 사용자 없이는 생기지 않으므로 순서상 후순위</li><li>선택 이벤트(<code>selection_confirmed</code>)를 학습 데이터원으로 설계 단계에서 확보</li></ul>
+  </div>
+  <div class="block">
+    <h3>7.2 구도 고도화 및 기록 심화 (REQ-FUNC-018 · 020 · 021)</h3>
+<ul><li>촬영 노하우 기반 구도 규칙과 앵글 연출로 결과물 완성도 향상</li><li>날짜별 타임라인으로 성장을 눈으로 확인하는 뷰 제공</li><li>온보딩 취향 설문을 추천 피드에 반영</li></ul>
+  </div>
+  <div class="block">
+    <h3>7.3 저장공간 회수 및 노출 자리 (REQ-FUNC-019 · 022)</h3>
+<ul><li>결과물 확보 후 원본 삭제를 안내해 저장공간 압박을 해소</li><li>카테고리별 랭킹으로 노출 자리를 제공 — <b>도입 여부 자체는 미정</b></li></ul>
+  </div>
+  <div class="block">
+    <h3>7.4 팀·다중 인물 확장 (REQ-FUNC-024)</h3>
+<ul><li>한 원본을 여러 사용자가 사용하는 팀 공유 편집</li><li>기술적으로는 <b>다중 인물 동시 추적</b>이 핵심이며, 처리 물량이 인원수에 비례해 GPU 원가에 직접 영향을 준다</li><li>팀 계정 구조 · 원본 공유 권한 · 얼굴 정보 동의 · 원가 부담 주체 <b>네 가지 결정이 선행</b>되어야 한다</li></ul>
+  </div>
+  <div class="block">
+    <h3>7.5 카테고리 확장</h3>
+<ul><li>첫 검증은 농구 한 카테고리로 좁혀 시작하며, 이후 구기 종목 전반으로 확장</li><li>확장 시점은 미정이며, 1년차 목표 달성 경로와 함께 재판정한다</li></ul>
+  </div>
+</section>
+
+<div class="doc-divider"><span>확장 챕터</span></div>
+<div class="note"><p>아래 8~13장은 <b>예시 SRS 양식(1~7장)의 범위를 벗어나는 원천 문서(PRD v1.0)의 내용</b>을 담기 위해 ISO/IEC/IEEE 29148:2018의 해당 조항에 근거해 개설한 챕터다. 각 장 머리에 근거 조항을 표기했다. <b>이미 작성된 내용만 옮겼으며 새로 만든 요구사항은 없다.</b></p></div>
+<section class="sec" id="s8">
+  <div class="sec-head">
+    <p class="sec-num">제품 목표 및 성공 지표</p>
+    <h2>제품 목표 및 성공 지표</h2>
+  </div>
+  <div class="block">
+<div class="note"><p><b>근거:</b> ISO/IEC/IEEE 29148:2018 §9.6.3 <em>Scope</em> — 범위는 제품이 달성할 <b>목표(objectives and goals)</b>를 포함한다.</p></div>
+  </div>
+  <div class="block">
+    <h3>8.1 북극성 KPI</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>KPI</th><th>정의</th><th>기준선</th><th>1년차 목표</th><th>측정 주기</th><th>측정 경로</th><th>판정 주체</th></tr></thead>
+<tbody>
+<tr><td><b>기록 3편 이상 보유 사용자 수</b></td><td>개인 기록 저장소에 결과물 3편 이상을 보유한 순 사용자</td><td>0명</td><td><b>10,000명</b></td><td>주간 추이 · <b>월말 판정</b></td><td><code>records</code> 기준 <code>COUNT(*) &gt;= 3</code>인 순 <code>user_id</code> · 월말 스냅샷</td><td>제품 리드</td></tr>
+</tbody></table></div>
+<p>설치 수가 아니라 축적 사용자 수를 성공 기준으로 삼는다. 설치는 마케팅으로 만들 수 있지만 기록 3편은 제품이 실제로 작동해야 쌓인다. <b>누적이 아니라 스냅샷</b>이므로 기록을 지워 3편 아래로 내려간 사용자는 그 달 집계에서 제외된다 — 이탈을 성공으로 세지 않기 위해서다.</p>
+<p>이 지표에는 처리 물량 <b>연 약 12만 편</b>(1만 명 × 월 1편)이 붙으며, 이 값은 GPU 원가에 직접 비례한다(REQ-NF-013). 사업 계획과 원가가 같은 지표를 공유한다.</p>
+  </div>
+  <div class="block">
+    <h3>8.2 보조 KPI</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>KPI</th><th>기준선</th><th>목표</th><th>주기</th><th>측정 경로</th><th>판정 주체</th><th>연결 관문</th></tr></thead>
+<tbody>
+<tr><td>S1</td><td>등장 구간 탐지율</td><td>정답셋 구축 시 확정</td><td>≥ 85%</td><td>릴리스마다 + 주간</td><td>정답셋 회귀 배치 · 모델 버전별</td><td>AI 리드</td><td><b>Gate A</b></td></tr>
+<tr><td>S2</td><td>"잘 잡혔다" 평가 비율</td><td>베타 1주차 확정</td><td>≥ 80%</td><td>주간</td><td><code>reframe_rating</code> 4점 이상 비율 · 응답률 동시 보고</td><td>AI 리드</td><td>Gate A 이후</td></tr>
+<tr><td>S3</td><td>원본→완성 전환율</td><td>약 4%</td><td>≥ 60%</td><td>주간</td><td><code>render_succeeded</code> ÷ <code>upload_completed</code> · 30일 코호트</td><td>제품 리드</td><td>흐름 완성</td></tr>
+<tr><td>S4</td><td>장면 탐색 소요 시간</td><td>60분 이상</td><td>≤ 5분</td><td>주간</td><td><code>detection_started</code> → <code>selection_opened</code> 구간 · 중앙값과 p90 병기</td><td>제품 리드</td><td>Gate A</td></tr>
+<tr><td>S5</td><td>비공개 기록 비율</td><td>0%</td><td>≥ 30%</td><td>월간</td><td><code>visibility='private'</code> ÷ 전체 · 월말 스냅샷</td><td>제품 리드</td><td><b>Gate B</b></td></tr>
+<tr><td>S6</td><td>월간 기록 생성 편수</td><td>0.7건</td><td>4건</td><td>월간</td><td>월간 <code>render_succeeded</code> ÷ MAU</td><td>제품 리드</td><td>Gate B</td></tr>
+<tr><td>S7</td><td>원본 삭제 실행률</td><td>0%</td><td>≥ 50%</td><td>월간</td><td><code>source_deleted</code> ÷ <code>render_succeeded</code> (안내 노출자 한정)</td><td>제품 리드</td><td>REQ-FUNC-019 이후</td></tr>
+<tr><td>S8</td><td>재촬영 횟수</td><td>1~3회</td><td>0회</td><td>월간</td><td>동일 세션 내 중복 업로드 발생률</td><td>AI 리드</td><td>Gate A 이후</td></tr>
+<tr><td>S9</td><td>편집 외주 지출</td><td>월 60만 원</td><td>0원</td><td>분기</td><td><b>분기 설문 n ≥ 30</b> — 로그로 측정 불가</td><td>제품 리드</td><td>—</td></tr>
+<tr><td>S10</td><td>파이프라인 완주율</td><td>—</td><td>≥ 95%</td><td>주간</td><td><code>render_succeeded</code> ÷ <code>detection_started</code> — 실패 처리 요구사항의 상위 지표</td><td>백엔드 리드</td><td>전 구간</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>8.3 기존 대안 대비 차별 가치</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>축</th><th>기존 대안</th><th>목표</th><th>개선폭</th><th>측정 조건</th><th>검증</th></tr></thead>
+<tbody>
+<tr><td>탐색 시간</td><td>사람 눈으로 60분 이상</td><td>≤ 5분</td><td><b>12배 이상 단축</b></td><td>동일 사용자 n=30명 × 자기 원본 3편 · 전후 비교 · 중앙값</td><td>EXP-04</td></tr>
+<tr><td>원본→완성 전환율</td><td>약 4%</td><td>≥ 60%</td><td><b>15배 향상</b></td><td>베타 30일 코호트 · 분모는 업로드 완료 원본</td><td>EXP-05</td></tr>
+<tr><td>편집 외주 비용</td><td>월 60만 원</td><td>0원</td><td><b>100% 절감</b></td><td>분기 설문 n ≥ 30 · 자기보고(로그 검증 불가)</td><td>설문</td></tr>
+<tr><td>재촬영 횟수</td><td>1~3회</td><td>0회</td><td><b>100% 감소</b></td><td>세션 내 중복 업로드율 + 주관 의향 문항 n=50명</td><td>EXP-03</td></tr>
+<tr><td>추적 대상</td><td>유사 서비스는 <b>화자(말하는 사람)만</b> 추적</td><td>말하지 않고 움직이는 사람</td><td><b>탐지율 2배 이상</b></td><td>동일 원본 n=100편 · 동일 정답셋 · IoU ≥ 0.5</td><td>EXP-02</td></tr>
+<tr><td>하드웨어 전제</td><td>전용 카메라 · 팀 계약 필요</td><td>휴대폰 영상만</td><td><b>초기 비용 0원</b></td><td>공개 가격표 기준 정성 비교</td><td>—</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="s9">
+  <div class="sec-head">
+    <p class="sec-num">사용자 특성</p>
+    <h2>사용자 특성</h2>
+  </div>
+  <div class="block">
+<div class="note"><p><b>근거:</b> ISO/IEC/IEEE 29148:2018 §9.6.6 <em>User characteristics</em> — 의도된 사용자군의 특성, 숙련도, 사용 맥락을 기술한다.</p></div>
+  </div>
+  <div class="block">
+    <h3>9.1 세그먼트 정의</h3>
+<p class="lead">대상 선별의 1순위 기준은 <b>원본 영상 보유 여부</b>다. 앱에서 촬영하지 않으므로 원본이 없으면 제품이 작동하지 않는다. 2순위는 지불의향이다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>세그먼트</th><th>정의</th><th>규모</th><th>처리</th></tr></thead>
+<tbody>
+<tr><th><b>Q1</b></th><td>원본 있음 · 지불의향 있음 (이미 올리는 사람)</td><td>약 50만 명</td><td><b>대상 · 1순위</b> — 촬영 습관이 있고 편집 부담을 체감. 전환 비용이 가장 낮다</td></tr>
+<tr><th><b>Q4</b></th><td>원본 있음 · 지불의향 없음 (찍어놓고 안 올림)</td><td>약 450만 명</td><td><b>대상 · 2순위</b> — 페인이 가장 크고 시장이 9배. 값을 편집이 아니라 기록 축적에서 받기로 정했으므로 무료 확보가 사업의 본체</td></tr>
+<tr><th><b>Q2</b></th><td>원본 없음 · 지불의향 있음</td><td>약 200만 명</td><td>보류 — 촬영 가이드(REQ-FUNC-025) 단계에서 열림</td></tr>
+<tr><th><b>Q3</b></th><td>순수 소비자</td><td>약 2,800만 명</td><td>대상 아님</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>9.2 대상 사용자 프로필</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>사용자 유형</th><th>세그</th><th>특성</th><th>주요 제약</th><th>사용 맥락</th></tr></thead>
+<tbody>
+<tr><td><b>직장인 동호회 참가자</b></td><td>Q1</td><td>주 2회 사회인 농구 · 본계정과 종목 부계정 병행</td><td>원본 47편 적재 / 3개월 업로드 2건</td><td>경기가 끝난 밤, 40분 원본이 하나 더 늘었을 때</td></tr>
+<tr><td><b>동아리 촬영 담당</b></td><td>Q1</td><td>팀원 8명분 촬영을 전담 · 자기 기록은 늘 후순위</td><td>자기 기록 0건</td><td>경기 후 팀원들이 "내 장면 보내줘"라고 요청할 때</td></tr>
+<tr><td><b>종목 크리에이터</b></td><td>Q1</td><td>주 3회 업로드 목표 · 촬영 1시간 + 편집 3시간</td><td>외주 월 60만 원이 수익 초과</td><td>업로드 주기를 지켜야 하는데 원본만 세 개 쌓였을 때</td></tr>
+<tr><td><b>팀 운영자</b></td><td>Q1</td><td>팀원 12명 · 편집 인력은 본인 1명</td><td>매주 원본 생성 / 업로드 월 2회</td><td>팀원들이 "내 장면 있어?"라고 묻는데 편집자가 자기뿐일 때</td></tr>
+<tr><td><b>저장공간 압박형</b></td><td>Q4</td><td>액션캠 50분 촬영 · 파일 4GB</td><td>유료 편집 앱 3개 결제 후 전부 해지</td><td>주말 경기 후 저장공간 부족 알림이 뜰 때</td></tr>
+<tr><td><b>완성도 부담형</b></td><td>Q4</td><td>갤러리 미편집 영상 약 200개 · 업로드 연 3회</td><td>편집 30분 초과 시 매번 중도 포기</td><td>주말 영상을 정리하려 편집 앱을 켰을 때</td></tr>
+</tbody></table></div>
+<p><b>공통 숙련도</b> — 촬영에는 마찰이 없다(1분 이내 완료). 문제는 촬영 이후에 발생하며, 편집 도구 사용 능력이 아니라 <b>시간과 반복 노동</b>이 장벽이다.</p>
+  </div>
+  <div class="block">
+    <h3>9.3 공통 Pain과 실패 판정선</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>Pain</th><th>근본 원인</th><th>해당</th><th>현재 실패 수준</th></tr></thead>
+<tbody>
+<tr><th><b>P1</b></th><td>원본에서 자기 장면을 찾는 시간이 편집보다 오래 걸린다</td><td>고정 카메라는 경기를 담지만 <b>누가 어디에 있었는지는 기록하지 않는다</b></td><td>6 / 6</td><td>원본 1편당 탐색 60분 이상 · 원본→완성 전환율 약 4%</td></tr>
+<tr><th><b>P2</b></th><td>고정 카메라는 사람을 따라오지 않아 화면에 작게 잡힌다</td><td>P1과 <b>원인이 동일</b>하다</td><td>3 / 6</td><td>재촬영 1~3회 / 결과물 · "잘 잡혔다" 측정 불가</td></tr>
+<tr><th><b>P3</b></th><td>공개할 자신이 없으면 기록도 남지 않는다</td><td>기존 서비스는 <b>올려야 남는</b> 구조다</td><td>3 / 6</td><td>비공개 기록 비율 0% · 월 기록 생성 0.7건</td></tr>
+</tbody></table></div>
+<p><b>P1과 P2의 원인은 하나다.</b> 고정 카메라가 사람의 위치를 모른다는 사실이 두 문제를 동시에 만들었다. 따라서 <b>인물 추적 하나(REQ-FUNC-002 · 003 · 006)가 P1과 P2를 함께 없앤다.</b> 이것이 REQ-FUNC-003을 최우선 검증 대상으로 삼는 근거다.</p>
+  </div>
+  <div class="block">
+    <h3>9.4 사용자 여정과 이탈 지점</h3>
+    <h4>그림 9-1. 사용자 여정과 이탈 지점 (Flow Chart)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — 사용자가 촬영부터 재방문까지 거치는 여섯 단계와, 그중 어디서 포기하는지다.</p>
+<p><b>읽는 법</b> — 초록은 마찰이 없는 단계, <b>주황은 이탈이 몰리는 단계</b>다. 아래로 뻗은 점선이 포기 경로이고, 오른쪽 연한 초록 상자는 <b>그 이탈을 막는 요구사항 번호</b>다.</p></div>
+<figure class="fig"><pre class="mermaid">flowchart LR
+    A["① 촬영&lt;br/&gt;삼각대·녹화&lt;br/&gt;1분"] --&gt; B["② 귀가·보관&lt;br/&gt;원본 4GB 적재"]
+    B --&gt; C["③ 찾기&lt;br/&gt;40분에서 나를 탐색&lt;br/&gt;60분 이상"]
+    C --&gt; D["④ 편집&lt;br/&gt;컷·자막·음악&lt;br/&gt;30분 초과"]
+    D --&gt; E["⑤ 남기기·공개&lt;br/&gt;올릴 수준인가 판단"]
+    E --&gt; F["⑥ 재방문&lt;br/&gt;다음 경기"]
+
+    C -.최대 이탈.-&gt; X1["포기"]
+    D -.2차 이탈.-&gt; X2["포기"]
+    E -.3차 이탈.-&gt; X3["포기"]
+
+    C -.해결.-&gt; R1["REQ-FUNC-002·003&lt;br/&gt;인물 자동 탐색"]
+    D -.해결.-&gt; R2["REQ-FUNC-006&lt;br/&gt;구도 자동 보정"]
+    E -.해결.-&gt; R3["REQ-FUNC-009·010&lt;br/&gt;공개와 무관한 저장"]
+
+    style A fill:#E6F8F3,stroke:#33A992
+    style C fill:#FBEDE4,stroke:#C2673F
+    style D fill:#FBEDE4,stroke:#C2673F
+    style E fill:#FBEDE4,stroke:#C2673F
+    style R1 fill:#F2FBF8,stroke:#33A992
+    style R2 fill:#F2FBF8,stroke:#33A992
+    style R3 fill:#F2FBF8,stroke:#33A992
+    style X1 fill:#fff,stroke:#C2673F,stroke-dasharray:4
+    style X2 fill:#fff,stroke:#C2673F,stroke-dasharray:4
+    style X3 fill:#fff,stroke:#C2673F,stroke-dasharray:4</pre></figure>
+<p><b>핵심</b> — 이탈은 ①촬영이 아니라 <b>③찾기·④편집·⑤남기기</b>에 몰려 있다. 촬영은 이미 습관이 됐고 문제는 그 뒤에서 시작된다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>단계</th><th>사용자 행위</th><th>마찰</th></tr></thead>
+<tbody>
+<tr><td>① 촬영</td><td>삼각대를 세우고 녹화</td><td>거의 없음 (1분) — <b>이미 습관</b></td></tr>
+<tr><td>② 귀가·보관</td><td>원본 4GB가 휴대폰에 쌓임</td><td>저장공간 경고</td></tr>
+<tr><td>③ 찾기</td><td>40분 안에서 자기를 눈으로 탐색</td><td><b>최대 이탈 지점</b> (60분 이상)</td></tr>
+<tr><td>④ 편집</td><td>컷·자막·음악을 직접 제작</td><td><b>2차 이탈</b> (30분 초과 시 포기)</td></tr>
+<tr><td>⑤ 남기기·공개</td><td>올릴지 판단</td><td><b>3차 이탈</b> ("보여줄 수준인가")</td></tr>
+<tr><td>⑥ 재방문</td><td>다음 경기에 또 촬영</td><td>기록이 남지 않아 돌아올 이유 없음</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="s10">
+  <div class="sec-head">
+    <p class="sec-num">검증</p>
+    <h2>검증</h2>
+  </div>
+  <div class="block">
+<div class="note"><p><b>근거:</b> ISO/IEC/IEEE 29148:2018 §9.6.19 <em>Verification</em> — 각 요구사항이 충족되었음을 확인하는 방법·기준·순서를 기술한다.</p></div>
+  </div>
+  <div class="block">
+    <h3>10.1 검증 관문 순서</h3>
+    <h4>그림 10-1. 검증 관문 흐름도 (Flow Chart)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — 어떤 순서로 검증해야 하고, 각 관문에서 실패하면 무엇을 하는지다.</p>
+<p><b>읽는 법</b> — 마름모가 판정 지점이다. <b>굵은 주황 = Gate A</b>, <b>굵은 노랑 = Gate B</b>이며 이 둘은 순서를 바꿀 수 없다. 점선 테두리 상자는 <b>중단 상태</b>로, 그 위로 진행하지 않는다.</p></div>
+<figure class="fig"><pre class="mermaid">flowchart TD
+    START(["개발 착수"]) --&gt; PRE{"ADR-11 얼굴정보 승인&lt;br/&gt;ADR-05 GPU 원가 상한&lt;br/&gt;둘 다 확정?"}
+    PRE --&gt;|아니오| BLOCK["배포 게이트 차단&lt;br/&gt;CI가 프로덕션 배포 거부"]
+    PRE --&gt;|예| G1["1단계 · 추적 검증&lt;br/&gt;REQ-FUNC-001·002·003"]
+
+    G1 --&gt; GA{"Gate A&lt;br/&gt;등장 구간 탐지율 ≥ 85%?"}
+    GA --&gt;|실패| STOP["이후 전부 무의미&lt;br/&gt;모델 재학습 또는 제품 가설 재검토"]
+    GA --&gt;|통과| G2["2단계 · 흐름 완성&lt;br/&gt;REQ-FUNC-004~008"]
+
+    G2 --&gt; Q1{"잘 잡혔다 ≥ 80%&lt;br/&gt;외부 앱 이탈 0건?"}
+    Q1 --&gt;|미달| FIX1["미달 지표만 개선 후 재판정"]
+    FIX1 --&gt; Q1
+    Q1 --&gt;|통과| G3["3단계 · 기록 구조&lt;br/&gt;REQ-FUNC-009·010·011"]
+
+    G3 --&gt; GB{"Gate B&lt;br/&gt;비공개 기록 비율 ≥ 30%?"}
+    GB --&gt;|실패| REDESIGN["기록 공간 UX 재설계&lt;br/&gt;소비 루프 확장 중단"]
+    GB --&gt;|통과| G4["4단계 · 관계·소비&lt;br/&gt;REQ-FUNC-012~017"]
+
+    G4 --&gt; Q2{"D30 기록 3편 도달 ≥ 30%?"}
+    Q2 --&gt;|미달| FIX2["재방문 경로 재설계"]
+    FIX2 --&gt; Q2
+    Q2 --&gt;|통과| G5["5단계 · 재방문 심화&lt;br/&gt;REQ-FUNC-018~022"]
+    G5 --&gt; G6["6단계 · 확산과 방어&lt;br/&gt;REQ-FUNC-023"]
+    G6 --&gt; DONE(["1만 명 · 연 12만 편"])
+
+    style GA fill:#FBEDE4,stroke:#C2673F,stroke-width:3px
+    style GB fill:#FFF3C4,stroke:#8A6A22,stroke-width:3px
+    style STOP fill:#fff,stroke:#C2673F,stroke-dasharray:5
+    style BLOCK fill:#fff,stroke:#C2673F,stroke-dasharray:5</pre></figure>
+<p><b>가장 먼저 읽어야 할 것</b> — 맨 위 마름모다. <b>ADR-11(얼굴 정보 동의)과 ADR-05(GPU 원가 상한)가 확정되기 전에는 프로덕션 배포 자체가 막힌다.</b> 이 둘은 기술 문제가 아니라 결정 사항이다.</p>
+<p>관문 순서는 <b>바꿀 수 없다.</b> 앞 단계 실패 시 이후 단계에 착수하지 않는다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>순서</th><th>단계</th><th>대상 요구사항</th><th>판정 조건</th><th>실패 시 조치</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>추적 검증</td><td>REQ-FUNC-001 · 002 · 003</td><td><b>Gate A</b> — 등장 구간 탐지율 ≥ 85%</td><td><b>이후 전부 무의미.</b> 모델 재학습 또는 제품 가설 재검토</td></tr>
+<tr><td>2</td><td>흐름 완성</td><td>REQ-FUNC-004 ~ 008</td><td>"잘 잡혔다" ≥ 80% · 외부 앱 이탈 0건</td><td>미달 지표만 개선 후 재판정</td></tr>
+<tr><td>3</td><td>기록 구조</td><td>REQ-FUNC-009 · 010 · 011</td><td><b>Gate B</b> — 비공개 기록 비율 ≥ 30%</td><td>기록 공간 UX 재설계 · 소비 루프 확장 중단</td></tr>
+<tr><td>4</td><td>관계 · 소비</td><td>REQ-FUNC-012 ~ 017</td><td>기록 3편 도달 코호트 전환 ≥ 30%</td><td>재방문 경로 재설계</td></tr>
+<tr><td>5</td><td>재방문 심화</td><td>REQ-FUNC-018 ~ 022</td><td>기록 3편 이상 사용자 1만 명 경로 검증</td><td>확장 시점 연기</td></tr>
+<tr><td>6</td><td>확산과 방어</td><td>REQ-FUNC-023</td><td>선택 데이터가 실제로 정확도를 높이는가</td><td>—</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>10.2 실험 설계</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>검증 대상</th><th>실험 설계</th><th>측정 지표</th><th>성공 기준</th></tr></thead>
+<tbody>
+<tr><th><b>EXP-01</b></th><td>REQ-FUNC-003 (Gate A)</td><td><b>정답셋 벤치마크.</b> 농구 원본 n=100편(40분급)에 사람이 등장 구간을 수작업 표시한 정답셋 구축 후 모델 출력과 IoU 비교</td><td>구간 IoU · 탐지율 · 재식별 정확도 · 오인식률 · 편당 처리 시간</td><td>탐지율 ≥ 85% · 오인식 ≤ 2%</td></tr>
+<tr><th><b>EXP-02</b></th><td>차별 가치 (추적 대상)</td><td><b>동일 원본 벤치마크.</b> 같은 100편을 화자 추적 방식과 사람 수작업에 각각 투입</td><td>탐지율 · 탐색 소요 시간 · 결과물 도달률</td><td>화자추적군 대비 탐지율 ≥ 2배, 수작업 대비 탐색시간 ≤ 1/12</td></tr>
+<tr><th><b>EXP-03</b></th><td>REQ-FUNC-006</td><td><b>주관 평가.</b> 리프레이밍 전/후 쌍 n=200쌍을 참가자 n=50명에게 블라인드 제시</td><td>5점 척도 · 4점 이상 비율 · 재촬영 의향</td><td>4점 이상 ≥ 80% · 재촬영 의향 ≤ 10%</td></tr>
+<tr><th><b>EXP-04</b></th><td>S4 (탐색 시간)</td><td><b>전후 비교(within-subject).</b> 베타 사용자 n=30명이 자기 원본 3편을 기존 방식과 본 제품으로 각각 처리</td><td>스톱워치 실측 · 단계별 체류 로그</td><td>중앙값 ≤ 5분 · 기존 대비 12배 이상 단축</td></tr>
+<tr><th><b>EXP-05</b></th><td>S3 (전환율)</td><td><b>코호트 추적.</b> 베타 30일 코호트의 업로드 원본 대비 완성 결과물</td><td>원본 수 · 완성 수 · 중도 이탈 단계</td><td>≥ 60% · 이탈이 특정 단계에 몰리지 않을 것</td></tr>
+<tr><th><b>EXP-06</b></th><td>REQ-FUNC-009 · 010 (Gate B)</td><td><b>A/B 테스트 (n=500).</b> A: 공개 범위를 저장 <b>후</b> 선택 / B: 저장 <b>전</b> 선택</td><td>비공개 기록 비율 · 기록 생성 편수 · 마이페이지 재방문율</td><td>비공개 ≥ 30% · A안이 B안 대비 기록 편수 ≥ 1.3배</td></tr>
+<tr><th><b>EXP-07</b></th><td>REQ-FUNC-013 (그룹)</td><td><b>A/B 테스트 (n=500).</b> A: 공개 범위 2종 / B: 그룹 포함 3종</td><td>공개 전환율 · 그룹 공개 선택률 · 그룹 생성률</td><td>B안 공개 전환율이 A안 대비 ≥ 1.5배 · 그룹 선택 ≥ 25%</td></tr>
+<tr><th><b>EXP-08</b></th><td>북극성 KPI</td><td><b>코호트 리텐션.</b> 주간 코호트의 D7·D30 기록 축적</td><td>기록 3편 도달률 · D30 재방문율</td><td>D30 3편 도달 ≥ 30%</td></tr>
+<tr><th><b>EXP-09</b></th><td>REQ-FUNC-004 (후보 수)</td><td><b>A/B/n 테스트.</b> 후보 15 / 30 / 50개</td><td>선택 완료율 · 선택 소요 시간 · 선택 개수</td><td>선택 완료율이 최대인 구간 채택</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>10.3 운영 모니터링 및 알림 기준</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>구분</th><th>감시 항목</th><th>알림 기준</th><th>수신자</th><th>1차 대응 SLA</th></tr></thead>
+<tbody>
+<tr><td>관문 지표</td><td>등장 구간 탐지율</td><td>일간 &lt; 80%</td><td>AI 리드</td><td><b>2시간</b> — Gate A 회귀</td></tr>
+<tr><td>저장</td><td>기록 저장 성공률</td><td>&lt; 99.9%</td><td>백엔드 온콜</td><td><b>15분</b> — 최우선</td></tr>
+<tr><td>보안</td><td>공개 범위 위반 접근</td><td><b>1건이라도</b></td><td>보안 담당자 + 제품 리드</td><td><b>30분</b></td></tr>
+<tr><td>파이프라인</td><td>큐 대기 p95</td><td>&gt; 15분</td><td>백엔드 온콜</td><td>4시간</td></tr>
+<tr><td>파이프라인</td><td>완주율 (S10)</td><td>주간 &lt; 95%</td><td>백엔드 리드</td><td>1일</td></tr>
+<tr><td>북극성 선행</td><td>D30 기록 3편 도달률</td><td>주간 &lt; 20%</td><td>제품 리드</td><td>주간 리뷰</td></tr>
+<tr><td>비용</td><td>일일 GPU 예산</td><td>80% 초과</td><td>백엔드 리드 + 제품 리드</td><td>4시간</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>10.4 단계적 배포</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>단계</th><th>대상</th><th>규모</th><th>판정 지표</th><th>판정 주체</th><th>판정 시점</th><th>실패 시 조치</th></tr></thead>
+<tbody>
+<tr><td>α 내부</td><td>팀 + 동호회 1곳</td><td>20명 · 원본 100편</td><td>EXP-01 (Gate A)</td><td>AI 리드 + 제품 리드 공동</td><td>정답셋 100편 처리 완료 시</td><td>다음 단계 진입 금지</td></tr>
+<tr><td>β 비공개</td><td>Q1 사용자</td><td>200명</td><td>EXP-03 · 04 · 05</td><td>제품 리드</td><td>코호트 30일 경과 시</td><td>미달 지표 개선 후 재판정</td></tr>
+<tr><td>β 공개</td><td>첫 카테고리</td><td>2,000명</td><td>EXP-06 (Gate B) · EXP-07</td><td>제품 리드</td><td>A/B n=500 도달 시</td><td>기록 공간 UX 재설계</td></tr>
+<tr><td>정식</td><td>카테고리 확장</td><td>—</td><td>EXP-08</td><td>제품 리드 + 경영</td><td>월말 판정</td><td>확장 시점 연기</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="s11">
+  <div class="sec-head">
+    <p class="sec-num">운영 시나리오 및 상세 수용 기준</p>
+    <h2>운영 시나리오 및 상세 수용 기준</h2>
+  </div>
+  <div class="block">
+<div class="note"><p><b>근거:</b> ISO/IEC/IEEE 29148:2018 §9.4.17 <em>Operational scenarios</em> — 사용자 관점의 운영 시나리오로 요구사항의 사용 맥락을 기술한다. §4.1의 인수 기준을 시나리오 단위로 상세화한 것이며 새로운 요구사항이 아니다.</p></div>
+<p>각 시나리오는 <b>Given – When – Then</b> 구조이며, 정상 경로와 <b>실패 경로(F 접미사)</b>를 모두 포함한다.</p>
+<div class="easy"><p><b><code>연결 REQ</code> 열 읽는 법</b> — 각 시나리오가 §4의 어느 요구사항을 검증하는지 가리킨다. 여러 요구사항에 걸치면 모두 적었고,</p>
+<p><b>딱 맞는 요구사항이 없으면 <code>—</code>로 비워 두었다</b> — 억지로 연결하지 않는다. 현재 <code>—</code>는 <b>SC-6.4 1건</b>이며, 이는 시스템 요구사항이 아니라</p>
+<p>북극성 지표(§8.1)의 선행 관측이기 때문이다. 요구사항 → 모듈 → 테스트의 연결은 §5 추적성 매트릭스에서 이어진다.</p></div>
+  </div>
+  <div class="block">
+    <h3>11.1 시나리오 1 — 장시간 원본에서 본인 장면 자동 탐색 <code>[Gate A]</code></h3>
+    <h4>그림 11-1. 원본 업로드부터 후보 제시까지 (Sequence Diagram)</h4>
+<div class="easy"><p><b>시퀀스 다이어그램 읽는 법</b> — 위쪽 가로줄이 참여자(사람·서비스), 아래로 내려가는 세로선이 시간이다. 가로 화살표는 요청·응답이고 <code>alt</code>로 묶인 영역은 <b>조건에 따라 갈리는 분기</b>다. 회색 메모는 그 지점의 판정 기준이다.</p></div>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant S as Client Shell
+    participant I as Media Ingest
+    participant V as Vision Tracking
+    participant C as Highlight Composer
+    participant T as Telemetry
+
+    U-&gt;&gt;S: 갤러리에서 40분 원본 선택
+    S-&gt;&gt;I: POST /uploads (메타)
+    I--&gt;&gt;S: 업로드 세션 + 이어올리기 토큰
+    I-&gt;&gt;I: 코덱·손상 사전 검증 (10초 이내)
+
+    alt 손상·미지원 코덱 [SC-1.F1]
+        I--&gt;&gt;S: 422 사유 안내
+        S--&gt;&gt;U: "이 영상은 처리할 수 없습니다"
+        Note over I,V: GPU 작업 생성 0건 — 과금 없이 중단
+    else 정상
+        S-&gt;&gt;I: 청크 업로드 (재개 가능)
+        Note over S,I: 네트워크 단절 시 재개 [SC-1.F3]&lt;br/&gt;재개 성공률 ≥ 99%
+        I-&gt;&gt;T: upload_completed
+        U-&gt;&gt;S: 화면에서 본인 1회 지정
+        S-&gt;&gt;V: POST /detections (subjectRef)
+        V-&gt;&gt;T: detection_started
+        V-&gt;&gt;V: 재식별 + 등장 구간 탐지
+        Note over V: 탐지율 ≥ 85% · IoU ≥ 0.5&lt;br/&gt;Gate A 판정 지점
+
+        alt 대상 미등장 [SC-1.F2]
+            V--&gt;&gt;S: 상태=NOT_FOUND
+            S--&gt;&gt;U: "찾지 못함" + 재지정 경로
+            Note over S,U: 빈 화면 노출 0건
+        else 구간 검출됨
+            V--&gt;&gt;C: 등장 구간 배열
+            C-&gt;&gt;C: 후보 산출 (온전도 우선)
+            C--&gt;&gt;S: 후보 목록
+            S-&gt;&gt;T: selection_opened
+            S--&gt;&gt;U: 후보 화면 표시
+            Note over U,S: detection_started → selection_opened&lt;br/&gt;중앙값 ≤ 5분 · p90 ≤ 10분
+        end
+    end</pre></figure>
+<p><b>두 갈래의 실패 경로가 핵심이다.</b> 파일이 깨졌으면 <b>GPU를 쓰기 전에</b> 멈추고(SC-1.F1), 영상에 본인이 안 나왔으면 빈 화면 대신 <b>재지정 경로</b>를 준다(SC-1.F2). 둘 다 없으면 사용자는 돈만 쓰고 빈 화면을 보게 된다.</p>
+<div class="note"><p><b>사용자로서</b> 40분 원본에서 내가 잘 나온 장면을 대신 찾아주기를 바란다. <b>그래야</b> 편집에 한 시간을 쓰지 않고도 오늘의 기록을 남길 수 있다.</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th><th>연결 REQ</th></tr></thead>
+<tbody>
+<tr><td>SC-1.1</td><td><b>Given</b> 40분·4GB 원본과 지정된 추적 대상이 있을 때 / <b>When</b> 탐지를 실행하면 / <b>Then</b> 정답 구간 대비 탐지 구간 비율이 기준을 넘는다</td><td>탐지율 ≥ 85% · IoU ≥ 0.5를 정탐으로 · 정답셋 회귀 배치 (<b>Gate A 판정</b>)</td><td>REQ-FUNC-003</td></tr>
+<tr><td>SC-1.2</td><td><b>Given</b> 사용자가 자기를 한 번 지정했을 때 / <b>When</b> 대상이 가려졌다 다시 나타나면 / <b>Then</b> 같은 사람으로 재식별한다</td><td>재식별 정확도 ≥ 90% · 오인식 ≤ 2% · 가림 구간 라벨 포함 정답셋</td><td>REQ-FUNC-002</td></tr>
+<tr><td>SC-1.3</td><td><b>Given</b> 탐지가 끝났을 때 / <b>When</b> 사용자가 선택 화면에 도달하면 / <b>Then</b> <code>detection_started</code> → <code>selection_opened</code> 구간이 기준 이하다</td><td>중앙값 ≤ 5분 · p90 ≤ 10분 · 앱 백그라운드 시간 제외</td><td>REQ-NF-003</td></tr>
+<tr><th><b>SC-1.F1</b></th><td><b>Given</b> 손상·미지원 코덱 원본을 올렸을 때 / <b>When</b> 검증 단계에서 판별되면 / <b>Then</b> <b>업로드 전에</b> 사유를 안내하고 과금 없이 중단한다</td><td>사전 판별율 ≥ 95% · 판별 소요 ≤ 10초 · <b>GPU 작업 생성 0건</b></td><td>REQ-FUNC-001 · REQ-NF-008</td></tr>
+<tr><th><b>SC-1.F2</b></th><td><b>Given</b> 원본에 대상이 한 번도 등장하지 않을 때 / <b>When</b> 탐지가 끝나면 / <b>Then</b> 빈 결과가 아니라 <b>"찾지 못함" 상태와 재지정 경로</b>를 제공한다</td><td>빈 화면 노출 0건 · 재지정 진입률 측정 · 오탐 ≤ 3%</td><td>REQ-FUNC-002 · REQ-FUNC-003</td></tr>
+<tr><th><b>SC-1.F3</b></th><td><b>Given</b> 업로드 중 네트워크가 끊겼을 때 / <b>When</b> 재연결되면 / <b>Then</b> 이어올리기로 복구된다</td><td>재개 성공률 ≥ 99% · 업로드 실패율 &lt; 0.5% · 재시도 ≥ 3회</td><td>REQ-FUNC-001 · REQ-NF-002</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>11.2 시나리오 2 — 팀원이 각자 자기 장면을 확보</h3>
+    <h4>그림 11-2. 그룹 탈퇴와 기록 회수 (Sequence Diagram)</h4>
+<div class="easy"><p><b>시퀀스 다이어그램 읽는 법</b> — 위쪽 가로줄이 참여자(사람·서비스), 아래로 내려가는 세로선이 시간이다. 가로 화살표는 요청·응답이고 <code>alt</code>로 묶인 영역은 <b>조건에 따라 갈리는 분기</b>다. 회색 메모는 그 지점의 판정 기준이다.</p></div>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor M as 나가는 멤버
+    actor P as 남은 멤버
+    participant S as Client Shell
+    participant G as Social Graph
+    participant R as Record Store
+
+    M-&gt;&gt;S: 그룹 나가기 누름
+    S-&gt;&gt;G: DELETE /groups/{id}/members/me (사전 조회)
+    G-&gt;&gt;R: 이 멤버가 그룹에 올린 기록 수 조회
+    R--&gt;&gt;G: N개
+    G--&gt;&gt;S: 회수 대상 N개
+
+    S--&gt;&gt;M: "이 그룹에 올린 영상 N개가 함께 내려갑니다&lt;br/&gt;내 기록에는 그대로 남습니다"
+    Note over S,M: 경고 노출률 100% · 실제 개수 표시&lt;br/&gt;확인 없이 나가기 완료 0건 [SC-2.F1]
+
+    alt 취소
+        M-&gt;&gt;S: 취소
+        S--&gt;&gt;M: 그룹 유지
+    else 확인
+        M-&gt;&gt;S: 확인
+        S-&gt;&gt;G: 탈퇴 실행
+        G-&gt;&gt;G: GROUP_MEMBERS.left_at 기록
+        G-&gt;&gt;R: 해당 멤버 기록 일괄 회수 요청
+        R-&gt;&gt;R: visibility: GROUP → PRIVATE (삭제 아님)
+        Note over R: 본인 기록 유실 0건&lt;br/&gt;부분 회수 0건 [SC-2.F2]
+        R--&gt;&gt;G: 회수 완료 (≤ 60초)
+        G--&gt;&gt;S: 탈퇴 완료
+
+        P-&gt;&gt;S: 그룹 화면 열기
+        S-&gt;&gt;R: 그룹 피드 조회
+        R--&gt;&gt;P: 그 멤버 영상 전부 사라진 상태
+    end</pre></figure>
+<p><b>"내려간다"와 "지운다"는 다르다.</b> 탈퇴하면 그 멤버의 영상은 그룹 화면에서 사라지지만, 데이터베이스에서는 공개 범위만 <code>GROUP → PRIVATE</code>로 바뀔 뿐 <b>삭제되지 않는다</b>. 본인 기록 저장소에는 그대로 남는다.</p>
+<div class="note"><p><b>촬영 담당·팀 운영자로서</b> 사람마다 자기가 나온 장면을 각자 가져가기를 바란다. <b>그래야</b> 촬영 담당인 나도 기록을 남기고, 홍보 주기를 내 편집 속도에서 떼어낼 수 있다.</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th><th>연결 REQ</th></tr></thead>
+<tbody>
+<tr><td>SC-2.1</td><td><b>Given</b> 그룹 멤버가 기록을 보유할 때 / <b>When</b> 멤버 필터를 누르면 / <b>Then</b> 해당 멤버 기록만 표시된다</td><td>p95 ≤ 300ms · 오표시(타 멤버 기록 노출) 0건</td><td>REQ-FUNC-013 · REQ-NF-005</td></tr>
+<tr><td>SC-2.2</td><td><b>Given</b> 촬영 담당 본인이 원본을 올렸을 때 / <b>When</b> 본인 대상으로 탐지하면 / <b>Then</b> 본인 기록도 동일 품질로 생성된다</td><td>렌더 성공률 타 멤버와 ±2%p 이내 · 탐지율 차 ≤ 3%p</td><td>REQ-FUNC-003 · REQ-FUNC-008</td></tr>
+<tr><td>SC-2.3</td><td><b>Given</b> 팀원 12명이 각자 자기 원본을 올렸을 때 / <b>When</b> 각자 하이라이트를 만들면 / <b>Then</b> <b>타인 계정에서 발생한 편집 이벤트가 0건</b>이다</td><td>타 계정 <code>selection_*</code> 이벤트 0건</td><td>REQ-FUNC-005</td></tr>
+<tr><td>SC-2.4</td><td><b>Given</b> 한 원본을 여러 사용자가 쓰려 할 때 / <b>When</b> MVP 버전에서 시도하면 / <b>Then</b> 기능 없음을 명시하고 각자 업로드 경로를 안내한다</td><td>안내 노출률 100% · 무응답·오류 종료 0건 (REQ-FUNC-024는 P3)</td><td>REQ-FUNC-024 <em>(P3 · 범위 밖 안내)</em></td></tr>
+<tr><th><b>SC-2.F1</b></th><td><b>Given</b> 그룹에 영상 N개를 올린 멤버가 <b>나가기</b>를 누를 때 / <b>When</b> 확인 화면이 뜨면 / <b>Then</b> <b>"이 그룹에 올린 영상 N개가 함께 내려갑니다 · 내 기록에는 그대로 남습니다"</b>를 실제 개수와 함께 보여준다</td><td>경고 노출률 100% · 표시 개수 불일치 0건 · <b>확인 없이 나가기 완료 0건</b></td><td>REQ-FUNC-013</td></tr>
+<tr><th><b>SC-2.F2</b></th><td><b>Given</b> 멤버가 경고를 확인하고 나갔을 때 / <b>When</b> 남은 멤버가 그룹 화면을 열면 / <b>Then</b> 그 멤버의 영상이 <b>전부 사라지되 본인 기록 저장소에는 남는다</b></td><td>그룹 잔존 노출 0건 · <b>본인 기록 유실 0건</b> · 회수 반영 지연 ≤ 60초 · 부분 회수 0건</td><td>REQ-FUNC-013 · REQ-FUNC-009</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>11.3 시나리오 3 — 구석의 인물을 화면 주인공으로</h3>
+    <h4>그림 11-3. 선택부터 저장까지 (Sequence Diagram)</h4>
+<div class="easy"><p><b>시퀀스 다이어그램 읽는 법</b> — 위쪽 가로줄이 참여자(사람·서비스), 아래로 내려가는 세로선이 시간이다. 가로 화살표는 요청·응답이고 <code>alt</code>로 묶인 영역은 <b>조건에 따라 갈리는 분기</b>다. 회색 메모는 그 지점의 판정 기준이다.</p></div>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant S as Client Shell
+    participant C as Highlight Composer
+    participant V as Vision Tracking
+    participant R as Record Store
+    participant T as Telemetry
+
+    U-&gt;&gt;S: 후보 중 하이라이트 선택
+    S-&gt;&gt;C: 선택 확정
+    C-&gt;&gt;T: selection_confirmed
+    Note over C: 이 이벤트 없이 렌더 시작 0건&lt;br/&gt;최종 선택권은 사람에게 [SC-3.3]
+
+    C-&gt;&gt;V: 리프레이밍 요청 (추적 좌표)
+    V--&gt;&gt;C: 인물 중심 프레임 (≥ 1080×1920)
+    C-&gt;&gt;T: render_started
+    C-&gt;&gt;C: 합치기 · 음악 삽입 · 렌더링
+
+    alt 렌더 3회 연속 실패 [SC-3.F1]
+        C--&gt;&gt;S: 실패 사유
+        Note over C,R: 선택 결과 보존 · 원본 삭제 안 함&lt;br/&gt;선택 데이터 유실 0건
+        S--&gt;&gt;U: 사유 안내 + 재시도 경로
+    else 렌더 성공
+        C-&gt;&gt;R: 기록 행 생성 요청
+        R-&gt;&gt;R: RECORD 저장 (visibility=PRIVATE)
+        Note over R: 공개 범위를 정하기 전에 이미 저장&lt;br/&gt;저장 성공률 ≥ 99.9% · Gate B 전제
+        R--&gt;&gt;C: recordId
+        C-&gt;&gt;T: render_succeeded
+        S--&gt;&gt;U: 결과 재생 + 5점 척도 1문항
+        U-&gt;&gt;S: "잘 잡혔다" 평가
+        S-&gt;&gt;T: reframe_rating
+        Note over S,T: 4점 이상 ≥ 80% · 응답률 ≥ 30%
+
+        U-&gt;&gt;S: 공개 범위 선택 (6단계)
+        S-&gt;&gt;R: PATCH /records/{id}/visibility
+        R--&gt;&gt;S: 변경 완료
+    end</pre></figure>
+<p><b>저장이 공개보다 먼저다.</b> 그림에서 기록 저장(<code>RECORD 저장</code>)이 공개 범위 선택보다 <b>위에</b> 있는 것에 주목하면 된다. 이 순서가 뒤바뀌면 "올리지 않아도 남는다"는 제품 주장이 성립하지 않는다.</p>
+<div class="note"><p><b>크리에이터로서</b> 편집 시간을 3시간에서 크게 줄여 주기를 바란다. <b>그래야</b> 쌓인 원본을 업로드로 연결하고 성장 근거를 만들 수 있다.</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th><th>연결 REQ</th></tr></thead>
+<tbody>
+<tr><td>SC-3.1</td><td><b>Given</b> 대상이 화면 구석에 작게 잡힌 원본일 때 / <b>When</b> 리프레이밍 결과를 보여주면 / <b>Then</b> 렌더 직후 5점 척도에서 4점 이상 응답 비율이 기준을 넘는다</td><td>≥ 80% · <b>응답률 ≥ 30%</b>(미만이면 무효)</td><td>REQ-FUNC-006</td></tr>
+<tr><td>SC-3.2</td><td><b>Given</b> 리프레이밍 결과가 나왔을 때 / <b>When</b> 사용자가 확인하면 / <b>Then</b> 세션 내 재업로드가 발생하지 않는다</td><td>세션 내 중복 업로드 0건 · 출력 ≥ 1080×1920</td><td>REQ-FUNC-006 · REQ-FUNC-008</td></tr>
+<tr><td>SC-3.3</td><td><b>Given</b> 후보가 제시됐을 때 / <b>When</b> 결과물이 생성되면 / <b>Then</b> 사용자의 명시적 선택 없이 확정된 건이 없다</td><td><code>selection_confirmed</code> 없는 <code>render_started</code> 0건</td><td>REQ-FUNC-005</td></tr>
+<tr><td>SC-3.4</td><td><b>Given</b> 선택이 끝났을 때 / <b>When</b> 합치기·렌더링을 실행하면 / <b>Then</b> 앱 안에서 완성된다</td><td>렌더 p95 ≤ 90초 · 외부 앱 전환 이벤트 0건</td><td>REQ-FUNC-008 · REQ-NF-004</td></tr>
+<tr><th><b>SC-3.F1</b></th><td><b>Given</b> 렌더링이 실패했을 때 / <b>When</b> 재시도해도 3회 연속 실패하면 / <b>Then</b> <b>선택 결과를 보존한 채</b> 사유를 안내하고 원본을 삭제하지 않는다</td><td>선택 데이터 유실 0건 · 재시도 ≥ 3회 · 최종 실패율 ≤ 0.5%</td><td>REQ-FUNC-008 · REQ-NF-008</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>11.4 시나리오 4 — 공개하지 않아도 기록이 남는다 <code>[Gate B]</code></h3>
+    <h4>그림 11-4. 타인 조회와 우회 시도 차단 (Sequence Diagram)</h4>
+<div class="easy"><p><b>시퀀스 다이어그램 읽는 법</b> — 위쪽 가로줄이 참여자(사람·서비스), 아래로 내려가는 세로선이 시간이다. 가로 화살표는 요청·응답이고 <code>alt</code>로 묶인 영역은 <b>조건에 따라 갈리는 분기</b>다. 회색 메모는 그 지점의 판정 기준이다.</p></div>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor V as 방문자 (타인)
+    actor A as 공격자 (조작 요청)
+    participant S as Client Shell
+    participant R as Record Store
+    participant E as VisibilityEnforcer
+    participant L as 감사 로그
+
+    V-&gt;&gt;S: 남의 프로필 열기
+    S-&gt;&gt;R: GET /users/{id}/profile
+    R-&gt;&gt;E: 조회 권한 판정
+    E-&gt;&gt;E: visibility=public 인 기록만 선별
+    E--&gt;&gt;R: 필터링된 목록 + 개수
+    R--&gt;&gt;S: 전체공개 9개 · 기록 수 9
+    Note over R,S: 비공개·그룹 기록은 개수에도 미포함&lt;br/&gt;노출 0건 · p95 ≤ 400ms [SC-4.4]
+
+    A-&gt;&gt;R: GET /records/{타인의 private id} (직접 호출)
+    R-&gt;&gt;E: 조회 권한 판정
+    E-&gt;&gt;E: 소유자 불일치 AND visibility=private
+    E--&gt;&gt;R: 거부
+    R-&gt;&gt;L: 감사 로그 기록 (100%)
+    R--&gt;&gt;A: 403 Forbidden
+    Note over E,L: 우회 성공 0건 [SC-4.F1]&lt;br/&gt;클라이언트 필터링만으로는 불충분 — 서버 강제</pre></figure>
+<p><b>두 경로를 나란히 그린 이유</b> — 위쪽은 정상 방문자, 아래쪽은 URL을 조작한 접근이다. 둘 다 <b>같은 검문소(VisibilityEnforcer)</b>를 지난다. 화면에서만 가리는 방식이었다면 아래쪽 경로가 뚫린다.</p>
+<div class="note"><p><b>찍어두고 올리지 않는 사용자로서</b> 남길 15초를 확실히 건지기를 바란다. <b>그래야</b> 공개하지 않고도 기록을 해마다 쌓을 수 있다.</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th><th>연결 REQ</th></tr></thead>
+<tbody>
+<tr><td>SC-4.1</td><td><b>Given</b> 렌더가 완료됐을 때 / <b>When</b> 공개 범위를 정하기 <b>전</b>이라도 / <b>Then</b> 기록 행이 이미 존재한다</td><td>저장 성공률 ≥ 99.9% · 렌더 성공 대비 기록 누락 0건 · <b>기본 공개 범위 <code>private</code></b></td><td>REQ-FUNC-009 · REQ-NF-007</td></tr>
+<tr><td>SC-4.2</td><td><b>Given</b> 기록이 쌓였을 때 / <b>When</b> 월말 스냅샷을 뽑으면 / <b>Then</b> 비공개 비율이 기준을 넘는다</td><td>≥ 30% · <code>visibility='private'</code> ÷ 전체</td><td>REQ-FUNC-010</td></tr>
+<tr><td>SC-4.3</td><td><b>Given</b> 마이페이지 격자에 기록이 있을 때 / <b>When</b> 목록을 보면 / <b>Then</b> 각 기록에 공개 범위 배지가 붙되 <b>영상 내용을 가리지 않는다</b></td><td>배지 미표시 0건 · <b>명도 대비 ≥ 4.5:1</b> · 배지 면적 ≤ 썸네일의 8% · <b>중앙 안전영역(가운데 60%) 침범 0</b></td><td>REQ-FUNC-010 · REQ-FUNC-011</td></tr>
+<tr><td>SC-4.4</td><td><b>Given</b> 남이 내 프로필을 열었을 때 / <b>When</b> 목록·개수를 조회하면 / <b>Then</b> 전체공개만 보이고 나머지는 <b>개수에도 포함되지 않는다</b></td><td>비공개·그룹 노출 0건 · API 응답 필드 단위 검증 · p95 ≤ 400ms</td><td>REQ-FUNC-010 · REQ-NF-005 · REQ-NF-009</td></tr>
+<tr><th><b>SC-4.F1</b></th><td><b>Given</b> 클라이언트가 조작된 요청으로 타인의 비공개 기록을 직접 조회할 때 / <b>When</b> 서버가 처리하면 / <b>Then</b> <b>403으로 차단하고 감사 로그를 남긴다</b></td><td>우회 성공 0건 · 감사 로그 기록률 100% · 회귀 테스트 스위트 상시 통과</td><td>REQ-NF-009</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>11.5 시나리오 5 — 같이 뛰는 사람에게만 공개 (그룹)</h3>
+    <h4>그림 11-5. 그룹 생성과 링크 초대 (Sequence Diagram)</h4>
+<div class="easy"><p><b>시퀀스 다이어그램 읽는 법</b> — 위쪽 가로줄이 참여자(사람·서비스), 아래로 내려가는 세로선이 시간이다. 가로 화살표는 요청·응답이고 <code>alt</code>로 묶인 영역은 <b>조건에 따라 갈리는 분기</b>다. 회색 메모는 그 지점의 판정 기준이다.</p></div>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor O as 그룹 생성자
+    actor N as 초대받은 사람
+    participant S as Client Shell
+    participant G as Social Graph
+    participant R as Record Store
+
+    O-&gt;&gt;S: 이름 입력 + 팔로잉 친구 선택
+    S-&gt;&gt;G: POST /groups
+    G-&gt;&gt;G: 승인 절차 없이 생성 (p95 ≤ 500ms)
+    Note over G: 이름 중복 허용 · 인원 상한 20명
+    G--&gt;&gt;S: groupId
+
+    O-&gt;&gt;S: 초대 링크 발급
+    S-&gt;&gt;G: POST /groups/{id}/invite-link
+    G--&gt;&gt;S: 링크 + 만료일시 (7일)
+    O--&gt;&gt;N: 카카오톡·문자로 링크 전달
+
+    N-&gt;&gt;S: 링크 열기
+    alt 미가입자 [SC-5.3]
+        S--&gt;&gt;N: 가입 화면으로 안내
+        N-&gt;&gt;S: 가입 완료
+        S-&gt;&gt;G: 원래 그룹으로 복귀 (성공률 ≥ 95%)
+    end
+
+    S-&gt;&gt;G: 참여 요청
+    alt 인원 20명 초과 [SC-5.F1]
+        G--&gt;&gt;S: 422 · 사유 안내
+        Note over G: 부분 생성 없이 롤백 0건
+    else 여유 있음
+        G-&gt;&gt;G: GROUP_MEMBERS 추가
+        G--&gt;&gt;N: 참여 완료
+    end
+
+    Note over N,R: 이후 그룹 공개 기록 열람 가능
+    N-&gt;&gt;R: 그룹 피드 조회
+    R-&gt;&gt;R: VisibilityEnforcer 검사
+    R--&gt;&gt;N: visibility=group AND 멤버인 기록만</pre></figure>
+<p><b>링크는 열려 있고 참여는 닫혀 있다.</b> 링크 자체는 카카오톡으로 누구에게나 보낼 수 있지만, 실제 참여는 <b>가입한 사람만</b> 가능하다. 링크가 유출돼도 가입 절차와 인원 상한 20명이 이중으로 막는다.</p>
+<div class="note"><p><b>사용자로서</b> 팔로워 전부가 아니라 함께 운동하는 소수에게만 열기를 바란다. <b>그래야</b> 계정을 쪼개지 않아도 된다.</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th><th>연결 REQ</th></tr></thead>
+<tbody>
+<tr><td>SC-5.1</td><td><b>Given</b> 팔로잉 친구가 있을 때 / <b>When</b> 이름을 적고 골라 만들면 / <b>Then</b> 승인 절차 없이 생성된다</td><td>승인 단계 0 · p95 ≤ 500ms · 이름 중복 허용</td><td>REQ-FUNC-013 · REQ-NF-005</td></tr>
+<tr><td>SC-5.2</td><td><b>Given</b> "그룹에만 공개" 기록이 있을 때 / <b>When</b> 그룹 밖 사용자가 검색·피드·직접 URL로 접근하면 / <b>Then</b> 세 경로 모두 노출되지 않는다</td><td><b>3경로 전부 0건</b> · 검색 색인 제외 100%</td><td>REQ-FUNC-013 · REQ-NF-009</td></tr>
+<tr><td>SC-5.3</td><td><b>Given</b> 그룹 초대 링크를 받은 사람이 있을 때 / <b>When</b> 링크를 열면 / <b>Then</b> <b>가입·로그인한 경우에만 참여</b>되고, 미가입자는 가입 화면으로 안내된다</td><td><b>비가입 상태 참여 0건</b> · 가입 후 원래 그룹 복귀 성공률 ≥ 95% · 링크 유효기간 7일 · 만료 링크 참여 0건</td><td>REQ-FUNC-013</td></tr>
+<tr><td>SC-5.4</td><td><b>Given</b> 그룹에 올린 기록을 내렸을 때 / <b>When</b> 내 기록을 열면 / <b>Then</b> 그대로 남아 있다</td><td>기록 유실 0건</td><td>REQ-FUNC-009 · REQ-FUNC-013</td></tr>
+<tr><td>SC-5.5</td><td><b>Given</b> 팔로우 관계만 있을 때 / <b>When</b> 그룹 공개 기록에 접근을 시도하면 / <b>Then</b> 차단된다</td><td>열람 성공 0건 · 감사 로그 100%</td><td>REQ-FUNC-012 · REQ-NF-009</td></tr>
+<tr><th><b>SC-5.F1</b></th><td><b>Given</b> 그룹 멤버가 <b>20명</b>인 상태에서 21번째를 초대할 때 / <b>When</b> 초대를 실행하면 / <b>Then</b> 사유를 안내하고 <b>부분 생성 없이 롤백</b>한다</td><td>상한 20명 · 21번째 초대 성공 0건 · 부분 생성 0건 · 안내 노출률 100%</td><td>REQ-FUNC-013</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>11.6 시나리오 6 — 앱을 열면 볼 것이 있다</h3>
+    <h4>그림 11-6. 앱 진입과 반응 (Sequence Diagram)</h4>
+<div class="easy"><p><b>시퀀스 다이어그램 읽는 법</b> — 위쪽 가로줄이 참여자(사람·서비스), 아래로 내려가는 세로선이 시간이다. 가로 화살표는 요청·응답이고 <code>alt</code>로 묶인 영역은 <b>조건에 따라 갈리는 분기</b>다. 회색 메모는 그 지점의 판정 기준이다.</p></div>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant S as Client Shell
+    participant F as Feed Service
+    participant R as Record Store
+    participant E as Engagement
+
+    U-&gt;&gt;S: 앱 실행
+    S-&gt;&gt;F: GET /feed?tab=following
+    Note over S,F: 로그인 화면 없이 바로 진입
+
+    alt 팔로잉 0명 — 빈 피드 [SC-6.F1]
+        F--&gt;&gt;S: 빈 결과
+        S-&gt;&gt;F: GET /feed?tab=recommend
+        F--&gt;&gt;S: 추천 목록
+        S--&gt;&gt;U: 추천 탭으로 대체 노출
+        Note over S,U: 빈 화면 체류 0초 · 대체 노출률 100%
+    else 팔로잉 있음
+        F-&gt;&gt;R: 공개 기록 조회 (VisibilityEnforcer 경유)
+        R--&gt;&gt;F: visibility=public 기록만
+        F--&gt;&gt;S: 피드 목록
+        S--&gt;&gt;U: 첫 프레임 재생 (p95 ≤ 1.5초)
+    end
+
+    U-&gt;&gt;S: 좋아요 누름
+    S-&gt;&gt;E: POST /records/{id}/reactions (like)
+    E-&gt;&gt;R: 대상 기록의 공개 범위 확인
+    alt visibility=private
+        R--&gt;&gt;E: 반응 대상 아님
+        Note over E: 나만 보기 기록에 반응 UI 0건 [SC-6.2]
+    else 공개 범위 안
+        E--&gt;&gt;S: 반영 완료
+    end
+
+    U-&gt;&gt;S: 부적절 댓글 신고
+    S-&gt;&gt;E: POST reactions (report)
+    E--&gt;&gt;U: 접수 확인 (성공률 ≥ 99%)
+    Note over E,U: 처리 기준·운영 주체 미정 — 접수까지가 범위</pre></figure>
+<p><b>신규 사용자가 빈 화면을 보지 않게 하는 분기</b>가 맨 위에 있다. 팔로잉이 0명이면 추천 탭으로 자동 대체한다 — 첫 세션에서 빈 화면을 보면 그대로 이탈하기 때문이다.</p>
+<div class="note"><p><b>모든 사용자로서</b> 앱을 열었을 때 볼 것이 있고 반응을 주고받기를 바란다. <b>그래야</b> 다음 경기에도 앱을 연다.</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th><th>연결 REQ</th></tr></thead>
+<tbody>
+<tr><td>SC-6.1</td><td><b>Given</b> 앱을 실행했을 때 / <b>When</b> 진입하면 / <b>Then</b> 로그인 화면 없이 팔로잉 탭에서 영상이 재생된다</td><td>첫 프레임 p95 ≤ 1.5초 · 빈 피드 노출률 &lt; 5%</td><td>REQ-FUNC-011 · REQ-FUNC-014 · REQ-NF-001</td></tr>
+<tr><td>SC-6.2</td><td><b>Given</b> "나만 보기" 기록일 때 / <b>When</b> 피드를 구성하면 / <b>Then</b> 좋아요·댓글 UI가 붙지 않는다</td><td>비공개 기록 반응 노출 0건</td><td>REQ-FUNC-010 · REQ-FUNC-015 · REQ-FUNC-016</td></tr>
+<tr><td>SC-6.3</td><td><b>Given</b> 부적절한 댓글을 만났을 때 / <b>When</b> 신고하면 / <b>Then</b> 접수 확인이 표시된다</td><td>접수 성공률 ≥ 99% · <em>처리 기준·주체 미정 — 접수까지만 검증 대상</em></td><td>REQ-FUNC-016</td></tr>
+<tr><td>SC-6.4</td><td><b>Given</b> 기록을 만든 사용자일 때 / <b>When</b> 가입 30일이 지나면 / <b>Then</b> 기록 3편 이상을 보유한다</td><td>D30 코호트 전환 ≥ 30% (북극성 선행지표)</td><td>— <em>(북극성 선행지표 · §8.1)</em></td></tr>
+<tr><th><b>SC-6.F1</b></th><td><b>Given</b> 팔로잉이 0명이라 피드가 비었을 때 / <b>When</b> 앱에 진입하면 / <b>Then</b> <b>빈 화면 대신 추천 탭으로 대체 노출</b>한다</td><td>빈 화면 체류 0초 · 대체 노출률 100% · 신규 첫 세션 이탈률 ≤ 20%</td><td>REQ-FUNC-014</td></tr>
+</tbody></table></div>
+<p><b>시나리오 총계: 정상 24건 + 실패 경로 9건 = 33건.</b> 모든 Then은 로그·쿼리·테스트로 관찰 가능하며, 주관적 표현은 계측 이벤트나 척도 문항으로 정의했다.</p>
+  </div>
+</section>
+
+<section class="sec" id="s12">
+  <div class="sec-head">
+    <p class="sec-num">시스템 모드 및 상태</p>
+    <h2>시스템 모드 및 상태</h2>
+  </div>
+  <div class="block">
+<div class="note"><p><b>근거:</b> ISO/IEC/IEEE 29148:2018 §9.5.10 <em>System modes and states</em> — 시스템이 취할 수 있는 상태와 전이 조건을 기술한다.</p></div>
+  </div>
+  <div class="block">
+    <h3>12.1 기록의 공개 범위 상태 전이</h3>
+    <h4>그림 12-1. 공개 범위 상태 전이도 (State Diagram)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — 기록 하나가 가질 수 있는 상태와, 어떤 사건으로 상태가 바뀌는지다. 아래 표의 그림판이다.</p>
+<p><b>읽는 법</b> — 둥근 상자가 상태, 화살표 위 글이 <b>그 전이를 일으키는 사건</b>이다. <code>[*]</code>는 시작·종료를 뜻한다.</p></div>
+<figure class="fig"><pre class="mermaid">stateDiagram-v2
+    direction LR
+    [*] --&gt; 저장됨: 렌더링 완료 (REQ-FUNC-008)
+    저장됨 --&gt; 나만보기: 기본값 자동 적용
+    나만보기 --&gt; 그룹공개: 그룹 선택
+    나만보기 --&gt; 전체공개: 전체공개 선택
+    그룹공개 --&gt; 나만보기: 사용자가 내림
+    그룹공개 --&gt; 나만보기: 그룹 탈퇴 — 자동 회수
+    그룹공개 --&gt; 전체공개: 범위 전환
+    전체공개 --&gt; 나만보기: 사용자가 내림
+    나만보기 --&gt; [*]: 사용자 명시 삭제만
+
+    note right of 저장됨
+        공개 범위를 정하기 전에
+        이미 저장돼 있다 (Gate B 전제)
+    end note
+    note right of 그룹공개
+        그룹 밖에서는 검색·피드·URL
+        세 경로 모두 노출되지 않는다
+    end note
+    note left of 나만보기
+        기본값. 어떤 전이에서도
+        기록 자체는 삭제되지 않는다
+    end note</pre></figure>
+<p><b>불변 조건 하나만 기억하면 된다</b> — 어떤 화살표를 타도 <b>기록 자체는 삭제되지 않는다</b>. 공개 범위 변경은 노출 범위만 바꾼다. 삭제로 가는 화살표는 사용자가 명시적으로 지울 때 하나뿐이다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>현재 상태</th><th>전이 사건</th><th>다음 상태</th><th>비고</th></tr></thead>
+<tbody>
+<tr><td>(없음)</td><td>렌더링 완료 (REQ-FUNC-008)</td><td><b>저장됨</b></td><td>공개 범위를 정하기 전에 저장이 선행된다 (Gate B의 전제)</td></tr>
+<tr><td>저장됨</td><td>기본값 적용</td><td><b>나만 보기</b></td><td>사용자 조작 없이 <code>PRIVATE</code>로 확정</td></tr>
+<tr><td>나만 보기</td><td>그룹 선택 (REQ-FUNC-013)</td><td><b>그룹에만 공개</b></td><td>그룹 밖에서는 검색되지 않는다</td></tr>
+<tr><td>나만 보기</td><td>전체공개 선택</td><td><b>전체공개</b></td><td>—</td></tr>
+<tr><td>그룹에만 공개</td><td>사용자가 내림</td><td><b>나만 보기</b></td><td>기록은 유실되지 않는다</td></tr>
+<tr><td>그룹에만 공개</td><td><b>그룹 탈퇴</b></td><td><b>나만 보기</b></td><td>자동 회수. 나가기 전 개수 경고 필수 (SC-2.F1)</td></tr>
+<tr><td>그룹에만 공개</td><td>전체공개 전환</td><td><b>전체공개</b></td><td>—</td></tr>
+<tr><td>전체공개</td><td>사용자가 내림</td><td><b>나만 보기</b></td><td>—</td></tr>
+<tr><td>나만 보기</td><td><b>사용자 삭제</b></td><td>(종료)</td><td>삭제는 사용자 명시 조작으로만 가능</td></tr>
+</tbody></table></div>
+<p><b>불변 조건</b> — 어떤 전이에서도 기록 자체는 삭제되지 않는다. 공개 범위 변경은 노출 범위만 바꾼다.</p>
+  </div>
+  <div class="block">
+    <h3>12.2 편집 파이프라인 단계</h3>
+    <h4>그림 12-2. 편집 파이프라인과 실패 분기 (Flow Chart)</h4>
+<div class="easy"><p><b>무엇을 보여주나</b> — 영상 한 편이 만들어지는 6단계와, 각 단계에서 실패했을 때 어디로 빠지는지다.</p>
+<p><b>읽는 법</b> — 마름모가 판정 지점, <b>점선 테두리 상자가 실패 경로</b>다. 점선 화살표는 실패 후 되돌아가는 경로다.</p></div>
+<figure class="fig"><pre class="mermaid">flowchart TD
+    S1["1단계 · 원본 고르기&lt;br/&gt;갤러리 격자에서 선택"] --&gt; CHK{"코덱·손상&lt;br/&gt;사전 검증"}
+    CHK --&gt;|실패| E1["사유 안내 후 중단&lt;br/&gt;GPU 작업 생성 0건"]
+    CHK --&gt;|통과| S2["2단계 · 내 장면 찾기&lt;br/&gt;본인 1회 지정 → 재식별 → 구간 탐지"]
+
+    S2 --&gt; FOUND{"등장 구간&lt;br/&gt;1개 이상?"}
+    FOUND --&gt;|없음| E2["찾지 못함 상태 표시&lt;br/&gt;재지정 경로 제공"]
+    E2 -.재지정.-&gt; S2
+    FOUND --&gt;|있음| S3["3단계 · 하이라이트 선택&lt;br/&gt;후보 중 사용자가 확정"]
+
+    S3 --&gt; S4["4단계 · 구도 보정&lt;br/&gt;추적 좌표로 인물 중심 리프레이밍"]
+    S4 --&gt; S5["5단계 · 음악 넣기&lt;br/&gt;저작권 정리된 라이브러리"]
+    S5 --&gt; RND{"렌더링"}
+    RND --&gt;|3회 연속 실패| E3["선택 결과 보존&lt;br/&gt;원본 삭제 안 함&lt;br/&gt;사유 안내"]
+    E3 -.재시도.-&gt; RND
+    RND --&gt;|성공| SAVE["기록 자동 저장&lt;br/&gt;visibility = PRIVATE"]
+
+    SAVE --&gt; S6["6단계 · 공개 범위 정하기&lt;br/&gt;이 시점에 저장은 이미 끝나 있다"]
+    S6 --&gt; OUT(["내 기록에 남음"])
+
+    style S2 fill:#FBEDE4,stroke:#C2673F,stroke-width:2px
+    style S4 fill:#E6F8F3,stroke:#33A992,stroke-width:2px
+    style SAVE fill:#FFF3C4,stroke:#8A6A22,stroke-width:2px
+    style E1 fill:#fff,stroke:#C2673F,stroke-dasharray:4
+    style E2 fill:#fff,stroke:#C2673F,stroke-dasharray:4
+    style E3 fill:#fff,stroke:#C2673F,stroke-dasharray:4</pre></figure>
+<p><b>색이 뜻하는 것</b> — 주황(2단계)은 Gate A 판정 지점, 초록(4단계)은 이 제품의 차별점인 구도 보정, 노랑(기록 저장)은 Gate B의 전제다. <b>저장이 6단계보다 앞에 있는 것</b>이 이 그림의 핵심이다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>단계</th><th>화면</th><th>담당 요구사항</th><th>다음 단계 진입 조건</th></tr></thead>
+<tbody>
+<tr><td>1 · 원본 고르기</td><td>갤러리 격자</td><td>REQ-FUNC-001</td><td>코덱 사전 검증 통과 (SC-1.F1)</td></tr>
+<tr><td>2 · 내 장면 찾기</td><td>탐지 진행</td><td>REQ-FUNC-002 · 003</td><td>등장 구간 1개 이상 (미검출 시 SC-1.F2)</td></tr>
+<tr><td>3 · 하이라이트 선택</td><td>후보 목록</td><td>REQ-FUNC-004 · 005</td><td><code>selection_confirmed</code> 발생</td></tr>
+<tr><td>4 · 구도 보정</td><td>결과 확인</td><td>REQ-FUNC-006</td><td>사용자 확인</td></tr>
+<tr><td>5 · 음악 넣기</td><td>라이브러리</td><td>REQ-FUNC-007</td><td>곡 선택 또는 건너뛰기</td></tr>
+<tr><td>6 · 공개 범위 정하기</td><td>범위 선택</td><td>REQ-FUNC-009 · 010</td><td><b>이 시점에 기록은 이미 저장돼 있다</b></td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="s13">
+  <div class="sec-head">
+    <p class="sec-num">가정, 의존성 및 제약</p>
+    <h2>가정, 의존성 및 제약</h2>
+  </div>
+  <div class="block">
+<div class="note"><p><b>근거:</b> ISO/IEC/IEEE 29148:2018 §9.6.8 <em>Assumptions and dependencies</em> · §9.6.7 <em>Limitations</em> — 요구사항이 성립하기 위한 전제와 설계 제약을 기술한다.</p></div>
+  </div>
+  <div class="block">
+    <h3>13.1 설계 결정 기록 (ADR)</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>결정 사항</th><th>상태</th><th>결정 필요 시점</th></tr></thead>
+<tbody>
+<tr><td>ADR-01</td><td>편집 기능으로 과금하지 않는다 (수익 설계 결정이며 편집 가치가 작다는 뜻이 아니다)</td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-02</td><td>관계는 팔로워·팔로잉, 비공개 공유는 그룹이 담당한다</td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-03</td><td>첫 검증은 농구 한 카테고리로 좁혀 시작한다</td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-04</td><td>수익 모델 · 가격 · 구독 도입 시점</td><td>미정</td><td>Gate B 통과 후</td></tr>
+<tr><td>ADR-05</td><td>GPU 원가 구조 및 편당 처리 원가 상한</td><td>미정</td><td><b>Gate A 착수 전</b></td></tr>
+<tr><td>ADR-06a</td><td>그룹 인원 상한 — <b>20명</b>(생성자 포함)</td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-06b</td><td>그룹 탈퇴 시 기록 처리 — <b>그룹에서 회수 · 본인 기록에는 잔존 · 나가기 전 경고 필수</b></td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-06c</td><td>그룹 초대 방식 — <b>링크 초대 허용, 참여는 가입자만, 유효기간 7일</b></td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-06d</td><td>그룹 이름 중복 — <b>허용</b> (그룹은 검색이 아니라 초대로 진입)</td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-06e</td><td>그룹 내 좋아요·댓글 정책</td><td>미정</td><td>그룹 구현 착수 전</td></tr>
+<tr><td>ADR-07a</td><td>저장 직후 기본 공개 범위 — <b>나만 보기(<code>private</code>)</b></td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-07b</td><td>공개 범위 표시 방식 — <b>글자 배지 · 영상 가독성 침해 금지</b></td><td><b>확정</b></td><td>—</td></tr>
+<tr><td>ADR-08</td><td>장면 후보 개수 (30개는 초안)</td><td>미정</td><td>베타 A/B(EXP-09)로 결정</td></tr>
+<tr><td>ADR-09</td><td>팔로우 승인제 / 자동</td><td>미정</td><td>소비 루프 착수 전</td></tr>
+<tr><td>ADR-10</td><td>카테고리 랭킹 도입 여부 (시점만 P1 확정)</td><td>미정</td><td>MVP 이후</td></tr>
+<tr><td>ADR-11</td><td>얼굴 정보 동의 · 보관 · 파기 절차</td><td>미정</td><td><b>법무 — 최우선 · 배포 게이트</b></td></tr>
+<tr><td>ADR-12</td><td>음악 곡 확보 경로 및 라이선스 비용</td><td>미정</td><td>REQ-FUNC-007 착수 전</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>13.2 리스크 및 대응</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>ID</th><th>리스크</th><th>영향</th><th>대응</th></tr></thead>
+<tbody>
+<tr><th><b>RISK-01</b></th><td>등장 구간 탐지율이 85%에 미달 (Gate A 실패)</td><td><b>치명적.</b> 인물 추적이 무너지면 나머지 차별점은 기록 앱 하나로 축소된다</td><td>다른 무엇보다 REQ-FUNC-003을 <b>먼저</b> 검증. 농구 한 종목으로 좁혀 데이터 밀도를 높인다. 실패 시 범위를 더 좁히거나 제품 가설을 재검토</td></tr>
+<tr><th><b>RISK-02</b></th><td>GPU 원가가 수익 없이 선행한다</td><td>처리량이 북극성 KPI와 함께 늘어 <b>원가가 성장에 비례</b>한다</td><td>편당 처리 원가 상한을 먼저 정하고(ADR-05), 확정 전 무제한 업로드를 열지 않는다 (REQ-NF-013)</td></tr>
+<tr><th><b>RISK-03</b></th><td>인물 추적 기술이 복제된다</td><td>기존 B2B 사업자가 개인 시장으로 내려오면 우위 소멸</td><td>방어선을 <b>선택 데이터 축적</b>(REQ-FUNC-023)으로 옮긴다. 다만 그 기능은 사용자가 있어야 시작되므로 <b>속도가 곧 방어</b></td></tr>
+<tr><th><b>RISK-04</b></th><td>얼굴 정보 동의 절차 미정</td><td>법적 위험 · REQ-FUNC-024 착수 불가</td><td>착수 전 법무 검토(ADR-11). MVP는 <b>본인 지정 1회</b> 범위로 한정</td></tr>
+<tr><th><b>RISK-05</b></th><td>Q4 세그먼트가 비용을 지불하지 않는다</td><td>시장이 9배지만 매출 0</td><td>값을 편집이 아니라 기록 축적에서 받기로 결정. 다만 가격·시점 미정이라 검증 불가</td></tr>
+<tr><th><b>RISK-06</b></th><td>근거가 전부 대리 지표다</td><td>국내 직접 조사 없이 해외·인접 직군 데이터에 의존</td><td>베타에서 자체 로그로 대체 수집. 국내 조사 실시 여부는 미정</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>13.3 설계 제약</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>구분</th><th>제약</th></tr></thead>
+<tbody>
+<tr><td>입력</td><td>앱은 촬영하지 않는다. <b>원본이 없는 사용자는 제품이 작동하지 않는다</b></td></tr>
+<tr><td>처리 물량</td><td>연 12만 편(1만 명 × 월 1편) 기준. 처리량이 GPU 원가에 직접 비례</td></tr>
+<tr><td>업로드 상한</td><td>최대 60분 / 6GB. 이어올리기 필수</td></tr>
+<tr><td>공개 범위</td><td>서버 측 강제. 클라이언트 필터링은 요구사항 충족으로 인정하지 않는다</td></tr>
+<tr><td>원본 보관</td><td>결과물 확보 시점까지를 기본으로 한다</td></tr>
+<tr><td>배포</td><td>ADR-11(얼굴 정보) 산출물 4종 승인 전 프로덕션 배포 금지</td></tr>
+<tr><td>일정 추정</td><td><b>공수·스프린트 추정은 본 문서에 포함하지 않는다.</b> 개발팀 합류 시점에 확정한다</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>13.4 미확정 항목 요약</h3>
+<p class="lead">착수 전 결정이 필요한 항목은 다음 7건이며, 그중 <b>ADR-11(얼굴 정보 동의)과 ADR-05(GPU 편당 원가)</b>가 Gate A 착수 전에 답이 필요하다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>막고 있는 요구사항</th></tr></thead>
+<tbody>
+<tr><td>ADR-04 수익 모델·가격·구독 시점</td><td>없음 (사업 계획)</td></tr>
+<tr><th><b>ADR-05 GPU 편당 원가 상한</b></th><td><b>REQ-NF-013 · Gate A 착수</b></td></tr>
+<tr><td>ADR-06e 그룹 내 좋아요·댓글 정책</td><td>REQ-FUNC-015 · 016의 그룹 적용 범위</td></tr>
+<tr><td>ADR-08 장면 후보 개수</td><td>REQ-FUNC-004 임계치</td></tr>
+<tr><td>ADR-09 팔로우 승인제 여부</td><td>REQ-FUNC-012 상세 흐름</td></tr>
+<tr><td>ADR-10 랭킹 도입 여부</td><td>REQ-FUNC-022</td></tr>
+<tr><th><b>ADR-11 얼굴 정보 동의·보관·파기</b></th><td><b>REQ-NF-010 · 프로덕션 배포 전체</b></td></tr>
+<tr><td>ADR-12 음악 라이선스 확보 경로</td><td>REQ-FUNC-007</td></tr>
+</tbody></table></div>
+<p><em>작성자: 제품 아키텍트, 검토자: 백엔드 리드 · AI 리드, 승인자: 제품 리드</em></p>
+<p><em>본 문서는 <a href="../PRD/hilit-prd-v1_0.md"><code>hilit-prd-v1_0.md</code></a>를 ISO/IEC/IEEE 29148:2018 SRS 양식으로 옮긴 것이며, 원천 문서에 없는 요구사항을 새로 만들지 않았다. 공수·일정 추정은 의도적으로 제외했다.</em></p>
+<p><em>v1.0 확정 시점의 미해결 사항: <b>REQ-FUNC-004(장면 후보 제시) · REQ-FUNC-007(음악 라이브러리) · REQ-FUNC-017(공유)</b> 세 건은 §4에 인수 기준이 정의돼 있으나 §11에 대응하는 운영 시나리오가 없다. 검증은 §4의 검증 방식 열로 가능하되, 사용자 관점 시나리오는 후속 판에서 보강 대상이다.</em></p>
+  </div>
+</section>
+
+
+</div>
+</main>
+
+<button class="top" id="topBtn" type="button" aria-label="문서 맨 위로 이동">↑ 맨 위로</button>
+
+<script>
+(function () {
+  var nav = document.getElementById('railNav');
+  var links = Array.prototype.slice.call(nav ? nav.querySelectorAll('a') : []);
+  var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+  var current = 0;
+
+  function mark(i) {
+    if (i < 0 || i >= links.length) return;
+    current = i;
+    links.forEach(function (a, n) { a.classList.toggle('is-current', n === i); });
+  }
+
+  if ('IntersectionObserver' in window && sections.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var i = sections.indexOf(e.target);
+        if (i > -1) mark(i);
+      });
+    }, { rootMargin: '-12% 0px -70% 0px', threshold: 0 });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+  mark(0);
+
+  function go(i) {
+    if (i < 0) i = 0;
+    if (i > sections.length - 1) i = sections.length - 1;
+    sections[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    mark(i);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(sections.length - 1); }
+  });
+
+  var btn = document.getElementById('topBtn');
+  if (btn) btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+
+  if (window.mermaid) { mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' }); }
+</script>
+</body>
+</html>
