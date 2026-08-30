@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HILiT Value Proposition v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+
+<style>
+  /* ── 팀 VPS v1 디자인 시스템 승계 ───────────────── */
+  :root{
+    --bg:#111310; --bg-soft:#181b17; --surface:#20231e; --surface-strong:#292d27;
+    --line:#3b4038; --line-soft:#2d312b;
+    --ink:#f6f3ea; --ink-soft:#c6c9be; --ink-muted:#90968a;
+    --mint:#b9f0d5; --mint-soft:#d9f8e9; --mint-deep:#5eb58d;
+    --brown:#4b2d20; --amber:#e7bf75; --danger:#df8a7d; --violet:#b9b6ef; --sky:#9fd2ef;
+    --font-sans:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --font-display:"Arial Black","Pretendard","Noto Sans KR",sans-serif;
+    --font-mono:"Cascadia Mono","Consolas","D2Coding",monospace;
+    --step--2:clamp(.67rem,.63rem + .12vw,.75rem);
+    --step--1:clamp(.75rem,.69rem + .2vw,.87rem);
+    --step-0:clamp(.91rem,.85rem + .25vw,1.05rem);
+    --step-1:clamp(1.08rem,.96rem + .45vw,1.32rem);
+    --step-2:clamp(1.38rem,1.14rem + .9vw,1.92rem);
+    --step-3:clamp(1.8rem,1.4rem + 1.5vw,2.8rem);
+    --space-2:.6rem; --space-3:.9rem; --space-4:1.25rem; --space-5:1.75rem;
+    --radius-s:.7rem; --radius-m:1.1rem; --radius-l:1.7rem;
+    --shadow:0 1.2rem 4rem rgba(0,0,0,.25);
+    --footer:3.6rem; --max:90rem; --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font-sans); font-size:var(--step-0); line-height:1.7;
+    letter-spacing:-.01em; overflow:hidden; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ margin:0; line-height:1.25; text-wrap:balance; letter-spacing:-.022em; }
+  p{ margin:0; }
+  b,strong{ color:var(--ink); font-weight:700; }
+  em{ font-style:normal; color:var(--mint); font-weight:700; }
+  del{ color:var(--ink-muted); text-decoration-color:var(--danger); }
+  :focus-visible{ outline:2px solid var(--mint); outline-offset:3px; border-radius:6px; }
+
+  .deck{ position:fixed; inset:0 0 var(--footer); }
+  .slide{ position:absolute; inset:0; display:none; overflow-y:auto; overscroll-behavior:contain;
+          padding:clamp(1.2rem,4vh,2.6rem) clamp(1rem,3.6vw,3rem); }
+  .slide.is-active{ display:flex; flex-direction:column; justify-content:center; }
+  @media (prefers-reduced-motion:no-preference){
+    .slide.is-active > .in{ animation:rise .32s var(--ease) both; }
+    @keyframes rise{ from{opacity:0; transform:translateY(9px)} to{opacity:1; transform:none} }
+  }
+  .in{ width:100%; max-width:var(--max); margin:0 auto; display:flex; flex-direction:column; gap:clamp(.6rem,1.5vh,1.15rem); }
+
+  .eyebrow{ font-size:var(--step--2); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--mint-deep); }
+  h2{ font-size:var(--step-2); }
+  .lead{ font-size:var(--step-1); color:var(--ink-soft); max-width:66ch; }
+  .sub{ font-size:var(--step--1); color:var(--ink-muted); max-width:78ch; line-height:1.66; }
+  .num,.mono{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+
+  .cover h1{ font-family:var(--font-display); font-size:var(--step-3); line-height:1.14; max-width:22ch; }
+  .meta{ display:flex; flex-wrap:wrap; gap:.25rem 1.3rem; font-size:var(--step--2); color:var(--ink-muted); letter-spacing:.03em; }
+  .badges{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .badge{ font-size:var(--step--2); font-weight:700; padding:.26rem .68rem; border-radius:999px;
+          background:var(--surface); border:1px solid var(--line); color:var(--ink-soft); }
+  .badge.fix{ background:rgba(223,138,125,.16); color:var(--danger); border-color:transparent; }
+  .badge.new{ background:var(--mint); color:var(--bg); border-color:transparent; }
+
+  .cards{ display:grid; gap:var(--space-3); grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m);
+         padding:var(--space-4); display:flex; flex-direction:column; gap:.42rem; }
+  .card .tag{ font-size:var(--step--2); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-muted); }
+  .card h3{ font-size:var(--step-1); }
+  .card p{ font-size:var(--step--1); color:var(--ink-soft); line-height:1.62; }
+  .card.mint{ border-color:var(--mint-deep); } .card.mint .tag{ color:var(--mint); }
+  .card.danger{ border-color:var(--danger); } .card.danger .tag{ color:var(--danger); }
+  .card.amber{ border-color:var(--amber); } .card.amber .tag{ color:var(--amber); }
+  .card.sky{ border-color:var(--sky); } .card.sky .tag{ color:var(--sky); }
+
+  .tw{ overflow:auto; border:1px solid var(--line); border-radius:var(--radius-m); background:var(--surface); max-height:64vh; }
+  table{ border-collapse:collapse; width:100%; font-size:var(--step--1); }
+  th,td{ text-align:left; padding:.48rem .78rem; border-bottom:1px solid var(--line-soft); vertical-align:top; }
+  th{ font-size:var(--step--2); font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-muted);
+      background:var(--surface-strong); white-space:nowrap; position:sticky; top:0; }
+  td{ color:var(--ink-soft); line-height:1.52; }
+  td b{ color:var(--ink); }
+  tbody tr:last-child td{ border-bottom:0; }
+  .r{ text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+  .c{ text-align:center; }
+  .hl{ background:rgba(185,240,213,.07); }
+  .hl-d{ background:rgba(223,138,125,.07); }
+
+  /* 수정 대비 */
+  .fixrow{ display:grid; gap:.3rem 1.1rem; grid-template-columns:auto 1fr; align-items:start;
+           background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--danger);
+           border-radius:var(--radius-s); padding:var(--space-4); }
+  .fixrow .k{ font-size:var(--step--2); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--danger); white-space:nowrap; }
+  .fixrow .was{ grid-column:2; font-size:var(--step--1); color:var(--ink-muted); }
+  .fixrow .now{ grid-column:2; font-size:var(--step-0); color:var(--ink-soft); line-height:1.6; }
+  .fixrow .now b{ color:var(--mint); }
+  .fixes{ display:flex; flex-direction:column; gap:var(--space-3); }
+
+  /* 근거 사슬 */
+  .chain{ display:flex; flex-direction:column; gap:.3rem; background:var(--bg-soft);
+          border-radius:var(--radius-s); padding:var(--space-4); font-size:var(--step--1); }
+  .chain .step{ display:grid; grid-template-columns:5.5rem 1fr; gap:.3rem .9rem; align-items:baseline; }
+  .chain .lbl{ font-size:var(--step--2); font-weight:700; letter-spacing:.08em; color:var(--mint-deep); text-transform:uppercase; }
+  .chain .txt{ color:var(--ink-soft); line-height:1.55; }
+  .chain .arrow{ color:var(--ink-muted); font-size:var(--step--2); padding-left:.4rem; }
+  .chain .step.final .lbl{ color:var(--mint); }
+  .chain .step.final .txt{ color:var(--ink); font-weight:700; }
+
+  .axis{ display:grid; gap:var(--space-3); grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr)); }
+  .ax{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-m); padding:var(--space-4);
+       display:flex; flex-direction:column; gap:.5rem; }
+  .ax.a1{ border-top:3px solid var(--mint); }
+  .ax.a2{ border-top:3px solid var(--sky); }
+  .ax.a3{ border-top:3px solid var(--amber); }
+  .ax .no{ font-size:var(--step--2); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-muted); }
+  .ax .decl{ font-size:var(--step-0); color:var(--mint-soft); line-height:1.6; font-weight:500; }
+  .ax dl{ margin:0; display:flex; flex-direction:column; gap:.28rem; }
+  .ax dt{ font-size:var(--step--2); font-weight:700; color:var(--ink-muted); letter-spacing:.06em; }
+  .ax dd{ margin:0; font-size:var(--step--1); color:var(--ink-soft); line-height:1.55; }
+
+  .note{ background:var(--bg-soft); border-radius:var(--radius-s); padding:.8rem 1.05rem;
+         font-size:var(--step--1); color:var(--ink-soft); line-height:1.66; }
+  .note.warn{ background:rgba(223,138,125,.1); border-left:2px solid var(--danger); }
+  .note.ok{ background:rgba(185,240,213,.08); border-left:2px solid var(--mint-deep); }
+  .note b{ color:var(--ink); }
+
+  .stmt{ background:linear-gradient(180deg, rgba(185,240,213,.1), rgba(185,240,213,.03));
+         border:1px solid var(--mint-deep); border-radius:var(--radius-m); padding:var(--space-5);
+         font-size:var(--step-1); line-height:1.66; color:var(--mint-soft); }
+  .stmt b{ color:var(--mint); }
+
+  .deck-footer{ position:fixed; bottom:0; left:0; right:0; height:var(--footer); z-index:20;
+    background:var(--bg-soft); border-top:1px solid var(--line);
+    display:flex; align-items:center; gap:.8rem; padding:0 clamp(1rem,3vw,2.4rem); }
+  .footer-context{ flex:1 1 auto; min-width:0; font-size:var(--step--1); font-weight:700;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--ink-soft); }
+  .nav-button{ font-family:inherit; font-size:var(--step--1); font-weight:700; color:var(--ink-soft);
+    background:var(--surface); border:1px solid var(--line); border-radius:999px;
+    padding:.34rem .88rem; cursor:pointer; white-space:nowrap; }
+  .nav-button:hover:not(:disabled){ color:var(--ink); border-color:var(--mint-deep); }
+  .nav-button:disabled{ opacity:.32; cursor:default; }
+  .cnt{ font-family:var(--font-mono); font-size:var(--step--1); font-weight:700; color:var(--ink-muted); white-space:nowrap; }
+  .cnt b{ color:var(--mint); }
+  .prog{ position:fixed; top:0; left:0; right:0; height:2px; z-index:25; background:var(--line-soft); }
+  .prog i{ display:block; height:100%; background:var(--mint); transition:width .3s var(--ease); }
+</style>
+
+</head>
+<body>
+<div class="prog"><i id="prog"></i></div>
+<div class="deck" id="deck">
+
+<!-- 01 -->
+<section class="slide is-active" data-t="표지">
+  <div class="in cover">
+    <div class="eyebrow">Value Proposition · v2 Augmented</div>
+    <h1>결론은 지키고<br>근거를 바꾼다</h1>
+    <p class="lead">v1의 구조와 결론 대부분은 그대로 유효합니다. 이 문서는 v1 이후 확보한 <b>실측 데이터</b>로 <b>세 건을 수정하고 세 건을 신설</b>합니다. 반증된 것을 그대로 두면 첫 반문에서 무너지기 때문입니다.</p>
+    <div class="badges">
+      <span class="badge fix">D1 근거 교체</span>
+      <span class="badge fix">D3 사실관계 수정</span>
+      <span class="badge fix">방어력 시제 정정</span>
+      <span class="badge new">경쟁사 ③-B 5곳</span>
+      <span class="badge new">화질 상한 실측</span>
+      <span class="badge new">B2B 모집단 321곳</span>
+      <span class="badge new">가치 선언 3축</span>
+    </div>
+    <p class="meta"><span>claude-opus-5[1m]</span><span>Effort: high</span><span>2026.08.28</span><span>기반: VPS v1 · 22장</span></p>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="slide" data-t="무엇이 바뀌었나">
+  <div class="in">
+    <div class="eyebrow">Changelog</div>
+    <h2>v1 대비 여덟 항목</h2>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>항목</th><th>v1</th><th>v2</th><th class="c">성격</th></tr></thead>
+      <tbody>
+        <tr><td>01</td><td>경쟁사 계층</td><td>9곳 + 유사 3사</td><td><b>14곳</b> — ③-B 개인 스포츠 AI 5곳 추가</td><td class="c">신설</td></tr>
+        <tr class="hl-d"><td>02</td><td><b>D1 차별점</b></td><td><del>“사람을 추적하는 서비스가 없다”</del></td><td><b>“추적 결과로 화면을 재구성하는 곳이 Trace뿐이고 하드웨어 전제”</b></td><td class="c">수정</td></tr>
+        <tr class="hl-d"><td>03</td><td><b>D3 차별점</b></td><td><del>“개인 자격으로 주는 곳이 없다”</del></td><td><b>“둘 다 되는 곳이 없다”</b></td><td class="c">수정</td></tr>
+        <tr class="hl-d"><td>04</td><td><b>방어력 판정</b></td><td><del>“B2B가 내려오려면 시간이 걸린다”</del></td><td><b>이미 내려와 있음</b> — Trace 2023</td><td class="c">수정</td></tr>
+        <tr class="hl"><td>05</td><td>트래킹 V2 성능</td><td>정성 서술</td><td><b>확대 상한 1.125~2.0배</b> 실측</td><td class="c">신설</td></tr>
+        <tr class="hl"><td>06</td><td>B2B 모집단</td><td>미산정</td><td><b>농구 클럽 321곳</b> — 문체부 공식</td><td class="c">신설</td></tr>
+        <tr class="hl"><td>07</td><td>A-4 클럽 조건</td><td>—</td><td><b>하프코트 5~8m</b> — 개인보다 유리</td><td class="c">신설</td></tr>
+        <tr><td>08</td><td>가치 선언</td><td>VP 선언문 1개</td><td><b>3축 구조</b>로 재편</td><td class="c">보강</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="slide" data-t="경쟁 지형 — ③ 계층이 둘로 갈린다">
+  <div class="in">
+    <div class="eyebrow">Competitor · 재편</div>
+    <h2>v1의 기록·트래킹 계층은 전부 팀 대상이었다</h2>
+    <p class="sub">setlog·Veo·Pixellot·Hudl 넷 모두 클럽·팀·학교가 계약 주체입니다. <b>하일릿이 실제로 서는 “개인 대상 스포츠 AI” 칸을 아무도 보지 않았습니다.</b> 확인 결과 그 칸은 비어 있지 않고 종목별로 쪼개져 있었습니다.</p>
+    <div class="tw"><table>
+      <thead><tr><th>계층</th><th>사업자</th><th>규모</th><th class="c">하드웨어</th><th>추적 대상</th><th class="c">화면 재구성</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3">③-A<br>팀 대상<br><span style="color:var(--ink-muted)">v1</span></td><td><b>Veo</b></td><td>ARR $37.2M · 클럽 25,000+</td><td class="c">필수</td><td>공 중심</td><td class="c">중계형</td></tr>
+        <tr><td><b>Pixellot</b></td><td>카메라 3만 대+</td><td class="c">필수</td><td>공 중심</td><td class="c">중계형</td></tr>
+        <tr><td><b>Hudl</b></td><td>이용 팀 343,000+</td><td class="c">선택</td><td>성과 데이터</td><td class="c">분석형</td></tr>
+        <tr class="hl-d"><td rowspan="5">③-B<br>개인 대상<br><span style="color:var(--mint)">v2 신설</span></td><td><b>Trace</b> PlayerFocus</td><td>축구·미국 · <b>연 $180~300</b></td><td class="c" style="color:var(--danger)"><b>필수</b></td><td><b>선수</b></td><td class="c" style="color:var(--danger)"><b>한다 (4X)</b></td></tr>
+        <tr><td><b>SwingVision</b></td><td>사용자 50만 · 가치 $3,500만</td><td class="c" style="color:var(--mint)">불필요</td><td><b>공+선수</b></td><td class="c">통계만</td></tr>
+        <tr><td><b>HomeCourt</b></td><td>투자 $12.5M+ · <b>NBA</b></td><td class="c" style="color:var(--mint)">불필요</td><td>공·동작</td><td class="c">숫자만</td></tr>
+        <tr><td><b>국내 농구 앱 4종</b></td><td><b>무료</b> · 유료화 미달성</td><td class="c">불필요</td><td>숫자만</td><td class="c">—</td></tr>
+        <tr><td><b>Strava</b></td><td>1.8억 명 · $415M · IPO</td><td class="c">불필요</td><td>영상 안 다룸</td><td class="c">—</td></tr>
+        <tr class="hl"><td><b>HILiT</b></td><td><b>—</b></td><td>미정</td><td class="c" style="color:var(--mint)"><b>불필요</b></td><td><b>사람</b></td><td class="c" style="color:var(--mint)"><b>한다</b></td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><b>차별점 논리가 흔들립니다.</b> v1의 “기록의 주인이 클럽이다”, “하드웨어 계약이 전제다”는 ③-A에만 해당합니다. <b>SwingVision도 개인이 주인이고 하드웨어도 없습니다.</b></div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="slide" data-t="D1 · D3 재판정">
+  <div class="in">
+    <div class="eyebrow">Differentiation · 수정</div>
+    <h2>두 문장이 사실이 아니었다</h2>
+    <div class="fixes">
+      <div class="fixrow">
+        <span class="k">D1</span>
+        <p class="was"><del>“말하지 않고 움직이는 사람을 추적한다 — 이 조건에서 사람을 놓치지 않는 서비스는 조사한 목록에 없다”</del></p>
+        <p class="now">SwingVision은 <em>“tracks player and ball movements”</em>, Trace는 <em>“player front and center”</em>, Spiideo는 <em>“precise automatic player tracking”</em>. <b>추적하는 곳은 여럿입니다.</b><br><br>→ 축을 옮깁니다. <b>“추적한 결과로 화면을 다시 구성한다” — 9곳 중 Trace 하나뿐이고, 그마저 전용 카메라를 전제로 합니다.</b></p>
+      </div>
+      <div class="fixrow">
+        <span class="k">D3</span>
+        <p class="was"><del>“같은 기술을 개인에게 개인 자격으로 주는 곳이 없다”</del></p>
+        <p class="now">Trace(연 $180)·SwingVision(연 $99~)·HomeCourt가 <b>정확히 그것을 하고 있습니다.</b><br><br>→ 두 조건으로 좁힙니다. <b>“전용 카메라 없이”</b> × <b>“화면 재구성”</b> — Trace는 앞을, SwingVision·HomeCourt는 뒤를 못 합니다. <b>둘 다 되는 곳은 없습니다.</b></p>
+      </div>
+    </div>
+    <div class="note ok"><b>수정이 오히려 논리를 단단하게 만듭니다.</b> “없다”는 반증 하나로 무너지지만, <b>“둘 다 되는 곳이 없다”는 두 조건을 동시에 깨야</b> 합니다.</div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="slide" data-t="종목이 곧 기술 구조였다">
+  <div class="in">
+    <div class="eyebrow">Why hardware</div>
+    <h2>Trace가 듀얼렌즈를 파는 이유는 거리 때문이다</h2>
+    <div class="cards">
+      <div class="card danger">
+        <span class="tag">Trace · 축구</span>
+        <h3>필드 105 × 68m</h3>
+        <p>그 거리에서 선수를 잡으려면 <b>4배 확대</b>가 필요합니다. 휴대폰 4K로는 화질이 무너지므로 <b>듀얼렌즈 전용기를 팔 수밖에 없습니다.</b></p>
+      </div>
+      <div class="card mint">
+        <span class="tag">HILiT · 농구</span>
+        <h3>하프코트 14 × 15m</h3>
+        <p>드릴 구간 5~8m에서 인물이 화면의 <b>28~47%</b>입니다. <b>1~2배면 충분</b>하고, 휴대폰 4K로 됩니다.</p>
+      </div>
+      <div class="card sky">
+        <span class="tag">그래서</span>
+        <h3>D3의 진짜 근거</h3>
+        <p>“우리는 하드웨어를 <b>안 쓰는 게 아니라, 안 써도 되는 종목을 골랐다</b>.” 종목 선택이 카테고리 결정이 아니라 <b>기술 구조의 결정</b>이었습니다.</p>
+      </div>
+    </div>
+    <div class="note">이 논리는 v1에 없었습니다. v1은 농구를 <b>“동작이 분명하고 사용자가 작게 잡힌다”</b>는 이유로 골랐는데, <b>“하드웨어 없이 가능한 유일한 규모”</b>라는 근거가 하나 더 붙습니다.</div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="slide" data-t="화질 상한 실측">
+  <div class="in">
+    <div class="eyebrow">Tracking V2 · 정량</div>
+    <h2>확대 여유는 12.5%뿐이다</h2>
+    <p class="sub">세로 숏폼(1080×1920) 출력 시 <b>화질 손실 없이 확대할 수 있는 배율</b>입니다. iPhone 15 Pro 24mm 환산 기준.</p>
+    <div class="cards">
+      <div class="card danger"><span class="tag">1080p 가로</span><h3 class="mono">0배</h3><p>세로 1080 = 출력 1080. <b>확대 불가 — 제품이 작동하지 않습니다.</b></p></div>
+      <div class="card danger"><span class="tag">4K 가로</span><h3 class="mono">1.125배</h3><p>세로 2160 중 <b>89%를 그대로 써야</b> 합니다. 여유 271px.</p></div>
+      <div class="card mint"><span class="tag">4K 세로</span><h3 class="mono">2.0배</h3><p><b>코드 변경 없이 78% 개선.</b> 촬영 가이드만으로 얻습니다.</p></div>
+      <div class="card amber"><span class="tag">Trace</span><h3 class="mono">4.0배</h3><p>듀얼렌즈 전용기. <b>3.6배 차이는 알고리즘으로 못 메웁니다.</b></p></div>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>상황</th><th class="r">거리</th><th class="r">인물 픽셀</th><th class="r">화면 비율</th><th class="c">O3 달성</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td>하프코트 골밑</td><td class="r">5.0m</td><td class="r">896px</td><td class="r"><b>46.7%</b></td><td class="c" style="color:var(--mint)">가능</td></tr>
+        <tr class="hl"><td>하프코트 자유투</td><td class="r">6.8m</td><td class="r">659px</td><td class="r"><b>34.3%</b></td><td class="c" style="color:var(--mint)">가능</td></tr>
+        <tr><td>풀코트 센터</td><td class="r">7.5m</td><td class="r">597px</td><td class="r">31.1%</td><td class="c" style="color:var(--amber)">경계</td></tr>
+        <tr class="hl-d"><td>풀코트 반대편 3점</td><td class="r">14.0m</td><td class="r">320px</td><td class="r"><b>16.7%</b></td><td class="c" style="color:var(--danger)">불가</td></tr>
+        <tr class="hl-d"><td>풀코트 반대편 골밑</td><td class="r">16.0m</td><td class="r">280px</td><td class="r"><b>14.6%</b></td><td class="c" style="color:var(--danger)">불가</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><b>O3 목표를 거리 조건부로 바꿔야 합니다.</b> v1의 “잘 잡혔다 80% 이상”은 15m 밖에서 물리적으로 불가능합니다. → <b>“촬영 거리 10m 이내에서 80%”</b>. 그리고 소구를 <del>“작게 잡힌 나를 크게”</del> → <b>“구석에 있던 나를 화면 중앙으로”</b>로 바꿔야 첫인상이 무너지지 않습니다.</div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="slide" data-t="방어력 재산정">
+  <div class="in">
+    <div class="eyebrow">Defensibility · 수정</div>
+    <h2>위험이 미래형으로 쓰여 있는데 이미 현재형이다</h2>
+    <div class="fixes">
+      <div class="fixrow"><span class="k">D1 위험</span>
+        <p class="was"><del>“Veo·Pixellot이 개인 시장으로 <b>내려오면</b> 우위가 사라진다”</del></p>
+        <p class="now"><b>이미 내려와 있습니다.</b> Trace가 2023년 PlayerFocus로 개인 요금제를 출시했습니다.</p></div>
+      <div class="fixrow"><span class="k">D3 위험</span>
+        <p class="was"><del>“B2B 3사가 B2C로 내려오려면 조직과 가격 구조를 바꿔야 해서 <b>시간이 걸린다</b>”</del></p>
+        <p class="now"><b>Trace는 이미 B2C입니다.</b> 남은 장벽은 <b>하드웨어 매출을 버릴 수 있는가</b>이며, 이건 기술이 아니라 사업 모델의 문제라 오히려 오래갑니다.</p></div>
+    </div>
+    <div class="cards">
+      <div class="card danger"><span class="tag">R1 · 가장 가까움</span><h3>Trace 소프트웨어 전용화</h3><p>이미 개인 요금제와 개인 하이라이트를 운영 중. <b>카메라를 빼는 것은 제품 결정 하나</b>입니다.</p></div>
+      <div class="card danger"><span class="tag">R2 · 가까움</span><h3>SwingVision 구도 보정 추가</h3><p><b>이미 선수를 추적하고 온디바이스 처리도 합니다.</b> 재료를 손에 쥐고 있어 기술적 거리가 가장 짧습니다.</p></div>
+      <div class="card amber"><span class="tag">R3 · 중기</span><h3>HomeCourt 경기 영역 진출</h3><p>같은 종목·같은 개인 시장. NBA 자본이 있습니다. 다만 지금은 <b>훈련</b>과 <b>경기</b>로 순간이 다릅니다.</p></div>
+    </div>
+    <div class="note ok"><b>방어선의 위치가 바뀝니다.</b> v1은 <del>“방어선은 D1의 기술 축적”</del>이라 했지만, <b>D1은 방어선이 아니라 시간을 버는 장치</b>입니다. 실제 방어는 <b>D2의 선택 데이터와 D4의 기록 축적</b>이고, 이 둘은 복제가 아니라 시간이 필요합니다. <b>그 시간을 D1이 벌어줍니다.</b></div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="slide" data-t="가치 선언 3축">
+  <div class="in">
+    <div class="eyebrow">Value Proposition · 신설</div>
+    <h2>경쟁사 14곳이 남긴 빈자리는 세 개다</h2>
+    <p class="sub">세 빈자리가 <b>각각 다른 경쟁 계층에서</b> 나옵니다 — A는 하드웨어 5사에서, B는 스포츠 AI 9곳 전부에서, C는 SNS·편집 도구 5곳에서. <b>하나의 경쟁사가 셋을 동시에 막고 있지 않습니다.</b></p>
+    <div class="axis">
+      <div class="ax a1">
+        <span class="no">① 진입 축 · 빈자리 A</span>
+        <p class="decl">“카메라를 사지 않고, 다음 경기를 기다리지 않는다. <b>지난주에 찍어둔 영상으로 오늘 시작한다.</b>”</p>
+        <dl>
+          <dt>막는 경쟁</dt><dd>Trace · Veo · Pixellot · Spiideo — 전부 하드웨어 모델</dd>
+          <dt>잡는 사람</dt><dd>김도현(원본 47개) · 정민수(200개) · 서지훈(체육관 고정)</dd>
+          <dt>반증 조건</dt><dd>사용자가 “중앙 배치”만으로 만족하지 않을 때</dd>
+        </dl>
+      </div>
+      <div class="ax a2">
+        <span class="no">② 판단 축 · 빈자리 B</span>
+        <p class="decl">“AI는 40분을 30개로 줄이는 일까지만 한다. <b>왜 특별한지는 당신만 알기 때문이다.</b>”</p>
+        <dl>
+          <dt>막는 경쟁</dt><dd>스포츠 AI 9곳 전부 · Google Photos</dd>
+          <dt>잡는 사람</dt><dd>김도현(의미) · 최윤아(처음 된 것) · 임도현(기준 밖)</dd>
+          <dt>반증 조건</dt><dd>선택 데이터가 쌓이기 전에 같은 화면이 복제될 때</dd>
+        </dl>
+      </div>
+      <div class="ax a3">
+        <span class="no">③ 보존 축 · 빈자리 C</span>
+        <p class="decl">“잘한 날만 남기는 SNS가 아니라, <b>뛴 날이 전부 남는 공간을 만든다.</b>”</p>
+        <dl>
+          <dt>막는 경쟁</dt><dd>Instagram(광고 구조) · CapCut·VLLO(다른 제품 됨) · Strava(GPU 원가)</dd>
+          <dt>잡는 사람</dt><dd>최윤아(계정 3개) · 이준혁(자신 없음) · 서지훈(3개월 비교)</dd>
+          <dt>반증 조건</dt><dd>첫 달에 이탈해 축적을 경험조차 못 할 때</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="slide" data-t="근거 사슬">
+  <div class="in">
+    <div class="eyebrow">Evidence chain</div>
+    <h2>각 선언이 어느 데이터에서 나왔는가</h2>
+    <div class="cards">
+      <div class="card mint"><span class="tag">① 진입</span>
+        <div class="chain">
+          <div class="step"><span class="lbl">실측</span><span class="txt">하프코트 5~8m에서 인물이 화면의 <b>28~47%</b></span></div>
+          <div class="arrow">↓ 그래서</div>
+          <div class="step"><span class="lbl">가능</span><span class="txt">1~2배 확대만으로 “중앙 배치”가 성립</span></div>
+          <div class="arrow">↓ 대비</div>
+          <div class="step"><span class="lbl">경쟁</span><span class="txt">Trace는 105m라 4배가 필요해 듀얼렌즈를 판다</span></div>
+          <div class="arrow">↓</div>
+          <div class="step final"><span class="lbl">결론</span><span class="txt">안 쓰는 게 아니라 안 써도 되는 종목</span></div>
+        </div>
+      </div>
+      <div class="card sky"><span class="tag">② 판단</span>
+        <div class="chain">
+          <div class="step"><span class="lbl">실측</span><span class="txt">스포츠 AI <b>9곳 전부 기계 판정</b> — 선택 구조 0곳</span></div>
+          <div class="arrow">↓ 그런데</div>
+          <div class="step"><span class="lbl">관찰</span><span class="txt">“점프·릴리스” 기준이면 휠체어 농구는 후보에 안 뜬다</span></div>
+          <div class="arrow">↓ 그리고</div>
+          <div class="step"><span class="lbl">자산</span><span class="txt">선택이 쌓이면 추천이 좋아진다 (KSF 5번)</span></div>
+          <div class="arrow">↓</div>
+          <div class="step final"><span class="lbl">결론</span><span class="txt">고르게 두는 것이 포용성이자 방어선</span></div>
+        </div>
+      </div>
+      <div class="card amber"><span class="tag">③ 보존</span>
+        <div class="chain">
+          <div class="step"><span class="lbl">실측</span><span class="txt">Strava 매출 <b>$415M</b> — 유료 혜택이 “구간별 기록 변화”</span></div>
+          <div class="arrow">↓ 한계</div>
+          <div class="step"><span class="lbl">경쟁</span><span class="txt">Strava는 숫자만, Instagram은 올려야 남는다</span></div>
+          <div class="arrow">↓ 그래서</div>
+          <div class="step"><span class="lbl">빈자리</span><span class="txt">영상 + 축적을 동시에 하는 곳이 없다</span></div>
+          <div class="arrow">↓</div>
+          <div class="step final"><span class="lbl">결론</span><span class="txt">올리지 않아도 남는 구조가 복제 불가 자산</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-t="셋은 서로를 지탱한다">
+  <div class="in">
+    <div class="eyebrow">Interdependence</div>
+    <h2>하나를 빼면 나머지 둘이 무너진다</h2>
+    <div class="cards">
+      <div class="card danger"><span class="tag">① 없이 ②③</span><h3>아무도 안 들어온다</h3><p>하드웨어를 사야 하면 <b>판단권도 축적도 경험할 사람이 없습니다.</b></p></div>
+      <div class="card danger"><span class="tag">② 없이 ①③</span><h3>화질에서 실망한다</h3><p>“AI가 다 해준다”고 해놓고 확대 상한이 1.125배면 <b>신뢰가 무너집니다.</b></p></div>
+      <div class="card danger"><span class="tag">③ 없이 ①②</span><h3>편집 도구가 된다</h3><p><b>600억 시장에서 무료 강자와 정면으로</b> 붙게 됩니다.</p></div>
+    </div>
+    <div class="note ok"><b>②가 ①의 약점을 덮습니다.</b> 확대 상한 1.125배는 “AI가 다 해준다”면 실망이지만, <b>“AI는 좁히기만 하고 고르는 건 당신”</b>이면 정직한 기대치가 됩니다.<br><br><b>③이 ①의 시간을 벌어줍니다.</b> 진입 우위는 Trace가 하드웨어를 버리면 사라지지만, 그때쯤 쌓인 아카이브는 옮길 수 없습니다.</div>
+    <div class="stmt">지난주에 찍어둔 영상을 넣으면, AI가 당신이 잘 나온 <b>30개를 골라</b> 옵니다. 그중 무엇이 오늘의 하이라이트인지는 <b>당신이 정하고</b>, 올리든 안 올리든 <b>그날은 남습니다</b>.<br><br><span style="font-size:var(--step--1);color:var(--ink-muted)">각 절이 하나의 축이고, 어느 절을 빼도 문장이 성립하지 않습니다.</span></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-t="B2B 모집단">
+  <div class="in">
+    <div class="eyebrow">B2B · 신설</div>
+    <h2>농구 클럽은 321곳이다</h2>
+    <p class="sub">문화체육관광부 「2025 전국 등록·신고 체육시설업 현황」(2024년 말 기준) 원문에서 <b>종목별 공식 소계</b>를 확보했습니다. 체육교습업은 13세 미만 대상이며 농구가 8개 지정 종목에 포함됩니다.</p>
+    <div class="tw"><table>
+      <thead><tr><th>종목</th><th class="r">시설 수</th><th class="r">비중</th><th class="r">지도자</th></tr></thead>
+      <tbody>
+        <tr><td>축구</td><td class="r">1,420</td><td class="r">47.3%</td><td class="r">1,368</td></tr>
+        <tr><td>줄넘기</td><td class="r">667</td><td class="r">22.2%</td><td class="r">571</td></tr>
+        <tr class="hl"><td>🏀 <b>농구</b></td><td class="r"><b>321</b></td><td class="r"><b>10.7%</b></td><td class="r">352</td></tr>
+        <tr><td>야구</td><td class="r">212</td><td class="r">7.1%</td><td class="r">210</td></tr>
+        <tr><td>복합</td><td class="r">159</td><td class="r">5.3%</td><td class="r">186</td></tr>
+        <tr><td><b>체육교습업 소계</b></td><td class="r"><b>2,999</b></td><td class="r">100%</td><td class="r">2,917</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><b>손익분기에 못 미칩니다.</b> Veo 실측(클럽당 연 190만원) 기준 필요 클럽은 <span class="mono">320~630곳</span>인데 모집단이 <span class="mono">321곳</span>입니다. <b>전량 획득해야 하한이라 B2B 단독으로는 사실상 불가능하고, 개인 시장과의 병행이 선택이 아니라 필수</b>입니다. (복합 159곳 중 농구 취급분을 더하면 상한 480곳)</div>
+    <div class="note ok"><b>그런데 클럽이 기술적으로는 유리합니다.</b> 하프코트 드릴 <b>5~8m</b>, 실내 조명, 코치가 카메라 위치를 정하고 매 수업 같은 자리 — <b>촬영 조건을 통제할 수 있는 유일한 사용자</b>입니다. “B2B 먼저”의 이유가 <b>매출에서 기술로 확장</b>됩니다.</div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-t="만들 것 — 신설 3건">
+  <div class="in">
+    <div class="eyebrow">Feature · 신설</div>
+    <h2>v1이 페르소나를 만들어 놓고 기능으로 잇지 않은 것</h2>
+    <div class="tw"><table>
+      <thead><tr><th>ID</th><th>기능</th><th>왜 필요한가</th><th>근거</th><th class="c">우선</th></tr></thead>
+      <tbody>
+        <tr class="hl-d"><td><b>F16</b></td><td><b>지정 대상 추적</b><br>1인칭 → N인칭</td><td><b>박서연(8명)·오세진(12명)·서지훈(12명) 셋이 같은 요구.</b> 매출 경로의 전제인데 편집 5단계가 전부 “나” 1인칭입니다</td><td>AOS/DOS 매출 모수 <b>DOS 1위</b></td><td class="c"><b>P0</b></td></tr>
+        <tr class="hl"><td><b>F17</b></td><td><b>다시 열어보기</b><br>기간 비교 뷰</td><td>김도현·서지훈·서하린의 <b>최고 감정이 저장 몇 달 뒤에 발생</b>합니다. 그 화면이 없습니다</td><td>O5·O7 검증 전제</td><td class="c"><b>P0</b></td></tr>
+        <tr><td><b>F18</b></td><td><b>지정 인원 공유</b><br>공개 범위 4단째</td><td>서지훈(학부모 개별)·조현아(동호회 한정)가 동시에 요구</td><td>공개 기능의 전제</td><td class="c">P1</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><b>F4(장면 선택)는 단일 기능이 아닙니다.</b> 다섯 사람이 각기 다른 이유로 막힙니다 — 김도현은 <b>개수</b>(지하철에서 한 손으로 30개), 최윤아는 <b>정렬 기준</b>(“잘 나온 것”이 아니라 “처음 된 것”), 강민석은 <b>신뢰도</b>(다른 사람이 섞임), 임도현은 <b>안전망</b>(후보에 없음), 서지훈은 <b>자동화</b>(360개는 못 고름). <b>F4a~F4e로 분해해야 합니다.</b></div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-t="검증 관문">
+  <div class="in">
+    <div class="eyebrow">Gates</div>
+    <h2>v1의 두 관문에 세 개를 더한다</h2>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>관문</th><th>판정 지표</th><th class="c">상태</th></tr></thead>
+      <tbody>
+        <tr><td><b>G1</b></td><td>AI가 “잘 나온 부분”을 골라내는가</td><td>실제 농구장 영상 테스트 — <b style="color:var(--danger)">야간 실외·동일 복장 조건 필수 추가</b></td><td class="c">v1 유지</td></tr>
+        <tr><td><b>G2</b></td><td>기록 공간이 부계정을 대체하는가</td><td>부계정 운영자 인터뷰</td><td class="c">v1 유지</td></tr>
+        <tr class="hl"><td><b>G3</b></td><td><b>거리별 화질이 사용자 기준을 넘는가</b></td><td>5·10·15·20m 결과물 만족도</td><td class="c" style="color:var(--mint)">신설</td></tr>
+        <tr class="hl"><td><b>G4</b></td><td><b>클럽이 연 100만원 낼 의향이 있는가</b></td><td>클럽 10곳 중 30% 이상</td><td class="c" style="color:var(--mint)">신설</td></tr>
+        <tr class="hl"><td><b>G5</b></td><td><b>타인 얼굴이 발행을 막는가</b></td><td>전원 문항 — 망설인 경험 비율</td><td class="c" style="color:var(--mint)">신설</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><b>G1에 조건을 추가해야 합니다.</b> v1의 테스트가 조명 좋은 실내 체육관에서만 이뤄지면 실전에서 무너집니다. 야간 공원 코트에 전원 검은 티셔츠 — <b>강민석 시나리오가 성능 하한선</b>입니다.</div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-t="확정한 것과 남은 것">
+  <div class="in">
+    <div class="eyebrow">Status</div>
+    <h2>v2에서 확정한 일곱, 여전히 미정인 여섯</h2>
+    <div class="cards">
+      <div class="card mint"><span class="tag">확정 · v2 신규</span><h3>일곱 가지</h3><p>① 경쟁 지형 ③-A/③-B 분리<br>② D1·D3 근거 교체<br>③ 방어선 D1 → D2+D4 이동<br>④ 화질 상한 1.125~2.0배<br>⑤ B2B 모집단 321곳<br>⑥ 가치 선언 3축<br>⑦ F16 지정 대상 추적</p></div>
+      <div class="card amber"><span class="tag">미정 · v1에서 이월</span><h3>네 가지</h3><p>① 수익 모델과 시점<br><span style="color:var(--ink-muted)">— 다만 SwingVision(처리 시간)·Strava(축적 조회) 두 실증 확보</span><br>② AI·클라우드 비용<br>③ 랭킹 노출 방식<br>④ 팀 공유 기능 <span style="color:var(--mint)">— F18로 일부 구체화</span></p></div>
+      <div class="card danger"><span class="tag">미정 · v2 신규</span><h3>두 가지</h3><p>① <b>F16을 v1 범위에 넣을 것인가</b><br><span style="color:var(--ink-muted)">매출 경로의 전제인데 개발 범위가 커집니다</span><br><br>② <b>촬영 가이드의 실제 허용 거리</b><br><span style="color:var(--ink-muted)">계산은 5~8m지만 사용자 만족선은 G3로 판정</span></p></div>
+    </div>
+    <div class="note"><b>근거 검증 상태</b> — 🟢 공식 통계: 농구 클럽 321곳 · Trace 요금제 · Strava 매출 · 스포츠 AI 9곳 기계 판정 / 🟡 계산값: 하프코트 화면 비율 28~47% / 🔴 미검증: 사용자의 화질 만족선(G3) · 클럽 지불 의사(G4) · 클럽 한 타임 인원(법령·상식으로 추론)</div>
+  </div>
+</section>
+
+</div>
+
+<div class="deck-footer">
+  <span class="footer-context" id="ctx">표지</span>
+  <button class="nav-button" id="prev" type="button">← 이전</button>
+  <button class="nav-button" id="next" type="button">다음 →</button>
+  <span class="cnt"><b id="cur">01</b> / <span id="tot">14</span></span>
+</div>
+
+<script>
+(function(){
+  var S = Array.prototype.slice.call(document.querySelectorAll('.slide')), i = 0;
+  var ctx=document.getElementById('ctx'), cur=document.getElementById('cur'), tot=document.getElementById('tot'),
+      prog=document.getElementById('prog'), prev=document.getElementById('prev'), next=document.getElementById('next');
+  tot.textContent = String(S.length).padStart(2,'0');
+  function go(n){
+    i = Math.max(0, Math.min(S.length-1, n));
+    S.forEach(function(s,k){ s.classList.toggle('is-active', k===i); });
+    ctx.textContent = S[i].dataset.t || '';
+    cur.textContent = String(i+1).padStart(2,'0');
+    prog.style.width = ((i+1)/S.length*100)+'%';
+    prev.disabled = i===0; next.disabled = i===S.length-1;
+    S[i].scrollTop = 0;
+  }
+  prev.addEventListener('click', function(){ go(i-1); });
+  next.addEventListener('click', function(){ go(i+1); });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); go(i+1); }
+    else if(e.key==='ArrowLeft'||e.key==='Backspace'){ e.preventDefault(); go(i-1); }
+    else if(e.key==='Home'){ go(0); } else if(e.key==='End'){ go(S.length-1); }
+  });
+  go(0);
+})();
+</script>
+</body>
+</html>

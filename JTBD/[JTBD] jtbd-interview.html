@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하일릿 JTBD 인터뷰 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&family=Baloo+2:wght@500;600;700;800&display=swap">
+
+<style>
+  :root{
+    --canvas:#FAF6EC; --surface:#FFFFFF; --surface-2:#F5F1E9;
+    --line:#E5DFD2; --line-2:#F0ECE3;
+    --ink:#4B3621; --ink-2:#6B5644; --muted:#8A7C6D;
+    --brand:#0E7C5A; --brand-soft:#EAFBF3; --mint:#A7F3D0;
+    --warm:#A9503C; --warm-soft:#FBEFEA;
+    --amber:#8A6420; --amber-soft:#F7EFDC;
+    --shadow:0 1px 2px rgba(75,54,33,.05), 0 10px 24px -18px rgba(75,54,33,.35);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --canvas:#1E1811; --surface:#292118; --surface-2:#332A1F;
+      --line:#423628; --line-2:#352C21;
+      --ink:#F2EAE0; --ink-2:#CFC2B2; --muted:#9A8B7A;
+      --brand:#4FD0A4; --brand-soft:#12352A; --mint:#2A6B54;
+      --warm:#D98770; --warm-soft:#3A241E;
+      --amber:#D9B26A; --amber-soft:#332714;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 24px -18px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --canvas:#1E1811; --surface:#292118; --surface-2:#332A1F;
+    --line:#423628; --line-2:#352C21;
+    --ink:#F2EAE0; --ink-2:#CFC2B2; --muted:#9A8B7A;
+    --brand:#4FD0A4; --brand-soft:#12352A; --mint:#2A6B54;
+    --warm:#D98770; --warm-soft:#3A241E;
+    --amber:#D9B26A; --amber-soft:#332714;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 24px -18px rgba(0,0,0,.7);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--canvas); color:var(--ink);
+    font-family:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;
+    line-height:1.72; letter-spacing:-.011em; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:1000px; margin:0 auto; padding:clamp(2rem,6vw,4.5rem) clamp(1.1rem,4vw,2.5rem) 5rem; }
+  h1,h2,h3{ margin:0; font-family:"Jua","Apple SD Gothic Neo",system-ui,sans-serif; font-weight:400; letter-spacing:-.02em; text-wrap:balance; }
+  p{ margin:0; }
+  :focus-visible{ outline:2px solid var(--brand); outline-offset:3px; border-radius:5px; }
+  .eyebrow{ font-family:"Baloo 2",sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); }
+  .num{ font-family:"Baloo 2",sans-serif; font-variant-numeric:tabular-nums; }
+
+  header{ display:flex; flex-direction:column; gap:.85rem; padding-bottom:2.2rem; border-bottom:2px solid var(--line); }
+  header h1{ font-size:clamp(1.85rem,5.2vw,2.9rem); line-height:1.2; }
+  .lede{ font-size:clamp(1rem,1.9vw,1.13rem); color:var(--ink-2); max-width:62ch; }
+  .metarow{ display:flex; flex-wrap:wrap; gap:.4rem .9rem; font-family:"Baloo 2",sans-serif; font-size:.78rem; color:var(--muted); }
+  .metarow span::after{ content:"·"; margin-left:.9rem; opacity:.45; }
+  .metarow span:last-child::after{ content:""; }
+
+  section{ margin-top:clamp(2.6rem,6vw,3.8rem); display:flex; flex-direction:column; gap:1.1rem; }
+  .shead{ display:flex; flex-direction:column; gap:.3rem; }
+  .shead h2{ font-size:clamp(1.25rem,2.9vw,1.65rem); }
+  .shead p{ color:var(--ink-2); font-size:.95rem; max-width:64ch; }
+
+  .callout{ background:var(--brand-soft); border-left:3px solid var(--brand); border-radius:0 14px 14px 0;
+            padding:1rem 1.2rem; font-size:.93rem; color:var(--ink-2); line-height:1.68; }
+  .callout b{ color:var(--ink); }
+  .callout.warn{ background:var(--warm-soft); border-left-color:var(--warm); }
+
+  .tw{ overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); }
+  table{ border-collapse:collapse; width:100%; font-size:.87rem; }
+  th,td{ text-align:left; padding:.65rem .9rem; border-bottom:1px solid var(--line-2); vertical-align:top; }
+  th{ font-family:"Baloo 2",sans-serif; font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+      color:var(--muted); background:var(--surface-2); white-space:nowrap; }
+  td{ color:var(--ink-2); line-height:1.58; }
+  td b{ color:var(--ink); }
+  tbody tr:last-child td{ border-bottom:0; }
+  .qt{ min-width:600px; }
+  .qt td:first-child{ font-family:"Baloo 2",sans-serif; font-weight:700; color:var(--brand); white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+  /* 타임라인 */
+  .parts{ display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .part{ background:var(--surface); padding:.9rem 1.1rem; display:grid; gap:.15rem .95rem;
+         grid-template-columns:4.4rem 1fr auto; align-items:center; }
+  .part.hot{ background:var(--warm-soft); }
+  .part .tm{ font-family:"Baloo 2",sans-serif; font-weight:700; font-size:.78rem; color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .part .nm{ font-size:.94rem; color:var(--ink); font-weight:500; }
+  .part .nm small{ display:block; color:var(--muted); font-size:.8rem; font-weight:400; margin-top:.08rem; }
+  .demo{ font-family:"Baloo 2",sans-serif; font-size:.7rem; font-weight:700; padding:.16rem .5rem; border-radius:999px; white-space:nowrap; }
+  .demo.yes{ background:var(--mint); color:var(--ink); }
+  .demo.no{ background:var(--warm); color:#fff; }
+  .demo.none{ background:var(--surface-2); color:var(--muted); }
+
+  /* 전환 동인 */
+  .drivers{ display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr)); }
+  .dv{ border:1px solid var(--line); border-radius:16px; padding:.95rem 1.05rem; background:var(--surface); display:flex; flex-direction:column; gap:.35rem; }
+  .dv.block{ border-color:var(--warm); }
+  .dv .lb{ font-family:"Baloo 2",sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--brand); }
+  .dv.block .lb{ color:var(--warm); }
+  .dv h3{ font-size:1rem; }
+  .dv p{ font-size:.85rem; color:var(--ink-2); line-height:1.6; }
+  .dv q{ display:block; font-size:.83rem; color:var(--muted); font-style:italic; margin-top:.2rem; }
+
+  /* 페르소나 */
+  .pcards{ display:flex; flex-direction:column; gap:1.1rem; }
+  .pc{ border:1px solid var(--line); border-radius:18px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden; }
+  .pc.top{ border-color:var(--brand); }
+  .pc-h{ padding:1rem 1.2rem; border-bottom:1px solid var(--line-2); display:flex; flex-direction:column; gap:.45rem; }
+  .pc-t{ display:flex; align-items:baseline; gap:.5rem; flex-wrap:wrap; }
+  .rank{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:.95rem; color:var(--brand); }
+  .pc-n{ font-family:"Jua",sans-serif; font-size:1.18rem; }
+  .pc-s{ font-family:"Baloo 2",sans-serif; font-size:.75rem; color:var(--muted); }
+  .grp{ margin-left:auto; font-family:"Baloo 2",sans-serif; font-size:.68rem; font-weight:700; letter-spacing:.06em;
+        background:var(--surface-2); color:var(--ink-2); padding:.15rem .55rem; border-radius:999px; white-space:nowrap; }
+  .pains{ display:flex; flex-wrap:wrap; gap:.28rem; }
+  .pid{ font-family:"Baloo 2",sans-serif; font-size:.72rem; font-weight:700; padding:.14rem .48rem; border-radius:6px; white-space:nowrap; }
+  .pid.q1{ background:var(--mint); color:var(--ink); }
+  .pid.q4{ background:var(--amber-soft); color:var(--amber); }
+  .pc-w{ font-size:.89rem; color:var(--ink-2); line-height:1.62; }
+  .pc-w b{ color:var(--ink); }
+  .pc-b{ padding:0; }
+  .pc-b .tw{ border:0; border-radius:0; box-shadow:none; }
+
+  /* 금지어 */
+  .bans{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+         grid-template-columns:1fr 1fr; }
+  .ban{ background:var(--surface); padding:.85rem 1rem; font-size:.88rem; line-height:1.55; }
+  .ban.x{ color:var(--warm); }
+  .ban.x::before{ content:"✕ "; font-weight:700; }
+  .ban.o{ color:var(--ink-2); }
+  .ban.o::before{ content:"○ "; color:var(--brand); font-weight:700; }
+  .ban b{ color:var(--ink); }
+  @media (max-width:560px){ .bans{ grid-template-columns:1fr; } }
+
+  /* 판정 */
+  .gates{ display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .gate{ background:var(--surface); padding:.9rem 1.1rem; display:grid; gap:.12rem .9rem;
+         grid-template-columns:auto 1fr auto; align-items:center; }
+  .gate .g{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:.85rem; color:var(--warm); white-space:nowrap; }
+  .gate .d{ font-size:.92rem; color:var(--ink); }
+  .gate .d small{ display:block; color:var(--muted); font-size:.79rem; margin-top:.08rem; }
+  .gate .th{ font-family:"Baloo 2",sans-serif; font-size:.74rem; font-weight:700; color:var(--warm); white-space:nowrap; text-align:right; }
+
+  footer{ margin-top:3.5rem; padding-top:1.6rem; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:.55rem; }
+  .fine{ font-size:.79rem; color:var(--muted); line-height:1.66; max-width:72ch; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Jobs To Be Done · 하일릿 HILit</div>
+    <h1>무엇을 원하냐고<br>묻지 않습니다</h1>
+    <p class="lede">데모를 체험한 참가자에게 <b>지난 몇 달 실제로 한 행동</b>을 묻는 90분 세션입니다. 사람은 제품을 사는 게 아니라 어떤 일을 해내려고 제품을 고용하고, 그 인과는 의견이 아니라 과거에만 남아 있습니다.</p>
+    <div class="metarow"><span>2026.08.28</span><span>데모 체험형 · 90분</span><span>대상 5인 · 공통 39문항 + 전용 79문항</span></div>
+  </header>
+
+  <section>
+    <div class="shead">
+      <h2>세션 설계 — 순서가 곧 방어 장치</h2>
+      <p>데모를 본 참가자는 이미 “정답”을 알아버립니다. 대책 없이 진행하면 인터뷰가 “이거 좋네요” 수집으로 끝납니다.</p>
+    </div>
+    <div class="parts">
+      <div class="part"><div class="tm">0–10</div><div class="nm">라포와 배경<small>“가장 최근에 코트에 나간 게 언제였어요?” — 이 날을 세션 내내 앵커로 쓴다</small></div><span class="demo none">언급 없음</span></div>
+      <div class="part"><div class="tm">10–25</div><div class="nm">데모 체험<small>말을 시키지 않는다. 멈칫·되돌아감·혼잣말만 관찰표에 기록</small></div><span class="demo yes">체험 중</span></div>
+      <div class="part"><div class="tm">25–35</div><div class="nm">체험 직후 반응<small>관찰표의 멈칫 지점을 되짚는다 — 이 세션에서 가장 값진 질문</small></div><span class="demo yes">언급</span></div>
+      <div class="part hot"><div class="tm">35–65</div><div class="nm">과거 경험 회상 — JTBD 본체<small>대안 · 맥락 · 전환 사건. 진행자가 “아까 보신 것처럼”이라 말하는 순간 뒤 30분이 오염된다</small></div><span class="demo no">🚫 금지</span></div>
+      <div class="part"><div class="tm">65–78</div><div class="nm">감정과 불안<small>전환을 막는 힘 — Habits · Anxieties</small></div><span class="demo none">최소</span></div>
+      <div class="part"><div class="tm">78–90</div><div class="nm">대조와 마무리<small>“그날 이걸 갖고 계셨다면 뭐가 달랐을까요?” — 미래 의향이 아니라 과거 시나리오</small></div><span class="demo yes">언급</span></div>
+    </div>
+    <div class="callout">
+      Part 2에서 3으로 넘어갈 때 <b>소리 내어 전환을 선언</b>합니다 — <i>“자, 이제 방금 보신 건 잠깐 잊어주세요. 지금부터는 하일릿이랑 상관없이, 지난 몇 달 동안 실제로 어떻게 하셨는지만 여쭤볼게요.”</i>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>경청해야 할 네 가지 전환 동인</h2>
+      <p>네 가지가 모두 모여야 전환이 일어납니다. 앞의 둘만 듣고 끝내면, 전환하지 않을 사람도 전환할 것처럼 보입니다.</p>
+    </div>
+    <div class="drivers">
+      <div class="dv"><div class="lb">밀어냄</div><h3>Push · 상황의 압력</h3><p>특정 상황 중 무엇이 새로운 해결책을 찾도록 이끌었나<q>“3주째 못 올리니까 계정이 죽은 것 같았다”</q></p></div>
+      <div class="dv"><div class="lb">끌어당김</div><h3>Pull · 새것의 매력</h3><p>새 해결책의 어떤 점이 시도하고 싶게 만들었나<q>“멀리 있는 나를 알아서 따라간다는 게”</q></p></div>
+      <div class="dv block"><div class="lb">붙잡음</div><h3>Habits · 기존 습관</h3><p>시도를 방해할 수 있는 습관은 무엇이었나<q>“어차피 인스타에 올릴 건데 굳이”</q></p></div>
+      <div class="dv block"><div class="lb">망설임</div><h3>Anxieties · 새것의 불안</h3><p>시도·사용에 어떤 불안을 느꼈나<q>“내 영상이 서버로 가는 건가”</q></p></div>
+    </div>
+    <div class="callout warn">
+      <b>대부분의 실패는 Push와 Pull이 충분한데도 Habits와 Anxieties가 더 컸기 때문에 일어납니다.</b> 하일릿에서는 N1의 불안(초상권)과 C2의 습관(무행동)이 여기에 해당합니다.
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>인터뷰 대상 5인</h2>
+      <p>AOS/DOS 사분면의 <b>Q1 혁신기회 10종 · Q4 니치마켓 4종</b>을 각각 누가 검증하는지로 순서를 정했습니다.</p>
+    </div>
+
+    <div class="pcards">
+
+      <article class="pc top">
+        <div class="pc-h">
+          <div class="pc-t"><span class="rank">1순위</span><span class="pc-n">A1 서지훈</span><span class="pc-s">38 · 유소년 클럽 코치 · 5명</span><span class="grp">① 최근 시작</span></div>
+          <div class="pains"><span class="pid q1">P-10</span><span class="pid q1">P-11</span><span class="pid q1">P-12</span><span class="pid q1">P-09</span></div>
+          <p class="pc-w"><b>P-10(원생 40명 분배)이 매출 모수 DOS 1위(1.800)</b>입니다. 그런데 이 세 항목은 현재 설계(1인칭 트래킹)로 <b>아예 성립하지 않는 기능</b>이라, 이 세션의 결과가 v1 범위 자체를 바꿉니다. T2 트리거 본지표이기도 합니다.</p>
+        </div>
+        <div class="pc-b"><div class="tw"><table class="qt">
+          <tbody>
+            <tr><td>A1-6</td><td>한 명 분량 자르는 데 얼마나 걸려요? <b>안 하셨다면 왜 안 하셨어요?</b><br><span style="color:var(--muted);font-size:.83rem">→ 하루 2시간 가설 검증</span></td></tr>
+            <tr><td>A1-10</td><td>클럽 운영에 <b>돈 쓰시는 도구</b>가 뭐가 있어요? 각각 얼마씩?<br><span style="color:var(--muted);font-size:.83rem">→ 지불 기준선 확보</span></td></tr>
+            <tr><td>A1-13</td><td><b>아이별 클립이 자동으로 만들어져서 학부모한테 바로 갈 수 있다면, 한 달에 얼마까지 내실 수 있을 것 같으세요?</b><br><span style="color:var(--warm);font-size:.83rem">→ T2 본지표 · 금지어 “얼마면 쓰시겠어요”의 유일한 예외</span></td></tr>
+            <tr><td>A1-14</td><td>그 금액은 <b>어떻게 계산하신 거예요?</b> <span style="color:var(--muted);font-size:.83rem">원생당? 시간 절약? 재등록?</span></td></tr>
+          </tbody>
+        </table></div></div>
+      </article>
+
+      <article class="pc top">
+        <div class="pc-h">
+          <div class="pc-t"><span class="rank">2순위</span><span class="pc-n">C1 이준호</span><span class="pc-s">24 · 부계정 운영형 · 5명</span><span class="grp">① 최근 시작</span></div>
+          <div class="pains"><span class="pid q1">P-01</span><span class="pid q1">P-02</span><span class="pid q1">P-03</span><span class="pid q1">P-06</span></div>
+          <p class="pc-w">사용자 수 모수에서 <b>P-01·P-02가 DOS 1·2위</b>입니다. SOM 1순위이자 가장 싼 획득층 — 편집 시간만 줄여주면 오늘 넘어오는 사람입니다.</p>
+        </div>
+        <div class="pc-b"><div class="tw"><table class="qt">
+          <tbody>
+            <tr><td>C1-1</td><td><b>부계정은 언제, 왜 만드셨어요?</b><br><span style="color:var(--muted);font-size:.83rem">→ 정체성 때문인가 공개 범위 때문인가 — 덱의 핵심 가설</span></td></tr>
+            <tr><td>C1-4</td><td>한 편 올리는 데 <b>촬영 빼고 얼마나 걸려요?</b> 단계별로요. <span style="color:var(--muted);font-size:.83rem">→ 40분 가설</span></td></tr>
+            <tr><td>C1-7</td><td><b>못 올린 날</b>도 있죠? 그 영상들은 어떻게 하세요?<br><span style="color:var(--muted);font-size:.83rem">→ “안 올려도 남는다”의 수요 확인</span></td></tr>
+            <tr><td>C1-10</td><td><b>부계정 없이</b> 본계정 하나로 다 할 수 있다면요? <span style="color:var(--muted);font-size:.83rem">→ 계정 통합 수요</span></td></tr>
+          </tbody>
+        </table></div></div>
+      </article>
+
+      <article class="pc">
+        <div class="pc-h">
+          <div class="pc-t"><span class="rank">3순위</span><span class="pc-n">C2 김태윤</span><span class="pc-s">31 · 편집에서 멈춘 · 5명</span><span class="grp">② 최근 중단</span></div>
+          <div class="pains"><span class="pid q1">P-04</span><span class="pid q1">P-02</span></div>
+          <p class="pc-w"><b>확정 6인에 없었지만 넣었습니다.</b> 2차 평가에서 “행동 증거 없음”으로 탈락했는데, JTBD에서는 <b>그만둔 사람</b>이라 가장 값집니다. 편집 앱을 두 번 깔았다 두 번 다 지운 사람이고, SOM 2순위(최대 시장)입니다.</p>
+        </div>
+        <div class="pc-b"><div class="tw"><table class="qt">
+          <tbody>
+            <tr><td>C2-3</td><td><b>어디서 그만두셨어요?</b> 정확히 어떤 화면이었는지 기억나세요?<br><span style="color:var(--warm);font-size:.83rem">→ 이 세션의 핵심 질문</span></td></tr>
+            <tr><td>C2-6</td><td>두 번째로 시도하신 건 <b>언제</b>였어요? 왜 다시 하셨어요?<br><span style="color:var(--muted);font-size:.83rem">→ 반복 시도 = 동기의 증거</span></td></tr>
+            <tr><td>C2-11</td><td><b>올리고 싶다는 생각은 지금도 있으세요?</b> 아니면 이제 별로예요?<br><span style="color:var(--warm);font-size:.83rem">→ 무행동이 기회인가 동기 부재인가 — 시장 규모의 분기점</span></td></tr>
+          </tbody>
+        </table></div></div>
+      </article>
+
+      <article class="pc">
+        <div class="pc-h">
+          <div class="pc-t"><span class="rank">4순위</span><span class="pc-n">C4 오세라</span><span class="pc-s">29 · 안 올리는 아카이비스트 · 3명</span><span class="grp">① 최근 시작</span></div>
+          <div class="pains"><span class="pid q1">P-09</span><span class="pid q4">P-08</span></div>
+          <p class="pc-w">T1 트리거의 잔여분을 판정합니다. 숫자(스탯 앱)는 이미 기록 중인 게 확인됐고, <b>영상 기록 동기만 미확인</b>입니다. KSF ④ 축적의 유일한 실증 대상이기도 합니다.</p>
+        </div>
+        <div class="pc-b"><div class="tw"><table class="qt">
+          <tbody>
+            <tr><td>C4-1</td><td><b>경기 스탯 기록하세요?</b> 어떤 방법으로요? <span style="color:var(--muted);font-size:.83rem">앱 / 수기 / 안 함</span></td></tr>
+            <tr><td>C4-3</td><td><b>3개월 전 경기 영상과 지금 영상을 나란히 보고 싶으신가요?</b><br><span style="color:var(--warm);font-size:.83rem">→ T1 본지표 · 긍정 50% 미만이면 트리거 발동</span></td></tr>
+            <tr><td>C4-12</td><td>앱 켰는데 <b>“전체공개”가 기본</b>으로 되어 있으면 어떠세요? <span style="color:var(--muted);font-size:.83rem">→ 기본값 판정</span></td></tr>
+            <tr><td>C4-16</td><td>만약 <b>“오늘 처음 된 것”</b>을 찾으려면 아까 화면에서 되셨을까요? <span style="color:var(--muted);font-size:.83rem">→ P-08 정렬 기준</span></td></tr>
+          </tbody>
+        </table></div></div>
+      </article>
+
+      <article class="pc">
+        <div class="pc-h">
+          <div class="pc-t"><span class="rank">5순위</span><span class="pc-n">N1 조현아</span><span class="pc-s">33 · 초상권 회피형 · 3명</span><span class="grp">③ 미인지</span></div>
+          <div class="pains"><span class="pid q4">P-15</span><span class="pid q1">P-12</span></div>
+          <p class="pc-w"><b>“이 사람을 획득할 수 있는가”가 아니라 “이 사람 때문에 다른 사람이 못 올리는가”를 검증합니다.</b> 본인 매출은 0이지만 C1·C2의 전체공개 결정을 좌우하는 쐐기 항목입니다.</p>
+        </div>
+        <div class="pc-b"><div class="tw"><table class="qt">
+          <tbody>
+            <tr><td>N1-7</td><td>올리지 말아달라고 <b>말하기 어려웠던</b> 적은요?<br><span style="color:var(--warm);font-size:.83rem">→ C1의 발행을 막는 실제 사회적 메커니즘</span></td></tr>
+            <tr><td>N1-8</td><td><i>“AI가 영상에서 사람을 알아본다”</i>는 말 들으면 <b>어떤 생각</b> 드세요?<br><span style="color:var(--muted);font-size:.83rem">→ 핵심 소구점이 경고음이 되는지</span></td></tr>
+            <tr><td>N1-11</td><td>내 영상에 <b>다른 사람 얼굴이 자동으로 흐려진다면</b> 어떠세요?</td></tr>
+          </tbody>
+        </table></div></div>
+      </article>
+
+    </div>
+
+    <div class="callout warn">
+      <b>E2(최악 촬영 환경)·E1(휠체어 농구)은 데모 체험형에서 뺐습니다.</b> 두 사람의 Pain은 “데모가 잘 돌아가는 것”이 아니라 <b>“실제 영상에서 실패하는 것”</b>이라, 잘 만든 데모로는 핵심 문제가 재현되지 않습니다. 본인이 찍은 영상을 가져오게 하는 별도 트랙이 맞습니다.
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>세션 중 금지어</h2>
+      <p>데모 직후의 참가자는 거의 모두 긍정합니다. 눈앞에서 본 것이 좋아 보였고, 만든 사람에게 미안하고, 아직 돈을 낸 적이 없기 때문입니다.</p>
+    </div>
+    <div class="bans">
+      <div class="ban x">“이거 쓰시겠어요?”</div>
+      <div class="ban o">지금까지는 그럴 때 <b>어떻게 하셨어요?</b></div>
+      <div class="ban x">“얼마면 쓰시겠어요?”</div>
+      <div class="ban o">그 문제 때문에 <b>돈이나 시간을 쓴 적</b>이 있나요?</div>
+      <div class="ban x">“이 기능 있으면 좋겠죠?”</div>
+      <div class="ban o">그게 <b>없어서 곤란했던 때</b>를 이야기해 주세요</div>
+      <div class="ban x">“왜 다른 걸로 바꾸셨어요?”</div>
+      <div class="ban o"><b>바꾸기 전 마지막 며칠</b>에 무슨 일이 있었나요?</div>
+      <div class="ban x">“아까 보신 것처럼…” <span style="font-size:.8rem">(Part 3에서)</span></div>
+      <div class="ban o">그건 이따 여쭤볼게요. <b>지금은 예전 이야기를</b>…</div>
+    </div>
+    <div class="callout">
+      <b>단 A1-13은 예외입니다.</b> 사업자의 예산 판단은 개인의 구매 의향과 성격이 다르고, 그 답이 손익분기 경로 전체를 판정하기 때문입니다.
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>이 인터뷰가 판정하는 것</h2>
+      <p>문항마다 임계값을 미리 정해뒀습니다. 결과를 보고 기준을 만들면 원하는 결론이 나옵니다.</p>
+    </div>
+    <div class="gates">
+      <div class="gate"><div class="g">T1</div><div class="d">농구인의 “영상” 기록 동기<small>C4-3 — 숫자 동기는 스탯 앱 4종으로 이미 실증됨</small></div><div class="th">긍정 &lt;50%</div></div>
+      <div class="gate"><div class="g">T2</div><div class="d">유소년 클럽의 지불 의사<small>A1-13 — 유일한 손익분기 경로</small></div><div class="th">연 100만원↑ &lt;30%</div></div>
+      <div class="gate"><div class="g">C2</div><div class="d">“무행동”이 기회인가 동기 부재인가<small>C2-6 · C2-11 — 반복 시도 + 동기 존속이면 기회</small></div><div class="th">시장 규모 분기</div></div>
+      <div class="gate"><div class="g">N1</div><div class="d">타인 얼굴이 실제로 발행을 막는가<small>Q4-4 · Q4-5 전원 + N1-7</small></div><div class="th">경험 비율</div></div>
+      <div class="gate"><div class="g">실측</div><div class="d">편집 시간 · 발행 간격 · 아이별 편집 시간<small>C1-4 · C1-3 · A1-6 — 가설은 40분 · 3주 · 하루 2시간</small></div><div class="th">AOS 재산정 입력</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="callout warn">
+      <b>인터뷰가 끝났을 때 손에 남아야 하는 것은 “좋다는 반응”이 아니라 “그 사람이 지난 몇 달 실제로 한 행동의 기록”입니다.</b> 세션 후 10분 이내에 전환 사건 한 문단과 네 동인의 인용문, 그리고 Job Statement를 씁니다 — <i>When [상황], I want to [동기], so I can [기대 결과].</i> 여기에 기능 이름이 들어가면 그건 Job이 아니라 Solution입니다.
+    </div>
+  </section>
+
+  <footer>
+    <p class="fine">AOS/DOS 사분면은 Pain 16종에 대해 두 모수(사용자 수 / 매출 기여)로 산정했으며, I·S 점수는 페르소나 스펙트럼과 고객 여정지도에 근거한 가설입니다. AOS 중앙값 2.40에 7종이 정확히 걸려 있어 <b>경계선 항목은 순위가 아니라 “확인 필요”로 다뤄야 하며</b>, 이번 인터뷰에서 I·S를 직접 질문해 갱신한 뒤 사분면을 재배치해야 합니다. 유사 프로젝트 사례에서는 갱신 시 18종 중 6종이 칸을 넘었습니다.</p>
+  </footer>
+
+</div>
+</body>
+</html>

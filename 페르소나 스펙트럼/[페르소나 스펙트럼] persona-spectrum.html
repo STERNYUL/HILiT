@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하일릿 페르소나 스펙트럼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&family=Baloo+2:wght@500;600;700;800&display=swap">
+
+<style>
+  /* ── 하일릿 브랜드 시스템 승계 (소개덱 deck-record-sns 토큰) ────────
+     민트는 면(fill) 전용, 브라운은 잉크, mint-deep이 글자·선용 브랜드색 */
+  :root{
+    --canvas:#FAF6EC;      /* 로고 크림 — 페이지 바탕 */
+    --surface:#FFFFFF;
+    --surface-2:#F5F1E9;
+    --line:#E5DFD2;
+    --line-2:#F0ECE3;
+    --ink:#4B3621;         /* 브라운 잉크 */
+    --ink-2:#6B5644;
+    --muted:#8A7C6D;
+    --brand:#0E7C5A;       /* mint-deep — 글자·선용 */
+    --brand-soft:#EAFBF3;
+    --mint:#A7F3D0;        /* 면 전용 */
+    --warm:#A9503C;        /* 리스크·페인포인트 */
+    --warm-soft:#FBEFEA;
+    --amber:#8A6420;       /* 보류 상태 */
+    --amber-soft:#F7EFDC;
+    --shadow:0 1px 2px rgba(75,54,33,.05), 0 10px 24px -18px rgba(75,54,33,.35);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --canvas:#1E1811; --surface:#292118; --surface-2:#332A1F;
+      --line:#423628; --line-2:#352C21;
+      --ink:#F2EAE0; --ink-2:#CFC2B2; --muted:#9A8B7A;
+      --brand:#4FD0A4; --brand-soft:#12352A;
+      --mint:#2A6B54;
+      --warm:#D98770; --warm-soft:#3A241E;
+      --amber:#D9B26A; --amber-soft:#332714;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 24px -18px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --canvas:#1E1811; --surface:#292118; --surface-2:#332A1F;
+    --line:#423628; --line-2:#352C21;
+    --ink:#F2EAE0; --ink-2:#CFC2B2; --muted:#9A8B7A;
+    --brand:#4FD0A4; --brand-soft:#12352A;
+    --mint:#2A6B54;
+    --warm:#D98770; --warm-soft:#3A241E;
+    --amber:#D9B26A; --amber-soft:#332714;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 24px -18px rgba(0,0,0,.7);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--canvas); color:var(--ink);
+    font-family:"Noto Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;
+    line-height:1.72; letter-spacing:-.011em; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:1020px; margin:0 auto; padding:clamp(2rem,6vw,4.5rem) clamp(1.1rem,4vw,2.5rem) 5rem; }
+  h1,h2,h3{ margin:0; font-family:"Jua","Apple SD Gothic Neo",system-ui,sans-serif; font-weight:400; letter-spacing:-.02em; text-wrap:balance; }
+  p{ margin:0; }
+  a{ color:var(--brand); }
+  :focus-visible{ outline:2px solid var(--brand); outline-offset:3px; border-radius:5px; }
+
+  .eyebrow{
+    font-family:"Baloo 2",sans-serif; font-size:.7rem; font-weight:700;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--brand);
+  }
+  .num{ font-family:"Baloo 2",sans-serif; font-variant-numeric:tabular-nums; }
+
+  /* ── 헤더 ─────────────────────────────────── */
+  header{ display:flex; flex-direction:column; gap:.85rem; padding-bottom:2.2rem; border-bottom:2px solid var(--line); }
+  header h1{ font-size:clamp(1.9rem,5.5vw,3.1rem); line-height:1.18; }
+  .lede{ font-size:clamp(1rem,1.9vw,1.15rem); color:var(--ink-2); max-width:60ch; }
+  .metarow{ display:flex; flex-wrap:wrap; gap:.4rem .9rem; font-family:"Baloo 2",sans-serif; font-size:.78rem; color:var(--muted); }
+  .metarow span::after{ content:"·"; margin-left:.9rem; opacity:.45; }
+  .metarow span:last-child::after{ content:""; }
+
+  /* ── 섹션 ─────────────────────────────────── */
+  section{ margin-top:clamp(2.6rem,6vw,4rem); display:flex; flex-direction:column; gap:1.15rem; }
+  .shead{ display:flex; flex-direction:column; gap:.3rem; }
+  .shead h2{ font-size:clamp(1.25rem,2.9vw,1.7rem); }
+  .shead p{ color:var(--ink-2); font-size:.95rem; max-width:62ch; }
+
+  /* ── 결론 3장 ─────────────────────────────── */
+  .verdicts{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line);
+             border-radius:16px; overflow:hidden; grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr)); }
+  .verdict{ background:var(--surface); padding:1.25rem 1.2rem; display:flex; flex-direction:column; gap:.3rem; }
+  .verdict .k{ font-family:"Baloo 2",sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .verdict .v{ font-family:"Jua",sans-serif; font-size:clamp(1.15rem,2.6vw,1.5rem); color:var(--brand); line-height:1.3; }
+  .verdict .d{ font-size:.85rem; color:var(--ink-2); line-height:1.6; }
+
+  /* ── 페르소나 카드 ────────────────────────── */
+  .grouplabel{ display:flex; align-items:center; gap:.6rem; margin-top:.35rem; }
+  .grouplabel b{ font-family:"Baloo 2",sans-serif; font-size:.74rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-2); }
+  .grouplabel i{ flex:1; height:1px; background:var(--line); }
+  .cards{ display:grid; gap:.85rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,238px),1fr)); }
+  .pc{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    padding:1.05rem 1.1rem; display:flex; flex-direction:column; gap:.55rem; box-shadow:var(--shadow);
+  }
+  .pc.lead{ border-color:var(--brand); }
+  .pc.ext{ border-color:var(--warm); }
+  .pc-top{ display:flex; align-items:baseline; gap:.45rem; flex-wrap:wrap; }
+  .pc-code{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:.82rem; color:var(--brand); }
+  .pc.ext .pc-code{ color:var(--warm); }
+  .pc-name{ font-family:"Jua",sans-serif; font-size:1.12rem; color:var(--ink); }
+  .pc-spec{ font-family:"Baloo 2",sans-serif; font-size:.74rem; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .pc-type{ font-size:.86rem; font-weight:700; color:var(--ink-2); }
+  .pc-line{ font-size:.87rem; color:var(--ink-2); line-height:1.62; }
+  .pc-foot{ display:flex; flex-wrap:wrap; gap:.3rem; margin-top:auto; padding-top:.35rem; }
+  .tag{ font-family:"Baloo 2",sans-serif; font-size:.7rem; font-weight:700; padding:.15rem .5rem; border-radius:999px; white-space:nowrap; }
+  .tag.ksf{ background:var(--mint); color:var(--ink); }
+  .tag.pay{ background:var(--surface-2); color:var(--ink-2); }
+  .tag.risk{ background:var(--warm-soft); color:var(--warm); }
+
+  /* ── 관계 구조 ────────────────────────────── */
+  .rels{ display:grid; gap:.85rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr)); }
+  .rel{ border:1px solid var(--line); border-radius:16px; padding:1.05rem 1.15rem; background:var(--surface); display:flex; flex-direction:column; gap:.5rem; }
+  .rel.flip{ border-color:var(--warm); background:var(--warm-soft); }
+  .rel-flow{ font-family:"Baloo 2",sans-serif; font-weight:700; font-size:.93rem; color:var(--ink); display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; }
+  .rel-flow em{ font-style:normal; color:var(--warm); }
+  .rel p{ font-size:.88rem; color:var(--ink-2); line-height:1.64; }
+
+  /* ── 표 ───────────────────────────────────── */
+  .tw{ overflow-x:auto; border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:var(--shadow); }
+  table{ border-collapse:collapse; width:100%; min-width:520px; font-size:.88rem; }
+  th,td{ text-align:left; padding:.68rem .95rem; border-bottom:1px solid var(--line-2); vertical-align:top; }
+  th{ font-family:"Baloo 2",sans-serif; font-size:.7rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+      color:var(--muted); background:var(--surface-2); white-space:nowrap; }
+  td{ color:var(--ink-2); line-height:1.62; }
+  td b{ color:var(--ink); }
+  tbody tr:last-child td{ border-bottom:0; }
+  .st{ font-family:"Baloo 2",sans-serif; font-size:.72rem; font-weight:700; padding:.18rem .55rem; border-radius:999px; white-space:nowrap; }
+  .st.ok{ background:var(--brand-soft); color:var(--brand); }
+  .st.hold{ background:var(--amber-soft); color:var(--amber); }
+  .st.wait{ background:var(--surface-2); color:var(--muted); }
+  .st.watch{ background:var(--mint); color:var(--ink); }
+
+  /* ── 정정 ─────────────────────────────────── */
+  .fixes{ display:flex; flex-direction:column; gap:.7rem; }
+  .fix{ display:grid; gap:.15rem .9rem; grid-template-columns:auto 1fr; align-items:start;
+        border-left:3px solid var(--warm); padding:.15rem 0 .15rem .95rem; }
+  .fix .n{ grid-row:span 2; font-family:"Baloo 2",sans-serif; font-weight:800; font-size:1.15rem; color:var(--warm); line-height:1.35; }
+  .fix .was{ font-size:.85rem; color:var(--muted); text-decoration:line-through; text-decoration-thickness:1px; }
+  .fix .now{ font-size:.9rem; color:var(--ink-2); line-height:1.6; }
+  .fix .now b{ color:var(--ink); }
+
+  /* ── 다음 행동 ────────────────────────────── */
+  .acts{ display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .act{ background:var(--surface); padding:.95rem 1.1rem; display:grid; gap:.15rem .95rem; grid-template-columns:1.6rem 1fr auto; align-items:center; }
+  .act .i{ font-family:"Baloo 2",sans-serif; font-weight:800; color:var(--brand); font-size:.95rem; }
+  .act .t{ font-size:.92rem; color:var(--ink); font-weight:500; }
+  .act .t small{ display:block; color:var(--muted); font-size:.8rem; font-weight:400; margin-top:.1rem; }
+  .act .c{ font-family:"Baloo 2",sans-serif; font-size:.72rem; font-weight:700; color:var(--brand); white-space:nowrap; }
+  .act .c.mid{ color:var(--amber); }
+
+  /* ── 각주 ─────────────────────────────────── */
+  .note{ background:var(--surface-2); border-radius:14px; padding:.95rem 1.15rem; font-size:.85rem; color:var(--ink-2); line-height:1.68; }
+  .note b{ color:var(--ink); }
+  footer{ margin-top:3.5rem; padding-top:1.6rem; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:.55rem; }
+  .docs{ display:flex; flex-wrap:wrap; gap:.35rem; }
+  .doc{ font-family:"Baloo 2",sans-serif; font-size:.74rem; font-weight:600; color:var(--ink-2);
+        background:var(--surface-2); border-radius:999px; padding:.22rem .62rem; }
+  .fine{ font-size:.78rem; color:var(--muted); line-height:1.65; max-width:70ch; }
+
+  @media (prefers-reduced-motion:no-preference){
+    .pc{ transition:transform .18s ease, box-shadow .18s ease; }
+    .pc:hover{ transform:translateY(-2px); box-shadow:0 4px 8px rgba(75,54,33,.06), 0 16px 32px -20px rgba(75,54,33,.5); }
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Persona Spectrum · 하일릿 HILit</div>
+    <h1>13명에서 6명으로,<br>그리고 농구로</h1>
+    <p class="lede">SNS 기반 숏폼 콘텐츠 제작·편집 시장에서 하일릿의 사용자를 핵심·확장·극단·비활성 네 층으로 펼친 뒤, 5단계로 수렴한 기록입니다. 확정된 것과 아직 열려 있는 것을 한 화면에 둡니다.</p>
+    <div class="metarow">
+      <span>2026.08.28</span><span>비즈니스 기획팀</span><span>선행: TAM-SAM-SOM · Five Forces · Value Chain · KSFs</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead">
+      <h2>세 가지가 확정됐습니다</h2>
+    </div>
+    <div class="verdicts">
+      <div class="verdict">
+        <div class="k">시작 카테고리</div>
+        <div class="v">농구 · 조건부</div>
+        <div class="d">v2 확장 1순위는 테니스. 골프는 원거리 트래킹 가치가 없어 제외 — 하일릿의 유일한 차별점이 성립하지 않습니다.</div>
+      </div>
+      <div class="verdict">
+        <div class="k">수익 모델</div>
+        <div class="v">처리량 과금</div>
+        <div class="d">기능은 전면 무료, 월 처리 건수 초과분에만 과금. SwingVision·Veo가 같은 시장에서 이미 쓰는 구조입니다.</div>
+      </div>
+      <div class="verdict">
+        <div class="k">손익분기 경로</div>
+        <div class="v">클럽 <span class="num">320~630</span>곳</div>
+        <div class="d">개인 구독은 국내 농구 동호인을 <span class="num">100%</span> 획득해도 미달합니다. B2B가 유일한 경로입니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>확정 페르소나 6명</h2>
+      <p>대표 4명이 제품 방향을 정하고, 검증 전용 2명이 KSF 공백을 메웁니다. 하나라도 빼면 검증할 사람이 없어지는 핵심 성공 요인이 생깁니다.</p>
+    </div>
+
+    <div class="grouplabel"><b>대표 · 제품 방향</b><i></i></div>
+    <div class="cards">
+      <article class="pc lead">
+        <div class="pc-top"><span class="pc-code">C1</span><span class="pc-name">이준호</span><span class="pc-spec">24 · L4</span></div>
+        <div class="pc-type">부계정 운영형 농구 기록자</div>
+        <p class="pc-line">촬영 습관도 계정도 이미 있는데 편집 때문에 3주에 하나만 올립니다. 편집만 빨라지면 오늘 넘어옵니다.</p>
+        <div class="pc-foot"><span class="tag ksf">KSF ① 정확도</span><span class="tag pay">무료</span></div>
+      </article>
+      <article class="pc lead">
+        <div class="pc-top"><span class="pc-code">A1</span><span class="pc-name">서지훈</span><span class="pc-spec">38 · L2</span></div>
+        <div class="pc-type">유소년 클럽 코치</div>
+        <p class="pc-line">원생 40명 개별 클립에 하루 2시간이 들어 못 합니다. 클럽 한 곳이 원생 40명과 학부모 40가구를 데려옵니다.</p>
+        <div class="pc-foot"><span class="tag ksf">KSF ③ 원가</span><span class="tag pay">B2B · 유일한 매출</span></div>
+      </article>
+      <article class="pc ext">
+        <div class="pc-top"><span class="pc-code">E2</span><span class="pc-name">강민석</span><span class="pc-spec">35 · L2</span></div>
+        <div class="pc-type">최악 촬영 환경 사용자</div>
+        <p class="pc-line">야간 공원 코트, 전원 검은 티셔츠, 저장공간 4GB. 덱이 “가장 어려운 지점”이라 지목한 조건의 최악 버전입니다.</p>
+        <div class="pc-foot"><span class="tag ksf">KSF ①③</span><span class="tag risk">성능 기준선</span></div>
+      </article>
+      <article class="pc lead">
+        <div class="pc-top"><span class="pc-code">N1</span><span class="pc-name">조현아</span><span class="pc-spec">33 · L2</span></div>
+        <div class="pc-type">초상권 회피형</div>
+        <p class="pc-line">“AI가 나를 인식해서 따라간다”가 경고음으로 들립니다. 쓰지 않지만 v1 발행률을 좌우합니다.</p>
+        <div class="pc-foot"><span class="tag risk">제3자 초상권</span><span class="tag pay">미진입</span></div>
+      </article>
+    </div>
+
+    <div class="grouplabel"><b>검증 전용 · KSF 공백 보완</b><i></i></div>
+    <div class="cards">
+      <article class="pc">
+        <div class="pc-top"><span class="pc-code">C4</span><span class="pc-name">오세라</span><span class="pc-spec">29 · L3</span></div>
+        <div class="pc-type">안 올리는 성장 아카이비스트</div>
+        <p class="pc-line">C1과 같은 코트에 서 있지만 동기가 반대입니다. 올리려고 찍는 사람이 아니라 남기려고 찍는 사람.</p>
+        <div class="pc-foot"><span class="tag ksf">KSF ④ 축적</span><span class="tag pay">무료 권고</span></div>
+      </article>
+      <article class="pc ext">
+        <div class="pc-top"><span class="pc-code">E1</span><span class="pc-name">임도현</span><span class="pc-spec">19 · L3</span></div>
+        <div class="pc-type">인식 모델 밖의 선수</div>
+        <p class="pc-line">휠체어 농구엔 점프가 없어 하이라이트 기준 자체가 없습니다. 평가셋을 잘못 쌓으면 되돌리기 비쌉니다.</p>
+        <div class="pc-foot"><span class="tag ksf">KSF ② 데이터</span><span class="tag risk">편향 검증</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>왜 스펙트럼으로 했는가</h2>
+      <p>일반 페르소나 추출이었다면 나오지 않았을 두 가지가 드러났습니다. 둘 다 화살표가 예상과 반대 방향으로 갑니다.</p>
+    </div>
+    <div class="rels">
+      <div class="rel flip">
+        <div class="rel-flow">N1 <em>&rarr;</em> C1 · C2</div>
+        <p><b>비활성 사용자가 핵심 사용자의 발행률을 깎습니다.</b> N1은 쓰지 않는 사람으로 끝나지 않습니다 — 함께 코트에 서는 C1·C2가 그 사람 얼굴 때문에 전체공개를 주저합니다. 타인 얼굴 처리는 “나중에 볼 시장”이 아니라 v1 변수입니다.</p>
+      </div>
+      <div class="rel flip">
+        <div class="rel-flow">E2 · E1 <em>&rarr;</em> 성능 · 자산 기준선</div>
+        <p><b>극단 사용자가 하한선을 정의합니다.</b> 조건이 나쁘면 무료 대안보다 못한 결과가 나오고, 평가 데이터셋을 좋은 조건으로만 채우면 축적할수록 배제가 고착됩니다. 예외가 아니라 기준입니다.</p>
+      </div>
+    </div>
+    <div class="note"><b>예상 못 한 수렴 하나.</b> E1(휠체어 농구)이 요구한 “종목에 하드코딩하지 않는 판정 신호”가, 카테고리 확정 단계에서 “테니스 확장의 전제”로 다시 나왔습니다. 포용적 설계와 확장성이 같은 요구였습니다.</div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>전환 트리거</h2>
+      <p>농구는 조건부 확정입니다. 하나라도 발동하면 테니스 전환을 재검토합니다.</p>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>코드</th><th>무엇을 감시하나</th><th>상태</th><th>다음 확인</th></tr></thead>
+        <tbody>
+          <tr><td><b>T1</b></td><td>농구인의 <b>“영상”</b> 기록 동기 부재</td><td><span class="st hold">부분 해소</span></td><td>숫자 동기는 앱 4개로 실증. 영상 동기만 인터뷰로 남음</td></tr>
+          <tr><td><b>T2</b></td><td>유소년 클럽의 <b>지불 의사</b> 미달</td><td><span class="st hold">보류</span></td><td>체육교습업 중 농구 비중 + 클럽 <span class="num">10</span>곳 인터뷰</td></tr>
+          <tr><td><b>T3</b></td><td>농구 MAU 정체</td><td><span class="st wait">대기</span></td><td>출시 <span class="num">+6</span>개월</td></tr>
+          <tr><td><b>T4</b></td><td>SwingVision 한국어·안드로이드 출시</td><td><span class="st watch">감시</span></td><td>발동 시 오히려 농구 확정을 강화</td></tr>
+          <tr><td><b>T5</b></td><td>재식별 정확도 미달</td><td><span class="st wait">대기</span></td><td>덱 22장 「확인 01」</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>도중에 뒤집힌 판정 셋</h2>
+      <p>분석 과정에서 스스로 정정한 것들입니다. 각 문서 본문에도 정정 블록을 남겼습니다.</p>
+    </div>
+    <div class="fixes">
+      <div class="fix">
+        <div class="n">01</div>
+        <div class="was">TAM은 “AI 편집을 프리미엄으로”, Five Forces는 “편집으로 수익 설계 금지” — 정면 충돌</div>
+        <div class="now">“과금할 것인가”와 <b>“무엇에 과금할 것인가”를 분리</b>하니 화해했습니다. 이후 SwingVision(월 녹화 시간 기준)과 Veo가 실제로 그 구조임이 확인됐습니다.</div>
+      </div>
+      <div class="fix">
+        <div class="n">02</div>
+        <div class="was">“농구는 팀 경기라 개인 성장 지표가 모호하다” → C4 존재 확률 65%</div>
+        <div class="now"><b>오판이었습니다.</b> 농구는 박스스코어 문화가 발달했고, 국내 동호인이 Pickup·HoopNote 등 앱 4개로 이미 손수 스탯을 기록 중입니다. <b>80%로 상향</b>했습니다.</div>
+      </div>
+      <div class="fix">
+        <div class="n">03</div>
+        <div class="was">플랜비(동호회 운영 앱)의 존재 = 동호회가 지출 주체라는 증거</div>
+        <div class="now"><b>정반대였습니다.</b> 전면 무료이고 유료화를 아직 못 하고 있습니다. 성인 동호회를 B2B에서 제외하고, A1을 <b>“수강료를 받는 사업체 운영자”</b>로 한정했습니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>다음 행동</h2>
+      <p>앞의 셋은 비용이 거의 들지 않으면서 트리거 두 개를 판정합니다.</p>
+    </div>
+    <div class="acts">
+      <div class="act">
+        <div class="i">1</div>
+        <div class="t">문체부 체육시설업 현황에서 체육교습업 종목별 내역 확인<small>체육교습업 <span class="num">2,651</span>개소 중 농구 비중이 <span class="num">10%</span>를 넘는가 — T2 보조 지표</small></div>
+        <div class="c">무료 · 즉시</div>
+      </div>
+      <div class="act">
+        <div class="i">2</div>
+        <div class="t">덱 22장 「확인 01」을 농구 + 테니스 양쪽 영상으로<small>정확도 검증과 카테고리 판정을 한 번에 — T5 + 테니스 옵션 유지</small></div>
+        <div class="c">영상 추가만</div>
+      </div>
+      <div class="act">
+        <div class="i">3</div>
+        <div class="t">「확인 02」에 문항 4개와 클럽 트랙 추가<small>현재 개인만 대상입니다. 유일한 손익분기 경로인 클럽이 검증 계획에 없습니다</small></div>
+        <div class="c">문항만</div>
+      </div>
+      <div class="act">
+        <div class="i">4</div>
+        <div class="t">열려 있는 설계 결정 5건을 제품 사양으로 이관<small>지정 대상 추적 시점 · 장면 선택 분해 · 다시 열어보기 화면 · 지정 인원 공유 · 무료 처리 한도</small></div>
+        <div class="c mid">중간</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="eyebrow">문서 8종</div>
+    <div class="docs">
+      <span class="doc">01 1차생성</span><span class="doc">02 2차평가</span><span class="doc">03 3차보정</span><span class="doc">04 4차검증</span><span class="doc">05 5차통합</span><span class="doc">부록A 카테고리 재검토</span><span class="doc">부록B 카테고리 확정</span><span class="doc">부록C T1 검증</span><span class="doc">부록D T2 검증</span>
+    </div>
+    <p class="fine">인물의 나이·직무·팔로워 수·시간 수치는 가설입니다. 확정 사항은 소개덱 명시분(<span class="num">40</span>분 원본, 후보 <span class="num">30</span>개 초안, 공개 범위 <span class="num">3</span>단, 농구 우선, 앱 내 촬영 없음)과 선행 문서 수치뿐입니다. 농구 동호인 <span class="num">33</span>만 명은 “동호회 상위 <span class="num">5</span>위 밖” 이라는 간접 근거의 상한 추정입니다. TAM 문서에서 수치 오류 2건(KRW 환산 <span class="num">10</span>배 축소, 전환율 <span class="num">5~20%</span> 대 <span class="num">1~3%</span> 불일치)을 발견해 지적했으며 페르소나 범위 밖이라 수정하지 않았습니다.</p>
+  </footer>
+
+</div>
+</body>
+</html>

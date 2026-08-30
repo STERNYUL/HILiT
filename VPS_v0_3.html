@@ -1,0 +1,1741 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HILiT Value Proposition 0.3 — 가치 선언 두 문장, 선별 페르소나 6명의 Pain·JTBD·Outcome, 기존 대안, 차별적 가치, Proof, Job-Feature Map 26개와 MVP 17개">
+  <title>HILiT | Value Proposition</title>
+  <style id="embedded-tokens">
+/* Hallmark · macrostructure: Value proposition dossier · pre-emit critique: P5 H5 E5 S5 R5 V5
+ * genre: product strategy deliverable · tone: decisive, evidence-first · anchor: HILiT mint
+ * structural fingerprint: N3 side rail + journey band + coverage matrix + feature map
+ * contrast: pass (40-41) · honest: pass (46) · chrome: pass (47) · tokens: pass (48)
+ */
+:root {
+  --bg: #111310;
+  --bg-soft: #181b17;
+  --surface: #20231e;
+  --surface-strong: #292d27;
+  --line: #3b4038;
+  --line-soft: #2d312b;
+  --ink: #f6f3ea;
+  --ink-soft: #c6c9be;
+  --ink-muted: #90968a;
+  --mint: #b9f0d5;
+  --mint-soft: #d9f8e9;
+  --mint-deep: #5eb58d;
+  --brown: #4b2d20;
+  --amber: #e7bf75;
+  --danger: #df8a7d;
+  --violet: #b9b6ef;
+  --sky: #9fd2ef;
+  --font-sans: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Arial Black", "Pretendard", "Noto Sans KR", sans-serif;
+  --font-mono: "Cascadia Mono", "Consolas", "D2Coding", monospace;
+  --step--2: clamp(0.67rem, 0.63rem + 0.12vw, 0.75rem);
+  --step--1: clamp(0.75rem, 0.69rem + 0.2vw, 0.87rem);
+  --step-0: clamp(0.91rem, 0.85rem + 0.25vw, 1.05rem);
+  --step-1: clamp(1.08rem, 0.96rem + 0.45vw, 1.32rem);
+  --step-2: clamp(1.38rem, 1.14rem + 0.9vw, 1.92rem);
+  --step-3: clamp(1.8rem, 1.4rem + 1.5vw, 2.8rem);
+  --space-1: 0.35rem;
+  --space-2: 0.6rem;
+  --space-3: 0.9rem;
+  --space-4: 1.25rem;
+  --space-5: 1.75rem;
+  --radius-s: 0.7rem;
+  --radius-m: 1.1rem;
+  --radius-l: 1.7rem;
+  --shadow: 0 1.2rem 4rem rgba(0, 0, 0, 0.25);
+  --rail: 4.75rem;
+  --footer: 3.6rem;
+  --max: 90rem;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+</style>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; overflow-x: clip; }
+    html { background: var(--bg); color-scheme: dark; }
+    body {
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 86% 10%, color-mix(in srgb, var(--mint-deep) 12%, transparent), transparent 28rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: var(--step-0);
+      line-height: 1.58;
+      letter-spacing: -0.02em;
+    }
+    button, a { font: inherit; }
+    button { color: inherit; }
+    img, svg { display: block; max-width: 100%; }
+    h1, h2, h3, h4, p { margin: 0; }
+    h1, h2, h3, h4, li, blockquote, strong, b, td, th, .no-break {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { text-wrap: balance; }
+    button:focus-visible, a:focus-visible { outline: 0.18rem solid var(--mint); outline-offset: 0.22rem; }
+
+    /* chrome */
+    .side-rail { position: fixed; inset: 0 auto 0 0; z-index: 20; width: var(--rail); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); padding: var(--space-4) 0; border-right: 1px solid var(--line-soft); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(1rem); }
+    .brand-defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+    .brand-mark { flex: none; overflow: visible; }
+    .brand-mark__field { fill: var(--mint); }
+    .brand-mark__spark { fill: var(--ink); }
+    .brand-mark__letter { fill: var(--brown); }
+    .rail-logo { width: 3rem; aspect-ratio: 1; filter: drop-shadow(0 0.3rem 0.75rem color-mix(in srgb, var(--bg) 46%, transparent)); }
+    .rail-title { writing-mode: vertical-rl; transform: rotate(180deg); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.13em; color: var(--ink-muted); white-space: nowrap; }
+    .rail-dots { margin-top: auto; display: grid; gap: 0.38rem; }
+    .rail-dot { width: 0.58rem; height: 0.58rem; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); cursor: pointer; transition: transform 180ms var(--ease), background-color 180ms var(--ease); }
+    .rail-dot[aria-current="true"] { background: var(--mint); transform: scale(1.32); }
+    .rail-dot:active { transform: scale(0.9); }
+
+    .mobile-head { display: none; }
+    .deck { position: fixed; inset: 0; }
+    .slide { position: absolute; inset: 0; display: none; overflow-y: auto; overscroll-behavior: contain; padding: clamp(1.6rem, 3vw, 3.2rem) clamp(1.3rem, 3.8vw, 4.2rem) calc(var(--footer) + 2.4rem) calc(var(--rail) + clamp(1.4rem, 3vw, 3.4rem)); }
+    .slide.is-active { display: block; }
+    .slide.is-active .reveal { animation: rise 560ms var(--ease) both; }
+    .slide.is-active .reveal.delay-1 { animation-delay: 80ms; }
+    .slide.is-active .reveal.delay-2 { animation-delay: 150ms; }
+    .slide.is-active .reveal.delay-3 { animation-delay: 220ms; }
+    .slide__inner { width: min(100%, var(--max)); min-height: calc(100vh - var(--footer) - clamp(3.2rem, 6vw, 7rem)); margin: 0 auto; display: flex; flex-direction: column; justify-content: center; gap: clamp(1rem, 2vw, 2rem); }
+    @keyframes rise { from { opacity: 0; transform: translateY(0.8rem); } to { opacity: 1; transform: translateY(0); } }
+
+    /* type */
+    .eyebrow { display: flex; align-items: center; gap: 0.7rem; color: var(--mint); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.08em; }
+    .eyebrow::before { content: ""; flex: none; width: 2.2rem; height: 0.15rem; background: var(--mint); }
+    .slide-title { max-width: 36ch; font-family: var(--font-display); font-size: var(--step-2); line-height: 1.2; letter-spacing: -0.04em; }
+    .slide-lead { max-width: 76ch; color: var(--ink-soft); font-size: var(--step-1); }
+    .label { color: var(--ink-muted); font-size: var(--step--1); font-weight: 800; letter-spacing: 0.06em; }
+    .tag { display: inline-flex; align-items: center; gap: 0.3rem; width: fit-content; padding: 0.18rem 0.5rem; border: 1px solid var(--line); border-radius: 999px; color: var(--ink-soft); font-size: var(--step--2); font-weight: 800; white-space: nowrap; }
+    .tag.mint { border-color: var(--mint-deep); color: var(--mint); }
+    .tag.amber { border-color: var(--amber); color: var(--amber); }
+    .tag.violet { border-color: var(--violet); color: var(--violet); }
+    .tag.sky { border-color: var(--sky); color: var(--sky); }
+    .tag.danger { border-color: var(--danger); color: var(--danger); }
+    .notice { padding: var(--space-3) var(--space-4); border-left: 0.18rem solid var(--amber); background: var(--bg-soft); color: var(--ink-muted); font-size: var(--step--1); line-height: 1.55; }
+    .notice b { color: var(--ink-soft); }
+    .warn { color: var(--amber); font-weight: 800; }
+
+    /* outcome key — 앞 슬라이드로 돌아가지 않고 O번호를 읽게 하는 각주 범례 */
+    .okey { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; padding: var(--space-2) var(--space-3); border: 1px dashed var(--line); border-radius: var(--radius-s); background: var(--bg-soft); color: var(--ink-muted); font-size: var(--step--2); line-height: 1.5; }
+    .okey > b { color: var(--ink-soft); font-weight: 800; letter-spacing: 0.06em; }
+    .okey span { display: inline-flex; align-items: baseline; gap: 0.26rem; white-space: nowrap; }
+    .okey i { font-style: normal; font-weight: 800; color: var(--ink-soft); }
+    .okey span[data-v] i, .okey span[data-v] { color: var(--mint); }
+
+    /* cover */
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(19rem, 0.94fr); gap: clamp(1.8rem, 4vw, 4.2rem); align-items: center; }
+    .hero-copy { display: grid; gap: var(--space-3); }
+    .hero-wordmark { width: clamp(10rem, 22vw, 15.5rem); overflow: visible; filter: drop-shadow(0 1rem 2rem color-mix(in srgb, var(--bg) 35%, transparent)); }
+    .hero-wordmark__field { fill: var(--mint-soft); }
+    .hero-wordmark__detail { fill: var(--mint); opacity: 0.72; }
+    .hero-title { max-width: 18ch; font-family: var(--font-display); font-size: clamp(2rem, 1.6rem + 1.9vw, 3.15rem); line-height: 1.1; letter-spacing: -0.048em; }
+    .hero-title em { color: var(--mint); font-style: normal; }
+    .hero-summary { max-width: 54ch; color: var(--ink-soft); font-size: var(--step-1); }
+    .meta-card { display: grid; gap: var(--space-2); padding: clamp(1.15rem, 2.4vw, 1.85rem); border: 1px solid var(--line); border-radius: var(--radius-l); background: linear-gradient(150deg, var(--surface), var(--bg-soft)); box-shadow: var(--shadow); }
+    .meta-row { display: grid; grid-template-columns: 7.4rem 1fr; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--line-soft); font-size: var(--step--1); }
+    .meta-row:last-of-type { border-bottom: 0; }
+    .meta-row > b { color: var(--ink-muted); font-size: var(--step--2); font-weight: 900; letter-spacing: 0.05em; }
+    .meta-row code { font-family: var(--font-mono); font-size: var(--step--1); color: var(--mint); }
+    .meta-row span { color: var(--ink-soft); }
+
+    /* toc */
+    .toc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+    .toc-col { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-3); border-top: 0.22rem solid var(--line); background: var(--bg-soft); border-radius: 0 0 var(--radius-m) var(--radius-m); }
+    .toc-col:nth-child(1) { border-top-color: var(--sky); }
+    .toc-col:nth-child(2) { border-top-color: var(--amber); }
+    .toc-col:nth-child(3) { border-top-color: var(--violet); }
+    .toc-col:nth-child(4) { border-top-color: var(--mint); }
+    .toc-col h3 { font-size: var(--step-0); line-height: 1.3; }
+    .toc-link { display: grid; grid-template-columns: 2.1rem 1fr; gap: var(--space-2); align-items: center; width: 100%; padding: 0.45rem 0.5rem; border: 1px solid var(--line-soft); border-radius: var(--radius-s); background: var(--surface); text-align: left; cursor: pointer; transition: border-color 160ms var(--ease), transform 160ms var(--ease); }
+    .toc-link:hover { border-color: var(--mint-deep); transform: translateX(0.15rem); }
+    .toc-link b { color: var(--mint); font-size: var(--step--2); font-variant-numeric: tabular-nums; }
+    .toc-link span { line-height: 1.3; font-size: var(--step--2); }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-m); }
+    table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+    table.wide { min-width: 60rem; }
+    table.mid { min-width: 46rem; }
+    table.matrix { min-width: 52rem; }
+    caption { padding: 0.55rem 0.75rem; color: var(--ink-muted); font-size: var(--step--2); font-weight: 800; letter-spacing: 0.05em; text-align: left; }
+    thead th { padding: 0.55rem 0.65rem; background: var(--surface-strong); color: var(--ink-soft); font-size: var(--step--2); font-weight: 900; letter-spacing: 0.04em; text-align: left; vertical-align: bottom; }
+    tbody td { padding: 0.58rem 0.65rem; border-top: 1px solid var(--line-soft); vertical-align: top; line-height: 1.45; }
+    tbody tr:nth-child(odd) td { background: var(--bg-soft); }
+    tbody th { padding: 0.58rem 0.65rem; border-top: 1px solid var(--line-soft); text-align: left; vertical-align: top; font-size: var(--step--1); }
+    td.c, th.c { text-align: center; }
+    .who { display: grid; gap: 0.12rem; min-width: 7.6rem; }
+    .who strong { font-size: var(--step-0); line-height: 1.25; }
+    .who small { color: var(--ink-muted); font-size: var(--step--2); }
+    .num { color: var(--mint); font-variant-numeric: tabular-nums; font-weight: 800; }
+    .neg { color: var(--danger); font-weight: 800; }
+    ul.tight { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.24rem; }
+    ul.tight li::marker { color: var(--ink-muted); }
+    .seg { display: inline-grid; place-items: center; min-width: 2rem; padding: 0.1rem 0.35rem; border-radius: 0.35rem; font-size: var(--step--2); font-weight: 900; }
+    .seg[data-q="Q1"] { background: var(--mint); color: var(--bg); }
+    .seg[data-q="Q4"] { background: var(--amber); color: var(--bg); }
+    .seg[data-q="Q2"] { background: var(--sky); color: var(--bg); }
+    .seg[data-q="Q3"] { background: var(--surface-strong); color: var(--ink-muted); }
+    .mk { font-weight: 900; }
+    .mk.yes { color: var(--mint); }
+    .mk.part { color: var(--amber); }
+    .mk.no { color: var(--danger); }
+    .mk.na { color: var(--ink-muted); }
+    .pri { display: inline-grid; place-items: center; min-width: 2.1rem; padding: 0.1rem 0.35rem; border-radius: 0.35rem; font-size: var(--step--2); font-weight: 900; }
+    .pri[data-p="P0"] { background: var(--mint); color: var(--bg); }
+    .pri[data-p="P1"] { background: var(--sky); color: var(--bg); }
+    .pri[data-p="P2"] { background: var(--violet); color: var(--bg); }
+    .pri[data-p="P3"] { background: var(--surface-strong); color: var(--ink-muted); }
+    .lvl { font-weight: 900; }
+    .lvl[data-l="H"] { color: var(--danger); }
+    .lvl[data-l="M"] { color: var(--amber); }
+    .lvl[data-l="L"] { color: var(--mint); }
+
+    /* journey band */
+    .journey { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-2); }
+    .jstep { position: relative; display: grid; align-content: start; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--bg-soft); }
+    .jstep.is-drop { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 10%, var(--bg-soft)); }
+    .jstep + .jstep::before { content: "→"; position: absolute; left: -0.85rem; top: 50%; transform: translateY(-50%); color: var(--mint); font-weight: 900; font-size: var(--step--1); }
+    .jstep > b { color: var(--mint); font-size: var(--step--2); font-weight: 900; letter-spacing: 0.05em; }
+    .jstep.is-drop > b { color: var(--danger); }
+    .jstep strong { font-size: var(--step--1); line-height: 1.35; }
+    .jstep p { color: var(--ink-muted); font-size: var(--step--2); line-height: 1.45; }
+    .jstep .drop-flag { padding: 0.22rem 0.4rem; border-radius: 0.35rem; background: var(--danger); color: var(--bg); font-size: var(--step--2); font-weight: 900; text-align: center; }
+
+    /* pain cards */
+    .pain-row { display: grid; gap: var(--space-3); }
+    .pain-row[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .pcard { display: grid; align-content: start; gap: var(--space-2); padding: clamp(1rem, 2.1vw, 1.5rem); border: 1px solid var(--line); border-left-width: 0.34rem; border-radius: var(--radius-m); background: var(--surface); }
+    .pcard[data-seg="Q1"] { border-left-color: var(--mint); }
+    .pcard[data-seg="Q4"] { border-left-color: var(--amber); }
+    .pcard-head { display: grid; gap: 0.12rem; padding-bottom: var(--space-2); border-bottom: 1px solid var(--line-soft); }
+    .pcard-head strong { font-family: var(--font-display); font-size: var(--step-1); line-height: 1.2; letter-spacing: -0.03em; }
+    .pcard-head small { color: var(--ink-muted); font-size: var(--step--2); line-height: 1.4; }
+    .pcard ul { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.26rem; color: var(--ink-soft); font-size: var(--step--2); line-height: 1.5; }
+    .pcard ul li::marker { color: var(--danger); }
+    .pcard .needs { display: grid; gap: 0.12rem; padding: var(--space-2); border-radius: var(--radius-s); background: var(--bg-soft); }
+    .pcard .needs b { color: var(--mint); font-size: var(--step--2); font-weight: 900; letter-spacing: 0.05em; }
+    .pcard .needs span { color: var(--ink); font-size: var(--step--2); line-height: 1.45; }
+
+    /* jtbd */
+    .jtbd-list { display: grid; gap: var(--space-2); }
+    .jtbd { display: grid; grid-template-columns: minmax(8rem, 0.62fr) minmax(0, 1fr) minmax(0, 1.3fr); gap: var(--space-3); align-items: start; padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--bg-soft); }
+    .jtbd > div:first-child { display: grid; gap: 0.15rem; }
+    .jtbd > div:first-child strong { font-size: var(--step-0); }
+    .jtbd .when { color: var(--ink-muted); font-size: var(--step--2); line-height: 1.45; }
+    .jtbd .decl { color: var(--ink); font-size: var(--step--1); line-height: 1.5; }
+    .jtbd .decl em { color: var(--mint); font-style: normal; font-weight: 800; }
+    .corejob { display: grid; gap: var(--space-2); padding: var(--space-4); border-radius: var(--radius-m); background: var(--mint); color: var(--bg); }
+    .corejob b { font-family: var(--font-display); font-size: var(--step--1); letter-spacing: 0.05em; }
+    .corejob blockquote { margin: 0; font-size: var(--step-1); font-weight: 850; line-height: 1.45; }
+    .corejob p { font-size: var(--step--1); line-height: 1.5; opacity: 0.85; }
+
+    /* vp statement */
+    .vp-state { display: grid; gap: var(--space-2); padding: clamp(1.3rem, 2.8vw, 2.1rem); border-left: 0.45rem solid var(--mint); background: var(--surface); }
+    .vp-state p { font-size: var(--step-1); line-height: 1.55; }
+    .vp-state p em { color: var(--mint); font-style: normal; font-weight: 850; }
+    .vp-line { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-3); align-items: start; }
+    .vp-no { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.55rem; background: var(--mint); color: var(--bg); font-family: var(--font-display); font-size: var(--step--1); }
+    .vp-short { padding: var(--space-4); border-radius: var(--radius-m); background: var(--mint); color: var(--bg); font-family: var(--font-display); font-size: var(--step-2); line-height: 1.3; letter-spacing: -0.03em; text-align: center; }
+
+    /* five steps */
+    .steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); }
+    .step { position: relative; display: grid; align-content: start; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--surface); }
+    .step + .step::before { content: "→"; position: absolute; left: -0.85rem; top: 50%; transform: translateY(-50%); color: var(--mint); font-weight: 900; }
+    .step > b { color: var(--mint); font-size: var(--step--2); font-weight: 900; letter-spacing: 0.05em; }
+    .step strong { font-size: var(--step--1); line-height: 1.35; }
+    .step p { color: var(--ink-muted); font-size: var(--step--2); line-height: 1.45; }
+    .step .solves { margin-top: auto; padding: 0.24rem 0.4rem; border-radius: 0.35rem; background: color-mix(in srgb, var(--mint) 18%, var(--surface)); color: var(--mint); font-size: var(--step--2); font-weight: 900; text-align: center; }
+
+    /* diff cards */
+    .diff-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); }
+    .diff-row[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .diff { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--bg-soft); }
+    .diff > b { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 0.55rem; background: var(--mint); color: var(--bg); font-family: var(--font-display); font-size: var(--step--1); }
+    .diff strong { font-size: var(--step-0); line-height: 1.35; }
+    .diff p { color: var(--ink-muted); font-size: var(--step--2); line-height: 1.5; }
+    .diff p b { color: var(--ink-soft); }
+
+    /* tracking value */
+    .track-jobs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+    .tjob { display: grid; align-content: start; gap: var(--space-3); padding: clamp(1.05rem, 2.2vw, 1.6rem); border: 1px solid var(--mint-deep); border-radius: var(--radius-m); background: var(--surface); }
+    .tjob-head { display: grid; grid-template-columns: auto 1fr; gap: var(--space-3); align-items: center; }
+    .tjob-head > b { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 0.6rem; background: var(--mint); color: var(--bg); font-family: var(--font-display); font-size: var(--step--1); }
+    .tjob-head strong { font-size: var(--step-1); line-height: 1.28; }
+    .tjob-head small { display: block; color: var(--ink-muted); font-size: var(--step--2); }
+    .tjob > p { color: var(--ink-soft); font-size: var(--step--1); line-height: 1.55; }
+    .tjob > p b { color: var(--mint); }
+    .frame-pair { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-2); align-items: center; }
+    .frame-box { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 0.45rem; background: var(--surface-strong); overflow: hidden; }
+    .frame-box .court { position: absolute; inset: 12% 8%; border: 1px solid var(--line); border-radius: 0.2rem; }
+    .frame-box .dot { position: absolute; width: 0.36rem; height: 0.72rem; border-radius: 0.1rem; background: var(--ink-muted); opacity: 0.5; }
+    .frame-box .me { position: absolute; width: 0.4rem; height: 0.8rem; border-radius: 0.1rem; background: var(--mint); }
+    .frame-box .bracket { position: absolute; border: 0.12rem solid var(--mint); border-radius: 0.15rem; }
+    .frame-box.after .me { width: 1.5rem; height: 3rem; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    .frame-box.after .bracket { inset: 16% 34% 12% 34%; }
+    .frame-box figcaption { position: absolute; inset: auto 0 0 0; padding: 0.22rem 0.4rem; background: color-mix(in srgb, var(--bg) 78%, transparent); color: var(--ink-soft); font-size: var(--step--2); font-weight: 800; text-align: center; }
+    .frame-box.after figcaption { color: var(--mint); }
+    .frame-arrow { color: var(--mint); font-weight: 900; font-size: var(--step-1); }
+    .tjob .gain { display: grid; gap: 0.14rem; padding: var(--space-2) var(--space-3); border-radius: var(--radius-s); background: var(--mint); color: var(--bg); }
+    .tjob .gain b { font-size: var(--step--2); font-weight: 900; letter-spacing: 0.05em; opacity: 0.72; }
+    .tjob .gain strong { font-size: var(--step--1); line-height: 1.4; }
+
+    .split { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-3); align-items: stretch; }
+    .split-side { display: grid; align-content: start; gap: var(--space-2); padding: clamp(1.05rem, 2.2vw, 1.6rem); border-radius: var(--radius-m); }
+    .split-side[data-kind="source"] { background: var(--mint); color: var(--bg); }
+    .split-side[data-kind="route"] { background: var(--bg-soft); border: 1px solid var(--line); }
+    .split-side > b { font-size: var(--step--2); font-weight: 900; letter-spacing: 0.06em; opacity: 0.78; }
+    .split-side h3 { font-size: var(--step-1); line-height: 1.3; }
+    .split-side[data-kind="route"] h3 { color: var(--sky); }
+    .split-side ul { margin: 0; padding-left: 1.05rem; display: grid; gap: 0.28rem; font-size: var(--step--1); line-height: 1.5; }
+    .split-side[data-kind="route"] ul { color: var(--ink-soft); }
+    .split-mid { display: grid; place-items: center; gap: var(--space-2); }
+    .split-mid span { writing-mode: vertical-rl; transform: rotate(180deg); color: var(--ink-muted); font-size: var(--step--2); font-weight: 900; letter-spacing: 0.08em; white-space: nowrap; }
+
+    /* quadrant */
+    .quad-frame { display: grid; grid-template-columns: 2.4rem 1fr; gap: var(--space-2); }
+    .quad-y { display: grid; place-items: center; }
+    .quad-y span { writing-mode: vertical-rl; transform: rotate(180deg); color: var(--ink-muted); font-size: var(--step--2); font-weight: 800; letter-spacing: 0.07em; white-space: nowrap; }
+    .quad-body { display: grid; gap: var(--space-2); }
+    .quad { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--line); border-radius: var(--radius-m); overflow: hidden; background: var(--line); }
+    .quad-cell { display: grid; align-content: start; gap: var(--space-2); min-height: 8.5rem; padding: var(--space-3); background: var(--bg-soft); }
+    .quad-cell.is-open { background: color-mix(in srgb, var(--mint) 12%, var(--surface)); }
+    .quad-cell > b { color: var(--ink-muted); font-size: var(--step--2); font-weight: 900; letter-spacing: 0.04em; }
+    .quad-cell.is-open > b { color: var(--mint); }
+    .quad-cell p { color: var(--ink-soft); font-size: var(--step--2); line-height: 1.5; }
+    .quad-chips { display: flex; flex-wrap: wrap; gap: 0.26rem; }
+    .chip { display: inline-flex; padding: 0.18rem 0.45rem; border: 1px solid var(--line); border-radius: 0.38rem; background: var(--surface); font-size: var(--step--2); font-weight: 800; }
+    .chip.is-hilit { border-color: var(--mint); background: var(--mint); color: var(--bg); }
+    .quad-x { display: flex; justify-content: space-between; gap: var(--space-3); color: var(--ink-muted); font-size: var(--step--2); font-weight: 800; letter-spacing: 0.05em; }
+
+    /* mvp flow + gates */
+    .mvp-flow { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0.4rem; }
+    .mvp-node { position: relative; display: grid; gap: 0.2rem; padding: var(--space-2); border-radius: var(--radius-s); background: var(--mint); color: var(--bg); text-align: center; }
+    .mvp-node[data-partial="true"] { background: color-mix(in srgb, var(--mint) 55%, var(--bg-soft)); color: var(--ink); border: 1px dashed var(--mint-deep); }
+    .mvp-node[data-new="true"] { background: color-mix(in srgb, var(--mint) 22%, var(--bg-soft)); color: var(--ink); border: 0.14rem solid var(--mint-deep); }
+    .mvp-node[data-new="true"]::after { content: "v0.6 신규"; position: absolute; top: -0.55rem; right: -0.2rem; font-size: 0.55rem; font-weight: 800; background: var(--mint-deep); color: var(--bg); padding: 0.05rem 0.3rem; border-radius: 0.3rem; }
+    .mvp-node b { font-size: var(--step--2); font-weight: 900; }
+    .mvp-node span { font-size: var(--step--2); line-height: 1.3; }
+    .mvp-flow--9 { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+    .gate-list { display: grid; gap: var(--space-2); }
+    .gate { display: grid; grid-template-columns: 2.2rem minmax(7rem, 0.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-3); align-items: center; padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--bg-soft); }
+    .gate.is-gate { border-color: var(--mint-deep); background: var(--surface); }
+    .gate > b { display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border: 1px solid var(--mint-deep); border-radius: 50%; color: var(--mint); font-weight: 900; font-size: var(--step--1); }
+    .gate strong { font-size: var(--step-0); line-height: 1.3; }
+    .gate .feats { display: flex; flex-wrap: wrap; gap: 0.24rem; }
+    .gate .cond { color: var(--ink-soft); font-size: var(--step--2); line-height: 1.45; }
+    .gate .cond b { color: var(--mint); }
+
+    /* fixed / open */
+    .fo-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--space-3); }
+    .fo { display: grid; align-content: start; gap: var(--space-2); padding: clamp(1rem, 2.1vw, 1.55rem); border-radius: var(--radius-m); background: var(--bg-soft); border-top: 0.22rem solid var(--line); }
+    .fo[data-tone="fix"] { border-top-color: var(--mint); }
+    .fo[data-tone="open"] { border-top-color: var(--amber); }
+    .fo h3 { font-size: var(--step-1); line-height: 1.3; }
+    .fo[data-tone="fix"] h3 { color: var(--mint); }
+    .fo[data-tone="open"] h3 { color: var(--amber); }
+    .fo ol, .fo ul { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.3rem; color: var(--ink-soft); font-size: var(--step--1); line-height: 1.5; }
+    .fo p { color: var(--ink-soft); font-size: var(--step--1); line-height: 1.55; }
+
+    /* source blocks */
+    .src-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+    .src-block { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--bg-soft); }
+    .src-block > b { font-size: var(--step--1); font-weight: 900; }
+    .src-block p { color: var(--ink-soft); font-size: var(--step--2); line-height: 1.5; }
+    .src-block code { font-family: var(--font-mono); font-size: var(--step--2); color: var(--sky); }
+
+    /* footer */
+    .deck-footer { position: fixed; z-index: 30; inset: auto 0 0 var(--rail); height: var(--footer); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: 0 clamp(1.25rem, 4vw, 4rem); border-top: 1px solid var(--line-soft); background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(1rem); }
+    .footer-context { overflow: hidden; color: var(--ink-muted); font-size: var(--step--1); text-overflow: ellipsis; white-space: nowrap; }
+    .footer-controls { display: flex; align-items: center; gap: var(--space-2); white-space: nowrap; }
+    .nav-button { min-width: 2.3rem; height: 2.3rem; padding: 0 0.65rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); cursor: pointer; }
+    .nav-button:hover { border-color: var(--mint-deep); }
+    .nav-button:active { background: var(--surface-strong); transform: translateY(1px); }
+    .nav-button:disabled { opacity: 0.35; cursor: default; }
+    .counter { min-width: 3.4rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; text-align: center; }
+
+    /* responsive */
+    @media (max-width: 80rem) {
+      .journey { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .jstep:nth-child(4)::before { display: none; }
+      .mvp-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .diff-row, .diff-row[data-cols="3"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 68rem) {
+      .track-jobs, .split { grid-template-columns: 1fr; }
+      .split-mid span { writing-mode: horizontal-tb; transform: none; }
+      .toc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pain-row[data-cols="3"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .step:nth-child(4)::before { display: none; }
+      .jtbd { grid-template-columns: minmax(7rem, 0.7fr) 1fr; }
+      .jtbd .decl { grid-column: 1 / -1; }
+      .gate { grid-template-columns: 2.2rem 1fr; }
+      .gate .cond { grid-column: 1 / -1; }
+    }
+    @media (max-width: 64rem) {
+      .hero-grid, .fo-grid, .src-cols { grid-template-columns: 1fr; }
+      .hero-title { max-width: 22ch; }
+      .journey, .steps, .pain-row[data-cols="3"], .diff-row, .diff-row[data-cols="3"] { grid-template-columns: 1fr; }
+      .jstep::before, .step::before { display: none; }
+      .quad { grid-template-columns: 1fr; }
+      .quad-frame { grid-template-columns: 1fr; }
+      .quad-y { display: none; }
+    }
+    @media (max-width: 48rem) {
+      .side-rail { display: none; }
+      .mobile-head { position: fixed; z-index: 35; inset: 0 0 auto; height: 3.7rem; display: flex; align-items: center; gap: var(--space-3); padding: 0 1rem; border-bottom: 1px solid var(--line-soft); background: var(--bg); }
+      .mobile-head .brand-mark { width: 2.35rem; }
+      .mobile-head strong { flex: 1; overflow: hidden; color: var(--ink-soft); font-size: var(--step--1); text-overflow: ellipsis; white-space: nowrap; }
+      .mobile-head span { color: var(--ink-muted); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+      .slide { padding: 5.2rem 1rem calc(var(--footer) + 2rem); }
+      .slide__inner { justify-content: flex-start; min-height: auto; }
+      .hero-wordmark { width: 10rem; }
+      .toc-grid { grid-template-columns: 1fr; }
+      .meta-row { grid-template-columns: 1fr; gap: 0.1rem; }
+      .mvp-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .jtbd { grid-template-columns: 1fr; }
+      table.wide, table.mid, table.matrix { min-width: 38rem; font-size: var(--step--2); }
+      .deck-footer { left: 0; padding: 0 0.9rem; }
+      .footer-context { max-width: 38vw; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="brand-defs" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="hilit-wordmark-shape" viewBox="0 0 700 210">
+        <path class="brand-mark__letter" d="M67 52 Q66 42 77 41 L104 39 Q114 38 115 50 L121 94 L162 90 L157 46 Q156 36 167 35 L194 33 Q204 32 205 44 L217 160 Q218 171 207 173 L181 176 Q170 177 169 165 L165 122 L126 127 L132 169 Q133 180 122 181 L95 184 Q84 184 82 172 Z"/>
+        <path class="brand-mark__letter" d="M271 51 Q270 42 280 41 L305 41 Q315 41 315 52 L313 165 Q313 176 302 176 L278 175 Q267 175 268 164 Z"/>
+        <path class="brand-mark__letter" d="M356 50 Q356 39 367 40 L393 42 Q404 43 403 54 L398 150 L446 154 Q457 155 456 166 L454 183 Q453 193 442 192 L365 184 Q354 183 355 172 Z"/>
+        <path class="brand-mark__letter" d="M493 70 Q492 60 503 59 L527 58 Q538 58 538 69 L536 166 Q536 176 525 177 L502 177 Q491 177 492 166 Z"/>
+        <path class="brand-mark__letter" d="M493 27 Q492 16 503 15 L527 14 Q538 14 539 25 L539 42 Q539 52 528 53 L503 53 Q492 53 492 42 Z"/>
+        <path class="brand-mark__letter" d="M565 48 Q565 37 576 38 L665 42 Q676 43 675 54 L673 73 Q672 83 661 82 L633 80 L628 171 Q627 182 616 181 L590 178 Q579 177 580 166 L585 77 L576 77 Q565 76 565 65 Z"/>
+      </symbol>
+      <symbol id="hilit-app-mark" viewBox="0 0 100 100">
+        <rect class="brand-mark__field" x="6" y="6" width="88" height="88" rx="24"/>
+        <path class="brand-mark__spark" d="M27 18 L31 22 L27 26 L23 22 Z M73 18 L77 22 L73 26 L69 22 Z M27 74 L31 78 L27 82 L23 78 Z M73 74 L77 78 L73 82 L69 78 Z"/>
+        <circle class="brand-mark__spark" cx="18" cy="50" r="2.5"/>
+        <circle class="brand-mark__spark" cx="82" cy="50" r="2.5"/>
+        <use href="#hilit-wordmark-shape" x="14" y="35" width="72" height="24"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <aside class="side-rail" aria-label="슬라이드 이동">
+    <svg class="brand-mark rail-logo" viewBox="0 0 100 100" role="img" aria-label="HILiT 앱 로고"><use href="#hilit-app-mark"/></svg>
+    <span class="rail-title">HILiT · Value Proposition</span>
+    <div class="rail-dots" id="railDots"></div>
+  </aside>
+
+  <header class="mobile-head">
+    <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true"><use href="#hilit-app-mark"/></svg>
+    <strong>HILiT · Value Proposition</strong>
+    <span id="mobileCounter">01 / 23</span>
+  </header>
+
+  <main class="deck" aria-live="polite">
+    <!-- 01 표지 -->
+    <section class="slide is-active" data-title="표지 · Value Proposition" aria-labelledby="s1t">
+      <div class="slide__inner hero-grid">
+        <div class="hero-copy reveal">
+          <svg class="hero-wordmark" viewBox="0 0 360 120" role="img" aria-label="HILiT">
+            <path class="hero-wordmark__field" d="M24 13 Q15 15 14 29 L10 91 Q10 106 27 108 L329 113 Q345 113 347 98 L350 26 Q350 11 333 10 Z"/>
+            <path class="hero-wordmark__detail" d="M25 28 L30 33 L25 38 L20 33 Z M333 83 L338 88 L333 93 L328 88 Z"/>
+            <use href="#hilit-wordmark-shape" x="25" y="22" width="310" height="92"/>
+          </svg>
+          <p class="eyebrow">Value Proposition</p>
+          <h1 class="hero-title" id="s1t">AI가 영상 속 <em>나를 끝까지 따라가</em> 하이라이트를 찾고, <em>나를 위해 오래 남긴다</em></h1>
+          <p class="hero-summary">이 제품은 두 문장이다. <b>AI가 나를 끝까지 따라가 하이라이트를 찾고, 내가 고른 순간을 나 중심의 영상으로 완성한다.</b> 그리고 <b>보여주기 위한 기록만이 아니라, 나를 위해 오래 남겨두는 개인 기록 공간을 제공한다.</b> 이 문서는 두 문장을 페르소나 6명의 Pain·JTBD, 고객 Outcome, 기존 대안 비교, 차별적 가치와 근거, Job-Feature Map으로 뒷받침한다.</p>
+          <p class="notice">페르소나 9명과 그들의 수치는 <b>가상 인터뷰 예시</b>다. 시장 규모는 참조 문서의 정정값을 그대로 가져왔고 가정에 기반한 값은 <span class="warn">⚠️</span>로 표시했다. 수익 모델과 가격이 미정이므로 <b>이 문서는 매출 목표를 다루지 않는다</b>.</p>
+        </div>
+        <div class="meta-card reveal delay-1" aria-label="문서 정보">
+          <p class="label">문서 정보</p>
+          <div class="meta-row"><b>작성 모델</b><span><code>claude-opus-5[1m]</code><br>Claude Opus 5 · 1M context</span></div>
+          <div class="meta-row"><b>Effort Level</b><span><code>high</code></span></div>
+          <div class="meta-row"><b>작성 기준일</b><span>2026-08-27</span></div>
+          <div class="meta-row"><b>문서 버전</b><span><code>VPS 0.3</code><br><small style="color:var(--ink-muted)">2026-08-29 개정 — 관계 모델 팔로워·팔로잉 전환 · 그룹 신설 · MVP 범위 재확정(16 → 17개)</small></span></div>
+          <div class="meta-row"><b>문서 단계</b><span>6. Value Proposition<br><small style="color:var(--ink-muted)">선행: 5가지 힘 → 가치사슬 → KSF → TAM·SAM·SOM → Persona·JTBD → 경쟁사 가치 분석</small></span></div>
+          <div class="meta-row"><b>참조 문서</b><span>TAM·SAM·SOM 세그먼트 · 페르소나 9명 · 경쟁사 가치 분석 · KSF · 가치사슬 · 5가지 힘 · 제품 기획 기준 문서</span></div>
+          <p class="label" style="color: var(--ink-soft);">오른쪽 방향키와 Space로 다음 장, 왼쪽 방향키와 Backspace로 이전 장으로 이동한다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 목차 -->
+    <section class="slide" data-title="목차 · 누르면 그 장으로 이동한다" aria-labelledby="s2t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Contents</p>
+          <h2 class="slide-title" id="s2t">누구의 문제인지 정하고, 그들이 원하는 결과를 숫자로 만들고, 대안과 비교한 뒤 만들 기능을 정한다</h2>
+        </div>
+        <div class="toc-grid reveal delay-1">
+          <div class="toc-col">
+            <span class="tag sky">1부 · 고객과 문제</span>
+            <h3>누구의 어떤 문제인가</h3>
+            <button class="toc-link" type="button" data-goto="3"><b>03</b><span>Selected Pain Point 선별 기준</span></button>
+            <button class="toc-link" type="button" data-goto="4"><b>04</b><span>CJM 6단계 · 이탈이 몰린 곳</span></button>
+            <button class="toc-link" type="button" data-goto="5"><b>05</b><span>Q1 4명의 Pain과 Needs</span></button>
+            <button class="toc-link" type="button" data-goto="6"><b>06</b><span>Q4 2명의 Pain과 공통 Pain 3</span></button>
+          </div>
+          <div class="toc-col">
+            <span class="tag amber">2부 · Job과 Outcome</span>
+            <h3>무엇을 하려 하는가</h3>
+            <button class="toc-link" type="button" data-goto="7"><b>07</b><span>JTBD 선언 6개</span></button>
+            <button class="toc-link" type="button" data-goto="8"><b>08</b><span>Core Job · 풀 것과 안 풀 것</span></button>
+            <button class="toc-link" type="button" data-goto="9"><b>09</b><span>고객이 원하는 Outcome 10개</span></button>
+            <button class="toc-link" type="button" data-goto="10"><b>10</b><span>기존 대안 ① 경쟁사 9곳</span></button>
+            <button class="toc-link" type="button" data-goto="11"><b>11</b><span>기존 대안 ② 유사 3사와 포기</span></button>
+          </div>
+          <div class="toc-col">
+            <span class="tag violet">3부 · 제안과 근거</span>
+            <h3>우리가 무엇을 주는가</h3>
+            <button class="toc-link" type="button" data-goto="12"><b>12</b><span>Value Proposition 선언문</span></button>
+            <button class="toc-link" type="button" data-goto="13" style="border-color: var(--mint-deep);"><b>13</b><span style="color:var(--mint); font-weight:800">트래킹이 만드는 고객 가치</span></button>
+            <button class="toc-link" type="button" data-goto="14" style="border-color: var(--mint-deep);"><b>14</b><span style="color:var(--mint); font-weight:800">가치의 원천과 수익의 경로</span></button>
+            <button class="toc-link" type="button" data-goto="15"><b>15</b><span>차별적 가치 4개와 방어력</span></button>
+            <button class="toc-link" type="button" data-goto="16"><b>16</b><span>Proof ① 근거 데이터 9건</span></button>
+            <button class="toc-link" type="button" data-goto="17"><b>17</b><span>Proof ② 기능 커버리지 비교</span></button>
+            <button class="toc-link" type="button" data-goto="18"><b>18</b><span>Proof ③ 2축 지도와 근거 사슬</span></button>
+            <button class="toc-link" type="button" data-goto="19"><b>19</b><span>Proof ④ 해소한 것과 남은 한계</span></button>
+            <button class="toc-link" type="button" data-goto="20" style="border-color: var(--amber);"><b>20</b><span style="color:var(--amber); font-weight:800">더 얘기해봐야 할 논점 6개</span></button>
+          </div>
+          <div class="toc-col">
+            <span class="tag mint">4부 · 만들 것</span>
+            <h3>무엇부터 만드는가</h3>
+            <button class="toc-link" type="button" data-goto="21"><b>21</b><span>Job-Feature Map 26개</span></button>
+            <button class="toc-link" type="button" data-goto="22"><b>22</b><span>MVP 범위와 검증 관문</span></button>
+            <button class="toc-link" type="button" data-goto="23"><b>23</b><span>확정한 것과 확정하지 않은 것</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 선별 기준 -->
+    <section class="slide" data-title="Selected Pain Point 선별 기준" aria-labelledby="s3t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Selected Pain Point</p>
+          <h2 class="slide-title" id="s3t">페르소나 9명을 세그먼트 축으로 다시 걸러 6명으로 좁혔다</h2>
+          <p class="slide-lead">9명을 전부 대상으로 삼으면 제안이 흐려진다. 세그먼트를 가르는 1순위 기준은 <b>원본 영상이 있는가</b>다. HILiT은 앱에서 촬영하지 않으므로 원본이 없으면 제품이 아예 작동하지 않는다. 2순위 기준은 <b>돈이나 시간을 쓸 의향이 있는가</b>다.</p>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="mid">
+            <caption>TAM·SAM·SOM 문서의 세그먼트 정의에 페르소나 9명을 배치한 결과</caption>
+            <thead>
+              <tr><th scope="col">세그먼트</th><th scope="col">정의</th><th scope="col">국내 규모</th><th scope="col">해당 페르소나</th><th scope="col">이 문서의 처리</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="seg" data-q="Q1">Q1</span></td>
+                <td>원본 O · 지불의향 O<br><small style="color:var(--ink-muted)">이미 올리는 사람</small></td>
+                <td><span class="num">약 50만 명</span> <span class="warn">⚠️</span></td>
+                <td><strong>김도현(A-1) · 박서연(A-2) · 강태오(C-1) · 오세진(C-3)</strong></td>
+                <td class="cell-sol"><b style="color:var(--mint)">대상 · 1순위</b></td>
+              </tr>
+              <tr>
+                <td><span class="seg" data-q="Q4">Q4</span></td>
+                <td>원본 O · 지불의향 X<br><small style="color:var(--ink-muted)">찍어놓고 안 올림</small></td>
+                <td><span class="num">약 450만 명</span> <span class="warn">⚠️</span></td>
+                <td><strong>이준혁(A-3) · 정민수(B-2)</strong></td>
+                <td><b style="color:var(--amber)">대상 · 2순위</b></td>
+              </tr>
+              <tr>
+                <td><span class="seg" data-q="Q2">Q2</span></td>
+                <td>원본 X · 지불의향 O<br><small style="color:var(--ink-muted)">잠재 수요</small></td>
+                <td>약 200만 명 <span class="warn">⚠️</span></td>
+                <td>최윤아(B-1)</td>
+                <td>보류 · 촬영 가이드 단계에서 열림</td>
+              </tr>
+              <tr>
+                <td><span class="seg" data-q="Q3">Q3</span></td>
+                <td>순수 소비자</td>
+                <td>약 2,800만 명</td>
+                <td>—</td>
+                <td>타깃 아님</td>
+              </tr>
+              <tr>
+                <td><span class="seg" data-q="Q3">밖</span></td>
+                <td>원본은 있으나 첫 카테고리(농구·구기) 밖</td>
+                <td>—</td>
+                <td>한지우(B-3) 클라이밍 · 서하린(C-2) 필라테스</td>
+                <td>확장 단계 · Proof 근거로 재활용</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="corejob reveal delay-2">
+          <b>선별 결과와 전략</b>
+          <blockquote>Q1으로 들어가서 Q4로 넓힌다 — Q1 4명 + Q4 2명, 총 6명을 이 문서의 대상으로 확정한다.</blockquote>
+          <p>Q1은 촬영 습관이 이미 있고 편집 부담을 몸으로 아는 사람들이라 전환이 가장 싸다. Q4는 페인이 가장 크고 시장이 9배지만 돈을 내지 않는다. 값을 편집에서 받지 않고 기록 축적에서 받기로 이미 결정했으므로(KSF 전략 권고), Q4를 무료로 많이 확보하는 일이 곧 사업의 본체가 된다.</p>
+        </div>
+        <p class="notice reveal delay-3">범위 밖 3명을 버리지는 않았다. <b>최윤아</b>는 기록과 공개를 분리해야 한다는 요구의 가장 선명한 증거이고, <b>서하린</b>은 카테고리 랭킹이 왜 필요한지를 설명해 준다. 두 사람의 페인은 Proof 단계에서 근거로 다시 쓴다.</p>
+      </div>
+    </section>
+
+    <!-- 04 CJM -->
+    <section class="slide" data-title="CJM 6단계 · 이탈이 몰린 곳" aria-labelledby="s4t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Customer Journey Map</p>
+          <h2 class="slide-title" id="s4t">이탈은 촬영이 아니라 찾기·편집·남기기 세 단계에 몰려 있다</h2>
+        </div>
+        <div class="journey reveal delay-1" aria-label="고객 여정 6단계와 이탈 지점">
+          <article class="jstep"><b>① 촬영</b><strong>삼각대를 세우고 녹화 버튼을 누른다</strong><p>마찰이 거의 없다. 1분이면 끝난다. 촬영은 이미 습관이 됐다.</p></article>
+          <article class="jstep is-drop"><b>② 귀가·보관</b><strong>원본 4GB가 휴대폰에 쌓인다</strong><p>저장공간 경고가 뜨는데 좋은 장면이 있을까 싶어 지우지 못한다.</p><span class="drop-flag">저장공간 압박</span></article>
+          <article class="jstep is-drop"><b>③ 찾기</b><strong>40분 안에서 자기를 눈으로 찾는다</strong><p>10초씩 앞뒤로 돌려본다. 1시간 이상 걸린다.</p><span class="drop-flag">최대 이탈 지점</span></article>
+          <article class="jstep is-drop"><b>④ 편집</b><strong>컷·자막·음악을 직접 만든다</strong><p>30분이 넘어가고 매번 중간에 그만둔다.</p><span class="drop-flag">두 번째 이탈</span></article>
+          <article class="jstep is-drop"><b>⑤ 남기기·공개</b><strong>올릴지 말지 판단한다</strong><p>"이 정도를 남한테 보여줄 수준인가"에서 멈춘다.</p><span class="drop-flag">세 번째 이탈</span></article>
+          <article class="jstep"><b>⑥ 재방문</b><strong>다음 경기에 또 찍는다</strong><p>기록이 남지 않았으므로 돌아올 이유도 없다. 원본만 늘어난다.</p></article>
+        </div>
+        <div class="vp-state reveal delay-2">
+          <p>HILiT이 없는 지금, 이탈은 촬영이 아니라 <em>③ 찾기 · ④ 편집 · ⑤ 남기기</em>에 몰려 있다. 촬영은 이미 습관이 됐고 문제는 그 뒤에서 시작된다.</p>
+        </div>
+        <p class="notice reveal delay-3">이 진단은 TAM·SAM·SOM 문서의 결론과 같다. 가설의 표현을 "편집이 어려워서 못 올린다"에서 <b>"촬영 이후에 발생하는 시간·기술·반복 작업의 부담"</b>으로 바꿔야 한다는 것이 그 문서의 가장 중요한 발견이었다. 앞의 표현은 직접 조사 데이터가 없어 반박당하고, 뒤의 표현은 서로 다른 조사 여러 건에서 반복 확인된다.</p>
+      </div>
+    </section>
+
+    <!-- 05 Q1 4명 -->
+    <section class="slide" data-title="Q1 4명의 Pain과 Needs" aria-labelledby="s5t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Pain &amp; Needs · <span class="seg" data-q="Q1" style="margin-left:0.2rem">Q1</span> 이미 올리는 사람 · 전환이 가장 싼 1순위</p>
+          <h2 class="slide-title" id="s5t">Q1 4명은 촬영과 게시 습관이 이미 있고, 찾기와 편집에서만 막혀 있다</h2>
+        </div>
+        <div class="pain-row" data-cols="3" style="grid-template-columns: repeat(4, minmax(0, 1fr));">
+          <article class="pcard" data-seg="Q1">
+            <div class="pcard-head"><strong>김도현 A-1</strong><small>26세 남성 · 3년차 직장인 · 주 2회 사회인 농구 · 인스타 본계정 + 농구 부계정</small></div>
+            <ul>
+              <li><b>③</b> 40분 원본에서 자기 장면 찾는 데 매번 1시간 이상</li>
+              <li><b>④</b> 코트 반대편에서 화면 구석에 작게 잡힘, 확대하면 화질 깨짐</li>
+              <li><b>⑥</b> 원본 47개 적재, 3개월 부계정 업로드 2건 <span class="warn">⚠️</span></li>
+              <li><b>⑥</b> 미루는 동안 그날이 왜 특별했는지 기억이 흐려짐</li>
+            </ul>
+            <div class="needs"><b>Needs</b><span>원본을 뒤지지 않고 자기가 잘 나온 장면만 골라 남기기. 부계정을 판 이유를 유지하기</span></div>
+          </article>
+          <article class="pcard" data-seg="Q1">
+            <div class="pcard-head"><strong>박서연 A-2</strong><small>22세 여성 · 대학생 · 풋살 동아리 주장 겸 촬영 담당</small></div>
+            <ul>
+              <li><b>③</b> 팀원 8명분을 사람 손으로 찾는 것은 불가능</li>
+              <li><b>③</b> 촬영 담당이라 자기 장면 편집이 늘 마지막 순위 → 자기 기록만 없음</li>
+              <li><b>③</b> 원본 통째 전송 시 용량 제한으로 화질 파괴</li>
+              <li><b>⑤</b> 신입 모집 영상을 매번 마감 전날 급조</li>
+            </ul>
+            <div class="needs"><b>Needs</b><span>원본 하나로 각자 자기 장면을 가져가게 하기. 촬영 담당인 자기 기록도 남기기</span></div>
+          </article>
+          <article class="pcard" data-seg="Q1">
+            <div class="pcard-head"><strong>강태오 C-1</strong><small>24세 남성 · 농구 크리에이터 · 팔로워 8,200 <span class="warn">⚠️</span> · 주 3회 업로드 목표</small></div>
+            <ul>
+              <li><b>④</b> 촬영 1시간 + 편집 3시간 → 주 3회를 혼자 지킬 수 없음</li>
+              <li><b>④</b> 외주는 월 60만 원대로 조회수 수익 초과 <span class="warn">⚠️</span></li>
+              <li><b>⑤</b> 큰 계정과 같은 피드에서 겨루다 신규 영상이 묻힘</li>
+              <li><b>⑥</b> 원본은 매주 쌓이나 업로드 전환은 절반 미달</li>
+            </ul>
+            <div class="needs"><b>Needs</b><span>완성도를 지키면서 편집 시간만 줄이기. 성장 중인 계정이 눈에 띌 자리 얻기</span></div>
+          </article>
+          <article class="pcard" data-seg="Q1">
+            <div class="pcard-head"><strong>오세진 C-3</strong><small>30세 남성 · 풋살팀 운영 겸 팀 계정 관리 · 팔로워 4,500 <span class="warn">⚠️</span> · 팀원 12명</small></div>
+            <ul>
+              <li><b>③</b> 12명이 각자 하이라이트를 원하나 편집 인력은 본인 1명</li>
+              <li><b>⑤</b> 팀 계정 하나로 12명을 다루니 개인 성장 기록이 아무에게도 남지 않음</li>
+              <li><b>⑥</b> 매주 원본 생성, 업로드는 월 2회</li>
+              <li><b>⑤</b> 팀원 자기 계정 업로드가 최고의 홍보인데 편집 장벽에 막힘</li>
+            </ul>
+            <div class="needs"><b>Needs</b><span>팀원이 각자 스스로 만들게 하기. 홍보 주기를 자기 편집 속도에서 떼어내기</span></div>
+          </article>
+        </div>
+        <p class="notice reveal delay-3">번호 <b>③ ④ ⑤ ⑥</b>은 앞 장 고객 여정 6단계의 단계 번호다. Q1 4명 모두 <b>① 촬영</b>에는 마찰이 없다.</p>
+      </div>
+    </section>
+
+    <!-- 06 Q4 2명 + 공통 Pain -->
+    <section class="slide" data-title="Q4 2명의 Pain과 공통 Pain 3가지" aria-labelledby="s6t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Pain &amp; Needs · <span class="seg" data-q="Q4" style="margin-left:0.2rem">Q4</span> 찍어놓고 안 올림 · 시장이 9배인 2순위</p>
+          <h2 class="slide-title" id="s6t">Q4 2명은 게시 자체를 포기했고, 그래서 기록도 남지 않는다</h2>
+        </div>
+        <div class="pain-row reveal delay-1" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+          <article class="pcard" data-seg="Q4">
+            <div class="pcard-head"><strong>이준혁 A-3</strong><small>34세 남성 · 카페 자영업 · 주말 풋살 · 액션캠 50분 촬영 · 파일 4GB</small></div>
+            <ul>
+              <li><b>②</b> 남길 건 15초인데 50분 원본을 못 지워 저장공간 경고 반복</li>
+              <li><b>④</b> 유료 편집 앱 3개 결제 후 전부 해지 — 기능이 아니라 시간이 없음</li>
+              <li><b>⑤</b> "이 정도를 남한테 보여줄 수준인가"에서 멈춤</li>
+              <li><b>⑥</b> 남은 것은 원본 폴더뿐, 기록이 아니라 짐</li>
+            </ul>
+            <div class="needs"><b>Needs</b><span>남길 15초를 확실히 건지고 원본을 지우기. 공개하지 않아도 해마다 기록이 쌓이게 하기</span></div>
+          </article>
+          <article class="pcard" data-seg="Q4">
+            <div class="pcard-head"><strong>정민수 B-2</strong><small>28세 남성 · 제조업 사무직 · 업로드 연 3회 <span class="warn">⚠️</span> · 갤러리 미편집 영상 약 200개 <span class="warn">⚠️</span></small></div>
+            <ul>
+              <li><b>④</b> 컷·자막·음악까지 30분 넘게 걸려 매번 중도 포기</li>
+              <li><b>⑤</b> 남들 영상과 비교되어 "내 수준으로는 못 올린다"로 결론</li>
+              <li><b>⑥</b> 안 올리니 남지 않고, 1년 뒤 뭘 했는지 기억나지 않음</li>
+            </ul>
+            <div class="needs"><b>Needs</b><span>편집 실력 없이도 볼 만한 영상 하나가 완성되기. 1년 뒤 다시 볼 기록 갖기</span></div>
+          </article>
+        </div>
+        <div class="table-wrap reveal delay-2">
+          <table class="mid">
+            <caption>선별한 6명에게 공통으로 나타난 Pain 3가지 — P1과 P2는 같은 원인에서 나온다</caption>
+            <thead><tr><th scope="col">#</th><th scope="col">공통 Pain</th><th scope="col">근본 원인</th><th scope="col">해당 페르소나</th><th scope="col">여정 단계</th></tr></thead>
+            <tbody>
+              <tr style="background: color-mix(in srgb, var(--mint) 9%, transparent);">
+                <td><b style="color:var(--danger)">P1</b></td>
+                <td><strong>원본에서 자기 장면을 찾는 시간이 편집보다 오래 걸린다</strong></td>
+                <td rowspan="2" style="border-left: 0.18rem solid var(--mint); vertical-align: middle;"><b style="color:var(--mint)">고정 카메라는 경기를 담지만 누가 어디에 있었는지는 기록하지 않는다</b><br><small style="color:var(--ink-muted)">→ 트래킹이 이 전제를 뒤집어 P1과 P2를 함께 없앤다</small></td>
+                <td>김도현 · 박서연 · 이준혁 · 정민수 · 강태오 · 오세진 <b class="num">(6 / 6)</b></td>
+                <td>③ 찾기</td>
+              </tr>
+              <tr style="background: color-mix(in srgb, var(--mint) 9%, transparent);">
+                <td><b style="color:var(--danger)">P2</b></td>
+                <td><strong>고정 카메라는 사람을 따라오지 않아 화면에 작게 잡힌다</strong></td>
+                <td>김도현 · 정민수 · 강태오 <b class="num">(3 / 6)</b> <small style="color:var(--ink-muted)">(+ 범위 밖 서하린)</small></td>
+                <td>④ 편집</td>
+              </tr>
+              <tr>
+                <td><b style="color:var(--danger)">P3</b></td>
+                <td><strong>공개할 자신이 없으면 기록도 남지 않는다</strong></td>
+                <td>기존 SNS는 올려야 남는 구조다</td>
+                <td>이준혁 · 정민수 · 오세진 <b class="num">(3 / 6)</b> <small style="color:var(--ink-muted)">(+ 범위 밖 최윤아)</small></td>
+                <td>⑤ 남기기</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="notice reveal delay-3"><b>P1은 6명 전원에게 나타났고, P1과 P2의 원인은 하나다.</b> 고정 카메라가 사람의 위치를 모른다는 사실이 두 문제를 동시에 만들었다. 그래서 <b>사용자 트래킹 하나가 P1과 P2를 함께 없앤다</b> — 이 내용은 13번 슬라이드에서 따로 다루고, F2(인물 자동 탐지)를 첫 검증 대상으로 삼는 근거가 된다.</p>
+      </div>
+    </section>
+    <!-- 07 JTBD 선언 -->
+    <section class="slide" data-title="JTBD 선언 6개" aria-labelledby="s7t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Jobs To Be Done · Goal &amp; Job</p>
+          <h2 class="slide-title" id="s7t">선별한 6명의 JTBD 선언을 인터뷰 요약 카드에서 그대로 가져왔다</h2>
+          <p class="slide-lead">형식은 <b>상황(When) → 하고 싶은 일(I want to) → 기대 결과(So I can)</b>다.</p>
+        </div>
+        <div class="jtbd-list reveal delay-1">
+          <article class="jtbd">
+            <div><span class="seg" data-q="Q1">Q1</span><strong>김도현 A-1</strong></div>
+            <p class="when">주 2회 농구가 끝난 밤, 휴대폰에 40분 원본이 하나 더 늘었을 때</p>
+            <p class="decl">40분 원본에서 내가 잘 나온 장면을 <em>대신 찾아주기를</em> 바란다. 그래서 <em>편집에 한 시간을 쓰지 않고도 오늘의 기록을 남기고</em> 싶다.</p>
+          </article>
+          <article class="jtbd">
+            <div><span class="seg" data-q="Q1">Q1</span><strong>박서연 A-2</strong></div>
+            <p class="when">경기 후 팀원들이 단체 대화방에서 "내 장면 좀 보내줘"라고 말할 때</p>
+            <p class="decl">사람마다 <em>자기가 나온 장면을 각자 골라 가져갈 수 있기를</em> 바란다. 그래서 <em>촬영 담당인 나도 내 기록을 남기고</em> 싶다.</p>
+          </article>
+          <article class="jtbd">
+            <div><span class="seg" data-q="Q1">Q1</span><strong>강태오 C-1</strong></div>
+            <p class="when">업로드 주기를 지켜야 하는데 편집할 원본만 세 개 쌓여 있을 때</p>
+            <p class="decl"><em>편집 시간을 3시간에서 크게 줄여 주기를</em> 바란다. 그래서 <em>쌓여 있는 원본을 업로드로 연결하고 성장 근거를 만들고</em> 싶다.</p>
+          </article>
+          <article class="jtbd">
+            <div><span class="seg" data-q="Q1">Q1</span><strong>오세진 C-3</strong></div>
+            <p class="when">경기 후 팀원들이 "내 장면 있어?"라고 묻는데 편집할 사람이 자기뿐일 때</p>
+            <p class="decl"><em>팀원 각자가 자기 하이라이트를 스스로 만들 수 있기를</em> 바란다. 그래서 <em>홍보 주기를 나 한 명의 편집 속도에서 떼어내고</em> 싶다.</p>
+          </article>
+          <article class="jtbd">
+            <div><span class="seg" data-q="Q4">Q4</span><strong>이준혁 A-3</strong></div>
+            <p class="when">주말 경기 후 휴대폰에 저장공간 부족 알림이 뜰 때</p>
+            <p class="decl">50분 원본에서 <em>남길 15초를 확실히 건져 주기를</em> 바란다. 그래서 <em>공개하지 않고도 내 운동 기록을 해마다 쌓고</em> 싶다.</p>
+          </article>
+          <article class="jtbd">
+            <div><span class="seg" data-q="Q4">Q4</span><strong>정민수 B-2</strong></div>
+            <p class="when">주말에 찍은 영상을 정리하려고 편집 앱을 켰을 때</p>
+            <p class="decl"><em>편집 실력 없이도 볼 만한 영상 하나가 완성되기를</em> 바란다. 그래서 <em>1년 뒤에 다시 볼 기록을 갖고</em> 싶다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 Core Job -->
+    <section class="slide" data-title="Core Job과 우리가 풀 범위" aria-labelledby="s8t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Core Job</p>
+          <h2 class="slide-title" id="s8t">여섯 선언을 겹쳐 놓으면 하나의 Job이 남는다</h2>
+        </div>
+        <div class="corejob reveal delay-1">
+          <b>Core Job</b>
+          <blockquote>"이미 찍어둔 긴 영상에서, 내가 의미 있다고 판단한 순간만 건져서, 남에게 보여줄지와 무관하게 내 기록으로 만들고 싶다."</blockquote>
+          <p>세 부분으로 나눠 읽어야 한다. <b>이미 찍어둔</b>은 촬영 기능을 만들지 않는다는 뜻이다. <b>내가 판단한</b>은 최종 선택권을 기계에 넘기지 않는다는 뜻이다. <b>보여줄지와 무관하게</b>는 기록과 공개를 분리한다는 뜻이다. 세 조건 중 하나라도 빠지면 이 Job은 기존 대안으로도 충족된다.</p>
+        </div>
+        <div class="reveal delay-2">
+          <p class="label" style="margin-bottom: var(--space-3);">우리가 풀 Job과 풀지 않을 Job을 먼저 갈라야 한다</p>
+          <div class="table-wrap">
+            <table class="mid">
+              <thead><tr><th scope="col">문제의 종류</th><th scope="col">내용</th><th scope="col">HILiT의 입장</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><b style="color:var(--mint)">게시 이전의 실행 문제</b></td>
+                  <td>찾기, 구도, 완성, 반복 노동, 저장공간</td>
+                  <td><b style="color:var(--mint)">우리가 푼다.</b> 도구로 해결 가능한 구간이다</td>
+                </tr>
+                <tr>
+                  <td><b style="color:var(--danger)">게시 이후의 결과 문제</b></td>
+                  <td>팔로워 성장, 조회수, 수익화</td>
+                  <td><b style="color:var(--danger)">우리가 풀지 않는다.</b> 편집 도구로 풀 수 없다. 다만 카테고리 랭킹으로 노출 자리는 만든다</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="notice reveal delay-3">TAM·SAM·SOM 문서가 인용한 Podia 조사에서 크리에이터의 1위 고민은 편집이 아니라 <b>오디언스 성장(32.9%)</b>이었다. 편집은 그 아래다. 이 사실을 무시하고 "가장 큰 문제는 편집"이라고 말하면 즉시 반박당한다. <b>범위를 좁히는 것이 오히려 더 강한 논증이 된다.</b></p>
+      </div>
+    </section>
+
+    <!-- 09 Outcome -->
+    <section class="slide" data-title="고객이 원하는 Outcome 10개" aria-labelledby="s9t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Desired Outcome</p>
+          <h2 class="slide-title" id="s9t">고객이 도달하려는 상태를 측정 가능한 지표로 바꿨다</h2>
+          <p class="slide-lead">Outcome은 기능이 아니라 고객이 도달하려는 상태다. 아래 목표값은 <b>1년차 가설이며 실측치가 아니다.</b> 현재값은 가상 인터뷰 기준이다. <b style="color:var(--mint)">민트색으로 표시한 O3 · O9 · O10은 사용자 트래킹이 직접 만들어내는 결과</b>다.</p>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="wide">
+            <thead>
+              <tr><th scope="col">#</th><th scope="col">고객이 도달하려는 상태</th><th scope="col">측정 지표</th><th scope="col">현재 (인터뷰 기준)</th><th scope="col">1년차 목표 <span class="warn">⚠️</span></th><th scope="col">근거 페르소나</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>O1</b></td><td><strong>원본에서 내 장면을 찾는 데 시간을 쓰지 않는다</strong></td><td>원본 1편당 장면 탐색 소요 시간</td><td class="neg">60분 이상</td><td class="num">5분 이내</td><td>김도현 · 정민수 · 강태오</td></tr>
+              <tr><td><b>O2</b></td><td><strong>찍은 영상이 완성 결과물로 이어진다</strong></td><td>원본 대비 완성 영상 전환율</td><td class="neg">약 4%<br><small style="color:var(--ink-muted)">원본 47편 → 업로드 2건</small></td><td class="num">60% 이상</td><td>김도현 · 강태오 · 오세진</td></tr>
+              <tr style="background: color-mix(in srgb, var(--mint) 9%, transparent);"><td><b>O3</b></td><td><strong>화면에서 내가 알아볼 수 있게 잡힌다</strong><br><small style="color:var(--mint)">트래킹 가치 V2</small></td><td>완성 영상 중 사용자가 "잘 잡혔다"고 평가한 비율</td><td class="neg">측정 불가<br><small style="color:var(--ink-muted)">재촬영으로 대응</small></td><td class="num">80% 이상</td><td>김도현 · 강태오</td></tr>
+              <tr style="background: color-mix(in srgb, var(--mint) 9%, transparent);"><td><b>O9</b></td><td><strong>내가 놓치지 않고 추적된다</strong><br><small style="color:var(--mint)">트래킹 가치 V1 · Gate A 판정 지표</small></td><td>원본 내 실제 등장 구간 대비 AI가 찾아낸 구간 비율<br><small style="color:var(--ink-muted)">사람이 표시한 정답과 비교</small></td><td class="neg">해당 없음<br><small style="color:var(--ink-muted)">사람이 눈으로 찾음</small></td><td class="num">85% 이상</td><td>전원</td></tr>
+              <tr style="background: color-mix(in srgb, var(--mint) 9%, transparent);"><td><b>O10</b></td><td><strong>같은 동작을 다시 찍지 않는다</strong><br><small style="color:var(--mint)">트래킹 가치 V2</small></td><td>한 결과물을 얻기 위한 재촬영 횟수</td><td class="neg">1~3회<br><small style="color:var(--ink-muted)">서하린 수업 후 30분 추가</small></td><td class="num">0회</td><td>강태오 · 서하린</td></tr>
+              <tr><td><b>O4</b></td><td><strong>원본을 지울 수 있다</strong></td><td>결과물 확보 후 원본 삭제 실행률</td><td class="neg">0%<br><small style="color:var(--ink-muted)">전량 보관</small></td><td class="num">50% 이상</td><td>이준혁</td></tr>
+              <tr><td><b>O5</b></td><td><strong>공개 여부와 무관하게 기록이 쌓인다</strong></td><td>비공개(나만 보기) 기록 비율</td><td class="neg">0%<br><small style="color:var(--ink-muted)">기존 SNS는 올려야 남음</small></td><td class="num">30% 이상</td><td>이준혁 · 정민수 · 최윤아</td></tr>
+              <tr><td><b>O6</b></td><td><strong>기록이 끊기지 않는다</strong></td><td>월간 기록 생성 편수</td><td class="neg">월 0.7건</td><td class="num">월 4건</td><td>전원</td></tr>
+              <tr><td><b>O7</b></td><td><strong>다음 경기에도 돌아온다</strong></td><td>기록 3개 이상 축적 사용자 수</td><td>—</td><td class="num">1만 명</td><td>전원</td></tr>
+              <tr><td><b>O8</b></td><td><strong>편집을 남에게 맡기지 않아도 된다</strong></td><td>편집 외주 지출</td><td class="neg">월 60만 원<br><small style="color:var(--ink-muted)">강태오</small></td><td class="num">0원</td><td>강태오 · 오세진</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="vp-state reveal delay-2">
+          <p><em>O7은 TAM·SAM·SOM 문서가 정의한 1년차 SOM과 같은 숫자다.</em> 설치 수가 아니라 "못 떠나게 된 사람" 수로 성공을 판정한다. 여기에 처리 물량 목표 <em>연간 약 12만 편</em>(1만 명 × 월 1편)이 붙는데, 이 숫자는 가치사슬 분석의 GPU 원가에 직접 비례하므로 사업 계획과 원가가 같은 지표를 공유한다.</p>
+        </div>
+        <p class="notice reveal delay-3">매출을 Outcome에 넣지 않은 이유는 단순하다. <b>구독 도입 여부와 시점이 아직 미정</b>이어서, 정해지지 않은 가격으로 1년차 매출을 계산하는 것은 순서가 뒤바뀐 일이다.</p>
+      </div>
+    </section>
+
+    <!-- 10 기존 대안 1 -->
+    <section class="slide" data-title="기존 대안 ① 경쟁사 9곳의 가치 선언" aria-labelledby="s10t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Competitor · 계층별 기존 대안</p>
+          <h2 class="slide-title" id="s10t">아홉 곳이 스스로 내건 공식 선언 어디에도 "이미 찍어둔 긴 원본"과 "공개하지 않는 개인 기록"이 함께 있지 않다</h2>
+          <p class="slide-lead">이전 발표본은 우리가 사업활동에서 해석한 문장을 실었다. 이번에는 <b>아홉 곳의 공식 홈페이지·매니페스토·앱 스토어 소개에서 회사가 직접 쓴 문구를 확인해 그대로 옮겼다.</b> 우리가 만든 요약이 아니라 그들의 자기 선언이므로, 아래 비교는 반박하기 어렵다.</p>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="wide">
+            <thead><tr><th scope="col">계층</th><th scope="col">대안</th><th scope="col">규모</th><th scope="col">이 대안이 공식적으로 내건 가치 선언</th><th scope="col">우리 고객의 Job을 못 푸는 지점</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="3"><span class="tag sky">① 소비·유통</span></td><td><div class="who"><strong>Meta · Instagram</strong><small>미국 · 상장</small></div></td><td>2025 매출 <span class="num">2,009.7억 달러</span> (공시)<br>IG MAU 30억</td><td><strong>Meta 공식 미션</strong> — "서로를 원활하게 이어주는 미래를 그리며 이를 실현할 기술을 만들어갑니다"<br><small style="color:var(--ink-muted)">Instagram 공식 — "당신이 사랑하는 사람과 좋아하는 것에 더 가까이 다가가게 한다"</small></td><td class="neg">선언의 주어가 <b>사람과 사람의 연결</b>이다. 혼자 보관하는 기록은 선언에 없다. 기록 단위 공개 범위가 없어 사용자가 부계정을 직접 판다</td></tr>
+              <tr><td><div class="who"><strong>ByteDance · TikTok</strong><small>중국 · 비상장</small></div></td><td>2025 매출 <span class="num">1,860억 달러</span> (추정)<br>성인 19.4억 명</td><td><strong>ByteDance 공식 미션</strong> — "Inspire Creativity, Enrich Life" (창의성에 영감을 주고 삶을 풍요롭게 한다)<br><small style="color:var(--ink-muted)">TikTok 공식 — "창의성에 영감을 주고 즐거움을 전한다"</small></td><td class="neg">선언이 <b>영감과 즐거움</b>을 말하고 보관을 말하지 않는다. 개인 기록 축적과 무관하게 작동한다</td></tr>
+              <tr><td><div class="who"><strong>LY Corp · LINE</strong><small>일본 · 상장</small></div></td><td>FY2025 매출 <span class="num">약 1조 9,200억 엔</span> (공시)<br>MAU 1.94억</td><td><strong>LY 공식 미션</strong> — "WOW Our Users!" (남에게 알리고 싶어질 만큼 놀라운 경험을 사용자에게 준다)</td><td class="neg">선언의 성공 조건이 <b>남에게 알리는 것</b>이다. 알리지 않고 남기려는 사용자는 대상이 아니다. 영상 편집 기능도 없다</td></tr>
+              <tr><td rowspan="2"><span class="tag amber">② 제작·편집</span></td><td><div class="who"><strong>CapCut</strong><small>ByteDance 제품</small></div></td><td>MAU <span class="num">2억+</span> (추정)<br>누적 14억 다운로드</td><td><strong>CapCut 공식 문구</strong> — "모두를 위한 AI 사진·영상 편집기"<br><small style="color:var(--ink-muted)">기업 미션은 따로 내지 않고 모회사 ByteDance 선언을 따른다</small></td><td class="neg">선언이 <b>편집기</b>에서 끝난다. 개인 기록 공간이 없고, 40분 원본에서 특정 인물을 찾지 않는다</td></tr>
+              <tr><td><div class="who"><strong>비모소프트 · VLLO</strong><small>한국 · 비상장</small></div></td><td>누적 창작자 <span class="num">5,700만+</span><br>MAU 약 200만</td><td><strong>비모소프트 공식 미션</strong> — "많은 사람이 더 쉽고 편하게 쓸 수 있는 가치 있는 소프트웨어를 만든다"<br><small style="color:var(--ink-muted)">"기술보다 사용자 경험을 먼저 본다"</small></td><td class="neg">선언이 <b>쉬운 조작</b>을 약속하고 <b>자동 판단</b>은 약속하지 않는다. 손으로 자르는 도구이므로 긴 원본의 인물 자동 탐색이 없다</td></tr>
+              <tr><td rowspan="4"><span class="tag mint">③ 기록·트래킹</span></td><td><div class="who"><strong>New Chat · setlog</strong><small>한국 · 비상장</small></div></td><td>한국 App Store 소셜 <span class="num">6위</span><br>최대 6인 폐쇄형</td><td><strong>setlog 공식 문구</strong> — "같은 하루, 더 가까운 우리"<br><small style="color:var(--ink-muted)">"친구들과 함께 시시콜콜한 일상을 나눠요"</small></td><td class="neg">선언의 대상이 <b>지금 이 순간 찍는 2초</b>다. 이미 찍어둔 긴 영상을 다루지 못한다</td></tr>
+              <tr><td><div class="who"><strong>Veo Technologies</strong><small>덴마크 · 비상장</small></div></td><td>ARR <span class="num">약 3,720만 달러</span> (추정)<br>클럽 15,000+</td><td><strong>Veo 공식 매니페스토</strong> — "모든 선수에게 기술을 개방한다"<br><small style="color:var(--ink-muted)">"스포츠만큼 인간적인 것은 없다"</small></td><td class="neg">선언의 주어가 <b>선수와 클럽</b>이다. 전용 하드웨어와 계약이 전제이고, 개인이 혼자 쓰는 관계망이 없다</td></tr>
+              <tr><td><div class="who"><strong>Pixellot</strong><small>이스라엘 · 비상장</small></div></td><td>매출 <span class="num">5,000만~1억 달러</span> 구간 (추정)<br>카메라 3만 대+</td><td><strong>Pixellot 공식 문구</strong> — "수백만 개의 작은 경기를 크게 만든다"<br><small style="color:var(--ink-muted)">Making Millions of Small Games — Big</small></td><td class="neg">선언의 단위가 <b>경기 한 판</b>이다. 그 경기 안에서 개인 한 명의 15초를 뽑는 일은 목표가 아니다</td></tr>
+              <tr><td><div class="who"><strong>Hudl</strong><small>미국 · 비상장</small></div></td><td>이용 팀 <span class="num">343,000+</span><br>연 100만 경기</td><td><strong>Hudl 공식 미션</strong> — "스포츠 영상과 데이터의 가장 강력한 네트워크를 만들어, 팀이 모든 순간을 값지게 쓰게 한다"</td><td class="neg">선언의 수혜자가 <b>팀</b>이고 영상의 목적이 성과 개선이다. 개인이 남기고 싶은 기억은 선언에 없다</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="notice reveal delay-2">위 아홉 문장은 <b>각 기업이 공식 홈페이지·매니페스토·앱 스토어 소개에 스스로 내건 문구</b>다(2026-08-28 웹 확인). 원문이 영어인 경우 뜻을 옮겨 적었고, 기업 미션을 따로 공개하지 않는 CapCut·setlog는 <b>공식 제품 소개 문구</b>를 실었다. 비상장사 매출은 조사기관·언론 추정치다.</p>
+      </div>
+    </section>
+
+    <!-- 11 기존 대안 2 -->
+    <section class="slide" data-title="기존 대안 ② 유사 서비스 3사와 아무것도 하지 않기" aria-labelledby="s11t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Substitute</p>
+          <h2 class="slide-title" id="s11t">AI 트래킹 유사 서비스는 모두 말하는 사람을 추적하고, 가장 강한 대체재는 사용자의 포기다</h2>
+        </div>
+        <div class="reveal delay-1">
+          <p class="label" style="margin-bottom: var(--space-3);">가장 직접적인 기능 경쟁 — AI 트래킹 편집 3사</p>
+          <div class="table-wrap">
+            <table class="mid">
+              <thead><tr><th scope="col">서비스</th><th scope="col">하는 일</th><th scope="col">이 서비스가 내건 가치 선언</th><th scope="col">추적 대상</th></tr></thead>
+              <tbody>
+                <tr><td><strong>AlphaCut</strong><br><small style="color:var(--ink-muted)">한국 · 알파컷</small></td><td>긴 영상을 쇼츠로 변환 + 화자 트래킹</td><td><span class="tag amber">재선언</span><br>"긴 원본 하나에서 조회수가 나올 구간을 AI가 골라 쇼츠 여러 편으로 자동 변환한다"<br><small style="color:var(--ink-muted)">공식 미션문이 없어 서비스 소개 문구("매일 쇼츠 편집하느라 지치셨나요?")와 사업 활동으로 다시 세운 문장이다</small></td><td class="neg">말하는 사람 (화자)</td></tr>
+                <tr><td><strong>Filmora</strong><br><small style="color:var(--ink-muted)">Wondershare 제품</small></td><td>AI 카메라 기능으로 화자 추적</td><td><strong>Wondershare 공식 미션</strong><br>"Creativity Simplified" (창작을 단순하게)</td><td class="neg">말하는 사람 (화자)</td></tr>
+                <tr><td><strong>Vrew</strong><br><small style="color:var(--ink-muted)">한국 · 보이저엑스</small></td><td>자동 컷 편집 · 자동 자막</td><td><strong>Vrew 공식 문구</strong><br>"누구나 영상 편집을 쉽고 즐겁게!"</td><td class="neg">음성 (말)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="vp-state reveal delay-2">
+          <p><em>세 서비스 모두 "말하는 사람"을 추적한다.</em> 넓은 코트에서 작게 잡힌 채 움직이는 사람을 추적하는 서비스는 이 목록에 없다. 세 곳의 가치 선언도 <b>"쉽게"와 "빠르게"</b>를 약속할 뿐 <b>"누구를 따라갈지"</b>는 약속하지 않는다. TAM·SAM·SOM 문서가 SAM을 정의할 때 지목한 좁은 틈이 여기서 다시 확인된다.</p>
+        </div>
+        <div class="reveal delay-3">
+          <p class="label" style="margin-bottom: var(--space-3);">가장 강력한 대체재 — 아무것도 하지 않기</p>
+          <div class="table-wrap">
+            <table class="mid">
+              <thead><tr><th scope="col">대체 행동</th><th scope="col">실제 관찰 (인터뷰 · 조사)</th></tr></thead>
+              <tbody>
+                <tr><td>원본을 갤러리에 그대로 방치</td><td>정민수 미편집 영상 약 200개 <span class="warn">⚠️</span> · 김도현 원본 47개 <span class="warn">⚠️</span></td></tr>
+                <tr><td>원본 링크만 공유하고 각자 알아서 하게 함</td><td>박서연 · 오세진 — 실제로 쓰는 사람 거의 없음</td></tr>
+                <tr><td>스토리에 통째로 올려 24시간 뒤 사라지게 둠</td><td>김도현</td></tr>
+                <tr><td>텍스트로만 기록</td><td>최윤아 · 한지우</td></tr>
+                <tr><td><strong>아예 게시하지 않음</strong></td><td><b class="num">Pew Research 2023: 성인 틱톡 이용자 약 절반이 한 번도 게시하지 않음</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="notice reveal delay-3">5가지 힘 분석이 대체재 위협을 <b>매우 높음</b>으로 판정한 이유가 여기 있다. 우리가 이겨야 할 상대는 경쟁 앱이 아니라 <b>사용자의 포기</b>다.</p>
+      </div>
+    </section>
+    <!-- 12 VP 선언문 -->
+    <section class="slide" data-title="우리 솔루션의 핵심 제안" aria-labelledby="s12t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Value Proposition</p>
+          <h2 class="slide-title" id="s12t">우리 솔루션의 핵심 제안</h2>
+        </div>
+        <div class="vp-state reveal delay-1">
+          <p><b>HILiT은 농구 원본 영상을 이미 갖고 있지만 편집 노동 때문에 게시하지 못하는 사람에게 —</b></p>
+          <p class="vp-line"><span class="vp-no">①</span><em>AI가 영상 속 나를 끝까지 따라가며 하이라이트를 찾아주고, 내가 선택한 순간을 나 중심의 영상으로 완성한다.</em></p>
+          <p class="vp-line"><span class="vp-no">②</span><em>누구에게 보여주기 위한 기록뿐만 아니라 나를 위해 오래 남겨두는 개인 기록 공간을 제공한다.</em></p>
+        </div>
+        <div class="vp-short reveal delay-2">"40분을 넣으면 <span style="text-decoration: underline; text-decoration-thickness: 0.14em; text-underline-offset: 0.2em;">내가 주인공인</span> 15초가 나온다.<br>그리고 그 15초는 올리지 않아도 남는다."</div>
+        <div class="reveal delay-2">
+          <p class="label" style="margin-bottom: var(--space-3);">문장 ①이 작동하는 방식 — 편집 5단계와 각 단계가 없애는 Pain</p>
+          <div class="steps">
+            <article class="step"><b>① 원본 올리기</b><strong>40~50분 원본을 그대로 가져온다</strong><p>앱에서 촬영하지 않는다. 본인 카메라로 찍은 파일을 올린다.</p><span class="solves">저장공간</span></article>
+            <article class="step"><b>② AI 1차 컷편집</b><strong>사용자가 온전히 잡힌 구간을 찾아 후보 약 30개를 제시한다</strong><p>사람 눈으로 원본을 훑는 작업이 사라진다.</p><span class="solves">P1 찾는 시간</span></article>
+            <article class="step"><b>③ 사용자 선택</b><strong>"여기가 하이라이트다"를 사용자가 직접 고른다</strong><p>후보를 좁히는 일은 기계가, 정하는 일은 사람이 한다.</p><span class="solves">의미 판단</span></article>
+            <article class="step"><b>④ 구도 보정</b><strong>선택 장면의 화면 구도를 사용자 중심으로 다시 잡는다</strong><p>구석에 작게 잡힌 사용자를 크게 담는다.</p><span class="solves">P2 작게 잡힘</span></article>
+            <article class="step"><b>⑤ 합치기·저장</b><strong>음악을 얹어 하나의 영상으로 합치고 개인 기록에 먼저 저장한다</strong><p>저작권이 정리된 곡만 담은 라이브러리를 앱 안에서 제공한다.</p><span class="solves">P3 공개 부담</span></article>
+          </div>
+        </div>
+        <div class="reveal delay-3">
+          <p class="label" style="margin-bottom: var(--space-3);">문장 ②가 작동하는 방식 — 완성한 영상이 어디에 남고, 무엇이 사용자를 다시 오게 하는가</p>
+          <div class="diff-row" data-cols="3">
+            <article class="diff">
+              <b>⑥</b>
+              <strong>내 기록으로 먼저 남는다</strong>
+              <p>완성 영상은 공개 여부와 무관하게 마이페이지에 저장된다. 공개 범위는 기록마다 고른다 — 전체공개 · <b>그룹에만 공개</b> · 나만 보기. <b>F7 · F8</b></p>
+            </article>
+            <article class="diff">
+              <b>⑦</b>
+              <strong>가까운 사람에게만 열 수 있다</strong>
+              <p><b>그룹</b>이 "나만 보기"와 "전체공개" 사이의 중간 문턱을 만든다. 팔로워 128명 전부가 아니라 <b>함께 뛰는 대여섯 명</b>에게만 열린다. 사용자가 부계정을 직접 파던 이유가 여기서 사라진다. <b>F8 · 그룹</b></p>
+            </article>
+            <article class="diff">
+              <b>⑧</b>
+              <strong>볼 것이 있어야 다시 온다</strong>
+              <p>앱을 열면 영상이 먼저 뜨고, 좋아요와 댓글이 돌아온다. 기록 3개 이상 축적(O7)은 편집이 아니라 이 루프에서 나온다. <b>F13 · F19 · F20</b></p>
+            </article>
+          </div>
+        </div>
+        <div class="corejob reveal delay-3">
+          <b>②와 ③을 나눈 것이 이 제안의 핵심이다</b>
+          <blockquote>AI는 "잘 나온 것"은 알지만 "의미 있는 것"은 모른다.</blockquote>
+          <p>오늘 그 3점이 처음이었다는 사실은 사용자만 안다. 그래서 후보를 좁히는 일은 기계가 하고, 무엇이 하이라이트인지 정하는 일은 사람이 한다. ④는 영뽀또가 사진에서 검증한 구도 개념을 영상 결과물에 적용한 것이다. 자르는 일과 잘 보이게 잡아주는 일은 서로 다른 작업이다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13 트래킹이 만드는 고객 가치 -->
+    <section class="slide" data-title="트래킹이 만드는 고객 가치" aria-labelledby="s13at">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Core value · 사용자 트래킹</p>
+          <h2 class="slide-title" id="s13at">트래킹은 두 가지 일을 한다 — 나를 찾아주고, 나를 크게 잡아준다</h2>
+          <p class="slide-lead">이 두 가지가 HILiT이 고객에게 주는 가치의 원천이다. 다른 기능은 이 가치를 전달하고 보관하는 통로에 가깝다.</p>
+        </div>
+        <div class="track-jobs reveal delay-1">
+          <article class="tjob">
+            <div class="tjob-head"><b>V1</b><div><strong>나를 찾아준다 — 40분에서 내가 나온 구간만 남긴다</strong><small>사람 한 명을 영상 내내 따라가며 등장 구간을 표시한다</small></div></div>
+            <p>고정 카메라는 경기 전체를 담지만 <b>누가 어디에 있었는지는 기록하지 않는다.</b> 그래서 사용자는 40분을 10초씩 되돌려 보며 자기를 눈으로 찾는다. 트래킹은 그 작업을 통째로 없앤다. 사용자가 한 번 자기를 지정하면, 이후 등장 구간은 AI가 표시한다.</p>
+            <p>이 가치는 <b>사람 수에 비례해 커진다.</b> 박서연의 팀원 8명, 오세진의 팀원 12명은 각자 다른 구간에 등장한다. 사람 손으로는 인원수만큼 시간이 늘어나지만, 트래킹은 같은 원본을 사람별로 다시 읽는다.</p>
+            <div class="gain"><b>고객이 얻는 것</b><strong>원본 탐색 60분 이상 → 5분 이내 (O1) · 원본 대비 완성 전환율 4% → 60% (O2)</strong></div>
+          </article>
+          <article class="tjob">
+            <div class="tjob-head"><b>V2</b><div><strong>나를 크게 잡아준다 — 구석의 콩알을 화면 주인공으로 바꾼다</strong><small>선택 장면의 구도를 사용자 중심으로 다시 잡는다</small></div></div>
+            <div class="frame-pair" aria-label="트래킹 구도 보정 전후 비교">
+              <figure class="frame-box" style="margin:0">
+                <span class="court"></span>
+                <span class="dot" style="left:26%; top:38%"></span>
+                <span class="dot" style="left:38%; top:56%"></span>
+                <span class="dot" style="left:58%; top:34%"></span>
+                <span class="dot" style="left:70%; top:60%"></span>
+                <span class="me" style="left:80%; top:66%"></span>
+                <span class="bracket" style="left:76%; top:60%; width:1.1rem; height:1.4rem;"></span>
+                <figcaption>보정 전 · 코트 반대편 구석</figcaption>
+              </figure>
+              <span class="frame-arrow" aria-hidden="true">→</span>
+              <figure class="frame-box after" style="margin:0">
+                <span class="court" style="inset:8% 4%"></span>
+                <span class="dot" style="left:14%; top:44%"></span>
+                <span class="dot" style="left:82%; top:52%"></span>
+                <span class="me"></span>
+                <span class="bracket"></span>
+                <figcaption>보정 후 · 내가 화면 주인공</figcaption>
+              </figure>
+            </div>
+            <p>자르는 일과 <b>잘 보이게 잡아주는 일은 서로 다른 작업</b>이다. 구간만 잘라내면 여전히 화면 구석에 작게 잡힌 영상이 남는다. 확대하면 화질이 깨진다. 트래킹은 사용자의 위치를 알기 때문에 프레임을 사용자 기준으로 다시 구성할 수 있다.</p>
+            <div class="gain"><b>고객이 얻는 것</b><strong>"잘 잡혔다" 평가 80% 이상 (O3) · 재촬영 0회 (O10) · 외주 지출 0원 (O8)</strong></div>
+          </article>
+        </div>
+        <div class="table-wrap reveal delay-2">
+          <table class="matrix">
+            <caption>트래킹 두 가치가 선별 페르소나 6명에게 각각 어떻게 작동하는가 — <span class="mk yes">●</span> 핵심 · <span class="mk part">○</span> 부분</caption>
+            <thead><tr><th scope="col">페르소나</th><th scope="col" class="c">V1<br>찾아준다</th><th scope="col" class="c">V2<br>크게 잡는다</th><th scope="col">그 사람에게 트래킹이 구체적으로 하는 일</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">김도현 <span class="seg" data-q="Q1">Q1</span></th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td>40분에서 등장 구간을 표시하고, 코트 반대편에 콩알처럼 잡힌 자신을 화면 중앙으로 끌어온다</td></tr>
+              <tr><th scope="row">박서연 <span class="seg" data-q="Q1">Q1</span></th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">○</span></td><td>같은 원본을 팀원 8명 각자 기준으로 다시 읽어, 촬영 담당인 자신의 구간까지 찾아낸다</td></tr>
+              <tr><th scope="row">이준혁 <span class="seg" data-q="Q4">Q4</span></th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">○</span></td><td>50분 중 남길 15초가 어디인지 특정해, 원본을 지워도 된다는 확신을 만든다</td></tr>
+              <tr><th scope="row">정민수 <span class="seg" data-q="Q4">Q4</span></th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td>편집 판단을 대신해 주고, 구도까지 잡아 "남에게 보여줄 수준"의 문턱을 넘겨준다</td></tr>
+              <tr><th scope="row">강태오 <span class="seg" data-q="Q1">Q1</span></th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td>편집 3시간의 대부분인 탐색·리프레이밍을 대체해, 완성도를 낮추지 않고 시간만 줄인다</td></tr>
+              <tr><th scope="row">오세진 <span class="seg" data-q="Q1">Q1</span></th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">○</span></td><td>팀원 12명이 각자 자기 구간을 받아가게 해, 편집 인력 1명이라는 병목을 없앤다</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="okey reveal delay-2" aria-label="이 슬라이드에 나온 Outcome 번호 요약">
+          <b>이 슬라이드의 O번호</b>
+          <span><i>O1</i>장면 탐색 시간</span>
+          <span><i>O2</i>완성 전환율</span>
+          <span data-v><i>O3</i>잘 잡힘</span>
+          <span><i>O8</i>외주 지출</span>
+          <span data-v><i>O10</i>재촬영 횟수</span>
+        </div>
+        <p class="notice reveal delay-3">앞서 정리한 공통 Pain <b>P1(찾는 시간)</b>과 <b>P2(작게 잡힘)</b>는 서로 다른 문제가 아니라 <b>같은 기술 하나가 푸는 두 얼굴</b>이다. 고정 카메라가 사람의 위치를 모른다는 사실이 P1과 P2를 동시에 만들었고, 트래킹이 그 전제를 뒤집는다.</p>
+      </div>
+    </section>
+
+    <!-- 14 가치 원천과 수익 경로 -->
+    <section class="slide" data-title="가치의 원천과 수익의 경로를 나눈다" aria-labelledby="s13bt">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Value source vs revenue route</p>
+          <h2 class="slide-title" id="s13bt">"편집으로 과금하지 않는다"는 말이 "편집의 가치가 작다"는 뜻은 아니다</h2>
+          <p class="slide-lead">KSF와 TAM 분석은 편집 기능을 유료화하지 말라고 결론지었다. 그 결론은 <b>어디서 돈을 받을지</b>에 대한 것이고, <b>고객이 왜 오는지</b>에 대한 것이 아니다. 두 질문을 갈라야 문서가 정확해진다.</p>
+        </div>
+        <div class="split reveal delay-1">
+          <article class="split-side" data-kind="source">
+            <b>가치의 원천 · 고객이 오는 이유</b>
+            <h3>사용자 트래킹 기반 하이라이트 편집</h3>
+            <ul>
+              <li><b>V1</b> 40분에서 나를 찾아준다 — 아무도 대신 해주지 않던 일</li>
+              <li><b>V2</b> 구석의 나를 화면 주인공으로 바꿔준다</li>
+              <li>이것이 없으면 <b>HILiT을 쓸 이유가 없다.</b> 기록 공간만 있는 앱은 이미 있다</li>
+              <li>선별 페르소나 <b>6명 전원</b>이 V1을 핵심 가치로 받는다</li>
+              <li>모방 난이도가 가장 높은 지점 — 데이터와 모델 축적이 필요하다</li>
+            </ul>
+          </article>
+          <div class="split-mid"><span>가치는 여기서 나고　　수익은 여기로 흐른다</span><span class="frame-arrow" aria-hidden="true" style="writing-mode: initial; transform: none;">→</span></div>
+          <article class="split-side" data-kind="route">
+            <b>수익의 경로 · 값을 받는 자리</b>
+            <h3>기록 축적과 관계망</h3>
+            <ul>
+              <li>기록이 쌓일수록 떠나기 어려워진다 (전환 비용)</li>
+              <li>사람이 모이면 광고가 붙는다 — 국내 렌즈 B 시장 <b>약 1조 원</b></li>
+              <li>편집 도구 시장(렌즈 A)은 <b>600억 원</b>이고 무료 강자가 지킨다</li>
+              <li>그래서 트래킹 편집은 <b>무료로 제공</b>하고, Q4 450만 명을 확보한다</li>
+              <li><b>관계망은 나중에 붙일 수 없다.</b> 사용자가 서로를 팔로우한 뒤에야 생기므로 첫 코호트부터 깔아야 한다</li>
+              <li>수익 모델과 시점은 여전히 <b>미정</b>이다</li>
+            </ul>
+          </article>
+        </div>
+        <div class="corejob reveal delay-2">
+          <b>이 문서가 다시 세운 관계</b>
+          <blockquote>트래킹 편집은 우리가 고객을 얻는 이유이고, 기록과 관계는 우리가 고객을 지키고 값을 받는 방법이다.</blockquote>
+          <p>둘의 순서를 바꾸면 두 가지 오류가 생긴다. 트래킹을 수익원으로 보면 600억 원 시장에서 무료 강자와 정면으로 싸우게 된다. 반대로 트래킹을 단순한 수단으로 낮춰 보면, 기록 공간만 남아 setlog가 이미 하고 있는 일과 구별되지 않는다.</p>
+        </div>
+        <div class="reveal delay-2">
+          <p class="label" style="margin-bottom: var(--space-3);">그래서 소비·관계 기능을 MVP에 함께 넣는다 — 이 문서 안에서 나온 근거 다섯 가지</p>
+          <div class="table-wrap">
+            <table class="mid">
+              <caption>21·22장에서 F11 · F13 · F18a · F19 · F20 · F21 · F22를 MVP로 올린 판정의 근거</caption>
+              <thead><tr><th scope="col">근거</th><th scope="col">이 문서 안의 출처</th><th scope="col">그래서 MVP에 들어가는 기능</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>1년차 성공 지표가 매출이 아니라 재방문이다</strong></td>
+                  <td>9장 <b>O7</b> 기록 3개 이상 축적 사용자 1만 명 · <b>O6</b> 월 4건 — 설치 수가 아니라 "못 떠나게 된 사람" 수로 판정한다</td>
+                  <td>편집만 있는 앱은 경기 다음 날 한 번 열리고 닫힌다. 다시 열 이유가 화면에 있어야 한다 → <b>F13 추천 피드 · F19 좋아요 · F20 댓글</b></td>
+                </tr>
+                <tr>
+                  <td><strong>이겨야 할 상대가 경쟁 앱이 아니라 "포기"다</strong></td>
+                  <td>11장 — 가장 강한 대체재는 아무것도 하지 않기. <b>Pew 2023: 성인 틱톡 이용자 약 절반이 한 번도 게시하지 않음</b></td>
+                  <td>포기를 되돌리는 것은 낮은 공개 문턱과 즉각적인 반응이다 → <b>F8 공개 범위 · 그룹 · F19 좋아요</b></td>
+                </tr>
+                <tr>
+                  <td><strong>P3(공개 부담)은 계정이 아니라 관계로 푼다</strong></td>
+                  <td>6장 공통 Pain <b>P3</b> · 10장 — 기록 단위 공개 범위가 없어 사용자가 부계정을 직접 판다</td>
+                  <td>"나만 보기"와 "전체공개" 사이에 <b>그룹</b> 단계가 실제로 있어야 F8이 작동한다 → <b>F8 공개 범위 · 그룹</b></td>
+                </tr>
+                <tr>
+                  <td class="neg"><strong>D4는 차별점이 아니라 진입 조건이다</strong></td>
+                  <td>15장 방어력 판정 — <b>setlog가 기록과 관계를 이미 갖고 있다.</b> D4의 모방 난이도는 "낮음"으로 판정됐다</td>
+                  <td>관계망 없이 기록만 남기면 우리는 편집기 하나로 남는다 → <b>F11 · F13 · F22 앱 셸</b></td>
+                </tr>
+                <tr>
+                  <td><strong>앱을 옮기는 순간 완성 전환율이 깨진다</strong></td>
+                  <td>8장 Core Job의 조건 "앱을 옮기지 않고 완성한다"(F6) · 9장 <b>O2</b> 완성 전환율 4% → 60%</td>
+                  <td>음악이 없으면 사용자는 완성본을 다른 앱으로 내보내 붙이고, 그 순간 기록도 그쪽에 남는다 → <b>F18a 음악 라이브러리</b>(저작권이 정리된 곡만)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="notice reveal delay-3">그래서 자원 투입 순서도 이 관계를 따른다. <b>가장 먼저 검증할 것은 트래킹 정확도(F2b)</b>이고, 가장 먼저 무료로 열어야 할 것도 트래킹 편집이다. 유료화 논의는 기록 축적이 실제로 일어난 뒤에 시작한다. 다만 <b>순서가 먼저라는 말이 나중에 만든다는 뜻은 아니다</b> — 수익의 경로인 기록과 관계망은 사용자가 직접 쌓아야 생기므로, 팔로우와 소비 루프는 <b>같은 MVP 안에</b> 들어간다(21·22장).</p>
+      </div>
+    </section>
+
+    <!-- 15 차별적 가치 -->
+    <section class="slide" data-title="우리가 제공하는 차별적 가치" aria-labelledby="s13t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Differentiation</p>
+          <h2 class="slide-title" id="s13t">차별점 네 개는 모두 트래킹에서 나오거나 트래킹을 전제로 한다</h2>
+        </div>
+        <div class="diff-row reveal delay-1">
+          <article class="diff" style="border-color: var(--mint-deep); background: color-mix(in srgb, var(--mint) 8%, var(--bg-soft));">
+            <b>D1</b>
+            <strong>말하지 않고 움직이는 사람을 추적한다</strong>
+            <p><b style="color:var(--mint)">고객이 받는 것 —</b> 40분에서 내 구간만 남고, 구석의 내가 화면 주인공이 된다 (V1 · V2).</p>
+            <p>AlphaCut · Filmora · Vrew는 모두 <b>화자(말하는 사람)</b>를 추적한다. 코트에는 말하는 사람이 없고, 대상은 멀고 작고 계속 움직인다. 이 조건에서 사람을 놓치지 않는 서비스는 조사한 목록에 없다.</p>
+          </article>
+          <article class="diff">
+            <b>D2</b>
+            <strong>최종 선택권이 사람에게 있다</strong>
+            <p><b style="color:var(--mint)">고객이 받는 것 —</b> 오늘 그 3점이 왜 특별했는지를 내가 반영할 수 있다.</p>
+            <p>Veo · Pixellot은 <b>기계가 하이라이트를 판정</b>한다. HILiT은 트래킹으로 후보를 좁히고 판단은 사람에게 남긴다. 트래킹이 정확할수록 사람이 고를 후보의 질이 올라간다.</p>
+          </article>
+          <article class="diff">
+            <b>D3</b>
+            <strong>기록의 주인이 개인이다</strong>
+            <p><b style="color:var(--mint)">고객이 받는 것 —</b> 전용 카메라도 팀 계약도 없이, 내 휴대폰 영상으로 오늘 시작할 수 있다.</p>
+            <p>Veo · Hudl · Pixellot도 사람을 추적하지만 기록의 주인이 <b>클럽·학교·팀</b>이고 하드웨어 계약이 전제다. 같은 기술을 개인에게 개인 자격으로 주는 곳이 없다.</p>
+          </article>
+          <article class="diff">
+            <b>D4</b>
+            <strong>기록이 먼저고 공개가 선택이다</strong>
+            <p><b style="color:var(--mint)">고객이 받는 것 —</b> 트래킹으로 만든 결과물이 올리지 않아도 내 기록에 남는다.</p>
+            <p>Instagram은 <b>올려야 남는다</b>. CapCut · VLLO는 완성에서 끝나고 보관을 담당하지 않는다. 트래킹 결과물을 담아둘 곳이 없으면 편집 가치도 한 번 쓰고 사라진다.</p>
+          </article>
+        </div>
+        <div class="vp-state reveal delay-1">
+          <p>네 차별점의 관계는 이렇다. <em>D1이 가치를 만들고, D2가 그 가치를 사람의 판단과 결합하고, D3와 D4가 그 결과물을 개인에게 남긴다.</em> D1이 실패하면 나머지 셋은 기록 앱 하나가 된다.</p>
+        </div>
+        <div class="reveal delay-2">
+          <div class="table-wrap">
+            <table class="matrix">
+              <caption>차별점이 선별 페르소나 6명의 Pain을 덮는 범위 — ● 핵심 해결 · ○ 부분 해결</caption>
+              <thead><tr><th scope="col">차별점</th><th scope="col" class="c">김도현</th><th scope="col" class="c">박서연</th><th scope="col" class="c">이준혁</th><th scope="col" class="c">정민수</th><th scope="col" class="c">강태오</th><th scope="col" class="c">오세진</th><th scope="col" class="c">합계</th></tr></thead>
+              <tbody>
+                <tr style="background: color-mix(in srgb, var(--mint) 10%, transparent);"><th scope="row"><b style="color:var(--mint)">D1 인물 추적</b></th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><b class="num">6 / 6</b></td></tr>
+                <tr><th scope="row">D2 사람이 선택</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">○</span></td><td class="c"><span class="mk part">○</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c">4 / 6</td></tr>
+                <tr><th scope="row">D3 개인 소유 기록</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">○</span></td><td class="c"><span class="mk yes">●</span></td><td class="c">5 / 6</td></tr>
+                <tr><th scope="row">D4 기록 우선·공개 선택</th><td class="c"><span class="mk part">○</span></td><td class="c"><span class="mk part">○</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">○</span></td><td class="c"><span class="mk yes">●</span></td><td class="c">3 / 6</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="reveal delay-3">
+          <div class="table-wrap">
+            <table class="mid">
+              <caption>차별점이 얼마나 오래 버티는가 — 방어 가능성 판정</caption>
+              <thead><tr><th scope="col">차별점</th><th scope="col">모방 난이도</th><th scope="col">위험</th></tr></thead>
+              <tbody>
+                <tr><td><strong>D1</strong> 인물 추적 정확도</td><td><span class="lvl" data-l="H">높음</span> — 데이터와 모델 축적 필요</td><td>Veo · Pixellot이 이미 상용화한 기술이다. 개인 시장으로 내려오면 우위가 사라진다</td></tr>
+                <tr><td><strong>D2</strong> 사람이 선택</td><td><span class="lvl" data-l="L">낮음</span> — UI 결정이라 복제가 쉽다</td><td>단독으로는 방어선이 되지 못한다</td></tr>
+                <tr><td><strong>D3</strong> 개인 소유 기록</td><td><span class="lvl" data-l="M">중간</span> — 사업 모델 전환 필요</td><td>B2B 3사가 B2C로 내려오려면 조직과 가격 구조를 바꿔야 해서 시간이 걸린다</td></tr>
+                <tr><td><strong>D4</strong> 기록 우선·공개 선택</td><td><span class="lvl" data-l="L">낮음</span> — 화면 복제가 쉽다</td><td class="neg">setlog가 이미 갖고 있다. 여기에 인물 추적만 붙으면 차별점이 사라진다</td></tr>
+                <tr><td><strong>D2 + 선택 데이터 축적</strong></td><td><span class="lvl" data-l="H">높음</span></td><td>사용자 선택이 쌓여 추천이 좋아지는 순환은 화면 복제로 따라올 수 없다 (KSF 5번)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="notice reveal delay-3"><b>D1은 6명 전원에게 핵심으로 작동한다.</b> 그래서 D1의 정확도 검증이 다른 어떤 기능보다 먼저다. 실패하면 나머지 세 차별점이 전부 무의미해진다. 방어선은 <b>D1의 기술 축적</b>과 <b>D2가 만들어내는 선택 데이터 축적</b> 두 곳에 있고, D4는 차별점이 아니라 <b>진입 조건</b>으로 봐야 한다.</p>
+      </div>
+    </section>
+
+    <!-- 14 Proof 1 -->
+    <section class="slide" data-title="Proof ① 근거 데이터 9건" aria-labelledby="s14t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Proof · 직접 근거</p>
+          <h2 class="slide-title" id="s14t">서로 다른 조사 9건이 무엇을 증명하고 무엇을 증명하지 못하는가</h2>
+          <p class="slide-lead"><b class="neg">2026-08-28 갱신</b> — 이전 발표본이 최우선 근거로 쓰던 홈비디오 연구의 <b>19% · 89% 수치를 폐기했다.</b> 원 출처를 찾지 못해 정량 근거 자격을 거뒀고, 서지가 확인되는 선행연구 두 편으로 교체해 <b>정성 근거로만</b> 남겼다.</p>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="wide">
+            <thead><tr><th scope="col">근거</th><th scope="col">핵심 수치</th><th scope="col">무엇을 증명하나</th><th scope="col">한계</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>홈비디오 편집 선행연구 2편</strong> <span class="tag danger">수치 폐기</span><br><small style="color:var(--ink-muted)">Campanella 외, SPIE 6506 (2007)<br>Use Study on a Home Video Editing System, BCS-HCI 2007</small></td>
+                <td class="neg">이전 발표본의 <s>"필요 없어서" 19% · "재미없는 부분 제거" 89%</s>는 <b>원 출처를 찾지 못해 삭제했다</b><br><small style="color:var(--ink-muted)">교체한 두 편은 비율 수치를 제시하지 않는다</small></td>
+                <td>두 논문 모두 <b>"편집하지 않는 이유는 시간과 기술의 부족"</b>과 <b>"자동으로 초벌 편집한 뒤 사용자가 다듬는 구조"</b>를 지지한다 — HILiT의 편집 흐름과 같은 설계 사상이다</td>
+                <td class="neg">정성 근거로만 쓸 수 있다. 2007년 연구이고 사용성 시험 표본이 8명이라 <b>정량 근거로는 인용하지 않는다</b></td>
+              </tr>
+              <tr>
+                <td><strong>Pew Research 2023</strong></td>
+                <td>틱톡 이용자 2,745명 중 성인 이용자 <span class="num">약 절반이 한 번도 게시하지 않음</span></td>
+                <td>"SNS 이용자 = 콘텐츠 제작자"가 아니다. <b>Q4가 최대 시장</b>이라는 판단의 근거</td>
+                <td>미국 데이터. "편집이 어려워서"를 증명한 것은 아님</td>
+              </tr>
+              <tr>
+                <td><strong>Adobe 2024</strong></td>
+                <td>경험 부족 59% · 교육 부족 56% · <span class="num">시간 부족 52%</span></td>
+                <td>문제가 "프로그램이 어렵다"가 아니라 <b>"촬영 이후의 반복적 후처리 노동"</b>이다</td>
+                <td>크리에이티브 직군 대상</td>
+              </tr>
+              <tr>
+                <td><strong>Wyzowl 2024 · 2025</strong></td>
+                <td>미사용 마케터 <span class="num">33%가 '시간 부족' 1위</span><br>미사용자 <span class="num">68%가 내년 시작 계획</span></td>
+                <td>비용·ROI보다 시간이 최대 장벽. "필요하지만 부담스러워 못 만드는 사람"이 실재한다</td>
+                <td>마케터 대상 — 개인 크리에이터 아님</td>
+              </tr>
+              <tr>
+                <td><strong>OpusClip · Wyzowl 2026</strong></td>
+                <td><span class="num">72.9%가 팔로워 1만 미만</span><br>Talking-head 56.89%<br>AI 영상 도구 사용률 51% → 63%</td>
+                <td>시장이 <b>작은 크리에이터 중심</b>이고, 사람이 움직이는 콘텐츠가 절반 이상이다. AI 트래킹과 적합성이 높다</td>
+                <td>자사 서비스 데이터 — 편향 가능</td>
+              </tr>
+              <tr>
+                <td><strong>Podia 지불의사</strong></td>
+                <td>추가 자금이 생기면 <span class="num">43%가 외부 인력 고용</span> (영상 편집자 포함)</td>
+                <td>지불의사의 대리 지표. "시간이 없다"가 "외부 도움을 받고 싶다"로 이어진다 — <b>세로축의 근거</b></td>
+                <td>가정 상황 질문 — 실제 결제 아님</td>
+              </tr>
+              <tr>
+                <td><strong>MBO Partners 2024</strong></td>
+                <td>독립 크리에이터 <span class="num">46%가 성공 어렵다 · 41%가 번아웃</span></td>
+                <td>실제 문제는 <b>"영상 1개 편집 × 매주 반복"</b>이다. 번아웃이 게시 지속성을 떨어뜨린다</td>
+                <td>편집이 원인이라고 특정하지는 않음</td>
+              </tr>
+              <tr>
+                <td><strong>2023 CHI 학술연구</strong></td>
+                <td>틱톡 내부 편집조차 복잡한 UI와 학습곡선이 장벽</td>
+                <td>숏폼은 짧아서 쉬운 것이 아니라, <b>짧은 시간에 많은 판단</b>을 해야 한다</td>
+                <td>인터뷰 기반 정성 연구</td>
+              </tr>
+              <tr>
+                <td><strong>Podia 조사</strong> (900명+) <span class="tag danger">불리한 근거</span></td>
+                <td>오디언스 성장 <span class="neg">32.9%</span> · 시간 부족 21.6% · 수익화 14.4%</td>
+                <td class="neg">우리에게 불리한 데이터. 1위 고민은 편집이 아니다 → <b>범위를 좁히는 것이 더 강한 논증</b>이라는 근거</td>
+                <td>해외 크리에이터 대상</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="notice reveal delay-2">불리한 데이터를 지우지 않고 그대로 넣었고, <b>출처를 대지 못하는 수치는 유리하더라도 지웠다.</b> 편집이 1위 고민이 아니라는 사실을 인정한 뒤 <b>"게시 이전의 실행 문제"</b>로 범위를 좁히는 편이, 반박 가능한 주장을 크게 말하는 것보다 강하다. <b class="neg">다만 홈비디오 수치를 뺀 지금, 남은 정량 근거 아홉 건은 모두 마케터·해외 크리에이터·미국 이용자를 대상으로 한 대리 지표다</b> — 이 공백은 20장에서 다시 다룬다.</p>
+      </div>
+    </section>
+
+    <!-- 15 Proof 2 커버리지 -->
+    <section class="slide" data-title="Proof ② 기능 커버리지 비교" aria-labelledby="s15t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Proof · 대안과의 비교 시각화 ①</p>
+          <h2 class="slide-title" id="s15t">각 대안이 Core Job의 일곱 조건을 어디까지 덮는가</h2>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="matrix">
+            <caption><span class="mk yes">●</span> 제공 · <span class="mk part">△</span> 부분 제공 또는 제약 있음 · <span class="mk na">○</span> 가능하나 목적 아님 · <span class="mk no">✕</span> 미제공</caption>
+            <thead>
+              <tr>
+                <th scope="col">대안</th>
+                <th scope="col" class="c">긴 원본<br>입력</th>
+                <th scope="col" class="c">인물 자동<br>탐색</th>
+                <th scope="col" class="c">사람이<br>최종 선택</th>
+                <th scope="col" class="c">구도<br>보정</th>
+                <th scope="col" class="c">개인 기록<br>보관</th>
+                <th scope="col" class="c">공개 범위<br>분리</th>
+                <th scope="col" class="c">하드웨어<br>불필요</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: color-mix(in srgb, var(--mint) 10%, transparent);">
+                <th scope="row"><strong style="color:var(--mint)">HILiT</strong></th>
+                <td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td>
+              </tr>
+              <tr><th scope="row">Instagram</th><td class="c"><span class="mk na">○</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><th scope="row">TikTok</th><td class="c"><span class="mk na">○</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><th scope="row">CapCut</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><th scope="row">VLLO</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><th scope="row">setlog</th><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><th scope="row">Veo</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><th scope="row">Pixellot</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><th scope="row">Hudl</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><th scope="row">AlphaCut · Filmora</th><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">△</span><small style="color:var(--ink-muted)"> 화자만</small></td><td class="c"><span class="mk yes">●</span></td><td class="c"><span class="mk part">△</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><th scope="row">아무것도 안 함</th><td class="c"><span class="mk na">—</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk na">—</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk no">✕</span></td><td class="c"><span class="mk na">—</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="notice reveal delay-2"><b>HILiT만 일곱 칸이 전부 채워진다.</b> 다만 이것은 계획이지 실적이 아니다. 인물 자동 탐색의 정확도가 검증되지 않으면 첫 칸부터 무너진다.</p>
+      </div>
+    </section>
+
+    <!-- 16 Proof 3 2축 지도 -->
+    <section class="slide" data-title="Proof ③ 2축 지도와 내부 근거 사슬" aria-labelledby="s16t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Proof · 대안과의 비교 시각화 ②</p>
+          <h2 class="slide-title" id="s16t">9개 가치 선언을 두 축에 놓으면 우리 자리가 비어 있다</h2>
+        </div>
+        <div class="quad-frame reveal delay-1">
+          <div class="quad-y"><span>위 · 사람이 장면을 고른다　　　아래 · 자동이 장면을 정한다</span></div>
+          <div class="quad-body">
+            <div class="quad" role="group" aria-label="가치 선언 2축 배치도">
+              <div class="quad-cell is-open">
+                <b>기록으로 남기기 × 사람이 고른다 · 비어 있던 자리</b>
+                <div class="quad-chips"><span class="chip is-hilit">HILiT</span><span class="chip">setlog</span><span class="chip">Hudl</span></div>
+                <p>setlog는 긴 원본을 다루지 못하고, Hudl은 기록의 주인이 팀이며 하드웨어 계약이 전제다. <b style="color:var(--mint)">개인이 자기 원본에서 자기 하이라이트를 골라 공개 없이 남기는 자리는 아직 아무도 점유하지 않았다.</b></p>
+              </div>
+              <div class="quad-cell">
+                <b>퍼뜨리기 × 사람이 고른다</b>
+                <div class="quad-chips"><span class="chip">Instagram</span><span class="chip">VLLO</span><span class="chip">CapCut 수동</span></div>
+                <p>사용자가 직접 편집하고 직접 올린다. 찾는 수고와 구도 문제가 그대로 사용자에게 남고, 올려야 남는 구조여서 공개 부담이 기록을 막는다.</p>
+              </div>
+              <div class="quad-cell">
+                <b>기록으로 남기기 × 자동이 정한다</b>
+                <div class="quad-chips"><span class="chip">Veo</span><span class="chip">Pixellot</span></div>
+                <p>자동 촬영과 자동 하이라이트를 이미 구현했다. 하지만 무엇이 오늘 의미 있었는지는 기계가 판단하고, 결과물의 주인은 클럽과 학교다.</p>
+              </div>
+              <div class="quad-cell">
+                <b>퍼뜨리기 × 자동이 정한다</b>
+                <div class="quad-chips"><span class="chip">TikTok</span><span class="chip">CapCut 템플릿</span><span class="chip">AlphaCut · Vrew</span></div>
+                <p>추천 알고리즘과 템플릿이 노출과 형식을 정한다. 발견 확률은 높아지지만 개인의 기록 축적과는 무관하게 작동한다.</p>
+              </div>
+            </div>
+            <div class="quad-x"><span>← 콘텐츠를 기록으로 남기기</span><span>콘텐츠를 퍼뜨리기 →</span></div>
+          </div>
+        </div>
+        <div class="reveal delay-2">
+          <p class="label" style="margin-bottom: var(--space-3);">우리 기획 안에서 나온 근거 사슬 — 이 문서의 결론은 앞 단계 분석에서 이어진다</p>
+          <div class="table-wrap">
+            <table class="mid">
+              <thead><tr><th scope="col">선행 분석</th><th scope="col">이 문서의 어느 결론을 뒷받침하나</th></tr></thead>
+              <tbody>
+                <tr><td><strong>5가지 힘</strong></td><td>대체재 위협 매우 높음 → 여러 앱을 오가지 않는 한 흐름이 필요하다 (D4 · F6) · 신규 진입자 위협 → 화면은 복제되지만 인물 추적은 어렵다 (D1)</td></tr>
+                <tr><td><strong>가치사슬</strong></td><td>Gate A "AI가 사용자를 정확히 찾는지 먼저 검증한다" → F2가 P0인 이유 · GPU 원가가 처리 영상 편수에 비례 → O7(재방문·기록 축적)의 처리 물량 지표</td></tr>
+                <tr><td><strong>KSF</strong></td><td>1번 추적 정확도 = D1 · 3번 기록 축적 = D4 · 4번 농구 촬영자 우선 = Q1 선별 · 5번 선택 데이터 학습 = 방어선</td></tr>
+                <tr><td><strong>TAM·SAM·SOM</strong></td><td>렌즈 B가 렌즈 A의 <b class="num">국내 17배 · 글로벌 270배</b> → 편집 유료화하지 않음 · Q1 → Q4 순서 · SOM을 매출이 아니라 사용량으로</td></tr>
+                <tr><td><strong>Persona · JTBD</strong></td><td>Core Job 도출 · 공통 Pain 3개 · Outcome 10개의 현재값 · P1과 P2가 한 원인에서 나온다는 진단</td></tr>
+                <tr><td><strong>경쟁사 가치 분석</strong></td><td>9개 사 가치 선언 도출 → 위 2축 지도에서 "기록 × 사람이 고름" 사분면이 비어 있음 확인</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="notice reveal delay-3">편집 도구로 승부하면 국내 <b>600억 원</b>짜리 판에서 무료 강자와 싸우는 것이고, SNS로 자리 잡으면 <b>약 1조 원</b>짜리 판에 들어가는 것이다. 그래서 <b>편집 기능으로 수익을 설계하지 않는다.</b> 이 결정은 KSF에서 전략적 판단으로 먼저 나왔고, 시장 규모라는 전혀 다른 근거로도 뒷받침된다.</p>
+      </div>
+    </section>
+
+    <!-- 17 Proof 4 한계 -->
+    <section class="slide" data-title="Proof ④ 재검증으로 해소한 것과 남은 한계" aria-labelledby="s17t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Proof · 한계</p>
+          <h2 class="slide-title" id="s17t">TAM·SAM·SOM 문서를 다시 계산해 여섯 건을 해소했고, 네 건이 그대로 남았다</h2>
+          <p class="slide-lead">2026-08-28 재검증 결과다. 여기서 <b>"해소"는 원본을 되찾았다는 뜻이 아니라, 출처를 댈 수 있는 공개 자료로 같은 자리를 다시 채웠다</b>는 뜻이다. 숫자가 바뀐 항목은 이전 발표본과 대조해 읽어야 한다.</p>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="wide">
+            <caption>해소한 여섯 건 — 이전 발표본에서 무엇이 어떻게 바뀌었나</caption>
+            <thead><tr><th scope="col">#</th><th scope="col">이전 발표본이 말하던 것</th><th scope="col">재검증으로 확인한 것</th><th scope="col">이 발표자료가 바꿔 말해야 할 것</th></tr></thead>
+            <tbody>
+              <tr><td><b class="num">1</b></td><td><strong>SAM 계산식이 유실됐다</strong><br><small style="color:var(--ink-muted)">1,500억 원의 근거를 설명할 수 없었다</small></td><td>공개 자료만으로 <b>두 경로를 새로 세워 교차 검증</b>했다 — ① CapCut 매출에서 카테고리를 역적용 ② 숏폼 플랫폼 시장에서 도구 지출을 역산. 두 경로가 <span class="num">800억~2,800억 원</span>에서 만난다</td><td>SAM을 <b>"약 1,500억 원"이 아니라 "1천억 원대"</b>로 말하고, <b>오차 폭 ±80%</b>를 함께 말한다. 복구가 아니라 재구성이므로 원본과 우연히 일치했을 가능성도 남는다</td></tr>
+              <tr><td><b class="num">2</b></td><td><strong>홈비디오 연구의 서지 정보가 없다</strong><br><small style="color:var(--ink-muted)">"필요 없어서" 19% · "재미없는 부분 제거" 89%를 최우선 근거로 썼다</small></td><td>원 수치의 출처를 <b>끝내 찾지 못해 폐기</b>했다. 서지가 확인되는 선행연구 2편(SPIE 6506, 2007 · BCS-HCI 2007)으로 교체했다</td><td>이 연구를 <b>정량 근거로 인용하지 않는다.</b> "편집을 막는 것은 시간과 기술"이라는 <b>정성 근거</b>로만 쓴다 (16장 갱신 완료)</td></tr>
+              <tr><td><b class="num">3</b></td><td><strong>국내 농구 인구 10만 명</strong> <span class="warn">⚠️</span><br><small style="color:var(--ink-muted)">근거 없는 숫자였다</small></td><td>대한민국농구협회 <b>공식 등록 10,538명</b>(2025.6) + 디비전리그 500팀 이상을 확인하고, 미등록 동호인을 3~5배로 잡아 <span class="num">약 3만~5만 명</span>으로 재산정했다</td><td>SOM 상향식 계산이 <b>연 1,800만 원 → 연 720만 원</b>으로 내려간다. 농구 하나로는 1년차 목표에 닿지 않는다 <b class="neg">(20장 논점 1)</b></td></tr>
+              <tr><td><b class="num">4</b></td><td><strong>유료 전환율 5~20%</strong>를 가정했고<br>대조군인 "CapCut 약 1%"와 어긋난다고 적었다</td><td>대조군 <b>"1%"조차 출처가 없어 직접 역산</b>했다 — 매출 약 1억 달러 ÷ 연 구독 약 75달러 ≈ 유료 133만 명, MAU 3억 대비 <span class="num">약 0.44%</span></td><td>가정치는 실제의 <b class="neg">11~45배 과대</b>다. 렌즈A TAM은 <b>보수 시나리오조차 최저치가 아니다</b>라고 말해야 한다</td></tr>
+              <tr><td><b class="num">5</b></td><td><strong>글로벌 숏폼 시장 2026년 1,350억 달러</strong><br><small style="color:var(--ink-muted)">출처를 확인할 수 없었다</small></td><td>복수 시장조사기관의 2026년 추정치와 대조해 <span class="num">약 591억 달러</span>로 정정했다</td><td>원자료 수치는 <b class="neg">2.3배 과대</b>였다. 시장 규모를 말할 때 정정값을 쓴다</td></tr>
+              <tr><td><b class="num">6</b></td><td><strong>경쟁사 가치 선언문은 우리가 도출한 문장</strong>이다<br><small style="color:var(--ink-muted)">기업이 내건 문구가 아니었다</small></td><td>경쟁사 9곳 <b>전부의 공식 문구를 웹에서 확인</b>했다 — 미션·매니페스토·앱 스토어 소개. 유사 서비스 3사 중 2사도 확인했다</td><td>10장·11장을 <b>회사가 스스로 쓴 문장</b>으로 교체했다. 우리 해석이 아니므로 비교 논거의 반박 여지가 줄었다 <b class="neg">(20장 논점 5)</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrap reveal delay-2">
+          <table class="mid">
+            <caption>남은 네 건 — 발표 때 반드시 함께 말해야 한다</caption>
+            <thead><tr><th scope="col">#</th><th scope="col">아직 해소하지 못한 것</th><th scope="col">이 발표자료에 미치는 영향</th></tr></thead>
+            <tbody>
+              <tr><td><b class="neg">1</b></td><td><strong>국내 소셜·숏폼 광고비 세부 금액이 없다</strong><br><small style="color:var(--ink-muted)">KOBACO 방송통신광고비조사 원문 확인 필요</small></td><td class="neg">국내 SNS 시장 약 1조 원이 <b>글로벌 비율을 대입한 추정</b>이다. 우리가 값을 받으려는 쪽의 시장이라 확인 1순위다</td></tr>
+              <tr><td><b class="neg">2</b></td><td><strong>국내 "게시하지 않는 이용자" 비율이 없다</strong><br><small style="color:var(--ink-muted)">Pew Research 2023은 미국 데이터다</small></td><td class="neg">"Q4가 최대 시장"이라는 이 문서의 핵심 판단이 <b>국내 데이터 없이</b> 서 있다 <b>(20장 논점 4)</b></td></tr>
+              <tr><td><b>3</b></td><td>비상장사 매출(ByteDance · Veo · Pixellot · CapCut)이 <strong>3차 출처 재인용</strong>이다</td><td>1차 출처를 찾지 못했다. <b>해소 불가</b>이므로 인용할 때마다 "추정치"를 함께 적는 것으로 대응한다</td></tr>
+              <tr><td><b>4</b></td><td>조사별 응답자 집단이 다르다 (마케터 / 크리에이터 / 일반 이용자)</td><td>같은 사람들에게 물은 결과가 아니다. 근거를 나란히 놓을 때 <b>대상이 다르다는 점을 말로 짚는다</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="corejob reveal delay-2" style="background: var(--danger);">
+          <b>재검증이 남긴 가장 중요한 발견</b>
+          <blockquote>문제는 자료가 비어 있던 것이 아니라, 남아 있던 숫자가 전부 한 방향으로 낙관적이었다는 점이다.</blockquote>
+          <p>시장 규모 <b>2.3배</b> · 유료 전환율 <b>11~45배</b> · 농구 인구 <b>2~3배</b> 과대였고, 이 셋이 모두 곱해지는 자리가 <b>렌즈A TAM</b>이다. 그래서 이 발표자료는 논증의 무게를 TAM이 아니라 <b>SOM 정의(기록 3개 이상 사용자 1만 명 · 처리 영상 12만 편)</b>에 싣는다.</p>
+        </div>
+        <div class="corejob reveal delay-3">
+          <b>여전히 검증되지 않은 두 가지 핵심 가설</b>
+          <blockquote>첫째, AI가 사용자가 잘 나온 부분을 정말 골라내는가. 둘째, 개인 기록 공간이 부계정을 대체할 만큼 편한가.</blockquote>
+          <p>이 둘은 재검증 대상이 아니라 <b>제품을 만들어야 답이 나오는 질문</b>이다. 확인되지 않으면 이 문서의 Value Proposition은 성립하지 않는다. 두 질문은 각각 가치사슬 분석의 Gate A와 Gate B에 대응한다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 20 더 얘기해봐야 할 논점 -->
+    <section class="slide" data-title="더 얘기해봐야 할 논점 여섯 개" aria-labelledby="s17bt">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Discussion · 오늘 정할 것</p>
+          <h2 class="slide-title" id="s17bt">재검증으로 숫자가 바뀌면서 새로 생긴 논점 여섯 개, 오늘 답을 정해야 다음 장이 움직인다</h2>
+          <p class="slide-lead">아래는 <b>자료가 틀렸다는 지적이 아니라, 숫자가 정확해지면서 드러난 선택의 문제</b>다. 각 줄의 마지막 칸은 우리 권장안이며, 회의에서 뒤집을 수 있다.</p>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="wide">
+            <thead><tr><th scope="col">#</th><th scope="col">논점</th><th scope="col">재검증으로 확인된 사실</th><th scope="col">지금 자료가 서 있는 상태</th><th scope="col">권장 결론</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><b class="num">1</b></td>
+                <td><strong>농구 한 종목만으로는<br>1년차 목표에 닿지 않는다</strong><br><small style="color:var(--ink-muted)">종목 확장 시점을 언제로 볼 것인가</small></td>
+                <td>촬영 습관이 있는 국내 농구 인구가 <span class="num">약 3만~5만 명</span>이다. 커뮤니티 침투율 10%를 적용하면 가입자는 <span class="num">약 4,000명</span>이다</td>
+                <td class="neg">1년차 SOM은 <b>기록 3개 이상 사용자 1만 명</b>이다. 농구만으로는 목표의 40%에서 멈춘다. 23장은 "농구 외 종목 확장 시점"을 <b>미정</b>으로 두고 있다</td>
+                <td>1년차 목표를 <b>농구 4,000명 + 확장 종목 6,000명</b>으로 쪼개 적고, 확장 시점을 <b>F2b 등장 구간 탐지율 85% 달성 시점</b>에 연동한다. 목표를 낮추는 대신 조건을 붙인다</td>
+              </tr>
+              <tr>
+                <td><b class="num">2</b></td>
+                <td><strong>값을 받겠다는 시장의 크기를<br>아직 재지 않았다</strong><br><small style="color:var(--ink-muted)">렌즈B 기준 SAM이 없다</small></td>
+                <td>SAM <span class="num">1천억 원대</span>는 <b>렌즈A(도구 구독료) 기준</b>이다. 렌즈B(SNS 광고) 기준 SAM은 단위가 달라 산정하지 않았다</td>
+                <td class="neg">14장은 "가치의 원천은 트래킹 편집, <b>수익의 경로는 기록 축적과 관계망</b>"이라고 선언했다. 그런데 그 수익 경로가 속한 시장의 크기가 숫자로 없다</td>
+                <td>억지로 환산하지 않는다. 대신 SAM을 말하는 모든 자리에 <b>"도구 기준"</b>을 병기하고, 렌즈B SAM 산정을 <b>수익 모델 확정 이후의 과제</b>로 명시한다</td>
+              </tr>
+              <tr>
+                <td><b class="num">3</b></td>
+                <td><strong>유료 전환 가정을<br>실측 0.44%에 맞출 것인가</strong></td>
+                <td>CapCut 실제 유료 전환율이 <span class="num">약 0.44%</span>다. 기존 가정 5~20%는 <b class="neg">11~45배 과대</b>였다</td>
+                <td>이 발표자료는 매출 목표를 말하지 않고 <b>사용량 지표</b>로 성공을 정의한다. 그래서 직접 타격은 없다. 다만 9장 Outcome 목표값은 <b>1년차 가설</b>로만 표시돼 있다</td>
+                <td>현재 구조를 유지한다. 발표에서는 <b>"업계 정상치가 1% 미만"이라는 사실을 먼저 말한 뒤</b> 사용량 지표로 넘어간다. 낮은 전환율을 우리 약점이 아니라 <b>업계 조건</b>으로 제시한다</td>
+              </tr>
+              <tr>
+                <td><b class="num">4</b></td>
+                <td><strong>최우선 근거 자리가 비었다</strong><br><small style="color:var(--ink-muted)">국내 데이터가 한 건도 없다</small></td>
+                <td>홈비디오 연구의 19% · 89%를 폐기하면서 <b>가장 직접적인 정량 근거가 사라졌다</b></td>
+                <td class="neg">남은 근거 9건은 전부 <b>대리 지표</b>다 — 마케터(Wyzowl) · 해외 크리에이터(Podia) · 미국 이용자(Pew). <b>"한국 사람이 찍어놓고 안 올린다"를 증명한 자료가 없다</b></td>
+                <td>MVP 개발보다 <b>먼저</b> 국내 소규모 설문을 돌린다 — 농구 동호회 100명 대상, 문항은 "원본 보유 개수 · 미게시 사유" 둘이면 된다. 예산 문제가 아니라 <b>순서 문제</b>다</td>
+              </tr>
+              <tr>
+                <td><b class="num">5</b></td>
+                <td><strong>공식 선언으로 바꿨더니<br>격차가 더 선명해졌다</strong></td>
+                <td>경쟁사 9곳 <b>전부</b>의 공식 가치 선언을 확인했다. 어느 문장에도 <b>"이미 찍어둔 긴 원본"과 "공개하지 않는 개인 기록"이 함께 들어 있지 않다</b></td>
+                <td>10장의 논거가 <b>우리 해석</b>에서 <b>그들의 자기 선언</b>으로 바뀌었다. 반박하려면 회사가 자기 미션을 부정해야 한다</td>
+                <td>10장을 <b>"우리가 보기에 이들은…"이 아니라 "이들이 스스로 말하기를…"</b>로 발표한다. 다만 선언과 실제 사업활동은 다를 수 있으므로, <b>선언 옆의 기능 커버리지(17장)</b>와 반드시 함께 보여준다</td>
+              </tr>
+              <tr>
+                <td><b class="num">6</b></td>
+                <td><strong>낙관치 세 개가<br>한 자리에서 곱해진다</strong></td>
+                <td>시장 규모 <span class="num">2.3배</span> · 전환율 <span class="num">11~45배</span> · 농구 인구 <span class="num">2~3배</span> 과대였고, 셋이 겹치는 곳이 <b>렌즈A TAM</b>이다</td>
+                <td class="neg">TAM을 크게 말할수록 <b>세 오차가 함께 증폭된다.</b> 심사자가 한 항목만 짚어도 나머지 둘까지 의심받는다</td>
+                <td>TAM은 <b>범위와 신뢰 수준을 붙여 짧게</b> 말하고 넘어간다. 발표 시간을 <b>SOM 정의와 Gate A·B 검증 계획</b>에 쓴다. 큰 숫자보다 <b>셀 수 있는 숫자</b>가 방어에 유리하다</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="vp-state reveal delay-3">
+          <p><em>여섯 논점의 공통점은 하나다.</em> 숫자가 정확해질수록 <b>이 사업의 근거는 시장 크기가 아니라 실행 순서에 있다</b>는 사실이 분명해진다. 그래서 다음 두 장은 만들 기능(21장)과 검증 관문(22장)을 다룬다.</p>
+        </div>
+      </div>
+    </section>
+    <!-- 18 Job-Feature Map -->
+    <section class="slide" data-title="Job-Feature Map · 25개 기능" aria-labelledby="s18t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Job-Feature Map</p>
+          <h2 class="slide-title" id="s18t">고객가치를 전달하려면 어떤 기능이 필요하고, 무엇을 먼저 만드는가</h2>
+          <p class="slide-lead"><b>중요도</b> H = 없으면 Core Job이 성립하지 않음 · M = Outcome 달성에 기여 · L = 있으면 좋음　|　<b>난이도</b> H = 모델 학습·데이터 축적 필요 · M = 통상 2~6주 · L = 2주 이내　|　<b>MVP</b> <span class="mk yes">●</span> 포함 · <span class="mk part">◐</span> 축소 포함 · <span class="mk no">✕</span> 미포함<br><small style="color:var(--ink-muted)"><b style="color:var(--mint)">2026-08-29 개정</b> — F18을 F18a·F18b로 쪼개고 <b style="color:var(--mint)">F19 · F20 · F21 · F22</b>를 새로 넣었다. <b style="color:var(--mint)">F11 · F13 · F18a</b>는 MVP로 올리고 <b>F15</b>는 MVP 직후(P1)로 확정했다. 판정 근거는 14장에 표로 정리했다.</small></p>
+        </div>
+        <div class="table-wrap reveal delay-1">
+          <table class="wide">
+            <thead>
+              <tr>
+                <th scope="col">ID</th><th scope="col">Feature</th><th scope="col">담당 Job (JTBD)</th><th scope="col" class="c">해결<br>Pain</th><th scope="col" class="c">Outcome</th><th scope="col" class="c">중요도</th><th scope="col" class="c">난이도</th><th scope="col" class="c">우선<br>순위</th><th scope="col" class="c">MVP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><b>F1</b></td><td><strong>긴 원본 영상 업로드</strong><br><small style="color:var(--ink-muted)">40~50분 · 4GB급</small></td><td>이미 찍어둔 영상을 가져온다</td><td class="c">저장공간</td><td class="c">O4</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr style="background: color-mix(in srgb, var(--mint) 12%, transparent);"><td><b>F2a</b></td><td><strong style="color:var(--mint)">추적 대상 지정과 재식별</strong><br><small style="color:var(--ink-muted)">사용자가 자기를 한 번 지정 · 가려졌다 다시 나타나도 같은 사람으로 인식 <b style="color:var(--mint)">V1</b></small></td><td>내가 누구인지 앱이 알게 한다</td><td class="c"><b class="neg">P1</b></td><td class="c">O9</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr style="background: color-mix(in srgb, var(--mint) 12%, transparent);"><td><b>F2b</b></td><td><strong style="color:var(--mint)">사용자 등장 구간 자동 탐지</strong><br><small style="color:var(--ink-muted)">영상 내내 추적하며 등장 구간 표시 · <b style="color:var(--mint)">최우선 검증 대상 · V1</b></small></td><td>내 장면을 대신 찾아준다</td><td class="c"><b class="neg">P1</b></td><td class="c">O1 · O9</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F3</b></td><td><strong>장면 후보 약 30개 제시</strong><br><small style="color:var(--ink-muted)">1차 컷편집 · 온전히 잡힌 구간 우선</small></td><td>판단할 대상을 좁혀준다</td><td class="c">P1</td><td class="c">O1</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F4</b></td><td><strong>사용자 장면 선택 UI</strong><br><small style="color:var(--ink-muted)">"여기가 하이라이트다"</small></td><td>의미 있는 순간을 내가 고른다</td><td class="c">의미 판단</td><td class="c">O2</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr style="background: color-mix(in srgb, var(--mint) 12%, transparent);"><td><b>F5a</b></td><td><strong style="color:var(--mint)">사용자 중심 크롭·리프레이밍</strong><br><small style="color:var(--ink-muted)">추적 좌표로 프레임을 다시 구성 <b style="color:var(--mint)">V2</b></small></td><td>내가 알아볼 수 있게 잡아준다</td><td class="c"><b class="neg">P2</b></td><td class="c">O3 · O10</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F5b</b></td><td>촬영 노하우 기반 구도 규칙 · 앵글 연출<br><small style="color:var(--ink-muted)">영뽀또식 구도 규칙을 영상에 적용 <b style="color:var(--mint)">V2</b></small></td><td>결과물의 완성도를 높인다</td><td class="c">P2</td><td class="c">O3</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="pri" data-p="P1">P1</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F6</b></td><td><strong>하나의 영상으로 합치기 · 렌더링</strong></td><td>앱을 옮기지 않고 완성한다</td><td class="c">편집 노동</td><td class="c">O2 · O6</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F7</b></td><td><strong>개인 기록 자동 저장</strong><br><small style="color:var(--ink-muted)">공개와 무관하게 저장</small></td><td>공개하지 않아도 남는다</td><td class="c"><b class="neg">P3</b></td><td class="c">O5 · O7</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F8</b></td><td><strong>기록 단위 공개 범위</strong><br><small style="color:var(--ink-muted)">전체공개 · <b>그룹에만 공개</b> · 나만 보기</small></td><td>계정을 쪼개지 않는다</td><td class="c"><b class="neg">P3</b></td><td class="c">O5</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F9</b></td><td>원본 삭제 안내 · 저장공간 회수</td><td>원본을 지울 수 있게 한다</td><td class="c">저장공간</td><td class="c">O4</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P1">P1</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F10</b></td><td>기록 타임라인 (날짜별 축적 뷰)</td><td>성장을 눈으로 확인한다</td><td class="c">기록 소실</td><td class="c">O6 · O7</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P1">P1</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F11</b></td><td><strong>팔로워 · 팔로잉</strong><br><small style="color:var(--ink-muted)">관계는 <b>공개 기록만</b> 정한다. 그 사이의 공개 문턱은 <b>그룹</b>이 맡는다 — v0.6에서 맞팔로우를 걷어냈다</small></td><td>가까운 사람과 나눈다</td><td class="c"><b class="neg">P3</b></td><td class="c">O5 · O7</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr style="background:color-mix(in srgb, var(--mint) 9%, transparent)"><td><b>F23</b></td><td><strong>그룹 · 소그룹 공유 <small style="color:var(--mint-deep)">· v0.6 신규 제안</small></strong><br><small style="color:var(--ink-muted)">맞팔로우가 맡던 비공개 공유를 대체한다 · <b>F8</b>의 선택지 하나(그룹에만 공개)와 <b>F13</b>의 탭 하나로 붙는다 · 승인 절차 없이 만든다 · <b>MVP 포함으로 확정</b></small></td><td>같이 뛰는 사람에게만 연다</td><td class="c">P3</td><td class="c">O5 · O7</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F12</b></td><td>온보딩 카테고리 취향 설문<br><small style="color:var(--ink-muted)">MVP 추천 피드는 이 설문 없이 팔로잉·인기 기준으로 시작한다</small></td><td>볼 것을 찾는다</td><td class="c">—</td><td class="c">—</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P1">P1</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F13</b></td><td><strong>추천 피드 · 앱 진입 화면</strong><br><small style="color:var(--ink-muted)">앱을 열면 영상이 바로 뜬다 · MVP는 <b>팔로잉·인기 기준</b>, 취향 설문(F12) 반영은 이후</small></td><td>콘텐츠를 소비한다</td><td class="c">—</td><td class="c">O7</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F14</b></td><td><strong>선택 데이터 학습 → 추천·후보 정확도 개선</strong><br><small style="color:var(--ink-muted)">KSF 5번 · 방어선</small></td><td>쓸수록 정확해진다</td><td class="c">P1</td><td class="c">O1 · O3</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="pri" data-p="P2">P2</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F15</b></td><td>카테고리별 조회수 랭킹<br><small style="color:var(--ink-muted)"><b>MVP 이후 첫 후속 작업으로 확정</b> — 8장에서 "게시 이후의 결과 문제는 풀지 않는다"고 그은 선 바로 위에 있다</small></td><td>성장을 증명한다</td><td class="c">노출 경쟁</td><td class="c">O2</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P1">P1</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F16</b></td><td><strong>팀 공유 편집</strong><br><small style="color:var(--ink-muted)">한 원본을 여러 사용자가 사용 · 기획 미정</small></td><td>팀원 각자가 자기 것을 만든다</td><td class="c">P1</td><td class="c">O2</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="pri" data-p="P3">P3</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F17</b></td><td>촬영 가이드 (Q2 세그먼트 확장용)</td><td>원본이 없는 사람을 들인다</td><td class="c">—</td><td class="c">—</td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P3">P3</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F18a</b></td><td><strong>사용 가능한 음악 라이브러리</strong><br><small style="color:var(--ink-muted)">저작권이 정리된 곡만 앱 안에서 제공 · 사용자가 곡을 가져오게 하지 않는다</small></td><td>앱을 옮기지 않고 완성한다</td><td class="c">편집 노동</td><td class="c">O2</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F18b</b></td><td>자막 편집 <small style="color:var(--ink-muted)">기획 미정</small></td><td>결과물을 꾸민다</td><td class="c">—</td><td class="c">—</td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P3">P3</span></td><td class="c"><span class="mk no">✕</span></td></tr>
+              <tr><td><b>F19</b></td><td><strong>좋아요</strong><br><small style="color:var(--ink-muted)">공개 범위 안에서만 보인다 — "나만 보기" 기록에는 붙지 않는다</small></td><td>반응을 받는다</td><td class="c">P3</td><td class="c">O7</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F20</b></td><td><strong>댓글 · 신고</strong><br><small style="color:var(--ink-muted)">댓글에 <b>신고 기능 포함</b> — 공개 기록을 여는 최소 안전장치</small></td><td>반응을 주고받는다</td><td class="c">P3</td><td class="c">O7</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F21</b></td><td><strong>공유 — 링크 · 카카오톡/메시지</strong><br><small style="color:var(--ink-muted)">앱을 쓰지 않는 사람에게도 보낸다 · 공유 링크도 기록의 공개 범위를 따른다</small></td><td>앱 밖의 사람에게 보낸다</td><td class="c">P3</td><td class="c">O5 · O7</td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="lvl" data-l="L">L</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+              <tr><td><b>F22</b></td><td><strong>앱 셸 — 3탭 내비 · + 버튼 · 마이페이지</strong><br><small style="color:var(--ink-muted)">진입 시 <b>팔로잉 탭</b>에 영상이 바로 뜬다 · 탭은 <b>팔로잉 · 추천 · 그룹</b> 셋 · 가운데 <b>+ 버튼</b>이 편집·업로드 · <b>마이페이지</b>가 내 기록 보관함</small></td><td>앱을 열면 볼 것이 있다</td><td class="c">P3</td><td class="c">O5 · O7</td><td class="c"><span class="lvl" data-l="H">H</span></td><td class="c"><span class="lvl" data-l="M">M</span></td><td class="c"><span class="pri" data-p="P0">P0</span></td><td class="c"><span class="mk yes">●</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="okey reveal delay-2" aria-label="Outcome 번호 열 요약">
+          <b>Outcome 열 읽는 법</b>
+          <span><i>O1</i>장면 탐색 시간</span>
+          <span><i>O2</i>완성 전환율</span>
+          <span data-v><i>O3</i>잘 잡힘</span>
+          <span><i>O4</i>원본 삭제</span>
+          <span><i>O5</i>비공개 기록</span>
+          <span><i>O6</i>기록 지속</span>
+          <span><i>O7</i>재방문·축적</span>
+          <span><i>O8</i>외주 지출</span>
+          <span data-v><i>O9</i>추적 정확도</span>
+          <span data-v><i>O10</i>재촬영 횟수</span>
+        </div>
+        <p class="notice reveal delay-2"><b>우선순위 기준</b> <span class="pri" data-p="P0">P0</span> MVP 필수 · <span class="pri" data-p="P1">P1</span> MVP 직후 · <span class="pri" data-p="P2">P2</span> 확산 단계 · <span class="pri" data-p="P3">P3</span> 미정·보류<br><b>중요도가 M인데 P0인 행이 있는 이유</b> — 두 열의 질문이 다르다. <b>중요도</b>는 "없으면 Core Job이 성립하지 않는가"로 매기고, <b>우선순위</b>는 "없으면 1년차 지표(O7 재방문)가 성립하지 않는가"로 매긴다. 좋아요·댓글·공유·추천 피드는 Core Job에는 없지만 재방문 루프에는 빠질 수 없다.</p>
+      </div>
+    </section>
+
+    <!-- 19 MVP 범위 -->
+    <section class="slide" data-title="MVP 범위와 검증 관문" aria-labelledby="s19t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">MVP scope</p>
+          <h2 class="slide-title" id="s19t">MVP는 열일곱 기능이다 — 트래킹 편집 여덟, 기록 공간 셋, 소비·관계 다섯, 그룹 하나</h2>
+          <p class="slide-lead">가치 선언 두 문장이 그대로 두 블록이 된다. <b>문장 ①이 편집 여덟</b>이고, <b>문장 ②가 기록 셋 + 소비·관계 다섯 + 그룹(F23) 하나</b>다. 프로토타입 v0.6에서 새로 제안한 <b>그룹을 MVP에 포함</b>하기로 정하면서 열여섯에서 <b>열일곱</b>이 됐다.</p>
+        </div>
+        <div class="reveal delay-1">
+          <p class="label" style="margin-bottom: var(--space-2); color: var(--mint);">① AI가 나를 끝까지 따라가 하이라이트를 찾고, 내가 고른 순간을 나 중심의 영상으로 완성한다 — 트래킹 편집 8</p>
+          <div class="mvp-flow" aria-label="MVP 편집 파이프라인 8개 기능 흐름">
+            <div class="mvp-node"><b>F1</b><span>원본 올리기</span></div>
+            <div class="mvp-node" data-partial="true" style="border-style: solid; border-width: 0.14rem;"><b>F2a</b><span>대상 지정<br>재식별</span></div>
+            <div class="mvp-node" data-partial="true" style="border-style: solid; border-width: 0.14rem;"><b>F2b</b><span>등장 구간<br>탐지</span></div>
+            <div class="mvp-node"><b>F3</b><span>후보 30개</span></div>
+            <div class="mvp-node"><b>F4</b><span>사용자 선택</span></div>
+            <div class="mvp-node" data-partial="true" style="border-style: solid; border-width: 0.14rem;"><b>F5a</b><span>구도 보정<br>리프레이밍</span></div>
+            <div class="mvp-node"><b>F18a</b><span>음악<br>라이브러리</span></div>
+            <div class="mvp-node"><b>F6</b><span>합치기</span></div>
+          </div>
+        </div>
+        <div class="reveal delay-2">
+          <p class="label" style="margin-bottom: var(--space-2); color: var(--mint);">② 보여주기 위한 기록만이 아니라, 나를 위해 오래 남겨두는 개인 기록 공간 — 기록 3 + 소비·관계 5 + 그룹 1</p>
+          <div class="mvp-flow mvp-flow--9" aria-label="MVP 기록·소비·관계 8개 기능과 신규 제안 그룹">
+            <div class="mvp-node"><b>F7</b><span>기록 저장</span></div>
+            <div class="mvp-node"><b>F8</b><span>공개 범위</span></div>
+            <div class="mvp-node"><b>F22</b><span>앱 셸<br>3탭·마이페이지</span></div>
+            <div class="mvp-node"><b>F11</b><span>팔로워<br>팔로잉</span></div>
+            <div class="mvp-node" data-new="true"><b>F23</b><span>그룹<br>소그룹 공유</span></div>
+            <div class="mvp-node"><b>F13</b><span>추천 피드</span></div>
+            <div class="mvp-node"><b>F19</b><span>좋아요</span></div>
+            <div class="mvp-node"><b>F20</b><span>댓글·신고</span></div>
+            <div class="mvp-node"><b>F21</b><span>공유<br>링크·카톡</span></div>
+          </div>
+        </div>
+        <p class="label reveal delay-2" style="text-align: center; color: var(--mint);">테두리를 두른 F2a · F2b · F5a가 사용자 트래킹 기능이다 — 열일곱 중 셋이며, 고객 가치의 원천이다</p>
+        <div class="vp-short reveal delay-2" style="font-size: var(--step-1);">"40분 원본에 나를 한 번 지정하면, 내가 나온 장면 30개가 나오고, 그중 내가 고른 것이 나를 주인공으로 잡은 15초로 합쳐져,<br>올리지 않아도 내 기록에 남고, 열고 싶을 때 <b>같이 뛰는 그룹에게만</b> 열린다."</div>
+        <div class="reveal delay-2">
+          <p class="label" style="margin-bottom: var(--space-3);">구현 순서와 검증 관문 — Gate A와 Gate B는 순서를 바꿀 수 없다</p>
+          <div class="gate-list">
+            <article class="gate is-gate"><b>1</b><strong>트래킹 검증</strong><div class="feats"><span class="chip">F1</span><span class="chip is-hilit">F2a</span><span class="chip is-hilit">F2b</span></div><p class="cond"><b>Gate A — AI가 사용자를 놓치지 않고 찾는가.</b> 판정 지표는 O9 등장 구간 탐지율 85% 이상. 실패하면 이후 전부 무의미하다</p></article>
+            <article class="gate"><b>2</b><strong>흐름 완성</strong><div class="feats"><span class="chip">F3</span><span class="chip">F4</span><span class="chip is-hilit">F5a</span><span class="chip">F18a</span><span class="chip">F6</span></div><p class="cond">한 흐름에서 완성 영상이 나오는가. 구도 보정 결과를 사용자가 "잘 잡혔다"고 평가하는가 (O3). 음악까지 앱 안에서 붙어 <b>다른 앱으로 나갈 이유가 없는가</b></p></article>
+            <article class="gate is-gate"><b>3</b><strong>기록 구조</strong><div class="feats"><span class="chip">F7</span><span class="chip">F8</span><span class="chip">F22</span></div><p class="cond"><b>Gate B — 개인 기록 공간이 부계정을 대체할 만큼 편한가.</b> 마이페이지가 "올리지 않아도 남는 자리"로 읽히는가</p></article>
+            <article class="gate is-gate"><b>4</b><strong>소비 루프 · 그룹</strong><div class="feats"><span class="chip">F11</span><span class="chip">F23</span><span class="chip">F13</span><span class="chip">F19</span><span class="chip">F20</span><span class="chip">F21</span></div><p class="cond"><b>기록을 한 번 만든 사람이 다음 경기에도 앱을 여는가.</b> 판정 지표는 O7 기록 3개 이상 축적 사용자. <b>팔로잉 탭</b>에 볼 것이 있고, <b>그룹</b>에만 열 수 있어야 성립한다. 그룹은 F8 공개 범위의 선택지와 F13 피드의 탭으로 함께 붙으므로 이 단계에서 같이 검증한다</p></article>
+            <article class="gate"><b>5</b><strong>재방문 심화 · 구도 고도화</strong><div class="feats"><span class="chip">F9</span><span class="chip">F10</span><span class="chip">F12</span><span class="chip">F15</span><span class="chip is-hilit">F5b</span></div><p class="cond">기록 3개 이상 축적 사용자가 1만 명까지 가는가 (SOM 판정선). 날짜별 타임라인·취향 설문·카테고리 랭킹을 얹고, 구도 규칙으로 결과물 완성도를 한 단계 올린다</p></article>
+            <article class="gate"><b>6</b><strong>확산과 방어</strong><div class="feats"><span class="chip is-hilit">F14</span></div><p class="cond">사용자 선택 데이터가 <b>트래킹 후보의 정확도</b>를 실제로 높이는가 — 이것이 복제 불가능한 방어선이다</p></article>
+            <article class="gate"><b>—</b><strong>보류 · 미정 영역</strong><div class="feats"><span class="chip">F16</span><span class="chip">F17</span><span class="chip">F18b</span></div><p class="cond">기획 확정 후 재판정한다</p></article>
+          </div>
+          <div class="okey" style="margin-top: var(--space-3);" aria-label="관문 판정 지표에 쓰인 Outcome 번호 요약">
+            <b>관문 판정 지표</b>
+            <span data-v><i>O9</i>추적 정확도 — 등장 구간 탐지율 85% 이상</span>
+            <span data-v><i>O3</i>잘 잡힘 — "잘 잡혔다" 평가 80% 이상</span>
+            <span><i>O7</i>재방문·축적 — 기록 3개 이상 축적 사용자</span>
+          </div>
+        </div>
+        <div class="fo-grid reveal delay-3">
+          <article class="fo" data-tone="fix">
+            <h3>여덟 가지 판정 근거</h3>
+            <ul>
+              <li><b style="color:var(--mint)">트래킹을 F2a와 F2b로 쪼갠 이유.</b> 두 기능의 실패 방식이 다르다. F2a가 틀리면 <b>다른 사람의 장면</b>을 내 하이라이트로 준다. F2b가 약하면 내 장면을 <b>일부만</b> 찾는다. 앞의 실패는 신뢰를 즉시 깨뜨리고 뒤의 실패는 만족도를 깎는다. 검증 지표를 따로 둬야 어느 쪽이 문제인지 알 수 있다.</li>
+              <li><b style="color:var(--mint)">F5를 F5a와 F5b로 쪼갠 이유.</b> 구도 보정은 트래킹 가치 V2의 본체라서 MVP에서 뺄 수 없다. 대신 <b>추적 좌표만으로 되는 크롭·리프레이밍(F5a)</b>은 MVP에 넣고, 촬영 노하우 기반 구도 규칙과 앵글 연출(F5b)은 P1으로 미룬다. 앞은 트래킹 결과의 직접 활용이고 뒤는 별도 연출 규칙 설계가 필요하다.</li>
+              <li><b style="color:var(--mint)">F14를 P2로 내린 이유.</b> 사용자 선택 데이터로 트래킹 후보 정확도를 높이는 순환이 가장 강한 방어선이지만(KSF 5번), 학습할 선택 데이터 자체가 사용자 없이는 생기지 않는다. 순서상 나중이 맞다.</li>
+              <li><b style="color:var(--mint)">F16을 P3에 둔 이유.</b> 박서연과 오세진의 가장 큰 Pain이 이 기능으로만 완전히 풀린다. 그런데 팀 계정, 원본 공유 권한, 얼굴 정보 처리 동의가 모두 미정이다. 정해지지 않은 것을 MVP에 넣을 수는 없다.</li>
+              <li><b style="color:var(--mint)">맞팔로우를 걷어내고 그룹을 넣은 이유.</b> 앞선 판은 <b>맞팔 친구 = 비공개 기록을 함께 보는 사이</b>로 묶었다. 그런데 사용자가 실제로 함께 운동하는 사람은 <b>맞팔 전체가 아니라 그중 대여섯 명</b>이다. 농구 크루 영상을 필라테스 소모임 사람에게까지 보낼 이유가 없다. 그래서 관계 목록은 사람들이 이미 아는 <b>팔로워 / 팔로잉</b>으로 되돌리고, "누구에게만 보여줄까"는 <b>그룹 단위</b>로 옮겼다. 그룹은 <b>F8 공개 범위의 선택지 하나를 대체하고 F13 피드에 탭 하나를 더하는</b> 방식으로 붙으므로 새 축을 만들지 않는다. <b>그룹은 MVP에 포함한다</b> — 비공개 공유 문턱이 없으면 F8 공개 범위가 세 갈래 중 가운데를 잃고, 부계정을 대체한다는 주장이 성립하지 않기 때문이다.</li>
+              <li><b style="color:var(--mint)">소비·관계 다섯(F11 · F13 · F19 · F20 · F21)을 MVP에 넣은 이유.</b> 14장이 "수익의 경로는 기록 축적과 관계망"이라고 선언했는데, <b>관계망은 사용자가 서로를 팔로우한 뒤에야 생기므로 나중에 붙일 수 없다.</b> 그리고 1년차 성공 지표 O7은 재방문 지표이고, 재방문은 편집 기능이 아니라 <b>열었을 때 볼 것이 있는 화면</b>에서 나온다. 11장이 지목한 최대 대체재 "포기"를 되돌리는 것도 <b>낮은 공개 문턱(그룹)</b>과 즉각적인 반응(좋아요)이다. 프로토타입 v0.6에서 그 문턱을 맞팔로우가 아니라 <b>그룹</b>으로 옮겼다.</li>
+              <li><b style="color:var(--mint)">F18을 F18a와 F18b로 쪼갠 이유.</b> 음악이 없으면 사용자는 완성본을 CapCut·릴스로 내보내 붙이고, <b>그 순간 기록도 그쪽에 남는다.</b> Core Job의 "앱을 옮기지 않고 완성한다"가 깨진다. 그래서 저작권이 정리된 곡만 담은 <b>라이브러리(F18a)는 MVP</b>에 넣고, 자막 편집(F18b)은 기획 미정 그대로 둔다.</li>
+              <li><b style="color:var(--amber)">F15 조회수 랭킹을 MVP에 넣지 않고 P1로 올린 이유.</b> 8장이 "게시 이후의 결과 문제는 풀지 않는다"고 선을 그었고, 랭킹은 그 선 바로 위에 있는 기능이다. 다만 노출 자리를 만드는 유일한 수단이므로 확산 단계(P2)가 아니라 <b>MVP 직후 첫 후속(P1)</b>으로 확정한다.</li>
+            </ul>
+          </article>
+          <article class="fo" data-tone="open">
+            <h3>다음 회의로 올릴 안건</h3>
+            <p><b>F16 팀 공유 편집</b>은 A부류(박서연)와 C부류(오세진) 양쪽에서 반복 등장한 요구다. 8명분·12명분 하이라이트라는 페인이 이 기능 없이는 절반만 풀린다.</p>
+            <p>기술적으로는 <b>다중 인물 동시 추적</b>이 핵심이다. 같은 원본을 사람 수만큼 다시 읽어야 하므로 처리 물량이 인원수에 비례해 늘어나고, 이는 GPU 원가에 직접 영향을 준다.</p>
+            <p>결정해야 할 것은 넷이다. 팀 계정을 별도 개체로 둘 것인가, 원본 소유자가 공유 권한을 어떻게 부여하는가, 영상에 함께 잡힌 다른 사람의 얼굴 정보 동의를 어떻게 처리하는가, 인원수에 비례하는 처리 비용을 누가 부담하는가.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 20 확정/미정 -->
+    <section class="slide" data-title="확정한 것과 확정하지 않은 것" aria-labelledby="s20t">
+      <div class="slide__inner">
+        <div class="reveal">
+          <p class="eyebrow">Conclusion</p>
+          <h2 class="slide-title" id="s20t">이 문서가 확정한 것과, 아직 확정하지 않은 것</h2>
+        </div>
+        <div class="fo-grid reveal delay-1">
+          <article class="fo" data-tone="fix">
+            <h3>확정</h3>
+            <ol>
+              <li>대상은 <b>Q1(원본 있고 이미 올리는 사람) 4명 → Q4(찍어놓고 안 올리는 사람) 2명</b> 순서다</li>
+              <li>Core Job은 <b>"이미 찍어둔 긴 영상에서, 내가 판단한 순간만 건져서, 공개와 무관하게 내 기록으로 만든다"</b>다</li>
+              <li>가치 선언은 <b>두 문장</b>이다. <b>①</b> AI가 영상 속 나를 끝까지 따라가며 하이라이트를 찾아주고, 내가 선택한 순간을 나 중심의 영상으로 완성한다. <b>②</b> 누구에게 보여주기 위한 기록뿐만 아니라 나를 위해 오래 남겨두는 개인 기록 공간을 제공한다</li>
+              <li><b>가치의 원천은 사용자 트래킹 편집이고, 수익의 경로는 기록 축적과 관계망이다.</b> 둘을 섞지 않는다</li>
+              <li>트래킹이 주는 가치는 둘이다. <b>V1 나를 찾아준다 · V2 나를 크게 잡아준다.</b> V1은 선별 페르소나 6명 전원에게 핵심으로 작동한다</li>
+              <li>1년차 성공 지표는 매출이 아니라 <b>기록 3개 이상 축적 사용자 1만 명 · 처리 영상 12만 편</b>이다</li>
+              <li><b>편집 기능으로 과금하지 않는다.</b> 다만 이것은 수익 설계에 대한 결정이며, 편집의 고객 가치가 작다는 뜻이 아니다</li>
+              <li>차별점의 방어선은 <b>D1 인물 추적 정확도</b>와 <b>선택 데이터로 추적 정확도를 높이는 순환</b> 두 곳이다</li>
+              <li>MVP는 <b>17개 기능</b>이다 — <b>트래킹 편집 8</b>(F1 · F2a · F2b · F3 · F4 · F5a · F18a · F6) · <b>기록 공간 3</b>(F7 · F8 · F22) · <b>소비·관계 5</b>(F11 · F13 · F19 · F20 · F21) · <b>그룹 1</b>(F23). 그중 <b>셋(F2a · F2b · F5a)이 트래킹</b>이고, 첫 검증 대상은 <b>F2b 등장 구간 탐지율 85%</b>다</li>
+              <li><b>관계 모델은 팔로워 · 팔로잉이다.</b> 앞선 판의 팔로우 · 맞팔로우를 걷어냈고, 맞팔로우가 맡던 <b>비공개 공유는 그룹</b>이 가져갔다. 관계는 <b>공개 기록만</b> 정한다</li>
+              <li><b>그룹 초대는 링크로도 가능하되, 참여는 가입자만 할 수 있다.</b> 링크는 카카오톡·문자로 보낼 수 있어 <b>아직 앱을 쓰지 않는 팀원도 부를 수 있고</b>, 그 사람은 가입 후에 참여한다 — 링크가 곧 유입 경로가 된다. 유출되더라도 <b>가입 절차와 인원 상한 20명</b>이 막는다. 그룹 이름은 <b>중복을 허용</b>한다(검색이 아니라 초대로 들어오므로)</li>
+              <li><b>그룹을 나가면 그 그룹에 올린 기록도 함께 내려간다.</b> 본인 기록 저장소에는 그대로 남는다. 나가기 전에 <b>회수될 영상 개수를 명시한 경고</b>를 반드시 보여준다 — "그룹에만 공개"의 약속은 그 관계가 끝나면 함께 끝난다</li>
+              <li><b>그룹(F23 · 소그룹 공유)은 MVP에 포함한다.</b> v0.6에서 새로 제안한 기능이며, F8 공개 범위의 선택지 하나와 F13 피드의 탭 하나로 붙는다. <b>인원 상한은 20명</b>(생성자 포함)으로 확정했고, 초대 방식 등 나머지 세부 규칙은 아직 미정이다</li>
+              <li><b>앱은 소비 화면으로 연다.</b> 탭은 <b>팔로잉 · 추천 · 그룹</b> 셋이고, 진입 시 팔로잉 탭에 영상이 바로 뜬다. 가운데 <b>+ 버튼</b>이 편집·업로드, <b>마이페이지</b>가 내 기록 보관함이다. 좋아요 · 댓글(신고 포함) · 공유(링크 · 카카오톡/메시지)와 <b>저작권이 정리된 음악 라이브러리(F18a)</b>, 그리고 <b>그룹</b>도 MVP에 포함한다</li>
+              <li><b>카테고리별 조회수 랭킹(F15)은 MVP에 넣지 않는다.</b> 순서상 MVP 직후 첫 후속(P1) 자리로 잡아 두었으나, <b>도입 여부 자체는 아직 미정</b>이다 — 순위 경쟁이 부담 없이 남기는 정서와 충돌하는지 먼저 본다</li>
+              <li>우리가 푸는 문제는 <b>게시 이전의 실행 문제</b>로 한정한다. 팔로워 성장과 수익화는 다루지 않는다</li>
+            </ol>
+          </article>
+          <article class="fo" data-tone="open">
+            <h3>확정하지 않음 · 미정</h3>
+            <ul>
+              <li>수익 모델과 가격, 구독 도입 시점</li>
+              <li>AI·클라우드(GPU) 비용 구조</li>
+              <li><b>그룹 안에서의 좋아요·댓글 정책</b> — 그룹 공개 기록에 반응을 어떻게 다룰지 미정. 그 외 <b>MVP 포함 · 인원 상한 20명 · 나갔을 때 회수 · 링크 초대(참여는 가입자만) · 이름 중복 허용은 모두 확정</b>했다</li>
+                  <li>팀 공유 편집 방식과 권한 설계 (F16)</li>
+              <li>랭킹 노출 방식과 순위 산정 주기, 카테고리 목록 (F15 · 시점만 MVP 직후로 확정했다)</li>
+              <li>음악 라이브러리의 곡 확보 경로와 라이선스 비용 (F18a)</li>
+              <li>댓글 신고 접수 후 처리 기준과 운영 주체 (F20)</li>
+              <li>추천 피드의 노출 로직 — MVP는 팔로잉·인기 기준으로 시작하고, 취향 설문(F12) 반영 방식은 미정이다</li>
+              <li><b class="neg">농구 외 종목 확장 시점</b> — 재검증 결과 농구 인구가 3~5만 명으로 내려가면서 <b>1년차 목표 1만 명의 전제가 됐다</b> (20장 논점 1)</li>
+              <li><b class="neg">렌즈B(SNS 광고) 기준 SAM</b> — 우리가 값을 받으려는 시장의 크기를 아직 재지 않았다 (20장 논점 2)</li>
+              <li><b class="neg">국내 미게시 비율 조사 실시 여부</b> — Q4가 최대 시장이라는 판단이 미국 데이터에 걸려 있다 (20장 논점 4)</li>
+              <li>자막 편집 범위 (F18b) — 음악은 <b>사용 가능한 라이브러리 제공</b>으로 확정했다</li>
+              <li>촬영 가이드 제공 여부 (F17 · Q2 확장)</li>
+              <li><b>앱 안 DM</b> — 미정이 아니라 후순위다. 지금은 카카오톡 링크와 문자 공유(F21)만 제공한다. 도입 시점 미정</li>
+                  <li><b>팔로우 승인 방식</b> — 승인제인지 자동인지 미정 (F11)</li>
+                  <li><b>공개 범위는 기본값 "나만 보기", 표시는 글자 배지</b>(공개 · 그룹 · 나만)로 확정했다 (F8). 배지는 <b>모서리에 반투명으로 얹어 영상을 가리지 않는다</b></li>
+                  <li><b>장면 후보 개수 30개</b> — 초안 수치이며 확정값이 아니다 (F3)</li>
+                  <li>고객 지원 정책</li>
+            </ul>
+            <p style="margin-top: var(--space-2);">이 항목들을 임의로 가정하지 않았다. 확정 사실과 섞이면 문서 전체의 신뢰가 떨어진다. <b>붉게 표시한 셋은 20장에서 오늘 답을 정하자고 올린 논점</b>이다.</p>
+          </article>
+        </div>
+        <div class="reveal delay-2">
+          <div class="src-cols">
+            <div class="src-block">
+              <b>내부 참조 문서</b>
+              <p><code>tam-sam-som-segment-sns-shortform.md</code> <b class="num">(2026-08-28 재검증본 · 기준 문서)</b> — 세그먼트 축과 Q1~Q4 정의, 재구성한 SAM, 재산정한 농구 인구·전환율, SOM 지표, 근거 데이터 10건. 이전 HTML 발표본과 숫자가 다른 항목은 이 파일을 따른다</p>
+              <p><code>docs/prototype/prototype_v0_6.html</code> — 앱 화면 프로토타입 14장. <b>이 문서의 MVP 정의는 여기에 맞춘다</b> — 화면↔기능(F번호) 매핑, 관계 모델, 공개 범위, 상단 탭 구성의 기준</p>
+              <p><code>Personas/CW_personas.html</code> — 페르소나 9명, CJM 관점 Pain, JTBD 선언</p>
+              <p><code>Competitive_Value_Analysis/competitive-value-analysis.html</code> — 경쟁사 9곳 브리핑과 가치 선언문, 2축 지도, 출처 링크 전체</p>
+              <p><code>KSFs/ksfs.html</code> · <code>Value_Chain/value-chain.html</code> · <code>Five_Forces_model/five-forces.html</code> · <code>deck-record-sns.html</code></p>
+            </div>
+            <div class="src-block">
+              <b>외부 출처</b>
+              <p><b>경쟁사 수치</b> — Meta 2025 연간 실적(IR 공시) · CNBC · eMarketer · LY Corporation 미디어 가이드 · Business of Apps · Rest of World · Statista · Apple App Store · Ventech · GetLatka · Youth Sports Business Report · Pixellot · Hudl · VLLO · Sensor Tower. 전체 링크는 경쟁사 분석 문서 16번 슬라이드에 정리돼 있다.</p>
+              <p><b>경쟁사 공식 가치 선언</b> <b class="num">(2026-08-28 웹 확인)</b> — meta.com 회사 소개 · bytedance.com · TikTok 뉴스룸 · lycorp.co.jp 미션 페이지 · capcut.com · 비모소프트 기업 소개 · setlog 앱 스토어 소개 · veo.com 매니페스토 · pixellot.tv 회사 소개 · hudl.com 회사 소개 · Wondershare 공식 자료 · vrew.ai. AlphaCut은 공식 미션문이 없어 서비스 소개 문구와 사업 활동으로 재선언했다.</p>
+              <p><b>근거 데이터</b> — Pew Research 2023 · Adobe 2024 · Wyzowl 2024·2025·2026 · OpusClip · Podia(900명+) · MBO Partners 2024 · 2023 CHI 학술연구 · 홈비디오 편집 선행연구 2편(SPIE 6506, 2007 · BCS-HCI 2007, <b class="neg">수치 폐기 후 정성 근거로만 사용</b>). 원 출처와 한계는 TAM·SAM·SOM 재검증본 5-3장에 정리돼 있다.</p>
+            </div>
+          </div>
+        </div>
+        <p class="notice reveal delay-3">작성 모델 <b>claude-opus-5[1m]</b> · Effort Level <b>high</b> · 작성 기준일 <b>2026-08-27</b> · <b>2026-08-28 갱신</b> — TAM·SAM·SOM 재검증본(<code>tam-sam-som-segment-sns-shortform.md</code>)을 반영해 10·11·16·19장을 고치고 20장을 새로 넣었다.<br><b class="num">2026-08-29 개정 · VPS 0.2</b> — 가치 선언을 <b>두 문장</b>으로 나누고 표지 헤드라인을 그에 맞춰 다시 썼다. 14장에 소비·관계 기능의 판정 근거표를 넣고, 21장 Job-Feature Map을 <b>25개 기능</b>으로, 22장 MVP를 <b>16개 기능</b>으로 다시 확정했다(F18 분할, F19~F22 신설, F11·F13·F18a MVP 승격, F15 P1 확정).<br><b class="num">2026-08-29 개정 · VPS 0.3</b> — <b>프로토타입 v0.6을 MVP 기준으로 삼아 맞췄다.</b> 관계 모델을 <b>팔로우·맞팔로우 → 팔로워·팔로잉</b>으로 바꾸고, 맞팔로우가 맡던 비공개 공유를 <b>그룹(v0.6 신규 제안)</b>으로 옮겼다. 공개 범위를 <b>전체공개 · 그룹에만 공개 · 나만 보기</b>로, 상단 탭을 <b>팔로잉 · 추천 · 그룹</b>으로 고쳤다. MVP는 <b>16 → 17개</b>가 됐다 — <b>그룹을 MVP에 포함</b>하기로 확정했고, F22 · F13 · F19 · F20 · F21은 기존대로 MVP에 남긴다.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="deck-footer">
+    <span class="footer-context" id="footerContext">HILiT · Value Proposition</span>
+    <div class="footer-controls">
+      <button class="nav-button" id="prevButton" type="button" aria-label="이전 슬라이드">←</button>
+      <span class="counter" id="counter">01 / 23</span>
+      <button class="nav-button" id="nextButton" type="button" aria-label="다음 슬라이드">→</button>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const dotsHost = document.getElementById('railDots');
+      const counter = document.getElementById('counter');
+      const mobileCounter = document.getElementById('mobileCounter');
+      const footerContext = document.getElementById('footerContext');
+      const prevButton = document.getElementById('prevButton');
+      const nextButton = document.getElementById('nextButton');
+      let current = Math.max(0, Math.min(slides.length - 1, Number(location.hash.replace('#', '')) - 1 || 0));
+      let touchStartX = 0;
+
+      const dots = slides.map((slide, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'rail-dot';
+        button.setAttribute('aria-label', `${index + 1}번 슬라이드: ${slide.dataset.title}`);
+        button.addEventListener('click', () => show(index));
+        dotsHost.appendChild(button);
+        return button;
+      });
+
+      function formatIndex(value) { return String(value).padStart(2, '0'); }
+
+      function show(index) {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((slide, slideIndex) => {
+          const active = slideIndex === current;
+          slide.classList.toggle('is-active', active);
+          slide.setAttribute('aria-hidden', String(!active));
+          dots[slideIndex].setAttribute('aria-current', String(active));
+        });
+        const countText = `${formatIndex(current + 1)} / ${formatIndex(slides.length)}`;
+        counter.textContent = countText;
+        mobileCounter.textContent = countText;
+        footerContext.textContent = slides[current].dataset.title;
+        prevButton.disabled = current === 0;
+        nextButton.disabled = current === slides.length - 1;
+        history.replaceState(null, '', `#${current + 1}`);
+        document.title = `HILiT | ${slides[current].dataset.title}`;
+        slides[current].scrollTop = 0;
+      }
+
+      document.querySelectorAll('[data-goto]').forEach((element) => {
+        element.addEventListener('click', () => show(Number(element.dataset.goto) - 1));
+      });
+
+      prevButton.addEventListener('click', () => show(current - 1));
+      nextButton.addEventListener('click', () => show(current + 1));
+      document.addEventListener('keydown', (event) => {
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+        if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'PageDown') { event.preventDefault(); show(current + 1); }
+        if (event.key === 'ArrowLeft' || event.key === 'Backspace' || event.key === 'PageUp') { event.preventDefault(); show(current - 1); }
+        if (event.key === 'Home') { event.preventDefault(); show(0); }
+        if (event.key === 'End') { event.preventDefault(); show(slides.length - 1); }
+      });
+      document.addEventListener('touchstart', (event) => { touchStartX = event.changedTouches[0].clientX; }, { passive: true });
+      document.addEventListener('touchend', (event) => {
+        const distance = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(distance) > 60) show(current + (distance < 0 ? 1 : -1));
+      }, { passive: true });
+      window.addEventListener('hashchange', () => show(Number(location.hash.replace('#', '')) - 1 || 0));
+      show(current);
+    })();
+  </script>
+</body>
+</html>
