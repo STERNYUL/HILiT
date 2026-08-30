@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>스파이크 실행 계획</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv1" href="#h0">스파이크 실행 계획</a><a class="lv2" href="#h1">0. 이 계획이 정하는 것</a><a class="lv2" href="#h2">1. 🔴 SP-1 — 외부 추론 API 선정·벤치마크</a><a class="lv2" href="#h3">2. SP-2 — Gemini 보조 경로 (구 S6 재정의)</a><a class="lv2" href="#h4">3. SP-3 — 브라우저 렌더 (구 S5)</a><a class="lv2" href="#h5">4. SP-4 — 함수 실행시간 · 토큰 원가 (구 S2·S3)</a><a class="lv2" href="#h6">5. 순서와 의존</a><a class="lv2" href="#h7">6. 재수립 대상 5건 — 입력이 어디서 오는가</a><a class="lv2" href="#h8">7. 이 계획이 답하지 못하는 것</a></nav>
+<main>
+<h1 id="h0">스파이크 실행 계획</h1>
+<p><strong>목적</strong> 웹 스택 SRS의 미결 항목 중 <strong>스파이크로 풀리는 것</strong>을 실행 가능한 형태로 정의한다 <strong>근거</strong> <code>AUDIT/REVIEW_웹스택-미결6건.md</code> · <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> (v2.2 · T1 확정) <strong>작성일</strong> 2026-08-30</p>
+<hr>
+<h2 id="h1">0. 이 계획이 정하는 것</h2>
+<p><strong>"해보자"가 아니라 "무엇이 나오면 통과인가"를 정한다.</strong> 성공 기준 없는 스파이크는 결과가 나와도 해석이 갈린다.</p>
+<div class="tw"><table><thead><tr><th>ID</th><th>스파이크</th><th style="text-align:center">우선순위</th><th>막히면</th></tr></thead><tbody><tr><td><strong>SP-1</strong></td><td>외부 추론 API 선정·벤치마크</td><td style="text-align:center"><strong>0</strong></td><td>목표 수치 5건 중 <strong>4건의 입력이 없다</strong></td></tr><tr><td><strong>SP-2</strong></td><td>Gemini 보조 경로 (구 S6 재정의)</td><td style="text-align:center">1</td><td>추론 호출량 최적화 기회 상실</td></tr><tr><td><strong>SP-3</strong></td><td>브라우저 렌더 (구 S5)</td><td style="text-align:center">1</td><td>REQ-NF-004 재정의 불가 · 완성 경로 미확정</td></tr><tr><td><strong>SP-4</strong></td><td>함수 실행시간 · 토큰 원가 (구 S2·S3)</td><td style="text-align:center">3</td><td>참고값 부재</td></tr></tbody></table></div>
+<blockquote><p><strong>결정 사안은 여기 없다.</strong> 자동재생·F9·탭 종료는 스파이크로 풀리지 않아 <strong>SRS v1.5·v2.2에 이미 반영</strong>했다.</p></blockquote>
+<hr>
+<h2 id="h2">1. 🔴 SP-1 — 외부 추론 API 선정·벤치마크</h2>
+<p><strong>T1 확정으로 이 제품의 핵심 AI가 외부 API로 나갔다. 그 API를 고르는 일이 지금 가장 중요하다.</strong></p>
+<h3 id="h3">1.1 목적</h3>
+<p>REQ-FUNC-002 · 003 · 006 · 027과 REQ-NF-003을 만족할 <strong>추적 추론 서비스</strong>를 선정하고, <strong>목표 수치 재수립의 입력</strong>을 확보한다.</p>
+<h3 id="h3">1.2 결격 기준 — 먼저 거른다</h3>
+<p><strong>아래 중 하나라도 해당하면 후보에서 제외한다.</strong> 성능을 보기 전에 본다.</p>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>결격 사유</th><th>근거</th></tr></thead><tbody><tr><td style="text-align:center"><strong>K1</strong></td><td>🔴 <strong>입력 영상을 학습에 사용</strong> (옵트아웃 불가)</td><td>파일럿 동의서가 <em>"학습 데이터로 쓰지 않음"</em> 을 명시했다. 이 약속이 깨지면 <strong>클럽과의 신뢰가 먼저 무너진다</strong></td></tr><tr><td style="text-align:center"><strong>K2</strong></td><td>🔴 <strong>bbox 시계열을 반환하지 않음</strong></td><td>REQ-FUNC-006의 입력이 없다. 리프레이밍이 성립하지 않는다</td></tr><tr><td style="text-align:center"><strong>K3</strong></td><td>비동기 + webhook 미지원</td><td>Vercel 함수 실행시간 안에서 동기 대기 불가</td></tr><tr><td style="text-align:center"><strong>K4</strong></td><td>데이터 처리 위치·보존 정책을 명시하지 않음</td><td>REQ-NF-010 · 017 · 022의 전제</td></tr><tr><td style="text-align:center"><strong>K5</strong></td><td>40분급 입력을 받지 못함</td><td>REQ-FUNC-001의 대상 자체</td></tr></tbody></table></div>
+<blockquote><p><strong>K1이 가장 먼저다.</strong> 미성년자 영상을 다루는 파일럿에서 <em>"학습에 안 씁니다"</em> 라고 말해 놓고 API가 학습에 쓰면, 그것은 성능 문제가 아니라 <strong>약속 위반</strong>이다.</p></blockquote>
+<h3 id="h3">1.3 평가 항목</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>측정</th><th>연결 요구사항</th></tr></thead><tbody><tr><td style="text-align:center"><strong>B1</strong></td><td><strong>탐지율</strong> — 정답 구간 대비 (제외 후)</td><td>IoU ≥ 0.5 정탐</td><td>REQ-FUNC-003 · O9</td></tr><tr><td style="text-align:center"><strong>B2</strong></td><td><strong>재식별 정확도 · 오인식률</strong></td><td>가림 구간 라벨 정답셋</td><td>REQ-FUNC-002</td></tr><tr><td style="text-align:center"><strong>B3</strong></td><td><strong>신뢰도 값 제공 여부</strong></td><td>구간별 confidence 반환</td><td><strong>REQ-FUNC-027</strong> — 없으면 제외 로직이 불가</td></tr><tr><td style="text-align:center"><strong>B4</strong></td><td><strong>처리 시간</strong> — 40분 원본</td><td>요청 → webhook 수신</td><td>REQ-NF-003</td></tr><tr><td style="text-align:center"><strong>B5</strong></td><td><strong>편당 원가</strong></td><td>단가 × 40분</td><td>REQ-NF-013</td></tr><tr><td style="text-align:center"><strong>B6</strong></td><td>촬영 조건별 편차</td><td>거리·조도·복장 유사도</td><td>RISK-04</td></tr><tr><td style="text-align:center"><strong>B7</strong></td><td>🔺 <strong>규제 부담</strong></td><td>채택 시 REQ-NF-010·016·017 산출물이 몇 종 늘어나는가 · <strong>파일럿 동의서를 다시 받아야 하는가</strong></td><td>04_API후보조사 §6</td></tr><tr><td style="text-align:center"><strong>B8</strong></td><td>🔴 <strong>입력 해상도별 탐지율</strong></td><td><strong>원본 · 1/2 · 1/4</strong> 각각에서 B1·B2 재측정</td><td><strong>전송비 ↔ O9 교환비</strong></td></tr></tbody></table></div>
+<h3 id="h3">🔴 B8을 왜 넣는가 — 전송비와 탐지율이 같은 손잡이에 걸려 있다</h3>
+<p>원본을 그대로 추론 API에 넘기면 <strong>연 12만 편 × 4GB = 480TB 전송</strong>이 발생한다. 저해상도로 전처리하면 전송량이 <strong>제곱으로</strong> 준다(1/2 해상도 → 1/4 전송).</p>
+<p><strong>그런데 다운스케일은 탐지율을 떨어뜨린다.</strong> 이 제품의 조건이 <em>"코트 반대편에서 화면 구석에 작게"</em> 이므로 <strong>원거리 인물이 특히 취약</strong>하다.</p>
+<blockquote><p><strong>지금은 그 교환비를 모른 채 ADR-3(저해상도 1차)을 적용하고 있다.</strong> B8이 나와야 <em>"탐지율을 얼마나 포기하면 전송비를 얼마나 아끼는가"</em> 를 계산할 수 있다.</p>
+<p><strong>B8은 정답셋을 3번 돌리므로 실행 루프 구조에 영향을 준다.</strong> 나중에 추가하면 전체를 다시 돌려야 하므로 <strong>처음부터 넣는다.</strong></p></blockquote>
+<h3 id="h3">1.4 🔴 정답셋을 두 단계로 나눈다</h3>
+<p><strong>SRS §6.4.2는 정답셋 n=100편을 요구하지만, 그것은 Gate A 판정용이다.</strong> 선정 단계에 100편을 만들면 <strong>선정 전에 가장 비싼 작업을 하게 된다.</strong></p>
+<div class="tw"><table><thead><tr><th>단계</th><th style="text-align:center">규모</th><th>용도</th><th>시점</th></tr></thead><tbody><tr><td><strong>선정용</strong></td><td style="text-align:center"><strong>n = 10~15편</strong></td><td>후보 API 비교 · 결격 판정</td><td><strong>지금</strong></td></tr><tr><td><strong>판정용</strong></td><td style="text-align:center">n = 100편</td><td>Gate A 통과 판정</td><td>선정 후 · Q12(국내 설문) 이후</td></tr></tbody></table></div>
+<p><strong>선정용 정답셋 구성</strong> — 조건 다양성이 규모보다 중요하다.</p>
+<div class="tw"><table><thead><tr><th>조건</th><th style="text-align:center">편수</th></tr></thead><tbody><tr><td>근거리(하프코트) · 밝은 실내</td><td style="text-align:center">3</td></tr><tr><td>원거리(풀코트) · 밝은 실내</td><td style="text-align:center">3</td></tr><tr><td>원거리 · <strong>어두운 실내</strong></td><td style="text-align:center">3</td></tr><tr><td><strong>복장 유사도 높음</strong>(같은 유니폼)</td><td style="text-align:center">3</td></tr><tr><td>다인원(8명 이상) 혼재</td><td style="text-align:center">3</td></tr></tbody></table></div>
+<blockquote><p><strong>복장 유사도가 높은 케이스를 반드시 넣는다.</strong> 같은 유니폼을 입은 팀 경기가 재식별의 최악 조건이고, <strong>이 제품의 실제 사용 조건</strong>이다.</p></blockquote>
+<h3 id="h3">1.5 산출</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>산출</th><th>쓰이는 곳</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td>후보 API 결격 판정표</td><td>선정</td></tr><tr><td style="text-align:center">2</td><td><strong>B1~B8 실측표</strong></td><td><strong>목표 수치 5건 중 4건 재수립</strong> · B8은 ADR-3 교환비</td></tr><tr><td style="text-align:center">3</td><td><strong>편당 원가</strong> — 추론 + <strong>전송량 실측</strong></td><td>REQ-NF-013 <strong>4항목</strong> 중 ①③ 확정 · Q3</td></tr><tr><td style="text-align:center">4</td><td>제외 임계 <code>τ</code> 초기값</td><td>REQ-FUNC-027 · SRS §6.4.4 1a</td></tr><tr><td style="text-align:center">5</td><td>촬영 조건별 편차</td><td>O3 거리 조건부 재정의 · Q2</td></tr></tbody></table></div>
+<h3 id="h3">1.6 실패 시</h3>
+<p><strong>결격 기준을 통과하는 후보가 없으면</strong> — T1이 성립하지 않는다. <strong>T2(범위 축소)로 되돌아가 VPS부터 재검토</strong>해야 한다. 이 경우가 이 프로젝트에서 가장 무거운 분기다.</p>
+<hr>
+<h2 id="h3">2. SP-2 — Gemini 보조 경로 (구 S6 재정의)</h2>
+<h3 id="h4">2.1 질문이 바뀌었다</h3>
+<div class="tw"><table><thead><tr><th></th><th>구 S6</th><th><strong>SP-2</strong></th></tr></thead><tbody><tr><td>질문</td><td><em>"Gemini가 사람을 찾아내는가"</em></td><td><strong>"Gemini가 추론 호출량을 줄여 주는가"</strong></td></tr><tr><td>성격</td><td>실현 가능성</td><td><strong>원가 최적화</strong></td></tr><tr><td>실패 시</td><td>설계 전체 재검토</td><td>최적화 포기 · <strong>설계는 그대로</strong></td></tr></tbody></table></div>
+<p><strong>T1 확정으로 추적은 외부 API가 맡는다.</strong> Gemini에게 남는 역할은 <em>"이 구간이 볼 만한가"</em> 이다.</p>
+<h3 id="h4">2.2 분업 가설</h3>
+<pre class="code"><code>40분 원본
+  ↓ ① Gemini — 의미 구간 후보 산출 (저비용)
+  "슛·돌파·수비" 구간 N개
+  ↓ ② 외부 추론 API — 그 구간만 인물 추적 (고비용)
+  bbox 시계열 · 재식별
+  ↓ ③ 후보 30개</code></pre>
+<p><strong>②의 입력이 40분 전체가 아니라 N개 구간이면 추론 호출량이 줄어든다.</strong></p>
+<h3 id="h4">2.3 성공 기준</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>기준</th><th>임계</th></tr></thead><tbody><tr><td style="text-align:center"><strong>G1</strong></td><td>Gemini가 산출한 구간이 <strong>실제 등장 구간을 포함</strong>하는가</td><td>포함률 <strong>[TBD]</strong> — SP-1의 B1과 비교해 정함</td></tr><tr><td style="text-align:center"><strong>G2</strong></td><td>구간 총 길이가 원본 대비 <strong>충분히 짧은가</strong></td><td>원본의 <strong>50% 이하</strong>여야 절감 효과 <code>[PROPOSED]</code></td></tr><tr><td style="text-align:center"><strong>G3</strong></td><td>①+② 합산 원가 &lt; ② 단독 원가</td><td><strong>절감액 &gt; Gemini 비용</strong></td></tr><tr><td style="text-align:center"><strong>G4</strong></td><td>① 추가로 인한 지연 &lt; 절감 시간</td><td>전체 처리 시간이 늘지 않을 것</td></tr></tbody></table></div>
+<blockquote><p>🔴 <strong>G1이 핵심이다.</strong> Gemini가 놓친 구간은 ②가 볼 기회조차 없다. <strong>이 경로는 탐지율의 상한을 Gemini가 결정하게 만든다.</strong> G1이 낮으면 <strong>원가를 아끼려다 O9를 잃는다.</strong></p></blockquote>
+<h3 id="h4">2.4 실패 시</h3>
+<p><strong>40분 전체를 외부 추론 API에 넘긴다.</strong> 원가가 올라갈 뿐 <strong>기능은 그대로</strong>다. SP-1이 통과했다면 제품은 성립한다.</p>
+<hr>
+<h2 id="h4">3. SP-3 — 브라우저 렌더 (구 S5)</h2>
+<h3 id="h5">3.1 목적</h3>
+<p>SRS v2.2 §3.3이 전제한 <strong>클라이언트 렌더</strong>가 실제로 되는지, <strong>어느 단말부터 안 되는지</strong> 확인한다.</p>
+<h3 id="h5">3.2 성공 기준</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>확인</th><th>기준</th></tr></thead><tbody><tr><td style="text-align:center"><strong>S3-a</strong></td><td>WebCodecs 또는 ffmpeg.wasm으로 <strong>15초 세로 숏폼 + 음악 병합</strong></td><td>산출물 재생 가능 · 음성 동기</td></tr><tr><td style="text-align:center"><strong>S3-b</strong></td><td><strong>소요 시간</strong></td><td>단말 등급별 p95 — REQ-NF-004 재정의 입력</td></tr><tr><td style="text-align:center"><strong>S3-c</strong></td><td>🔴 <strong>하한선</strong></td><td><strong>어느 등급부터 실패하는가 · 그 비율</strong></td></tr><tr><td style="text-align:center"><strong>S3-d</strong></td><td>발열·배터리</td><td>연속 3회 처리 시 스로틀링 여부</td></tr><tr><td style="text-align:center"><strong>S3-e</strong></td><td>탭 종료 복구</td><td>R1(이탈 경고) · R2(선택 서버 저장) 동작</td></tr><tr><td style="text-align:center"><strong>S3-f</strong></td><td>🔺 <strong>규모 재판정 근거</strong></td><td>결과에 따라 REQ-FUNC-008의 <strong>L 판정</strong>(SRS §4.3)을 유지할지 <strong>M으로 환원</strong>할지</td></tr></tbody></table></div>
+<h3 id="h5">3.3 🔴 S3-c가 핵심이다</h3>
+<p><strong>하한선을 모르면 REQ-NF-004를 재정의할 수 없고, 하한 미만 사용자를 어떻게 할지도 정할 수 없다.</strong></p>
+<div class="tw"><table><thead><tr><th>하한 미만 처리</th><th>판단</th></tr></thead><tbody><tr><td>안내 후 차단</td><td>🔴 그 사용자는 <strong>완성을 못 한다</strong> — Core Job 미충족</td></tr><tr><td>저화질 렌더로 대체</td><td>🟡 O3(구도 만족도)와 충돌 가능</td></tr><tr><td><strong>서버 렌더 예외 경로</strong></td><td>🔴 C-TEC-002 위반 · 하지만 <strong>유일하게 완성을 보장</strong></td></tr></tbody></table></div>
+<blockquote><p><strong>이 셋 중 어느 것도 공짜가 아니다.</strong> S3-c 실측 후 <strong>제품 결정</strong>으로 정해야 한다(v1.5 Q18).</p></blockquote>
+<h3 id="h5">3.4 대상 단말</h3>
+<div class="tw"><table><thead><tr><th>등급</th><th>예</th><th style="text-align:center">최소 표본</th></tr></thead><tbody><tr><td>상</td><td>최근 2년 플래그십</td><td style="text-align:center">2대</td></tr><tr><td>중</td><td>3~4년 전 중급기</td><td style="text-align:center">2대</td></tr><tr><td><strong>하</strong></td><td><strong>5년 이상 · 저가형</strong></td><td style="text-align:center"><strong>3대</strong></td></tr></tbody></table></div>
+<p><strong>하 등급을 가장 많이 본다.</strong> 실패가 거기서 나오기 때문이다.</p>
+<hr>
+<h2 id="h5">4. SP-4 — 함수 실행시간 · 토큰 원가 (구 S2·S3)</h2>
+<h3 id="h6">4.1 T1 확정으로 중요도가 내려갔다</h3>
+<p>긴 처리가 외부로 나가 <strong>Vercel 함수에는 밀리초 작업만 남는다</strong> — 업로드 개시·코덱 검증·추론 요청 발신·webhook 수신·후보 조회.</p>
+<p><strong>어느 것도 실행시간 상한에 근접하지 않는다.</strong> 값은 알아야 하되 <strong>차단 요인이 아니라 참고값</strong>이다.</p>
+<h3 id="h6">4.2 범위를 넓힌다</h3>
+<p>🔴 <strong>원래 S3(Gemini 토큰 원가)만으로는 편당 원가를 산정할 수 없다.</strong></p>
+<div class="tw"><table><thead><tr><th>원가 항목</th><th>출처</th><th style="text-align:center">비중</th></tr></thead><tbody><tr><td><strong>외부 추론 API</strong></td><td><strong>SP-1 B5</strong></td><td style="text-align:center">🔴 <strong>주</strong></td></tr><tr><td>Gemini 토큰</td><td>SP-4</td><td style="text-align:center">보조</td></tr><tr><td>Vercel 실행시간</td><td>SP-4</td><td style="text-align:center">미미</td></tr><tr><td>Supabase 저장·전송</td><td>SP-4</td><td style="text-align:center">보조</td></tr><tr><td>렌더</td><td><strong>사용자 단말</strong></td><td style="text-align:center"><strong>0원</strong></td></tr></tbody></table></div>
+<p><strong>SP-4 단독으로는 REQ-NF-013을 채울 수 없다.</strong> SP-1의 B5와 합쳐야 완성된다.</p>
+<hr>
+<h2 id="h6">5. 순서와 의존</h2>
+<pre class="mermaid">flowchart LR
+    P0["선정용 정답셋&lt;br/&gt;n=10~15"] --&gt; SP1["SP-1&lt;br/&gt;추론 API 선정"]
+    SP1 --&gt; SP2["SP-2&lt;br/&gt;Gemini 보조"]
+    SP1 --&gt; M["목표 수치&lt;br/&gt;재수립 4건"]
+    SP1 --&gt; C["REQ-NF-013&lt;br/&gt;원가 확정"]
+    SP4["SP-4&lt;br/&gt;실행시간·토큰"] --&gt; C
+    SP3["SP-3&lt;br/&gt;브라우저 렌더"] --&gt; M2["REQ-NF-004&lt;br/&gt;등급별 재정의"]
+    SP3 --&gt; Q18["Q18&lt;br/&gt;하한 미만 처리"]
+    SP1 -.-&gt;|"결격 통과 0건"| T2["🔴 T2 재검토&lt;br/&gt;VPS부터"]
+    style SP1 fill:#ffd9cc,color:#111
+    style T2 fill:#ffe0e0,color:#111</pre>
+<div class="tw"><table><thead><tr><th style="text-align:center">순서</th><th>항목</th><th>병렬</th></tr></thead><tbody><tr><td style="text-align:center"><strong>1</strong></td><td>선정용 정답셋 10~15편 구축</td><td>—</td></tr><tr><td style="text-align:center"><strong>2</strong></td><td><strong>SP-1</strong> 추론 API 선정·벤치마크</td><td><strong>SP-3와 병렬</strong></td></tr><tr><td style="text-align:center">2</td><td><strong>SP-3</strong> 브라우저 렌더</td><td>SP-1과 병렬</td></tr><tr><td style="text-align:center">3</td><td>SP-2 Gemini 보조 경로</td><td>SP-1 결과 필요</td></tr><tr><td style="text-align:center">3</td><td>SP-4 실행시간·토큰 원가</td><td>독립</td></tr><tr><td style="text-align:center">4</td><td>목표 수치 5건 재수립 · REQ-NF-004 · 013 확정</td><td>전부 필요</td></tr></tbody></table></div>
+<p><strong>SP-1과 SP-3은 담당자가 다르고(AI 리드 / 클라이언트 개발자) 서로의 결과를 필요로 하지 않는다.</strong> 병렬이 맞다.</p>
+<hr>
+<h2 id="h7">6. 재수립 대상 5건 — 입력이 어디서 오는가</h2>
+<blockquote><p>🔴 <strong>다섯 중 넷의 입력이 Gemini가 아니라 외부 추론 API다.</strong> <em>"스파이크 결과로 재수립"</em> 이라고만 적으면 어느 스파이크인지 불명확해진다.</p></blockquote>
+<div class="tw"><table><thead><tr><th>지표</th><th>현재</th><th><strong>입력</strong></th></tr></thead><tbody><tr><td>탐지율 (O9)</td><td>85% <code>[HYPOTHESIS]</code></td><td><strong>SP-1 B1</strong></td></tr><tr><td>오인식률</td><td>≤ 2%</td><td><strong>SP-1 B2</strong></td></tr><tr><td>탐지 시간 (REQ-NF-003)</td><td>p95 ≤ 8분</td><td><strong>SP-1 B4</strong></td></tr><tr><td>편당 원가 (REQ-NF-013)</td><td><code>[TBD]</code></td><td><strong>SP-1 B5 + SP-4</strong></td></tr><tr><td>렌더 시간 (REQ-NF-004)</td><td>p95 ≤ 90초</td><td><strong>SP-3 S3-b·c</strong></td></tr><tr><td><em>(참고)</em> 구도 만족도 (O3)</td><td>80% <code>[HYPOTHESIS]</code></td><td>SP-1 B6 → 거리 조건부 재정의</td></tr></tbody></table></div>
+<hr>
+<h2 id="h8">7. 이 계획이 답하지 못하는 것</h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>왜</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td><strong>국내 사용자가 실제로 원본을 쌓아두는가</strong></td><td>Q12(국내 설문) 소관. <strong>스파이크와 무관하며 더 먼저다</strong></td></tr><tr><td style="text-align:center">2</td><td>클럽이 지불할 의사가 있는가</td><td>Wizard of Oz 파일럿 소관</td></tr><tr><td style="text-align:center">3</td><td>하한 미만 단말 처리 방침</td><td>S3-c 실측 후 <strong>제품 결정</strong></td></tr><tr><td style="text-align:center">4</td><td>무음 소비 비율이 높을 때의 대응</td><td>베타 실측 후 <strong>제품 결정</strong>(Q17)</td></tr></tbody></table></div>
+<blockquote><p><strong>SRS §6.4.4가 정한 0순위는 여전히 Q12(국내 설문)다.</strong> 이 스파이크 계획은 그것을 대체하지 않는다 — <em>"만들 수 있는가"</em> 를 답할 뿐이고, <em>"만들 이유가 있는가"</em> 는 설문이 답한다.</p></blockquote>
+<hr>
+<p><em>이 계획은 실행 가능성 확인을 목적으로 하며, 제품 결정을 대신하지 않는다. 각 스파이크의 실패는 설계 변경으로 이어지되 SP-1의 결격 전무만은 사업 판단(T2)으로 이어진다.</em></p>
+<p class="meta">스파이크 실행 계획 · 원본 03_스파이크_실행계획.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) mermaid.initialize({startOnLoad:true, theme: dark?'dark':'neutral', securityLevel:'loose'});
+})();
+</script>
+</body></html>
