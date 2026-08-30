@@ -1,0 +1,426 @@
+# SRS Requirements & Architecture Audit
+
+**감사 대상** `[SRS]hilit-SRSv1.4.md` (요구사항 44건 · 시나리오 42건)
+**기준 문서** `PRD/HILiT_PRD_v0.1.md` (US 6 · AC 23 · AF 9 · F 26 · O 10)
+**보조 대조** `hilit-srs-v1_0.html`(팀 SRS) · `prototype_v0_6.html` · `VPS_v0_3.html`
+**감사일** 2026-08-30 · **기준** ISO/IEC/IEEE 29148:2018
+
+---
+
+## 0. Executive Summary
+
+**판정: FAIL**
+
+문서의 서술 품질과 결정 근거는 충실하나, **감사 기준이 요구하는 추적 체인이 세 지점에서 끊긴다.**
+
+| 끊긴 지점 | 내용 |
+| --- | --- |
+| **US-6 → REQ** | PRD의 여섯 번째 Story가 SRS 추적성 매트릭스 `Story` 열에 **존재하지 않는다** |
+| **REQ → Component** | **Component Diagram이 없다.** v1.1의 시스템 구성도가 §3 재구조화 과정에서 표로 대체되며 소실됐다 |
+| **AC → REQ** | PRD의 AC 32건 중 SRS가 **ID로 역참조하는 것은 3건**뿐이다. 내용은 대부분 보존됐으나 **ID 링크가 없어 기계적 추적이 불가능**하다 |
+
+**추가로 v1.3 개정의 부작용이 확인됐다.** 요구사항을 60 → 43건으로 줄이면서 **AI 품질 지표 3건(탐지율·오탐률·구도 만족도)이 REQ-NF에서 사라졌다.** 내용은 REQ-FUNC 인수기준과 SC로 이동했으나, **KPI → REQ-NF 매핑을 요구하는 감사 기준(G2)에는 미달**한다.
+
+**반면 다음은 기준을 초과 충족한다** — Sequence Diagram 9개(요구 3~5), 실패 경로 시나리오 12건, 설계 결정에 대한 검증 항목·재검토 조건 명시.
+
+---
+
+## 1. Audit Dashboard
+
+| Gate | 기준 | 결과 | Coverage | Critical Finding |
+| --- | --- | :---: | ---: | --- |
+| **G1** | Story/AC → REQ-FUNC | 🔴 **FAIL** | Story **83.3%**<br>AC 내용 90.6%<br>AC ID **9.4%** | US-6 매트릭스 부재 · AC1-2 수치 소실 · AC6-1 미반영 |
+| **G2** | KPI → REQ-NF | 🟡 **PARTIAL** | REQ-NF 정의 **10%**<br>매핑 존재 100% | O2~O10 중 REQ-NF로 정의된 것 없음 |
+| **G3** | API Coverage | 🟡 **PARTIAL** | **85.7%** | `PATCH /records/{id}/privacy` → `/visibility` 무단 개명 |
+| **G4** | Entity / Schema | 🔴 **FAIL** | 존재 100%<br>스키마 **0%** | 타입·PK/FK·제약·인덱스·보존기간 전무 · 엔티티 5건 개명 미문서화 |
+| **G5** | Traceability | 🔴 **FAIL** | 완전 체인 **0%** | Component 계층 부재로 어떤 체인도 완결되지 않음 |
+| **G6** | Architecture Diagrams | 🟡 **PARTIAL** | 3/5 | **Use Case · Component 부재** · Class Diagram이 enum만 |
+| **G7** | ISO 29148 구조 | 🟢 **PASS** | — | 확장 절 전부 조항 근거 보유 |
+
+### Coverage 산출 근거
+
+```
+Story      5/6   = 83.3%   ← §5.1 Story 열에 US-6 없음
+AC (내용)  29/32 = 90.6%   ← FULL 29 · PARTIAL 2 · MISSING 1
+AC (ID)     3/32 =  9.4%   ← SRS가 AC ID로 역참조하는 것: AC1-3 · AC2-3 · AF-4
+KPI→REQ-NF  1/10 = 10.0%   ← REQ-NF로 정의된 O: O1(REQ-NF-003) 뿐
+API         6/7  = 85.7%   ← 경로명 불일치 1건
+Entity(존재)14/14= 100%
+Entity(스키마)0/16 = 0%    ← 필드명만 나열. 타입·제약 없음
+Trace 완전체인 0/44 = 0%   ← Component 계층 부재
+```
+
+---
+
+## 2. Gate Assessment
+
+### G1 · Story/AC → REQ-FUNC — **FAIL**
+
+| Story | PRD 위치 | SRS §5.1 Story 열 | 판정 |
+| --- | --- | :---: | :---: |
+| US-1 김도현 | PRD 167 | ✅ 7행 | FULL |
+| US-2 이준혁 | PRD 181 | ✅ 2행 | FULL |
+| US-3 정민수 | PRD 192 | ✅ 4행 | FULL |
+| US-4 박서연 | PRD 210 | ✅ 2행 | PARTIAL |
+| US-5 오세진 | PRD 222 | ✅ 7행 | PARTIAL |
+| **US-6 강태오** | PRD 238 | 🔴 **없음** | **MISSING** |
+
+**US-6은 UC-05(이용자 클래스)로만 존재하며 요구사항 추적 대상이 아니다.** ADR-5·Q5의 참조 대상으로 등장하나 이는 Story 추적이 아니다.
+
+### G2 · KPI → REQ-NF — **PARTIAL**
+
+**§5.4에 O1~O10 전부의 매핑 행이 있다.** 그러나 감사 기준은 *"검증 가능한 Requirement로 정의"* 를 요구하며, **REQ-NF로 정의된 것은 O1 하나**다.
+
+🔴 **v1.3 개정의 직접 부작용** — 삭제된 REQ-NF 3건이 전부 AI 품질 지표였다.
+
+| 삭제된 REQ-NF | 지표 | 현재 위치 | 문제 |
+| --- | --- | --- | --- |
+| 구 REQ-NF-016 | 탐지율 ≥ 85% (O9) | REQ-FUNC-003 인수기준 | **Gate A 판정 지표가 기능 요구사항 안에 묻힘** |
+| 구 REQ-NF-017 | 오탐률 ≤ 2% | REQ-FUNC-002 인수기준 | 동일 |
+| 구 REQ-NF-018 | 구도 만족도 ≥ 80% (O3) | **SC-3.1에만** | **요구사항 어디에도 없음** |
+
+### G3 · API Coverage — **PARTIAL**
+
+| PRD API | SRS | 판정 |
+| --- | --- | :---: |
+| `POST /videos` | ✅ 동일 | FULL |
+| `POST /videos/{id}/subject` | ✅ 동일 | FULL |
+| `POST /videos/{id}/detect` | ✅ 동일 | FULL |
+| `GET /videos/{id}/candidates` | ✅ 동일 | FULL |
+| `POST /records` | ✅ 동일 | FULL |
+| `PATCH /records/{id}/privacy` | 🔴 `/records/{id}/visibility` | **CONFLICT** |
+| `GET /feed?tab=…` | ✅ 동일 | FULL |
+
+**SRS 20건 중 13건은 PRD에 없다.** PRD §6.3이 *"Internal API (개요)"* 로 자기 범위를 한정했으므로 **UNSUPPORTED가 아니라 INFERRED**로 분류한다. 다만 **역방향 근거 표기가 없다.**
+
+**공통 미비** — 모든 API에 Request/Response Schema · Error Response · Auth · Validation · Idempotency · Rate limit · Timeout이 **전무**하다.
+
+### G4 · Entity / Schema — **FAIL**
+
+🔴 **엔티티 5건이 PRD와 다른 이름을 쓰며, 매핑표가 없다.**
+
+| PRD | SRS | 매핑 문서화 |
+| --- | --- | :---: |
+| `Video` | `SourceVideo` | ❌ |
+| `VideoSegment` | `AppearanceInterval` | ❌ |
+| `HighlightCandidate` | `Candidate` | ❌ |
+| `HighlightSelection` | `Selection` | ❌ |
+| `PrivacySetting` | `VisibilitySetting` | ❌ |
+
+**PRD 엔티티명 5건은 SRS 전문에서 0회 출현한다.** PRD 독자가 SRS에서 해당 엔티티를 찾을 방법이 없다.
+
+**스키마 완성도 0%** — §6.2는 `주요 필드` 열에 필드명만 나열한다. 감사 기준이 요구하는 **Data Type · Required/Optional · PK · FK · Enum · Default · Constraint · Unique · Cascade · Index · 개인정보 여부 · 보존 기간** 이 **전부 없다.**
+
+**신규 2건**(`GroupMember` · `ShareLink`)은 SRS 요구사항(REQ-FUNC-013 · 017)에 근거가 있으므로 **INFERRED**다.
+
+### G5 · Traceability — **FAIL**
+
+체인 정의: `Story → AC → REQ → UC → API → Entity → Component → Sequence → Test`
+
+**Component 계층이 문서에 존재하지 않으므로 완전 체인은 0건**이다. §5.1은 `모듈`(Media Ingest Service 등)과 `구현 컴포넌트`(SourceVideoUploader 등) 열을 갖지만, **이들을 정의한 Component Diagram이나 컴포넌트 명세가 없다** — 표에 이름만 있고 뒷받침 문서가 없다.
+
+### G6 · Architecture Diagrams — **PARTIAL (3/5)**
+
+| 다이어그램 | 존재 | 위치 | 판정 |
+| --- | :---: | --- | :---: |
+| Use Case | 🔴 **없음** | — | **FAIL** |
+| ERD | ✅ | §6.2 `erDiagram` | PASS |
+| Class | 🟡 | §6.2 `classDiagram` — **열거형 4개만** | **PARTIAL** — 도메인 클래스·속성·메서드 없음 |
+| Component | 🔴 **없음** | — | **FAIL** |
+| Sequence | ✅ **9개** | §3.4 ×4 · §6.3 ×5 | **PASS (초과 충족)** |
+
+🔴 **v1.1에 있던 §3.1 시스템 구성도(`flowchart TB`)가 §3 재구조화 중 표로 대체되며 소실됐다.** 현재 §3.1은 외부 시스템 5행 표뿐이다.
+
+### G7 · ISO 29148 — **PASS**
+
+| ISO 29148 영역 | SRS 위치 | Coverage | 문제 |
+| --- | --- | :---: | --- |
+| Introduction (Purpose·Scope·Definitions·References) | §1.1~1.4 | ✅ | — |
+| Overall Description — User Classes | §2.2 | ✅ | §9.6.6 규율 준수(요구사항 미기재) |
+| Overall Description — Constraints·Assumptions | §1.5~1.6 | ✅ | ADR·리스크 통합 |
+| Specific Requirements — Functional | §4.1 | ✅ | 9열 표 |
+| Specific Requirements — Non-Functional | §4.2 | ✅ | 유형 분류 |
+| External Interfaces | §3 · §6.1 | 🟡 | 스키마 부재(G3) |
+| Data Requirements | §6.2 | 🟡 | 스키마 부재(G4) |
+| Security / Privacy | §4.2 · §4.4 | ✅ | 게이트형 기술 |
+| Verification / Acceptance | §6.4 | ✅ | §9.6.19 병렬 구조 |
+| Traceability | §5.1~5.4 | 🟡 | Component 단절(G5) |
+| Appendices | §6 | ✅ | — |
+
+**확장 9개 절 전부 §9.6 조항 근거를 명시**하고, 대응 없는 조항(§9.6.4.3 · 9.6.4.6)은 **해당 없음과 이유**를 적었다. 구조 준수는 충족한다.
+
+---
+
+## 3. PRD Story → SRS REQ-FUNC Coverage
+
+| Story | AC 수 | REQ-FUNC | Use Case | API | Component | Sequence | Coverage |
+| --- | :--: | --- | :--: | --- | :--: | --- | :---: |
+| US-1 | 5 | 001·002·003·004·005·027 | ❌ | `/videos` 계열 | ❌ | 3.4.1 · 6.3.1 · 6.3.2 | **PARTIAL** |
+| US-2 | 4 | 009·010·019 | ❌ | `/records` | ❌ | 3.4.3 | **PARTIAL** |
+| US-3 | 5 | 006·007·008 | ❌ | `/records` · `/music` | ❌ | 3.4.2 · 6.3.3 | **PARTIAL** |
+| US-4 | 3 | 013 | ❌ | `/groups` | ❌ | 6.3.5 | **PARTIAL** |
+| US-5 | 3 | 011·012·014·015·016·017 | ❌ | `/feed` · `/follows` | ❌ | 3.4.4 · 6.3.4 | **PARTIAL** |
+| **US-6** | 3 | 🔴 **없음** | ❌ | — | ❌ | — | 🔴 **MISSING** |
+
+**전부 PARTIAL 이하** — Use Case와 Component 계층이 없어 FULL 판정이 불가능하다.
+
+---
+
+## 4. AC → Requirement Coverage
+
+**내용 기준 FULL 29 · PARTIAL 2 · MISSING 1 = 90.6%**
+
+### 문제 3건
+
+| AC ID | AC 내용 | SRS 대응 | 문제 | 판정 |
+| --- | --- | --- | --- | :---: |
+| **AC1-2** | 후보 **약 30개** 제시 · 시작·종료 타임코드 | REQ-FUNC-004 | 🔴 **"판단 가능한 개수"로 축약** — **수치 30이 소실**됐다. 가정 A3이 *"후보 약 30개가 적정"* 을 초안값으로 유지하는데 요구사항에서 숫자가 빠져 A3의 검증 대상이 사라졌다 | **PARTIAL** |
+| **AC6-1** | 업로드~완성 조작 시간 `[TBD]` | 🔴 **없음** | PRD가 `[TBD]`로 뒀더라도 **요구사항 자리 자체가 없다.** Gate B 이후 실측으로 설정한다는 계획이 SRS로 이관되지 않았다 | **MISSING** |
+| **AC6-2** | 외부 내보내기 정책 | ADR-5 (보류) | 요구사항이 아니라 설계 결정으로 이동. 추적은 되나 **AC로서는 미충족** | **PARTIAL** |
+
+### ID 추적성 — **9.4%**
+
+SRS가 PRD의 AC ID를 **명시적으로 역참조하는 것은 3건**(`AC1-3` · `AC2-3` · `AF-4`)뿐이다. 나머지 29건은 내용이 보존됐으나 `출처` 열이 `REF-03 4-1 (F1)` 같은 **기능 번호**를 가리켜 **AC 단위 추적이 불가능**하다.
+
+> 감사 기준 §26 — *"단순히 비슷한 기능이 있다는 이유로 FULL 처리하지 않는다."* 내용 일치와 ID 추적성을 분리해 보고한다.
+
+---
+
+## 5. KPI → REQ-NF Coverage
+
+| KPI | Baseline | Target | PRD 위치 | SRS 대응 | REQ-NF? | Coverage |
+| --- | ---: | ---: | --- | --- | :---: | :---: |
+| **O1** 체감 탐색 시간 | 60분+ | 5분 | §1.2 | REQ-NF-003 | ✅ | **FULL** |
+| **O2** 완성 전환율 | 4% | 60% | §1.2 | REQ-FUNC-004~008 | ❌ | PARTIAL |
+| **O3** 구도 만족도 | 측정 불가 | 80% | §1.2 | 🔴 **SC-3.1에만** | ❌ | **PARTIAL** |
+| **O4** 원본 삭제율 | 미측정 | 50% | §1.2 | REQ-FUNC-019 · SC-4.F2 | ❌ | PARTIAL |
+| **O5** 비공개 비율 | 0% | 30% | §1.2 | REQ-FUNC-009·010 | ❌ | PARTIAL |
+| **O6** 월 기록 생성 | 0.7건 | 4건 | §1.2 | REQ-FUNC-009 | ❌ | PARTIAL |
+| **O7** 북극성 | — | 1만 명 | §10.1 | REQ-FUNC-009~017 | ❌ | PARTIAL |
+| **O8** 외주 지출 | 월 60만 원대 | 0원 | §1.2 | REQ-FUNC-003~008 | ❌ | PARTIAL |
+| **O9** 탐지율 | 해당 없음 | 85% | §5.3 | REQ-FUNC-003 인수기준 | ❌ | **PARTIAL** |
+| **O10** 재촬영 | 1~3회 | 0회 | §1.2 | REQ-FUNC-006 | ❌ | PARTIAL |
+
+**성능·신뢰성 KPI는 양호하다** — PRD §5.1의 p95 7종과 §5.2의 가용성·성공률 6종이 **REQ-NF-001~008에 전부 보존**됐고 수치도 일치한다.
+
+**AI 품질 KPI만 REQ-NF에서 이탈했다**(O3 · O9 · 오탐률). Gate A의 단독 판정 지표가 기능 요구사항의 인수기준 문장 안에 있어, **NFR 회귀 테스트 대상에서 빠질 위험**이 있다.
+
+---
+
+## 6~7. API · Entity Coverage
+
+G3 · G4 참조. **공통 근본 원인은 하나다 — SRS가 인터페이스와 데이터를 "개요" 수준으로만 기술했다.**
+
+| 미비 항목 | API | Entity |
+| --- | :---: | :---: |
+| Request/Response Schema | ❌ | — |
+| Error Response · 상태코드 | ❌ | — |
+| Auth / Authorization | ❌ | — |
+| Idempotency · Rate limit · Timeout | ❌ | — |
+| Data Type · Required | — | ❌ |
+| PK / FK / Unique / Index | — | ❌ |
+| Enum · Default · Constraint | — | 🟡 enum만 |
+| Cascade · 보존 기간 | — | ❌ |
+
+**§6.2 말미에 "보존 기간은 미정 `[TBD]`"이 있어 누락이 아니라 미결로 표기된 항목은 1건뿐**이고, 나머지는 **표기 자체가 없다.**
+
+---
+
+## 8. Traceability Matrix — 최종
+
+**완전 체인 0건.** 아래는 각 요구사항의 실제 도달 지점이다(대표 10건).
+
+| Story | AC | Requirement | API | Entity | UC | Component | Sequence | Test | Status |
+| --- | --- | --- | --- | --- | :--: | :--: | --- | --- | :---: |
+| US-1 | AC1-1 | REQ-FUNC-003 | `/detect` | AppearanceInterval | ❌ | ❌ | 3.4.1·6.3.2 | TC-FUNC-003 | **PARTIAL** |
+| US-1 | AC1-2 | REQ-FUNC-004 | `/candidates` | Candidate | ❌ | ❌ | 3.4.2 | TC-FUNC-004 | **PARTIAL**(수치 소실) |
+| US-1 | AC1-3 | REQ-NF-003 | — | — | ❌ | ❌ | 6.3.2 | TC-NF-003 | PARTIAL |
+| US-1 | AC1-4 | REQ-NF-002 · SC-1.F3 | `/chunks` | SourceVideo | ❌ | ❌ | 6.3.1 | TC-SC-1.F3 | PARTIAL |
+| US-1 | AC1-5 | REQ-FUNC-005 | `/records` | Selection | ❌ | ❌ | 3.4.2 | TC-FUNC-005 | PARTIAL |
+| US-2 | AC2-1 | REQ-FUNC-009 | `/records` | Record | ❌ | ❌ | 3.4.3 | TC-FUNC-009 | PARTIAL |
+| US-3 | AC3-1 | SC-3.1 | — | — | ❌ | ❌ | — | TC-SC-3.1 | **PARTIAL**(REQ-NF 부재) |
+| US-5 | AC5-1 | REQ-NF-001 | `/feed` | — | ❌ | ❌ | 3.4.4 | TC-NF-001 | PARTIAL |
+| **US-6** | AC6-1 | 🔴 **없음** | — | — | ❌ | ❌ | — | — | 🔴 **MISSING** |
+| — | — | REQ-FUNC-018~026 | — | — | ❌ | ❌ | — | 매트릭스 제외 | **DEAD END** |
+
+### 4대 문제 탐지 결과
+
+| 유형 | 건수 | 대표 사례 |
+| --- | ---: | --- |
+| **Forward Gap** (PRD→SRS 누락) | **2** | US-6 · AC6-1 |
+| **Backward Gap** (근거 없는 SRS 항목) | **0** | SRS 13개 추가 API·엔티티 2건은 전부 INFERRED로 근거 보유 |
+| **Broken Link** (잘못된 연결) | **1** | `PATCH /records/{id}/privacy` ↔ `/visibility` 경로 불일치 |
+| **Dead End** (구현·검증 요소 없음) | **11** | REQ-FUNC-018~026 · REQ-NF-012·015 — §5.1이 *"Must Have에 한정"* 을 명시했으나 **추적 대상에서 제외된 상태 자체가 Dead End** |
+
+---
+
+## 9~13. Diagram Coverage Matrix
+
+| Requirement 군 | UseCase | ERD | Class | Component | Sequence | Coverage |
+| --- | :--: | :--: | :--: | :--: | :--: | :---: |
+| 업로드·탐지 (001~005·027) | ❌ | ✅ | 🟡 | ❌ | ✅ | **40%** |
+| 후보·선택·완성 (004~008) | ❌ | ✅ | 🟡 | ❌ | ✅ | **40%** |
+| 기록·공개 범위 (009·010) | ❌ | ✅ | ✅ | ❌ | ✅ | **60%** |
+| 관계·그룹·피드 (011~017) | ❌ | ✅ | 🟡 | ❌ | ✅ | **40%** |
+| 보안 (NF-009~011·016·017) | ❌ | 🟡 | ❌ | ❌ | ✅ | **20%** |
+
+### Sequence Diagram 상세 — **유일한 초과 충족 항목**
+
+| # | Sequence | Trigger | API 일치 | 실패 흐름 | 연결 REQ |
+| --- | --- | --- | :--: | :--: | --- |
+| 3.4.1 | 업로드·탐지 | 사용자 원본 선택 | ✅ | ✅ `alt` 미지원 코덱 | 001·002·003 |
+| 3.4.2 | 후보 선택·완성 | 후보 목록 조회 | ✅ | ✅ `alt` 렌더 실패 | 004~008 |
+| 3.4.3 | 기록 저장 | 렌더 완료 | ✅ | ➖ | 009·010 |
+| 3.4.4 | 피드·공개 범위 강제 | 피드 열기 | ✅ | ✅ `alt` 권한 없음 | 014 · NF-009 |
+| 6.3.1 | 업로드 실패·재개 | 네트워크 중단 | ✅ | ✅ `loop`+`alt` | 001·027 · NF-002 |
+| 6.3.2 | 탐지·Gate A 계측 | 대상 지정 | ✅ | ✅ 0건 분기 | 002·003·027 · NF-003 |
+| 6.3.3 | 렌더 실패·재시도 | 선택 확정 | ✅ | ✅ `loop` 3회 | 008 · NF-008 |
+| 6.3.4 | 공개 범위 강제 | 기록 조회 | ✅ | ✅ 3분기 | NF-009 |
+| 6.3.5 | 그룹 이탈·회수 | 멤버 이탈 | ✅ | ✅ | 013 · NF-012 |
+
+**9개 전부 실제 API·Entity·REQ와 일치하며 대부분 실패 흐름을 포함한다.** 비동기 처리의 상태 관리(`ProcessingStage`)와 재시도(`loop`)도 표현됐다.
+
+---
+
+## 14~15. Requirement Quality Assessment
+
+### 모호 표현 탐지 — **3건**
+
+| REQ ID | 문제 표현 | 유형 | 필요한 수치화 | 권고 |
+| --- | --- | --- | --- | --- |
+| **REQ-FUNC-004** | *"사용자가 **판단 가능한 개수**의 후보로 좁혀"* | 주관적·검증 불가 | 후보 수 하한·상한 | PRD AC1-2의 **"약 30개"를 복원**하고 A3 검증 대상으로 유지 |
+| **REQ-FUNC-006** | *"**중앙·확대 배치**해 세로 숏폼으로 출력"* | 정도 미규정 | 대상 픽셀 점유율 또는 확대 배율 상한 | 기술 검토(REF-11)의 배율 상한을 인수기준에 명시 |
+| **REQ-FUNC-018** | *"촬영 노하우 기반 구도·앵글 연출을 적용"* | 검증 불가 | 규칙 목록·판정 방법 | Should Have이나 착수 전 정의 필요 |
+
+**나머지 41건은 수치 또는 판정 가능한 술어를 갖는다.** *"빠르게"·"적절히"·"안정적으로"* 류 표현은 **0건**이다.
+
+### Testability
+
+| 구분 | 건수 | 비고 |
+| --- | ---: | --- |
+| 수치 임계 보유 | 28 | p95 · % · 건수 |
+| 이진 판정 가능 | 13 | "0건" · "포함되어서는 안 된다" |
+| **판정 불가** | **3** | 위 표 |
+
+---
+
+## 16. Consistency / Conflict Findings
+
+| # | 문서 A | 문서 B | 불일치 | Severity |
+| --- | --- | --- | --- | :---: |
+| C1 | PRD `PATCH /records/{id}/privacy` | SRS `/records/{id}/visibility` | **경로명 불일치.** 개명 근거·매핑 없음 | **P1** |
+| C2 | PRD `Video`·`VideoSegment`·`HighlightCandidate`·`HighlightSelection`·`PrivacySetting` | SRS `SourceVideo`·`AppearanceInterval`·`Candidate`·`Selection`·`VisibilitySetting` | **엔티티 5건 개명.** 매핑표 없음 | **P1** |
+| C3 | PRD AC1-2 *"약 30개"* | SRS REQ-FUNC-004 *"판단 가능한 개수"* | **수치 소실** | **P1** |
+| C4 | SRS §5.1 `구현 컴포넌트` 열 | Component Diagram | **참조 대상 문서 부재** | **P0** |
+| C5 | PRD §5.3 O3 `≥ 80%` | SRS REQ-NF | **REQ-NF에 없음.** SC-3.1에만 존재 | **P1** |
+
+**CONTRADICTED 항목은 0건**이다 — 의미가 정면으로 충돌하는 서술은 발견되지 않았다.
+
+---
+
+## 17. Unsupported / Orphan Requirements
+
+| 분류 | 건수 | 판정 |
+| --- | ---: | --- |
+| **SUPPORTED** | 41 | PRD·VPS·프로토타입에 직접 근거 |
+| **INFERRED** | 3 | REQ-FUNC-027(RISK-02 대응) · REQ-NF-016·017(규제) — **근거 문서와 도출 논리가 본문에 명시됨** |
+| **UNSUPPORTED** | **0** | — |
+| **CONTRADICTED** | **0** | — |
+| **ORPHAN API** | 0 | 13건 추가 API 전부 REQ 연결 보유 |
+| **ORPHAN ENTITY** | 0 | `GroupMember`·`ShareLink` 모두 REQ 연결 보유 |
+
+**환각·근거 없는 추가는 발견되지 않았다.** 모든 수치가 `[SOURCE]`/`[HYPOTHESIS]`/`[PROPOSED]`/`[TBD]` 태그를 보유한다.
+
+---
+
+## 18. Critical Findings
+
+### 🔴 P0 — 승인 차단
+
+| # | Finding | 근거 | 영향 |
+| --- | --- | --- | --- |
+| **P0-1** | **US-6이 추적성 매트릭스에 없다** | SRS §5.1 `Story` 열: US-1~US-5만 존재 | 페르소나 6인 중 1인의 요구가 개발 대상에서 누락 |
+| **P0-2** | **Component Diagram 부재** | 다이어그램 13개 중 component 계층 0건 · §3.1이 표로 대체 | **모든 추적 체인이 여기서 끊긴다**(G5 0%) |
+| **P0-3** | **§5.1의 `구현 컴포넌트`가 정의되지 않은 이름을 참조** | `SourceVideoUploader` 등 20여 개가 어디에도 정의 없음 | Broken Link. 매트릭스가 실체 없는 대상을 가리킴 |
+
+### 🟠 P1 — 개발 착수 전 수정
+
+| # | Finding | 영향 |
+| --- | --- | --- |
+| **P1-1** | AC6-1(조작 시간) 요구사항 자리 부재 | US-6 Forward Gap |
+| **P1-2** | AC1-2의 "약 30개" 수치 소실 | 가정 A3의 검증 대상 소멸 |
+| **P1-3** | 엔티티 5건 개명 · 매핑표 부재 | PRD 독자의 추적 불가 |
+| **P1-4** | API 경로 1건 불일치 | 구현 시 혼선 |
+| **P1-5** | O3·O9·오탐률이 REQ-NF 밖 | NFR 회귀 테스트에서 이탈 |
+| **P1-6** | Use Case Diagram 부재 | G6 미충족 |
+| **P1-7** | API 스키마·에러·인증 전무 | 구현 착수 불가 |
+| **P1-8** | Entity 스키마 속성 전무 | DB 설계 착수 불가 |
+
+### 🟡 P2 — Sprint 1 이전
+
+| # | Finding |
+| --- | --- |
+| **P2-1** | Class Diagram이 열거형만 — 도메인 클래스·속성·메서드 없음 |
+| **P2-2** | AC ID 역참조 3/32 — `출처` 열이 기능 번호만 가리킴 |
+| **P2-3** | REQ-FUNC-018~026 등 11건이 매트릭스 제외(Dead End) |
+| **P2-4** | REQ-FUNC-006·018 모호 표현 |
+
+---
+
+## 19. Remediation Plan
+
+| Priority | Issue | Source | Impact | Required Action | Owner | Done Criteria |
+| :--: | --- | --- | --- | --- | --- | --- |
+| **P0** | US-6 매트릭스 부재 | PRD 238 | Story Coverage 83% | §5.1에 US-6 행 3개 추가 · AC6-1 요구사항 신설 | 제품 아키텍트 | Story Coverage 100% |
+| **P0** | Component Diagram 부재 | — | Trace 0% | §3에 `flowchart TB` 시스템 구성도 복원 + **컴포넌트 책임 표** 신설 | 제품 아키텍트 | 모든 REQ가 1개 이상 컴포넌트에 연결 |
+| **P0** | 구현 컴포넌트 미정의 | SRS §5.1 | Broken Link | 위 표에 §5.1의 20여 개 컴포넌트를 전부 정의 | 백엔드 리드 | §5.1 컴포넌트 100%가 §3에 존재 |
+| **P1** | AC1-2 수치 소실 | PRD AC1-2 | A3 검증 불가 | REQ-FUNC-004 인수기준에 **"약 30개"** 복원 | 제품 아키텍트 | 수치 존재 |
+| **P1** | 엔티티 개명 | SRS §6.2 | 추적 불가 | §6.2에 **PRD ↔ SRS 명칭 매핑표** 추가 | 제품 아키텍트 | 5건 매핑 명시 |
+| **P1** | API 경로 불일치 | PRD §6.3 | 혼선 | `/visibility`로 통일하고 **PRD 개정 또는 매핑 각주** | 백엔드 리드 | 단일 경로 |
+| **P1** | O3·O9 REQ-NF 이탈 | v1.3 개정 | NFR 회귀 이탈 | REQ-NF에 **AI Quality 3건 복원** (v1.3 축약의 예외로) | AI 리드 | O1~O10 중 AI 지표가 REQ-NF 보유 |
+| **P1** | API 스키마 전무 | SRS §6.1 | 구현 불가 | 각 API에 Request/Response/Error/Auth 추가 | 백엔드 리드 | 20건 전부 |
+| **P1** | Entity 스키마 전무 | SRS §6.2 | DB 설계 불가 | 타입·PK/FK·제약·인덱스·보존기간 추가 | 백엔드 리드 | 16건 전부 |
+| **P1** | Use Case Diagram | — | G6 | UC-01~06 ↔ Story ↔ REQ 다이어그램 신설 | 제품 아키텍트 | 6개 Story 전부 연결 |
+| **P2** | AC ID 역참조 | SRS §4.1 | 기계 추적 불가 | `출처` 열에 AC ID 병기 | 제품 아키텍트 | 32건 중 30건 이상 |
+| **P2** | Class Diagram 빈약 | SRS §6.2 | 설계 근거 부족 | 도메인 클래스·서비스 인터페이스 추가 | 백엔드 리드 | 주요 서비스 7개 표현 |
+| **P2** | Dead End 11건 | SRS §5.1 | 추적 제외 | Should/Won't도 매트릭스에 상태와 함께 등재 | 제품 아키텍트 | 44건 전부 등재 |
+
+---
+
+## 20. Final Approval Decision
+
+# 🔴 FAIL
+
+| 승인 조건 | 기준 | 실제 | 충족 |
+| --- | ---: | ---: | :---: |
+| Story Coverage | 100% | **83.3%** | ❌ |
+| AC Coverage | 100% | 90.6% | ❌ |
+| KPI → REQ-NF | 100% | **10%** | ❌ |
+| API Coverage | 100% | 85.7% | ❌ |
+| Entity/Schema Coverage | 100% | **0%** (스키마) | ❌ |
+| Traceability Coverage | 100% | **0%** | ❌ |
+| 핵심 Diagram 모두 존재 | 5종 | **3종** | ❌ |
+| Sequence Diagram | 3~5개 | **9개** | ✅ |
+| P0 Critical Issue | 0 | **3** | ❌ |
+| P1 Critical Issue | 0 | **8** | ❌ |
+| Critical Conflict | 0 | **1**(C4) | ❌ |
+| 핵심 Requirement Testable | 전부 | 41/44 | ❌ |
+| ISO 29148 핵심 구조 | 충족 | 충족 | ✅ |
+
+**13개 조건 중 2개 충족.**
+
+### 판정 근거
+
+이 SRS는 **요구사항 명세로서의 논증은 강하나 설계 명세로서는 미완**이다. 결정의 근거·감수 사항·재검토 조건이 문서화된 수준은 기준을 넘지만, **API 스키마와 Entity 속성이 전무해 개발이 착수할 수 없다.**
+
+가장 무거운 것은 **P0-2·P0-3**이다. §5.1 추적성 매트릭스가 `SourceVideoUploader` 같은 **정의되지 않은 컴포넌트 이름 20여 개를 가리키고 있다.** 매트릭스에 행이 있다는 사실이 추적성을 보장하지 않는다는 감사 기준(§26)의 정확한 사례다.
+
+### 재감사 조건
+
+**P0 3건 해소 후 재감사.** P0만 해소되면 Traceability Coverage가 0% → 추정 70%대로 회복되며, P1 8건까지 처리하면 **READY FOR DEVELOPMENT** 판정이 가능하다.
+
+**다만 이 문서의 성격을 감안해야 한다** — SRS v1.4는 스스로를 *"요구사항 명세"* 로 한정하고 API·Entity를 **"개요"** 로 표기했다. P1-7·P1-8은 **누락이 아니라 범위 선언의 결과**이며, 해소하려면 SRS를 확장하든지 **별도 설계 명세(Design Specification)를 신설**하든지 선택이 필요하다. 후자가 ISO 29148의 통상적 분업에 가깝다.
+
+---
+
+*감사자: Requirements & Architecture Auditor · 기준 ISO/IEC/IEEE 29148:2018 · 이 감사는 문서의 정합성을 대상으로 하며 작성 과정이나 담당자를 평가하지 않는다.*
