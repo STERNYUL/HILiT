@@ -100,6 +100,7 @@ PRD 내용 ─┬─ 예시 SRS에 대응 절이 있음  →  예시 포맷 그�
 | --- | --- |
 | REQ-FUNC-001~026 · REQ-NF-001~015 | 팀 v1.0의 **식별자와 의미를 손대지 않고 보존** |
 | REQ-FUNC-027~035 · REQ-NF-016~022 | v1.1 **증분** — 단일성 분해 + PRD v0.1 고유 내용 |
+| REQ-FUNC-036~038 | v1.2 **증분** — 프로토타입 v0.6 고유 화면 규격 |
 
 증분 16건의 성격은 둘입니다. ① **단일성 분해** — 팀 v1.0이 하나로 묶어둔, 이행 수단이 다른 통제를 분리 ② **PRD v0.1 고유 내용** — 실패 경로 요구사항과 확정된 설계 결정 2건.
 
@@ -128,7 +129,7 @@ PRD 내용 ─┬─ 예시 SRS에 대응 절이 있음  →  예시 포맷 그�
 
 | 문서 | 설명 |
 | --- | --- |
-| **[`[SRS]hilit-SRSv1.1.md`](%5BSRS%5Dhilit-SRSv1.1.md)** | **이번 변환의 산출물.** 요구사항 57건(REQ-FUNC 35 · REQ-NF 22) · 시퀀스 다이어그램 9개 |
+| **[`[SRS]hilit-SRSv1.2.md`](%5BSRS%5Dhilit-SRSv1.2.md)** | **이번 변환의 산출물.** 요구사항 **60건**(REQ-FUNC 38 · REQ-NF 22) · 시퀀스 다이어그램 9개 |
 | [`PRD/HILiT_PRD_v0.1.md`](PRD/HILiT_PRD_v0.1.md) | 변환 원천 PRD. 12장 · Evidence Gap 13건 · Open Question 13건 |
 | [`VPS_v0_3.html`](VPS_v0_3.html) | **Source of Truth.** Core Job · Outcome · 차별점 · MVP 범위의 원천 |
 
@@ -140,6 +141,7 @@ PRD 내용 ─┬─ 예시 SRS에 대응 절이 있음  →  예시 포맷 그�
 | --- | --- |
 | `hilit-srs-v1_0.html` · `.md` | 팀 SRS v1.0 — **요구사항 ID 체계의 기준** |
 | `hilit-prd-v1_0.html` · `.md` | 팀 PRD v1.0 |
+| `prototype_v0_6.html` | 팀 프로토타입 v0.6 — **화면 14장 · 확정/미정 구분의 원천** |
 | `CW- personas.html` | 팀 페르소나 |
 
 `.md`는 원본 HTML에서 자동 변환한 것으로 **리뷰·검색용**입니다. 팀 문서의 정본은 HTML입니다.
