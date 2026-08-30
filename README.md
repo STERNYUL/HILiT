@@ -144,12 +144,13 @@ v1.1~v1.2는 실패 경로를 요구사항으로 승격해 REQ를 41 → 60건�
 
 | 문서 | 설명 |
 | --- | --- |
-| **[`[SRS]hilit-SRSv1.5.md`](%5BSRS%5Dhilit-SRSv1.5.md)** | **이번 변환의 산출물.** 요구사항 **44건** · 운영 시나리오 **42건** · 설계 결정 **3건** · 시퀀스 다이어그램 9개 |
+| **[`SRS/[SRS]hilit-SRSv1.5.md`](SRS/%5BSRS%5Dhilit-SRSv1.5.md)** | **요구사항 원천.** 요구사항 **45건** · 운영 시나리오 **42건** · 설계 결정 **3건** · 시퀀스 다이어그램 9개 |
 | [`PRD/HILiT_PRD_v0.1.md`](PRD/HILiT_PRD_v0.1.md) | 변환 원천 PRD. 12장 · Evidence Gap 13건 · Open Question 13건 |
 | [`VPS_v0_3.html`](VPS_v0_3.html) | **Source of Truth.** Core Job · Outcome · 차별점 · MVP 범위의 원천 |
-| **[`[DS]hilit-DSv1.0.md`](%5BDS%5Dhilit-DSv1.0.md)** | **설계 명세.** SRS가 "개요"로 남긴 API 스키마 23건 · 엔티티 속성 16건 · 도메인 클래스 · Use Case 모델 |
-| **[`[SRS]hilit-SRSv2.0-nextjs.md`](%5BSRS%5Dhilit-SRSv2.0-nextjs.md)** | **기술 제약 반영판.** Next.js·Vercel·Supabase·Gemini 스택에서 요구사항 45건의 구현 가능성 판정 |
-| [`AUDIT_SRS_2026-08-30.md`](AUDIT_SRS_2026-08-30.md) | ISO 29148 기반 요구사항·아키텍처 감사 + 재감사 부록 |
+| **[`DS/[DS]hilit-DSv1.0.md`](DS/%5BDS%5Dhilit-DSv1.0.md)** | **설계 명세.** API 스키마 23건 · 엔티티 속성 16건 · 도메인 클래스 · Use Case 모델 |
+| **[`SRS/[SRS]hilit-SRSv2.0-nextjs.md`](SRS/%5BSRS%5Dhilit-SRSv2.0-nextjs.md)** | **기술 제약 반영판 v2.1.** Next.js·Vercel·Supabase·Gemini 스택 판정 · **T1 확정** · C-TEC-007 대안 |
+| [`AUDIT/AUDIT_SRS-v1.4_초기감사.md`](AUDIT/AUDIT_SRS-v1.4_%EC%B4%88%EA%B8%B0%EA%B0%90%EC%82%AC.md) | ISO 29148 기반 초기 감사 — 판정 **FAIL** |
+| [`AUDIT/AUDIT_SRS-v1.5_재감사.md`](AUDIT/AUDIT_SRS-v1.5_%EC%9E%AC%EA%B0%90%EC%82%AC.md) | P0 3건 해소 후 재감사 — **CONDITIONAL PASS** |
 
 `.md`와 `.html`을 함께 둡니다 — 마크다운은 리뷰·diff용, HTML은 열람용입니다. **HTML은 마크다운에서 자동 변환되므로 마크다운이 정본입니다.**
 
@@ -188,13 +189,25 @@ PRD v0.1       무엇을 해결하는가   제품
   ↓
 SRS v1.5       무엇을 만족해야     제품 아키텍트   ← 기술 중립
   ├─ DS v1.0   어떻게 만들 것인가   백엔드 · AI 리드
-  └─ SRS v2.0  지정 스택에서 가능한가  제품 아키텍트  ← 기술 제약 반영
+  └─ SRS v2.1  지정 스택에서 가능한가  제품 아키텍트  ← 기술 제약 반영 · T1 확정
+```
+
+```
+디렉터리
+  PRD/     제품 요구사항
+  SRS/     요구사항 명세 (v1.5 원천 · v2.1 기술 제약판)
+  DS/      설계 명세
+  AUDIT/   감사 (초기 · 재감사)
 ```
 
 **SRS v1.5가 요구사항의 원천**입니다. DS와 SRS v2.0은 v1.5를 대체하지 않고 각각 **설계**와 **기술 제약 판정**을 담당합니다.
 
-> ### 🔴 SRS v2.0의 결론
-> 지정 스택(Next.js · Vercel · Supabase · Gemini)에서 요구사항 45건 중 **32건 구현 가능 · 8건 설계 변경 후 가능 · 5건 불가**입니다. 불가한 5건이 **차별점 D1(인물 추적)** 에 해당합니다. 선택지 3개와 권고는 해당 문서 §2.4에 있습니다.
+> ### ✅ SRS v2.1 — T1 확정
+> 지정 스택에서 요구사항 45건 중 **32건 가능 · 8건 설계 변경 후 가능 · 5건 불가**로 판정됐고, 불가한 5건이 **차별점 D1(인물 추적)** 이었습니다.
+>
+> **T1을 채택했습니다** — 추적 추론만 외부 전용 API로 위임하고 나머지 여섯 제약을 유지합니다. **추가되는 것은 서버가 아니라 호출 대상 API 하나**이며, C-TEC-005의 취지(*"자체 서버 구축 없이"*)도 지켜집니다.
+>
+> **C-TEC-007과 배포 게이트의 충돌도 해소했습니다** — 빌드 타임 검증(`prebuild` 스크립트)은 **CI 설정 파일 없이** 작동하고, 미승인 기능을 **빌드 산출물에서 제거**하므로 원래 요구(CI 차단)보다 보장이 강합니다.
 
 ---
 

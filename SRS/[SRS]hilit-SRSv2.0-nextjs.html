@@ -2,7 +2,7 @@
 <html lang="ko"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HILiT SRS v2.0 · Next.js</title>
+<title>HILiT SRS v2.1 · Next.js</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -76,11 +76,11 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 </style>
 </head><body>
 <div class="wrap">
-<nav><a class="lv1" href="#h0">Software Requirements Specification (SRS) — 기술 제약 반영판</a><a class="lv2" href="#h1">이 문서의 위치</a><a class="lv1" href="#h2">1. Introduction</a><a class="lv2" href="#h3">1.1 Purpose</a><a class="lv2" href="#h4">1.2 Scope</a><a class="lv2" href="#h5">1.3 Definitions</a><a class="lv2" href="#h6">1.4 References</a><a class="lv2" href="#h7">1.5 Assumptions &amp; Constraints</a><a class="lv1" href="#h8">2. 🔴 제약이 요구사항에 미치는 영향</a><a class="lv2" href="#h9">2.1 판정 요약</a><a class="lv2" href="#h10">2.2 🔴 불가 5건</a><a class="lv2" href="#h11">2.3 🟡 설계 변경 후 가능 8건</a><a class="lv2" href="#h12">2.4 선택지 3개</a><a class="lv1" href="#h13">3. System Architecture</a><a class="lv2" href="#h14">3.1 단일 앱 구성 (C-TEC-001 · 002)</a><a class="lv2" href="#h15">3.2 계층 책임</a><a class="lv2" href="#h16">3.3 🔴 서버 렌더를 클라이언트로 옮긴다</a><a class="lv1" href="#h17">4. Data Design (C-TEC-003)</a><a class="lv2" href="#h18">4.1 Prisma 스키마 — 핵심 발췌</a><a class="lv2" href="#h19">4.2 🔴 RLS로 공개 범위를 강제한다 (REQ-NF-009)</a><a class="lv1" href="#h20">5. Interface Design (C-TEC-002)</a><a class="lv2" href="#h21">5.1 Server Action / Route Handler 배분</a><a class="lv2" href="#h22">5.2 공통 규약 (C-TEC-002)</a><a class="lv2" href="#h23">5.3 🔴 4GB 업로드 — Route Handler를 우회한다</a><a class="lv1" href="#h24">6. UI Design (C-TEC-004)</a><a class="lv1" href="#h25">7. AI Integration (C-TEC-005 · 006)</a><a class="lv2" href="#h26">7.1 모델 추상화 (C-TEC-006)</a><a class="lv2" href="#h27">7.2 Gemini가 할 수 있는 것과 없는 것</a><a class="lv2" href="#h28">7.3 🟡 후보 생성의 대체 설계 (REQ-FUNC-004)</a><a class="lv2" href="#h29">7.4 🔺 T1 선택 시 — 추적 추론 서비스 연동</a><a class="lv1" href="#h30">8. Deployment (C-TEC-007)</a><a class="lv1" href="#h31">9. 🔺 상위 문서 개정 요청</a><a class="lv1" href="#h32">10. 판정 종합</a></nav>
+<nav><a class="lv1" href="#h0">Software Requirements Specification (SRS) — 기술 제약 반영판</a><a class="lv2" href="#h1">이 문서의 위치</a><a class="lv1" href="#h2">1. Introduction</a><a class="lv2" href="#h3">1.1 Purpose</a><a class="lv2" href="#h4">1.2 Scope</a><a class="lv2" href="#h5">1.3 Definitions</a><a class="lv2" href="#h6">1.4 References</a><a class="lv2" href="#h7">1.5 Assumptions &amp; Constraints</a><a class="lv1" href="#h8">2. 🔴 제약이 요구사항에 미치는 영향</a><a class="lv2" href="#h9">2.1 판정 요약</a><a class="lv2" href="#h10">2.2 🔴 불가 5건</a><a class="lv2" href="#h11">2.3 🟡 설계 변경 후 가능 8건</a><a class="lv2" href="#h12">2.4 선택지 3개</a><a class="lv1" href="#h13">3. System Architecture</a><a class="lv2" href="#h14">3.1 단일 앱 구성 (C-TEC-001 · 002)</a><a class="lv2" href="#h15">3.2 계층 책임</a><a class="lv2" href="#h16">3.3 🔴 서버 렌더를 클라이언트로 옮긴다</a><a class="lv1" href="#h17">4. Data Design (C-TEC-003)</a><a class="lv2" href="#h18">4.1 Prisma 스키마 — 핵심 발췌</a><a class="lv2" href="#h19">4.2 🔴 RLS로 공개 범위를 강제한다 (REQ-NF-009)</a><a class="lv1" href="#h20">5. Interface Design (C-TEC-002)</a><a class="lv2" href="#h21">5.1 Server Action / Route Handler 배분</a><a class="lv2" href="#h22">5.2 공통 규약 (C-TEC-002)</a><a class="lv2" href="#h23">5.3 🔴 4GB 업로드 — Route Handler를 우회한다</a><a class="lv1" href="#h24">6. UI Design (C-TEC-004)</a><a class="lv1" href="#h25">7. AI Integration (C-TEC-005 · 006)</a><a class="lv2" href="#h26">7.1 모델 추상화 (C-TEC-006)</a><a class="lv2" href="#h27">7.2 Gemini가 할 수 있는 것과 없는 것</a><a class="lv2" href="#h28">7.3 🟡 후보 생성의 대체 설계 (REQ-FUNC-004)</a><a class="lv2" href="#h29">7.4 ✅ 추적 추론 서비스 연동 (T1 확정)</a><a class="lv1" href="#h30">8. Deployment (C-TEC-007)</a><a class="lv2" href="#h31">8.1 🔴 C-TEC-007과 배포 게이트의 충돌</a><a class="lv2" href="#h32">8.2 배포 파이프라인</a><a class="lv1" href="#h33">9. 🔺 상위 문서 개정 요청</a><a class="lv1" href="#h34">10. 판정 종합</a></nav>
 <main>
 <h1 id="h0">Software Requirements Specification (SRS) — 기술 제약 반영판</h1>
 <p><strong>Document ID:</strong> SRS-HILIT-NEXTJS-001</p>
-<p><strong>version:</strong> 2.0</p>
+<p><strong>version:</strong> 2.1</p>
 <p><strong>Date:</strong> 2026-08-30</p>
 <p><strong>Standard:</strong> ISO/IEC/IEEE 29148:2018</p>
 <p><strong>성격:</strong> <code>[SRS]hilit-SRSv1.5.md</code>와 <strong>병렬 문서</strong>. 기존 SRS를 대체하지 않는다.</p>
@@ -129,11 +129,17 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <h2 id="h12">2.4 선택지 3개</h2>
 <p><strong>이 문제는 설계로 풀리지 않는다. 제약이나 제품 정의를 바꿔야 한다.</strong></p>
 <div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>선택</th><th>바뀌는 것</th><th>유지되는 것</th><th>비용</th></tr></thead><tbody><tr><td style="text-align:center"><strong>T1</strong></td><td><strong>C-TEC-005를 완화</strong> — AI만 전용 추론 서비스 사용</td><td>AI 계층만 외부 (Replicate·Modal 등 추적 모델 호스팅)</td><td>제품 정의 · D1 · 나머지 6개 제약</td><td>인프라 1개 추가 · 원가 구조 재산정</td></tr><tr><td style="text-align:center"><strong>T2</strong></td><td><strong>제품 범위 축소</strong> — 추적을 포기하고 <strong>구간 탐색</strong>만</td><td>🔴 <strong>D1 상실.</strong> "AI가 나를 찾아준다" → "AI가 볼 만한 구간을 골라준다"</td><td>스택 7개 제약 전부 · 기록·소비 계층</td><td><strong>차별점 소실</strong> · VPS 재작성</td></tr><tr><td style="text-align:center"><strong>T3</strong></td><td><strong>단계 분리</strong> — 1단계는 기록·소비만, 2단계에 추적</td><td>출시 순서</td><td>최종 제품 정의</td><td>Gate A가 2단계로 밀림 · <strong>검증 순서 역전</strong></td></tr></tbody></table></div>
-<h3 id="h13">권고</h3>
-<blockquote><p><strong>T1을 권한다.</strong> 일곱 제약 중 여섯(001~004 · 006~007)이 그대로 유지되고, <strong>C-TEC-005의 "자체 서버 구축 없이"라는 취지도 지켜진다</strong> — 전용 추론 서비스는 자체 서버가 아니라 <strong>또 하나의 외부 API</strong>다.</p>
+<h3 id="h13">✅ 결정 — T1 확정 (2026-08-30)</h3>
+<p><strong>T1을 채택한다.</strong> AI 추론만 외부 전용 서비스로 분리하고 나머지 여섯 제약을 유지한다.</p>
+<div class="tw"><table><thead><tr><th>항목</th><th>내용</th></tr></thead><tbody><tr><td><strong>결정</strong></td><td>인물 추적·재식별·좌표 산출을 <strong>외부 추론 API</strong>로 위임</td></tr><tr><td><strong>유지되는 제약</strong></td><td>C-TEC-001 · 002 · 003 · 004 · 006 · 007 (6/7)</td></tr><tr><td><strong>완화되는 제약</strong></td><td><strong>C-TEC-005</strong> — "AI 기능은 Vercel AI SDK로 외부 API 호출" → <strong>Gemini는 AI SDK로, 추적은 전용 API로</strong></td></tr><tr><td><strong>추가되는 것</strong></td><td>호출 대상 API 1개 · webhook 수신 Route Handler 1개</td></tr><tr><td><strong>추가되지 않는 것</strong></td><td>🔴 <strong>서버 · 인프라 관리 · CI/CD 설정</strong></td></tr></tbody></table></div>
+<blockquote><p><strong>C-TEC-005의 취지는 지켜진다.</strong> 제약의 문구는 <em>"별도 자체 서버 구축 없이"</em> 이고, 전용 추론 서비스는 <strong>자체 서버가 아니라 또 하나의 외부 API</strong>다. Vercel에는 결과를 받는 Route Handler만 늘어난다.</p></blockquote>
+<p><strong>T2·T3 기각 사유</strong></p>
+<div class="tw"><table><thead><tr><th>#</th><th>기각 사유</th></tr></thead><tbody><tr><td><strong>T2</strong></td><td>차별점 D1·D3이 성립하지 않는다. 제품이 <em>"AI가 나를 찾아주는 서비스"</em> 에서 <em>"AI가 볼 만한 구간을 골라주는 서비스"</em> 로 바뀌며 <strong>VPS부터 개정해야 한다.</strong> 기술 제약이 제품 정의를 바꾸는 것은 순서가 거꾸로다</td></tr><tr><td><strong>T3</strong></td><td>VPS·SRS가 <em>"Gate A가 실패하면 이후 전부 무의미"</em> 를 반복 명시했다. 추적 검증을 2단계로 미루면 <strong>가장 비싼 것을 가장 늦게 확인</strong>하게 된다</td></tr></tbody></table></div>
+<h3 id="h13">권고 근거 (결정 전 검토 기록)</h3>
+<blockquote><p>일곱 제약 중 여섯(001~004 · 006~007)이 그대로 유지되고, <strong>C-TEC-005의 "자체 서버 구축 없이"라는 취지도 지켜진다</strong> — 전용 추론 서비스는 자체 서버가 아니라 <strong>또 하나의 외부 API</strong>다.</p>
 <p><strong>T3은 겉보기에 안전하나 위험하다.</strong> VPS와 SRS가 <em>"Gate A가 실패하면 이후 전부 무의미"</em> 를 반복해 명시했다. 추적 검증을 뒤로 미루면 <strong>가장 비싼 것을 가장 늦게 확인</strong>하게 된다.</p>
 <p><strong>T2는 사업 판단이다.</strong> 기술 문서가 결정할 사안이 아니다. 다만 그 경우 <strong>VPS의 차별점 4개 중 D1·D3이 성립하지 않으므로 상위 문서부터 개정해야 한다.</strong></p></blockquote>
-<p><strong>이 문서의 §3 이후는 T1을 전제로 작성한다.</strong> T2·T3을 택하면 §7(AI 통합)을 다시 써야 한다.</p>
+<p><strong>§3 이후는 T1 확정을 전제로 한다.</strong></p>
 <hr>
 <h1 id="h13">3. System Architecture</h1>
 <h2 id="h14">3.1 단일 앱 구성 (C-TEC-001 · 002)</h2>
@@ -156,7 +162,7 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
     end
     subgraph EX["외부"]
         GM["Google Gemini API&lt;br/&gt;영상 이해"]
-        TR["🔺 추적 추론 서비스&lt;br/&gt;(T1 선택 시)"]
+        TR["추적 추론 서비스&lt;br/&gt;✅ T1 확정"]
     end
     UI --&gt; SA
     UI -.-&gt;|"직접 업로드"| ST
@@ -164,11 +170,11 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
     SA --&gt; PG
     RH --&gt; PG
     AI --&gt; GM
-    RH -.-&gt;|"T1"| TR
+    RH --&gt; TR
     ST -.-&gt;|"완료 webhook"| RH
-    TR -.-&gt;|"결과 webhook"| RH
+    TR --&gt; RH
     PG --&gt; RT --&gt; UI
-    style TR stroke-dasharray: 5 5</pre>
+    </pre>
 <h2 id="h15">3.2 계층 책임</h2>
 <div class="tw"><table><thead><tr><th>계층</th><th>구현</th><th>담당 요구사항</th></tr></thead><tbody><tr><td><strong>RSC (서버 컴포넌트)</strong></td><td>피드·기록 목록 조회 · 초기 렌더</td><td>REQ-FUNC-011 · 014 · REQ-NF-001</td></tr><tr><td><strong>Client Component</strong></td><td>후보 선택 · 공개 범위 UI · 렌더 진행</td><td>REQ-FUNC-005 · 010</td></tr><tr><td><strong>Server Action</strong></td><td>상태 변경 전부 (기록·그룹·반응·팔로우)</td><td>REQ-FUNC-009 · 010 · 012 · 013 · 015~017</td></tr><tr><td><strong>Route Handler</strong></td><td>외부 webhook 수신 · Vercel Cron · 업로드 완료 통지</td><td>REQ-FUNC-001 · 003</td></tr><tr><td><strong>Supabase RLS</strong></td><td>🔴 <strong>공개 범위 강제</strong></td><td><strong>REQ-NF-009</strong></td></tr><tr><td><strong>Supabase Storage</strong></td><td>원본·결과물 · 직접 업로드</td><td>REQ-FUNC-001 · REQ-NF-002 · 011</td></tr><tr><td><strong>Supabase Realtime</strong></td><td>처리 상태 구독</td><td>SC-1.F4</td></tr><tr><td><strong>Vercel AI SDK</strong></td><td>모델 호출 추상화</td><td>REQ-FUNC-004</td></tr></tbody></table></div>
 <h2 id="h16">3.3 🔴 서버 렌더를 클라이언트로 옮긴다</h2>
@@ -320,7 +326,7 @@ export const videoModel = google(process.env.AI_VIDEO_MODEL ?? 'gemini-2.0-flash
   })).max(30),                   // REQ-FUNC-004 — 약 30개
 });</code></pre>
 <blockquote><p>🔴 <strong>여기서 나오는 <code>confidence</code>는 REQ-FUNC-027의 재식별 신뢰도가 아니다.</strong> <em>"이 구간이 볼 만한가"</em> 이지 <em>"이 사람이 당신인가"</em> 가 아니다. <strong>두 값을 같은 이름으로 쓰면 요구사항이 조용히 바뀐다.</strong></p></blockquote>
-<h2 id="h29">7.4 🔺 T1 선택 시 — 추적 추론 서비스 연동</h2>
+<h2 id="h29">7.4 ✅ 추적 추론 서비스 연동 (T1 확정)</h2>
 <pre class="mermaid">sequenceDiagram
     participant SA as Server Action
     participant TR as 추적 추론 서비스
@@ -336,22 +342,106 @@ export const videoModel = google(process.env.AI_VIDEO_MODEL ?? 'gemini-2.0-flash
 <p><strong>C-TEC-002·007은 유지된다</strong> — 자체 서버를 두지 않고 <strong>외부 API를 호출</strong>할 뿐이며, Vercel에는 webhook 수신 Route Handler만 추가된다. 실행 시간 상한에도 걸리지 않는다.</p>
 <hr>
 <h1 id="h30">8. Deployment (C-TEC-007)</h1>
-<div class="tw"><table><thead><tr><th>항목</th><th>설계</th></tr></thead><tbody><tr><td>배포</td><td>Vercel Git 연동 · <strong><code>main</code> push → 프로덕션</strong> · PR → Preview</td></tr><tr><td>마이그레이션</td><td>🔺 <code>prisma migrate deploy</code>를 <strong>빌드 단계에 넣지 않는다</strong> — 롤백 불가. <strong>수동 실행 후 배포</strong></td></tr><tr><td>환경 변수</td><td>Vercel 대시보드 · <code>AI_VIDEO_MODEL</code> 포함</td></tr><tr><td>로컬</td><td>Supabase CLI 로컬 스택 + <code>prisma migrate dev</code></td></tr><tr><td>배포 게이트</td><td>🔴 <strong>CI/CD 없음(C-TEC-007)</strong> → SRS의 산출물 승인 게이트(REQ-NF-010 · 016 · 017)를 <strong>자동 차단할 수단이 없다</strong></td></tr></tbody></table></div>
-<blockquote><h3 class="bq-h">🔴 C-TEC-007과 배포 게이트가 충돌한다</h3>
+<div class="tw"><table><thead><tr><th>항목</th><th>설계</th></tr></thead><tbody><tr><td>배포</td><td>Vercel Git 연동 · <strong><code>main</code> push → 프로덕션</strong> · PR → Preview</td></tr><tr><td>마이그레이션</td><td>🔺 <code>prisma migrate deploy</code>를 <strong>빌드 단계에 넣지 않는다</strong> — 롤백 불가. <strong>수동 실행 후 배포</strong></td></tr><tr><td>환경 변수</td><td>Vercel 대시보드 · <code>AI_VIDEO_MODEL</code> 포함</td></tr><tr><td>로컬</td><td>Supabase CLI 로컬 스택 + <code>prisma migrate dev</code></td></tr><tr><td>배포 게이트</td><td>✅ <strong>빌드 타임 검증 + 저장소 보호 + 킬 스위치</strong> — §8.1</td></tr></tbody></table></div>
+<h2 id="h31">8.1 🔴 C-TEC-007과 배포 게이트의 충돌</h2>
 <p>SRS v1.5는 <strong>얼굴 정보 4종·미성년자 3종·음원 증빙이 미승인이면 CI가 배포를 차단</strong>하도록 요구한다(REQ-NF-010 · 016 · 017). <strong>CI 설정 없이 Git Push만으로 배포하면 이 차단이 작동하지 않는다.</strong></p>
-<p><strong>[PROPOSED] 최소 대안</strong> — 차단을 <strong>런타임 기능 플래그</strong>로 옮긴다. <code>FEATURE_PUBLIC_PUBLISH</code> 같은 환경 변수를 두고, 산출물 승인 전까지 <strong>공개 발행 경로를 코드에서 비활성</strong>한다. 배포는 막지 않되 <strong>기능이 켜지지 않는다.</strong></p>
-<p>이것은 CI 차단보다 약하다 — <strong>환경 변수를 켜는 사람이 승인 여부를 확인해야 한다.</strong> 그 확인이 사람에게 남는다는 점을 인지하고 선택해야 한다.</p></blockquote>
+<h3 id="h32">8.1.1 대안 비교</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>대안</th><th>차단 시점</th><th style="text-align:center">강도</th><th style="text-align:center">C-TEC-007 위반</th><th style="text-align:center">판정</th></tr></thead><tbody><tr><td style="text-align:center"><strong>A</strong></td><td>런타임 기능 플래그 (환경 변수)</td><td>실행 시</td><td style="text-align:center">🟡 약</td><td style="text-align:center">아니오</td><td style="text-align:center">보조</td></tr><tr><td style="text-align:center"><strong>B</strong></td><td><strong>빌드 타임 게이트 검증</strong> (<code>prebuild</code> 스크립트)</td><td><strong>빌드 시</strong></td><td style="text-align:center">🟢 <strong>강</strong></td><td style="text-align:center"><strong>아니오</strong></td><td style="text-align:center">✅ <strong>채택</strong></td></tr><tr><td style="text-align:center"><strong>C</strong></td><td><strong>저장소 브랜치 보호 + CODEOWNERS</strong></td><td>병합 시</td><td style="text-align:center">🟢 <strong>강</strong></td><td style="text-align:center"><strong>아니오</strong></td><td style="text-align:center">✅ <strong>채택</strong></td></tr><tr><td style="text-align:center">D</td><td>Vercel Deployment Protection</td><td>배포 승인</td><td style="text-align:center">🟡 중</td><td style="text-align:center">아니오</td><td style="text-align:center">기각 — 플랜 의존 · 승인자가 산출물을 본다는 보장 없음</td></tr><tr><td style="text-align:center">E</td><td>DB 기반 런타임 게이트 조회</td><td>매 요청</td><td style="text-align:center">🟡 약</td><td style="text-align:center">아니오</td><td style="text-align:center">기각 — 조회 비용 · 여전히 사람이 켬</td></tr></tbody></table></div>
+<p><strong>A의 한계</strong> — 배포는 되고 기능만 꺼진다. <strong>환경 변수를 켜는 사람이 승인 여부를 확인해야 하고</strong>, 그 확인이 문서가 아니라 사람의 기억에 남는다.</p>
+<p><strong>D를 기각한 이유</strong> — 승인 버튼을 누르는 것과 <strong>산출물 7종을 실제로 확인하는 것</strong>은 다르다. 게이트가 형식만 남는다.</p>
+<h3 id="h32">8.1.2 ✅ 채택 — B + C + A 3중 구조</h3>
+<p><strong>세 층이 서로 다른 실패를 막는다.</strong></p>
+<div class="tw"><table><thead><tr><th>층</th><th>막는 실패</th></tr></thead><tbody><tr><td><strong>B 빌드 타임</strong></td><td><em>"승인 안 된 걸 잊고 배포했다"</em></td></tr><tr><td><strong>C 저장소 보호</strong></td><td><em>"개발자가 승인 파일을 임의로 만들었다"</em></td></tr><tr><td><strong>A 런타임 플래그</strong></td><td><em>"배포한 뒤에 문제를 발견했다"</em> — 긴급 차단</td></tr></tbody></table></div>
+<h3 id="h32">8.1.3 B — 빌드 타임 게이트 검증</h3>
+<p>🔴 <strong>핵심 통찰 — 이것은 CI가 아니다.</strong> <code>package.json</code>의 스크립트일 뿐이고, <strong>Vercel은 어차피 빌드를 실행한다.</strong> CI 설정 파일이 하나도 없이 실질 차단이 작동한다.</p>
+<p><strong>승인 아티팩트를 저장소에 둔다.</strong></p>
+<pre class="code"><code>gates/
+  face-consent.gate.json      # REQ-NF-010 · 산출물 4종
+  minor-policy.gate.json      # REQ-NF-016 · 산출물 4종
+  minor-subject.gate.json     # REQ-NF-017 · 산출물 3종
+  music-license.gate.json     # REQ-FUNC-007 · 증빙 3종</code></pre>
+<pre class="code"><code class="language-json">{
+  "gateId": "FACE_CONSENT",
+  "requirement": "REQ-NF-010",
+  "status": "PENDING",
+  "requiredArtifacts": 4,
+  "artifacts": [],
+  "blocks": ["PUBLIC_PUBLISH", "GROUP_PUBLISH"],
+  "expiresAt": null
+}</code></pre>
+<pre class="code"><code class="language-jsonc">// 승인 후
+{
+  "gateId": "FACE_CONSENT",
+  "requirement": "REQ-NF-010",
+  "status": "APPROVED",
+  "requiredArtifacts": 4,
+  "artifacts": [
+    { "name": "동의 문구",      "ref": "legal/consent-copy-v2.pdf",  "sha256": "…", "approvedBy": "법무", "approvedAt": "2026-09-15" },
+    { "name": "보관 기간",      "ref": "legal/retention-policy.md",  "sha256": "…", "approvedBy": "법무", "approvedAt": "2026-09-15" },
+    { "name": "파기 절차",      "ref": "legal/erasure-procedure.md", "sha256": "…", "approvedBy": "법무", "approvedAt": "2026-09-15" },
+    { "name": "처리 위탁",      "ref": "legal/processor-agreement.pdf","sha256": "…","approvedBy": "법무","approvedAt": "2026-09-15" }
+  ],
+  "blocks": [],
+  "expiresAt": "2027-09-15"
+}</code></pre>
+<p><strong>검증 스크립트</strong> <code>[PROPOSED]</code></p>
+<pre class="code"><code class="language-ts">// scripts/verify-gates.ts — package.json: "prebuild": "tsx scripts/verify-gates.ts"
+const gates = loadGates('gates/*.gate.json');
+const blocked = new Set&lt;string&gt;();
+
+for (const g of gates) {
+  const ok =
+    g.status === 'APPROVED' &amp;&amp;
+    g.artifacts.length === g.requiredArtifacts &amp;&amp;
+    g.artifacts.every(a =&gt; fileExists(a.ref) &amp;&amp; sha256(a.ref) === a.sha256) &amp;&amp;
+    (!g.expiresAt || new Date(g.expiresAt) &gt; new Date());
+
+  if (!ok) {
+    console.error(`⛔ ${g.gateId} (${g.requirement}) — 차단: ${g.blocks.join(', ')}`);
+    g.blocks.forEach(f =&gt; blocked.add(f));
+  }
+}
+
+// 🔴 기능 상수를 생성한다 — 미승인 기능은 빌드 산출물에 포함되지 않는다
+writeFileSync('lib/gates.generated.ts',
+  `export const BLOCKED = ${JSON.stringify([...blocked])} as const;\n` +
+  [...ALL_FEATURES].map(f =&gt;
+    `export const ${f} = ${!blocked.has(f)};`).join('\n'));</code></pre>
+<p><strong>전체 배포를 막지 않고 해당 기능만 뺀다.</strong></p>
+<pre class="code"><code class="language-ts">// app/(feed)/publish/page.tsx
+import { PUBLIC_PUBLISH } from '@/lib/gates.generated';
+if (!PUBLIC_PUBLISH) notFound();   // 상수 false → 번들에서 제거됨</code></pre>
+<blockquote><p>🔴 <strong>런타임 플래그보다 강한 이유</strong> — 플래그는 <strong>켤 수 있지만, 없는 코드는 켤 수 없다.</strong> 상수가 <code>false</code>면 해당 분기가 트리 셰이킹으로 사라지고 <strong>미승인 기능의 라우트가 빌드 산출물에 존재하지 않는다.</strong></p>
+<p>이는 SRS의 <em>"배포를 차단한다"</em> 보다 <strong>실질 보장이 강하다</strong> — 배포는 되지만 그 기능은 물리적으로 없다. 🔺 SRS 문구 개정을 요청한다(§9-7).</p></blockquote>
+<h3 id="h32">8.1.4 C — 저장소 보호로 승인 주체를 강제</h3>
+<p><strong>B만으로는 개발자가 <code>gate.json</code>을 직접 <code>APPROVED</code>로 고칠 수 있다.</strong> 저장소 설정으로 막는다.</p>
+<pre class="code"><code># .github/CODEOWNERS
+/gates/     @법무-담당자 @제품-리드
+/legal/     @법무-담당자</code></pre>
+<div class="tw"><table><thead><tr><th>설정</th><th>효과</th></tr></thead><tbody><tr><td><code>main</code> 직접 push 금지</td><td>모든 변경이 PR을 거친다</td></tr><tr><td>PR 승인 1인 이상 필수</td><td>단독 병합 불가</td></tr><tr><td><strong>CODEOWNERS 승인 필수</strong></td><td>🔴 <strong><code>gates/</code> 변경에는 법무 승인이 반드시 붙는다</strong></td></tr><tr><td>강제 푸시 금지</td><td>승인 이력이 히스토리에서 지워지지 않는다</td></tr></tbody></table></div>
+<blockquote><p><strong>이것은 CI 설정이 아니라 저장소 설정이다.</strong> C-TEC-007은 <em>"CI/CD 설정 없이 Git Push만으로 배포"</em> 를 요구했고, 브랜치 보호는 <strong>배포 파이프라인이 아니라 협업 규칙</strong>이다. <strong>제약과 충돌하지 않는다.</strong></p></blockquote>
+<h3 id="h32">8.1.5 A — 런타임 킬 스위치 (보조)</h3>
+<p>배포 후 문제를 발견했을 때 <strong>재배포 없이</strong> 끄는 수단만 남긴다.</p>
+<pre class="code"><code class="language-ts">// 환경 변수 하나. 켜는 용도가 아니라 끄는 용도다.
+export const killSwitch = (f: Feature) =&gt;
+  process.env.KILL_SWITCH?.split(',').includes(f) ?? false;</code></pre>
+<p><strong>빌드 타임 상수가 <code>false</code>면 킬 스위치와 무관하게 기능이 없다.</strong> 킬 스위치는 <strong>승인된 기능을 긴급히 내리는 데만</strong> 쓴다 — 반대 방향으로는 작동하지 않는다.</p>
+<h3 id="h32">8.1.6 게이트 ↔ 기능 매핑</h3>
+<div class="tw"><table><thead><tr><th>게이트</th><th>요구사항</th><th>차단 대상</th><th style="text-align:center">산출물</th></tr></thead><tbody><tr><td><code>FACE_CONSENT</code></td><td>REQ-NF-010</td><td>공개 발행 · 그룹 공개</td><td style="text-align:center">4종</td></tr><tr><td><code>MINOR_POLICY</code></td><td>REQ-NF-016</td><td><strong>가입 플로우</strong></td><td style="text-align:center">4종</td></tr><tr><td><code>MINOR_SUBJECT</code></td><td>REQ-NF-017</td><td>공개 발행 · 그룹 공개</td><td style="text-align:center">3종</td></tr><tr><td><code>MUSIC_LICENSE</code></td><td>REQ-FUNC-007</td><td>음악 라이브러리</td><td style="text-align:center">3종</td></tr></tbody></table></div>
+<blockquote><p><strong><code>MINOR_POLICY</code>가 가입 플로우를 막는다는 것은 서비스 자체가 열리지 않는다는 뜻이다.</strong> 이 게이트만은 <strong>베타 초대 경로에도 적용</strong>해야 한다 — 초대도 가입이다.</p></blockquote>
+<h2 id="h32">8.2 배포 파이프라인</h2>
 <hr>
-<h1 id="h31">9. 🔺 상위 문서 개정 요청</h1>
-<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>내용</th><th>대상</th><th>사유</th></tr></thead><tbody><tr><td style="text-align:center"><strong>9-1</strong></td><td>🔴 <strong>REQ-FUNC-002 · 003 · 006 · 027 · REQ-NF-003의 실현 경로 확정</strong></td><td>VPS · SRS v1.5</td><td>§2.4의 T1·T2·T3 중 택일 없이는 개발 착수 불가</td></tr><tr><td style="text-align:center"><strong>9-2</strong></td><td><strong>RLS 감사 로그</strong> — RLS는 접근 거부를 기록하지 않는다</td><td>SRS REQ-NF-009</td><td>감사 로그 100% 요구를 별도 설계로 충족해야 함</td></tr><tr><td style="text-align:center"><strong>9-3</strong></td><td>속도 제한 구현 방식 미확정</td><td>DS §3.1.3</td><td>Vercel 미들웨어 vs DB 카운터</td></tr><tr><td style="text-align:center"><strong>9-4</strong></td><td><strong>REQ-NF-004(렌더 p95 ≤ 90초)를 단말 기준으로 재정의</strong></td><td>SRS</td><td>클라이언트 렌더 전환(§3.3)</td></tr><tr><td style="text-align:center"><strong>9-5</strong></td><td><strong>REQ-NF-013 원가 구조 재산정</strong></td><td>SRS</td><td>GPU 원가 → API 요금 + 실행 시간</td></tr><tr><td style="text-align:center"><strong>9-6</strong></td><td><strong>배포 게이트를 기능 플래그로 대체</strong>하는 것의 승인</td><td>SRS REQ-NF-010 · 016 · 017</td><td>§8 — CI 차단 대비 강도가 낮음</td></tr></tbody></table></div>
+<h1 id="h33">9. 🔺 상위 문서 개정 요청</h1>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>내용</th><th>대상</th><th>사유</th></tr></thead><tbody><tr><td style="text-align:center"><strong>9-1</strong></td><td>🔴 <strong>REQ-FUNC-002 · 003 · 006 · 027 · REQ-NF-003의 실현 경로 확정</strong></td><td>VPS · SRS v1.5</td><td>§2.4의 T1·T2·T3 중 택일 없이는 개발 착수 불가</td></tr><tr><td style="text-align:center"><strong>9-2</strong></td><td><strong>RLS 감사 로그</strong> — RLS는 접근 거부를 기록하지 않는다</td><td>SRS REQ-NF-009</td><td>감사 로그 100% 요구를 별도 설계로 충족해야 함</td></tr><tr><td style="text-align:center"><strong>9-3</strong></td><td>속도 제한 구현 방식 미확정</td><td>DS §3.1.3</td><td>Vercel 미들웨어 vs DB 카운터</td></tr><tr><td style="text-align:center"><strong>9-4</strong></td><td><strong>REQ-NF-004(렌더 p95 ≤ 90초)를 단말 기준으로 재정의</strong></td><td>SRS</td><td>클라이언트 렌더 전환(§3.3)</td></tr><tr><td style="text-align:center"><strong>9-5</strong></td><td><strong>REQ-NF-013 원가 구조 재산정</strong></td><td>SRS</td><td>GPU 원가 → API 요금 + 실행 시간</td></tr><tr><td style="text-align:center"><strong>9-6</strong></td><td><strong>배포 게이트 방식 승인</strong> — 빌드 타임 검증 + 저장소 보호 + 킬 스위치 3중</td><td>SRS REQ-NF-010 · 016 · 017</td><td>§8.1</td></tr><tr><td style="text-align:center"><strong>9-7</strong></td><td>🔺 <strong>"CI가 배포를 차단한다" → "미승인 기능은 빌드 산출물에 포함되지 않는다"</strong> 로 문구 개정</td><td>SRS REQ-NF-010 · 016 · 017</td><td>§8.1.3 — <strong>실질 보장이 더 강하다.</strong> 배포는 되되 기능이 물리적으로 없다</td></tr></tbody></table></div>
 <hr>
-<h1 id="h32">10. 판정 종합</h1>
-<div class="tw"><table><thead><tr><th>계층</th><th style="text-align:center">이 스택 적합도</th><th>근거</th></tr></thead><tbody><tr><td><strong>기록·보관</strong> (REQ-FUNC-009 · 010)</td><td style="text-align:center">🟢 <strong>매우 적합</strong></td><td>RLS가 공개 범위를 구조적으로 보장</td></tr><tr><td><strong>소비·관계</strong> (REQ-FUNC-011~017)</td><td style="text-align:center">🟢 <strong>매우 적합</strong></td><td>RSC + Server Action의 전형적 영역</td></tr><tr><td><strong>업로드</strong> (REQ-FUNC-001)</td><td style="text-align:center">🟡 적합</td><td>Storage 직접 업로드로 우회</td></tr><tr><td><strong>완성·렌더</strong> (REQ-FUNC-008)</td><td style="text-align:center">🟡 조건부</td><td>클라이언트 렌더 · 단말 종속</td></tr><tr><td><strong>트래킹</strong> (REQ-FUNC-002 · 003 · 006 · 027)</td><td style="text-align:center">🔴 <strong>부적합</strong></td><td>외부 추론 서비스 없이는 불가</td></tr></tbody></table></div>
+<h1 id="h34">10. 판정 종합</h1>
+<div class="tw"><table><thead><tr><th>계층</th><th style="text-align:center">이 스택 적합도</th><th>근거</th></tr></thead><tbody><tr><td><strong>기록·보관</strong> (REQ-FUNC-009 · 010)</td><td style="text-align:center">🟢 <strong>매우 적합</strong></td><td>RLS가 공개 범위를 구조적으로 보장</td></tr><tr><td><strong>소비·관계</strong> (REQ-FUNC-011~017)</td><td style="text-align:center">🟢 <strong>매우 적합</strong></td><td>RSC + Server Action의 전형적 영역</td></tr><tr><td><strong>업로드</strong> (REQ-FUNC-001)</td><td style="text-align:center">🟡 적합</td><td>Storage 직접 업로드로 우회</td></tr><tr><td><strong>완성·렌더</strong> (REQ-FUNC-008)</td><td style="text-align:center">🟡 조건부</td><td>클라이언트 렌더 · 단말 종속</td></tr><tr><td><strong>트래킹</strong> (REQ-FUNC-002 · 003 · 006 · 027)</td><td style="text-align:center">🟢 <strong>적합 (T1 확정 후)</strong></td><td>외부 추론 API 위임 · Vercel에는 webhook 수신만 추가</td></tr><tr><td><strong>배포 게이트</strong> (REQ-NF-010 · 016 · 017)</td><td style="text-align:center">🟢 <strong>적합</strong></td><td>빌드 타임 검증이 CI 차단보다 강한 보장</td></tr></tbody></table></div>
 <blockquote><p><strong>이 스택은 잘못된 선택이 아니다.</strong> 이 제품의 <strong>기록·소비 계층에는 오히려 강점</strong>이 있다 — 특히 RLS가 REQ-NF-009를 개발자 실수 없이 보장하는 것은 일반 백엔드 구성보다 안전하다.</p>
-<p><strong>다만 트래킹은 이 틀 밖에 있다.</strong> C-TEC-005의 취지("자체 서버 구축 없이")를 지키면서 이를 해결하는 방법이 <strong>T1</strong>이며, 추가되는 것은 서버가 아니라 <strong>호출 대상 API 하나</strong>다.</p></blockquote>
+<p><strong>트래킹만 이 틀 밖에 있었고, T1 확정으로 해소됐다.</strong> 추가되는 것은 서버가 아니라 <strong>호출 대상 API 하나</strong>이며 나머지 여섯 제약은 그대로다.</p>
+<p><strong>배포 게이트의 충돌도 해소됐다.</strong> §8.1의 빌드 타임 검증은 <strong>CI 설정 파일 없이</strong> 작동하며, 미승인 기능을 <strong>빌드 산출물에서 제거</strong>하므로 원래 요구(CI 차단)보다 실질 보장이 강하다.</p></blockquote>
 <hr>
 <p><em>작성자: 제품 아키텍트 · 검토자: AI 리드 · 백엔드 리드 · 승인자: 제품 리드 (PM)</em> <em>이 문서는 <code>[SRS]hilit-SRSv1.5.md</code>를 대체하지 않는다. 요구사항의 원천은 v1.5이며, 이 문서는 지정된 기술 제약 하에서의 실현 가능성과 설계를 다룬다.</em></p>
-<p class="meta">HILiT SRS v2.0 · Next.js · 원본 [SRS]hilit-SRSv2.0-nextjs.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+<p class="meta">HILiT SRS v2.1 · Next.js · 원본 [SRS]hilit-SRSv2.0-nextjs.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
 </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
