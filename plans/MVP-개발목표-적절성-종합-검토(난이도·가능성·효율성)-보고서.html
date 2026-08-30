@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MVP 개발목표 적절성 종합 검토</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv1" href="#h0">MVP 개발목표 적절성 종합 검토</a><a class="lv2" href="#h1">난이도 · 가능성 · 효율성</a><a class="lv1" href="#h2">0. 요약</a><a class="lv2" href="#h3">0.1 판정</a><a class="lv2" href="#h4">0.2 🔴 이 검토의 가장 큰 발견 셋</a><a class="lv1" href="#h5">1. 개발 속도</a><a class="lv2" href="#h6">1.1 규모 판정 재확인</a><a class="lv2" href="#h7">1.2 스택이 속도에 주는 효과</a><a class="lv2" href="#h8">1.3 🔴 속도를 위협하는 것 넷</a><a class="lv2" href="#h9">1.4 🔴 MVP 범위 조정안</a><a class="lv2" href="#h10">1.5 개발 속도 종합</a><a class="lv1" href="#h11">2. 외부 연동과 기술 스택 적절성</a><a class="lv2" href="#h12">2.1 외부 의존 목록</a><a class="lv2" href="#h13">2.2 🔴 추론 API만 성격이 다르다</a><a class="lv2" href="#h14">2.3 🔺 권고 — 추론 API도 SDK 수준으로 추상화</a><a class="lv2" href="#h15">2.4 복잡성 평가</a><a class="lv2" href="#h16">2.5 외부 연동 종합 — 🟢 적절</a><a class="lv1" href="#h17">3. 운영 비용</a><a class="lv2" href="#h18">3.1 산정 전제</a><a class="lv2" href="#h19">3.2 🔴 원가 구조 — 3분할이 아니라 4분할</a><a class="lv2" href="#h20">3.3 🔴 ADR-3의 근거를 넓혀야 한다</a><a class="lv2" href="#h21">3.4 Vercel 실행 비용</a><a class="lv2" href="#h22">3.5 비용 종합 — 🔴 재산정 필요</a><a class="lv1" href="#h23">4. 통합 조정안</a><a class="lv2" href="#h24">4.1 A-1~A-3은 Phase 0 착수 전에 처리한다</a><a class="lv2" href="#h25">4.2 A-4는 제품 결정이다</a><a class="lv1" href="#h26">5. 미확정 — 추정으로 채우지 않은 것</a></nav>
+<main>
+<h1 id="h0">MVP 개발목표 적절성 종합 검토</h1>
+<h2 id="h1">난이도 · 가능성 · 효율성</h2>
+<p><strong>대상</strong> <code>SRS v1.7</code>(요구사항 45건 · MVP 17기능) · <code>SRS v2.2</code>(기술 제약판) · <code>DS v1.1</code> · <code>plans/PLAN_기술스택-전면적용.md</code> <strong>관점</strong> ① 개발 속도 ② 외부 연동·기술 스택 적절성 ③ 운영 비용 <strong>작성일</strong> 2026-08-30</p>
+<blockquote><p>⚠️ <strong>파일명 주의</strong> — 요청하신 이름의 <code>/</code> 는 Windows 파일명에 쓸 수 없어 <code>·</code> 로 대체했습니다.</p></blockquote>
+<hr>
+<h1 id="h2">0. 요약</h1>
+<h2 id="h3">0.1 판정</h2>
+<div class="tw"><table><thead><tr><th>관점</th><th style="text-align:center">판정</th><th>핵심</th></tr></thead><tbody><tr><td><strong>① 개발 속도</strong></td><td style="text-align:center">🟡 <strong>조정 필요</strong></td><td>스택 선택은 속도에 유리하나, <strong>MVP 17개 중 셋이 법무 대기에 묶여 있다</strong></td></tr><tr><td><strong>② 외부 연동·스택</strong></td><td style="text-align:center">🟢 <strong>적절</strong></td><td>외부 의존이 4개로 적고 전부 대체 가능. <strong>단 추론 API만 대체가 어렵다</strong></td></tr><tr><td><strong>③ 운영 비용</strong></td><td style="text-align:center">🔴 <strong>재산정 필요</strong></td><td><strong>전송 비용이 누락돼 있다</strong> — 원가 구조가 3분할이 아니라 4분할이다</td></tr></tbody></table></div>
+<h2 id="h4">0.2 🔴 이 검토의 가장 큰 발견 셋</h2>
+<h3 id="h5">발견 1 — 원가 구조에서 <strong>전송 비용이 빠져 있다</strong></h3>
+<p>SRS v2.2는 편당 원가를 <strong>추론 API + Gemini + 단말(0원)</strong> 셋으로 나눴다. <strong>그러나 4GB 원본을 추론 API로 넘기는 전송 비용이 없다.</strong></p>
+<p>연 12만 편 × 4GB = <strong>연 480TB의 외부 전송</strong>이다. 클라우드에서 egress는 통상 가장 비싼 항목이며, 이것이 <strong>추론 원가를 넘을 가능성</strong>이 있다.</p>
+<p>→ <strong>§3.2</strong> · REQ-NF-013 재정의 필요</p>
+<h3 id="h5">발견 2 — ADR-3이 <strong>전송 비용도 줄인다</strong></h3>
+<p><code>저해상도 1차 → 선택분만 고화질</code>(ADR-3)의 근거는 지금 <strong>GPU 원가</strong>만 적혀 있다. 그러나 <strong>저해상도로 전처리해 넘기면 전송량도 함께 준다.</strong></p>
+<p><strong>그런데 다운스케일은 탐지율을 떨어뜨린다</strong> — 원거리에서 인물이 작게 잡히는 것이 이 제품의 조건이기 때문이다. <strong>전송비와 O9가 같은 손잡이에 걸려 있다.</strong></p>
+<p>→ <strong>SP-1에 B8(입력 해상도별 탐지율) 항목 추가 필요</strong></p>
+<h3 id="h5">발견 3 — <strong>공개 발행을 MVP에서 빼면 법무 대기가 사라진다</strong></h3>
+<p>현재 MVP는 <strong>REQ-NF-010(얼굴 4종) · REQ-NF-017(미성년자 3종) · REQ-FUNC-007(음원 3종)</strong> 세 게이트에 묶여 있고, 앞의 둘은 <strong>공개 발행 기능을 차단</strong>한다.</p>
+<p>**Core Job은 <em>"공개와 무관하게 내 기록으로"</em> 다. 공개 발행이 없어도 Core Job·D4·Gate B가 전부 성립한다.**</p>
+<p>→ <strong>§1.3</strong> · MVP 범위 조정안</p>
+<hr>
+<h1 id="h5">1. 개발 속도</h1>
+<h2 id="h6">1.1 규모 판정 재확인</h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">규모</th><th style="text-align:right">건수</th><th>대상</th></tr></thead><tbody><tr><td style="text-align:center"><strong>L</strong> (수렴형 · 스프린트 부적합)</td><td style="text-align:right"><strong>4</strong></td><td>REQ-FUNC-002 · 003 · 006 · 027</td></tr><tr><td style="text-align:center"><strong>M</strong> (스프린트당 1건)</td><td style="text-align:right"><strong>7</strong></td><td>REQ-FUNC-001 · 004 · 007 · 008 · 011 · 013 · 014</td></tr><tr><td style="text-align:center"><strong>S</strong> (스프린트당 복수)</td><td style="text-align:right"><strong>7</strong></td><td>REQ-FUNC-005 · 009 · 010 · 012 · 015 · 016 · 017</td></tr></tbody></table></div>
+<p><strong>스프린트로 셀 수 있는 것은 M 7 + S 7 = 14건</strong>이고, L 4건은 Gate A 트랙에서 별도로 수렴한다.</p>
+<h2 id="h7">1.2 스택이 속도에 주는 효과</h2>
+<div class="tw"><table><thead><tr><th>항목</th><th style="text-align:center">효과</th><th>근거</th></tr></thead><tbody><tr><td>shadcn/ui + Tailwind</td><td style="text-align:center">🟢 <strong>크게 단축</strong></td><td>화면 8종의 컴포넌트를 직접 만들지 않는다</td></tr><tr><td>RSC + Server Actions</td><td style="text-align:center">🟢 <strong>단축</strong></td><td>API 계층·클라이언트 상태 관리 코드가 사라진다</td></tr><tr><td>Prisma + Supabase</td><td style="text-align:center">🟢 <strong>단축</strong></td><td>마이그레이션·타입 생성 자동</td></tr><tr><td>Supabase Auth</td><td style="text-align:center">🟢 <strong>단축</strong></td><td>인증 구현 불필요</td></tr><tr><td>Supabase Realtime</td><td style="text-align:center">🟢 단축</td><td>처리 상태 폴링 코드 불필요</td></tr><tr><td>Vercel 배포</td><td style="text-align:center">🟢 단축</td><td>인프라 설정 0</td></tr></tbody></table></div>
+<p><strong>S 7건은 이 스택에서 특히 빠르다.</strong> 목록·토글·관계·반응은 shadcn 컴포넌트 + Server Action 조합으로 대부분 처리된다.</p>
+<h2 id="h8">1.3 🔴 속도를 위협하는 것 넷</h2>
+<h3 id="h9">① 클라이언트 렌더 — <strong>가장 큰 시간 위험</strong></h3>
+<div class="tw"><table><thead><tr><th>항목</th><th>판단</th></tr></thead><tbody><tr><td>대상</td><td>REQ-FUNC-008 (M)</td></tr><tr><td>위험</td><td>WebCodecs·ffmpeg.wasm은 <strong>브라우저·기기별 편차가 크고 디버깅이 어렵다</strong></td></tr><tr><td>실제 규모</td><td>🔴 <strong>M이 아니라 L에 가깝다</strong> — 종료 조건이 <em>"동작한다"</em> 가 아니라 <em>"어느 단말까지 되는가"</em> 다</td></tr></tbody></table></div>
+<blockquote><p>**SRS §4.3의 L 정의는 <em>"모델 성능이 결과를 좌우"</em> 였다.<strong> 클라이언트 렌더는 </strong>단말 성능이 결과를 좌우<strong>하므로 같은 성질이다. </strong>규모 판정을 M → L로 올리고 Gate A 트랙과 같은 방식(측정 주기)으로 다뤄야 한다.**</p>
+<p>→ 🔺 <strong>SRS §4.3 규모 재판정 필요</strong></p></blockquote>
+<h3 id="h9">② RLS 정책 — 강력하나 검증이 무겁다</h3>
+<p>REQ-NF-009는 <em>"조작된 요청의 우회 성공 0건"</em> 을 요구한다. <strong>RLS는 작성보다 검증이 오래 걸린다</strong> — 정책이 의도대로 막는지, 의도한 것까지 막아버리진 않는지를 조회 경로마다 확인해야 한다.</p>
+<p><strong>다만 이것은 스택 때문에 생긴 비용이 아니다.</strong> 일반 백엔드로 만들면 같은 검증을 <strong>애플리케이션 코드 전수</strong>에 해야 한다. RLS가 오히려 검증 지점을 한 곳으로 모은다.</p>
+<h3 id="h9">③ 🔴 음악 라이브러리 — <strong>개발이 아니라 계약이 병목</strong></h3>
+<p>REQ-FUNC-007(M)의 기술 난이도는 낮다. <strong>그러나 라이선스 계약 없이는 곡이 0개이므로 기능이 성립하지 않는다.</strong></p>
+<p><strong>개발 속도와 무관하게 Phase 1을 막는다.</strong> 계약 협의는 개발자가 앞당길 수 없다.</p>
+<h3 id="h9">④ 🔴 법무 게이트 셋 — MVP 경로 위에 있다</h3>
+<div class="tw"><table><thead><tr><th>게이트</th><th>차단 대상</th><th style="text-align:center">산출물</th></tr></thead><tbody><tr><td>REQ-NF-010</td><td><strong>공개 발행 · 그룹 공개</strong></td><td style="text-align:center">4종</td></tr><tr><td>REQ-NF-017 ③④</td><td><strong>공개 발행 · 그룹 공개</strong></td><td style="text-align:center">3종</td></tr><tr><td>REQ-FUNC-007</td><td>음악 라이브러리</td><td style="text-align:center">3종</td></tr></tbody></table></div>
+<p><strong>셋 다 개발이 아니라 승인 대기다.</strong> 개발이 끝나도 승인이 안 나면 기능이 빌드에 들어가지 않는다.</p>
+<h2 id="h9">1.4 🔴 MVP 범위 조정안</h2>
+<blockquote><p><strong>질문 — 17개가 정말 전부 MVP여야 하는가.</strong></p></blockquote>
+<h3 id="h10">근거: VPS의 논리를 그대로 적용하면</h3>
+<p>VPS는 F14(선택 데이터 학습)를 <strong>"사용자 없이는 학습 데이터가 생기지 않는다"</strong> 는 이유로 유보했다. <strong>같은 논리가 반응 기능에도 적용된다</strong> — 사용자가 열 명일 때 좋아요·댓글이 붙을 대상이 없다.</p>
+<p><strong>그러나 VPS의 반론도 유효하다</strong> — <em>"관계망은 나중에 붙일 수 없다."</em> 이건 사실이다. 다만 <strong>관계 구조와 반응 기능은 다르다.</strong></p>
+<div class="tw"><table><thead><tr><th>구분</th><th style="text-align:center">나중에 붙일 수 있나</th><th>판단</th></tr></thead><tbody><tr><td>F11 팔로우 · F13 피드 · F23 그룹</td><td style="text-align:center">🔴 <strong>어렵다</strong> — 데이터 모델과 조회 경로의 뼈대</td><td><strong>Day-1 유지</strong></td></tr><tr><td>F19 좋아요 · F20 댓글·신고 · F21 공유</td><td style="text-align:center">🟢 <strong>쉽다</strong> — 기존 기록에 얹는 기능</td><td><strong>조정 가능</strong></td></tr></tbody></table></div>
+<h3 id="h10">제안 — 공개 발행을 Phase 3에서 분리</h3>
+<div class="tw"><table><thead><tr><th>안</th><th>범위</th><th>효과</th></tr></thead><tbody><tr><td><strong>현행</strong></td><td>MVP 17 (그룹 공개 + 전체공개 + 반응 3종)</td><td>법무 게이트 3개 전부 MVP 경로</td></tr><tr><td>🔵 <strong>조정안</strong></td><td>MVP 14 (<strong>그룹 공개까지</strong> · 반응 3종 후속)</td><td>🟢 <strong>REQ-NF-010·017 게이트가 MVP 경로에서 빠진다</strong></td></tr></tbody></table></div>
+<p><strong>Core Job 점검</strong> — <em>"이미 찍어둔 / 내가 판단한 / 공개와 무관하게 내 기록으로"</em>. <strong>공개 발행이 없어도 세 조건 전부 성립한다.</strong> D4(기록 우선·공개 선택)도 성립하고 <strong>Gate B(기록 공간이 부계정을 대체하는가)</strong> 도 그대로 판정된다.</p>
+<p><strong>잃는 것</strong> — O7(재방문) 검증이 약해진다. 다만 <strong>그룹 공개만으로도 소비 루프의 최소 형태는 돈다.</strong></p>
+<blockquote><p>🔺 <strong>이건 기술 판단이 아니라 제품 결정이다.</strong> 다만 <strong>얻는 것이 크다</strong> — 법무 승인 대기가 MVP 완주 경로에서 빠지고, 미성년자 영상 처리 부담도 파일럿 수준으로 낮아진다.</p></blockquote>
+<h2 id="h10">1.5 개발 속도 종합</h2>
+<div class="tw"><table><thead><tr><th>항목</th><th style="text-align:center">판정</th></tr></thead><tbody><tr><td>스택이 속도에 유리한가</td><td style="text-align:center">🟢 <strong>그렇다</strong> — S 7건은 특히 빠르다</td></tr><tr><td>기간을 산정할 수 있는가</td><td style="text-align:center">🔴 <strong>아니다</strong> — 팀 규모·속도 실측이 없다 <code>[TBD]</code></td></tr><tr><td>지금 착수 가능한가</td><td style="text-align:center">🟡 <strong>부분</strong> — Gate A 트랙은 가능, 스프린트 트랙은 SP-3 이후</td></tr><tr><td>조정할 것</td><td style="text-align:center">🔴 <strong>클라이언트 렌더 M→L 재판정</strong> · 🔵 <strong>공개 발행 분리 검토</strong></td></tr></tbody></table></div>
+<hr>
+<h1 id="h11">2. 외부 연동과 기술 스택 적절성</h1>
+<h2 id="h12">2.1 외부 의존 목록</h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>대상</th><th>성격</th><th style="text-align:center">오픈소스 대체</th><th style="text-align:center">잠금 위험</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td><strong>Vercel</strong></td><td>배포·실행</td><td style="text-align:center">🟢 가능 (Node 호스팅 일반)</td><td style="text-align:center">🟢 낮음</td></tr><tr><td style="text-align:center">2</td><td><strong>Supabase</strong></td><td>DB·스토리지·인증·Realtime</td><td style="text-align:center">🟢 <strong>오픈소스</strong> · 자체 호스팅 가능</td><td style="text-align:center">🟢 낮음</td></tr><tr><td style="text-align:center">3</td><td><strong>Gemini</strong></td><td>영상 이해</td><td style="text-align:center">🟡 SDK 추상화로 교체 가능 (C-TEC-006)</td><td style="text-align:center">🟡 중간</td></tr><tr><td style="text-align:center">4</td><td>🔴 <strong>추론 API</strong></td><td>인물 추적</td><td style="text-align:center">🟡 <strong>모델은 오픈소스(SAM 2)이나 호스팅은 종속</strong></td><td style="text-align:center">🔴 <strong>높음</strong></td></tr><tr><td style="text-align:center">5</td><td>음원 제공자</td><td>라이선스</td><td style="text-align:center">🔴 대체 어려움</td><td style="text-align:center">🟡 중간</td></tr><tr><td style="text-align:center">6</td><td>카카오 공유</td><td>전달</td><td style="text-align:center">🟢 OS 공유 시트로 대체</td><td style="text-align:center">🟢 낮음</td></tr></tbody></table></div>
+<p><strong>여섯 중 넷은 잠금 위험이 낮다.</strong> Supabase는 오픈소스라 최악의 경우 자체 호스팅이 되고, Vercel도 Next.js 자체는 다른 호스팅에서 돈다.</p>
+<h2 id="h13">2.2 🔴 추론 API만 성격이 다르다</h2>
+<div class="tw"><table><thead><tr><th>항목</th><th>판단</th></tr></thead><tbody><tr><td>대체 가능성</td><td>🟡 <strong>모델(SAM 2)은 오픈소스</strong> — 그러나 <strong>직접 호스팅하면 C-TEC-005 위반</strong>이자 T1이 피하려던 운영 부담이 돌아온다</td></tr><tr><td>잠금의 실체</td><td><strong>API 스펙이 아니라 정확도 특성</strong>에 잠긴다. 다른 API로 바꾸면 O9·오탐률이 달라지고 <strong>Gate A를 다시 통과해야 한다</strong></td></tr><tr><td>완화</td><td>🔺 <strong>추상화 계층 필수</strong> — Gemini와 같은 방식(§2.3)</td></tr></tbody></table></div>
+<blockquote><p><strong>이것이 이 아키텍처의 유일한 실질 잠금이다.</strong> 그리고 SP-1이 그 대상을 고른다.</p></blockquote>
+<h2 id="h14">2.3 🔺 권고 — 추론 API도 SDK 수준으로 추상화</h2>
+<p>C-TEC-006은 <strong>Gemini만</strong> 환경 변수 교체를 요구한다. 그런데 <strong>바꿀 가능성이 더 높은 것은 추론 API</strong>다(SP-1 후보가 둘이고, Gate A 결과에 따라 갈린다).</p>
+<pre class="code"><code class="language-ts">// lib/inference/provider.ts
+export interface TrackingProvider {
+  submit(input: { videoUrl: string; anchor: BBox; frameMs: number; callbackUrl: string })
+    : Promise&lt;{ inferenceId: string }&gt;;
+  parseWebhook(body: unknown): { intervals: Interval[]; confidence: number[] };
+}</code></pre>
+<p><strong>두 후보(AWS · Replicate)의 응답 형태가 다르므로 어댑터가 필요하다.</strong> SP-1 벤치마크 코드를 이 인터페이스로 짜면 <strong>벤치마크 하니스가 그대로 프로덕션 어댑터가 된다.</strong></p>
+<h2 id="h15">2.4 복잡성 평가</h2>
+<div class="tw"><table><thead><tr><th>항목</th><th style="text-align:center">평가</th></tr></thead><tbody><tr><td>서비스 개수</td><td style="text-align:center">🟢 <strong>적절</strong> — 단일 앱 + 외부 6</td></tr><tr><td>계층 수</td><td style="text-align:center">🟢 적절 — 프론트/백 미분리로 오히려 단순</td></tr><tr><td>비동기 경로</td><td style="text-align:center">🟡 <strong>주의</strong> — 업로드 → 추론 → webhook → Realtime의 4단 비동기. <strong>상태 추적이 이 시스템의 복잡성 중심</strong></td></tr><tr><td>데이터 일관성</td><td style="text-align:center">🟢 단일 PostgreSQL</td></tr></tbody></table></div>
+<blockquote><p><strong>복잡성은 서비스 개수가 아니라 비동기 경로에 있다.</strong> ProcessingJob의 <code>stage</code>·<code>checkpoint</code>가 그 복잡성을 흡수하도록 설계돼 있고(DS §6 상태 기계), 이 설계가 없으면 디버깅이 어려워진다.</p></blockquote>
+<h2 id="h16">2.5 외부 연동 종합 — 🟢 <strong>적절</strong></h2>
+<p><strong>외부 의존이 적고 대부분 대체 가능하다.</strong> 유일한 실질 잠금은 추론 API이며, <strong>추상화 계층으로 완화 가능</strong>하다.</p>
+<hr>
+<h1 id="h17">3. 운영 비용</h1>
+<h2 id="h18">3.1 산정 전제</h2>
+<div class="tw"><table><thead><tr><th>항목</th><th style="text-align:right">값</th><th>출처</th></tr></thead><tbody><tr><td>연 처리 물량</td><td style="text-align:right"><strong>12만 편</strong></td><td>1만 명 × 월 1편 <code>[HYPOTHESIS]</code></td></tr><tr><td>원본 크기</td><td style="text-align:right"><strong>4GB</strong> / 40분</td><td><code>[SOURCE]</code></td></tr><tr><td>결과물 크기</td><td style="text-align:right">약 5MB / 15초</td><td><code>[추정]</code></td></tr><tr><td>원본 보관</td><td style="text-align:right"><strong>결과물 확보 시점까지</strong></td><td>비즈니스 규칙 9</td></tr></tbody></table></div>
+<h2 id="h19">3.2 🔴 원가 구조 — 3분할이 아니라 <strong>4분할</strong></h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>규모</th><th style="text-align:center">현재 문서</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td><strong>추론 API</strong></td><td>편당 × 12만</td><td style="text-align:center">✅ 반영</td></tr><tr><td style="text-align:center">2</td><td>Gemini 토큰</td><td>편당 × 12만</td><td style="text-align:center">✅ 반영</td></tr><tr><td style="text-align:center">3</td><td>렌더</td><td><strong>0원</strong> (사용자 단말)</td><td style="text-align:center">✅ 반영</td></tr><tr><td style="text-align:center"><strong>4</strong></td><td>🔴 <strong>저장 + 전송</strong></td><td><strong>아래 참조</strong></td><td style="text-align:center">❌ <strong>누락</strong></td></tr></tbody></table></div>
+<h3 id="h20">전송량 계산</h3>
+<pre class="code"><code>업로드 (사용자 → Storage)      4GB × 12만 =  480TB/년   ← 통상 무료 또는 저렴
+추론 API로 전달 (Storage → 외부) 4GB × 12만 =  480TB/년   ← 🔴 egress · 통상 유료
+결과물 배포 (Storage → 시청자)   5MB × 12만 × 조회수      ← 소비 루프에 비례</code></pre>
+<blockquote><p>🔴 <strong><code>Storage → 추론 API</code>의 480TB가 지금 어느 문서에도 없다.</strong></p>
+<p>클라우드에서 <strong>egress(외부 전송)는 통상 가장 비싼 항목</strong>이다. 정확한 단가는 사업자·리전·계약에 따라 다르므로 여기 적지 않으나, <strong>480TB는 무시할 수 없는 규모</strong>이며 <strong>추론 원가를 넘을 가능성이 있다.</strong></p></blockquote>
+<h3 id="h20">저장량</h3>
+<p>원본을 <strong>결과물 확보까지만</strong> 보관하면 상시 저장량은 처리 중인 분량으로 한정된다.</p>
+<pre class="code"><code>주당 처리 ≈ 12만 / 52 ≈ 2,300편
+동시 보관 ≈ 2,300 × 4GB ≈ 9.2TB   ← 보관 기간 1주 가정 [추정]</code></pre>
+<p><strong>보관 기간이 원가를 선형으로 좌우한다.</strong> 🔺 REQ-NF-014의 <em>"보존 기간 <code>[TBD]</code>"</em> 가 비용 항목이기도 하다는 점이 명시돼 있지 않다.</p>
+<h2 id="h20">3.3 🔴 ADR-3의 근거를 넓혀야 한다</h2>
+<p>ADR-3(<code>저해상도 1차 → 선택분만 고화질</code>)의 현재 근거는 <strong>GPU 원가</strong>뿐이다. <strong>그러나 저해상도로 전처리해 넘기면 전송량도 함께 준다.</strong></p>
+<div class="tw"><table><thead><tr><th>전처리</th><th style="text-align:right">전송량 (연)</th><th>효과</th></tr></thead><tbody><tr><td>원본 그대로</td><td style="text-align:right">480TB</td><td>기준</td></tr><tr><td>1/2 해상도</td><td style="text-align:right">약 120TB <code>[추정]</code></td><td>🟢 <strong>4분의 1</strong></td></tr><tr><td>1/4 해상도</td><td style="text-align:right">약 30TB <code>[추정]</code></td><td>🟢 <strong>16분의 1</strong></td></tr></tbody></table></div>
+<h3 id="h21">🔴 그런데 여기에 상충이 있다</h3>
+<p><strong>다운스케일은 탐지율을 떨어뜨린다.</strong> 이 제품의 조건이 <em>"코트 반대편에서 화면 구석에 작게"</em> 이므로, <strong>원거리 인물은 다운스케일에 특히 취약하다.</strong></p>
+<blockquote><p><strong>전송비와 O9가 같은 손잡이에 걸려 있다.</strong> 해상도를 낮추면 비용이 제곱으로 줄지만 탐지율도 함께 떨어진다.</p>
+<p><strong>→ SP-1 벤치마크에 항목 추가가 필요하다.</strong></p></blockquote>
+<h3 id="h21">🔺 SP-1 추가 항목 — B8</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>측정</th></tr></thead><tbody><tr><td style="text-align:center"><strong>B8</strong></td><td><strong>입력 해상도별 탐지율</strong></td><td>원본 · 1/2 · 1/4 각각에서 B1(탐지율)·B2(오탐률) 측정</td></tr></tbody></table></div>
+<p><strong>이 값이 나와야 "탐지율을 얼마나 포기하면 전송비를 얼마나 아끼는가"를 계산할 수 있다.</strong> 지금은 그 교환비를 모른 채 ADR-3을 적용하고 있다.</p>
+<h2 id="h21">3.4 Vercel 실행 비용</h2>
+<p><strong>T1 확정으로 함수 실행 시간이 밀리초 단위로 줄었다.</strong> 업로드 개시·추론 요청·webhook 수신·후보 조회가 전부 짧다.</p>
+<div class="tw"><table><thead><tr><th>항목</th><th style="text-align:center">판단</th></tr></thead><tbody><tr><td>함수 실행</td><td style="text-align:center">🟢 <strong>미미</strong></td></tr><tr><td>대역폭</td><td style="text-align:center">🟡 결과물 배포가 Vercel을 거치면 비용 발생 → <strong>Storage 직접 서빙 권고</strong></td></tr></tbody></table></div>
+<blockquote><p>🔺 <strong>결과물을 Vercel을 통해 서빙하지 않는다.</strong> Signed URL로 Storage에서 직접 내보내야 한다. 피드가 도는 만큼 이 경로가 반복된다.</p></blockquote>
+<h2 id="h22">3.5 비용 종합 — 🔴 <strong>재산정 필요</strong></h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>조치</th><th>대상</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td>🔴 <strong>REQ-NF-013 원가 항목에 전송·저장 추가</strong> (3분할 → 4분할)</td><td>SRS</td></tr><tr><td style="text-align:center">2</td><td>🔴 <strong>SP-1에 B8(해상도별 탐지율) 추가</strong></td><td>스파이크 계획</td></tr><tr><td style="text-align:center">3</td><td>🔺 <strong>ADR-3 근거에 전송비 절감 추가</strong></td><td>SRS §1.5.2</td></tr><tr><td style="text-align:center">4</td><td>🔺 <strong>원본 보관 기간이 비용 항목임을 명시</strong></td><td>REQ-NF-014</td></tr><tr><td style="text-align:center">5</td><td>🔺 <strong>결과물은 Storage 직접 서빙</strong></td><td>DS §3</td></tr></tbody></table></div>
+<hr>
+<h1 id="h23">4. 통합 조정안</h1>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>조정</th><th style="text-align:center">관점</th><th>영향</th><th style="text-align:center">우선순위</th></tr></thead><tbody><tr><td style="text-align:center"><strong>A-1</strong></td><td>🔴 <strong>SP-1에 B8(해상도별 탐지율) 추가</strong></td><td style="text-align:center">비용</td><td>전송비 ↔ O9 교환비 확보</td><td style="text-align:center"><strong>0</strong></td></tr><tr><td style="text-align:center"><strong>A-2</strong></td><td>🔴 <strong>REQ-NF-013을 4분할로 재정의</strong></td><td style="text-align:center">비용</td><td>원가 산정의 전제</td><td style="text-align:center"><strong>0</strong></td></tr><tr><td style="text-align:center"><strong>A-3</strong></td><td>🔴 <strong>클라이언트 렌더를 M → L 재판정</strong></td><td style="text-align:center">속도</td><td>스프린트 이월 방지</td><td style="text-align:center"><strong>0</strong></td></tr><tr><td style="text-align:center"><strong>A-4</strong></td><td>🔵 <strong>공개 발행을 MVP에서 분리 검토</strong></td><td style="text-align:center">속도</td><td>법무 게이트 2개가 MVP 경로에서 빠짐</td><td style="text-align:center">1</td></tr><tr><td style="text-align:center"><strong>A-5</strong></td><td>🔺 <strong>추론 API 추상화 계층</strong></td><td style="text-align:center">스택</td><td>유일한 실질 잠금 완화 · 벤치마크 하니스 재사용</td><td style="text-align:center">1</td></tr><tr><td style="text-align:center"><strong>A-6</strong></td><td>🔺 결과물 Storage 직접 서빙</td><td style="text-align:center">비용</td><td>Vercel 대역폭 회피</td><td style="text-align:center">2</td></tr><tr><td style="text-align:center"><strong>A-7</strong></td><td>🔺 ADR-3 근거 확장 · 보관 기간의 비용 성격 명시</td><td style="text-align:center">비용</td><td>문서 정합</td><td style="text-align:center">2</td></tr></tbody></table></div>
+<h2 id="h24">4.1 A-1~A-3은 Phase 0 착수 전에 처리한다</h2>
+<p><strong>셋 다 SP-1·SP-3의 설계를 바꾼다.</strong> 스파이크를 돌린 뒤에 알면 다시 돌려야 한다.</p>
+<h2 id="h25">4.2 A-4는 제품 결정이다</h2>
+<p><strong>기술 검토가 결정할 사안이 아니다.</strong> 다만 판단 재료는 이렇다 — <strong>Core Job·D4·Gate B가 전부 공개 발행 없이 성립</strong>하고, 잃는 것은 <strong>O7 검증의 강도</strong>다.</p>
+<hr>
+<h1 id="h26">5. 미확정 — 추정으로 채우지 않은 것</h1>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>왜</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td><strong>개발 기간</strong></td><td>팀 규모·속도 실측이 없다. 인·일 환산은 근거 없는 숫자가 된다</td></tr><tr><td style="text-align:center">2</td><td><strong>클라우드 단가</strong></td><td>사업자·리전·계약에 따라 다르다. <strong>구조와 규모만 산정</strong>했다</td></tr><tr><td style="text-align:center">3</td><td><strong>편당 추론 원가</strong></td><td>SP-1 B5에서 확정</td></tr><tr><td style="text-align:center">4</td><td><strong>해상도별 탐지율 교환비</strong></td><td>SP-1 <strong>B8</strong>에서 확정 (이 검토가 신설 제안)</td></tr><tr><td style="text-align:center">5</td><td><strong>단말 하한선</strong></td><td>SP-3 S3-c에서 확정</td></tr><tr><td style="text-align:center">6</td><td>결과물 조회수</td><td>소비 루프 실측 후</td></tr></tbody></table></div>
+<blockquote><p><strong>연 480TB 전송은 계산값이지 견적이 아니다.</strong> <code>4GB × 12만 편</code>이라는 곱셈의 결과이며, 그 단가는 사업자 선정 후에만 나온다. <strong>그러나 규모 자체가 재산정을 요구하기에 충분하다.</strong></p></blockquote>
+<hr>
+<p><em>이 검토는 시스템·비용 효율성 관점의 판단이며 제품 가치 판정은 <code>plans/PLAN_기술스택-전면적용.md</code> §2에 있다. 두 문서는 서로를 대체하지 않는다 — 전자는 "만들면 가치가 남는가", 이 문서는 "만들 수 있고 감당 가능한가"를 답한다.</em></p>
+<p class="meta">MVP 개발목표 적절성 종합 검토 · 원본 MVP-개발목표-적절성-종합-검토(난이도·가능성·효율성)-보고서.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>
