@@ -67,7 +67,7 @@
 | ID | 문서 |
 | --- | --- |
 | **TREF-01** | `[SRS]hilit-SRSv1.7.md` — 요구사항 원천 |
-| **TREF-02** | `[DS]hilit-DSv1.0.md` — 기술 중립 설계 |
+| **TREF-02** | `[DS]hilit-DSv1.1.md` — 기술 중립 설계 |
 | **TREF-03** | `VPS_v0_3.html` — 차별점 D1~D4 |
 | **TREF-04** | Next.js App Router · Vercel · Supabase · Prisma · Vercel AI SDK 공식 문서 ⚠️ **버전별 제한값은 착수 시 재확인** |
 
@@ -131,7 +131,7 @@
 
 > ### 이 5건이 왜 치명적인가
 >
-> VPS 0.3이 정의한 차별점 **D1 — "말하지 않고 움직이는 사람을 추적한다"** 가 정확히 이 다섯이다. SRS v1.5 §6.5는 **D1이 실패하면 나머지 셋은 일반 기록 앱이 된다**고 적었다.
+> VPS 0.3이 정의한 차별점 **D1 — "말하지 않고 움직이는 사람을 추적한다"** 가 정확히 이 다섯이다. SRS v1.7 §6.6은 **D1이 실패하면 나머지 셋은 일반 기록 앱이 된다**고 적었다.
 >
 > **즉 이 스택으로 만들면, 만들 수 있는 것은 "기록이 남는 숏폼 SNS"이지 "AI가 나를 찾아주는 서비스"가 아니다.**
 
@@ -326,7 +326,7 @@ enum VideoStatus { UPLOADING UPLOADED PROCESSING READY FAILED }
 enum Role { user operator }
 ```
 
-**전체 16개 모델의 속성·제약·인덱스는 `[DS]hilit-DSv1.0.md` §4.2를 따른다.** 이 문서는 **Prisma·PostgreSQL로의 사상만** 다룬다.
+**전체 16개 모델의 속성·제약·인덱스는 `[DS]hilit-DSv1.1.md` §4.2를 따른다.** 이 문서는 **Prisma·PostgreSQL로의 사상만** 다룬다.
 
 | DS 설계 | Prisma·PG 구현 |
 | --- | --- |
@@ -402,7 +402,7 @@ create policy record_read on records for select using (
 | 항목 | 설계 |
 | --- | --- |
 | 인증 | **Supabase Auth** 세션 → Server Action에서 `auth.uid()` 확보 |
-| 권한 없음 | RLS가 **빈 결과**를 반환 → 애플리케이션은 `notFound()` 처리 (v1.5 §3.1.1의 `404` 원칙과 일치) |
+| 권한 없음 | RLS가 **빈 결과**를 반환 → 애플리케이션은 `notFound()` 처리 (DS §3.1.1의 `404` 원칙과 일치) |
 | 입력 검증 | **Zod** 스키마 — Server Action 첫 줄에서 파싱 |
 | 오류 전달 | Server Action은 **예외를 던지지 않고** `{ok:false, code, message}` 반환 — 클라이언트 UI가 분기 |
 | 멱등성 | `Idempotency-Key`를 인자로 받아 `idempotency_keys` 테이블에 기록 |

@@ -147,7 +147,7 @@ v1.1~v1.2는 실패 경로를 요구사항으로 승격해 REQ를 41 → 60건�
 | **[`SRS/[SRS]hilit-SRSv1.7.md`](SRS/%5BSRS%5Dhilit-SRSv1.7.md)** | **요구사항 원천.** 요구사항 **45건** · 운영 시나리오 **42건** · 설계 결정 **3건** · 시퀀스 다이어그램 9개 |
 | [`PRD/HILiT_PRD_v0.1.md`](PRD/HILiT_PRD_v0.1.md) | 변환 원천 PRD. 12장 · Evidence Gap 13건 · Open Question 13건 |
 | [`VPS_v0_3.html`](VPS_v0_3.html) | **Source of Truth.** Core Job · Outcome · 차별점 · MVP 범위의 원천 |
-| **[`DS/[DS]hilit-DSv1.0.md`](DS/%5BDS%5Dhilit-DSv1.0.md)** | **설계 명세.** API 스키마 23건 · 엔티티 속성 16건 · 도메인 클래스 · Use Case 모델 |
+| **[`DS/[DS]hilit-DSv1.1.md`](DS/%5BDS%5Dhilit-DSv1.1.md)** | **설계 명세.** API 스키마 23건 · 엔티티 속성 16건 · 도메인 클래스 · Use Case 모델 |
 | **[`SRS/[SRS]hilit-SRSv2.0-nextjs.md`](SRS/%5BSRS%5Dhilit-SRSv2.0-nextjs.md)** | **기술 제약 반영판 v2.1.** Next.js·Vercel·Supabase·Gemini 스택 판정 · **T1 확정** · C-TEC-007 대안 |
 | [`AUDIT/AUDIT_SRS-v1.4_초기감사.md`](AUDIT/AUDIT_SRS-v1.4_%EC%B4%88%EA%B8%B0%EA%B0%90%EC%82%AC.md) | ISO 29148 기반 초기 감사 — 판정 **FAIL** |
 | [`AUDIT/AUDIT_SRS-v1.5_재감사.md`](AUDIT/AUDIT_SRS-v1.5_%EC%9E%AC%EA%B0%90%EC%82%AC.md) | P0 3건 해소 후 재감사 — **CONDITIONAL PASS** |
@@ -189,7 +189,7 @@ VPS 0.3        왜 만드는가        사업 · 제품
 PRD v0.1       무엇을 해결하는가   제품
   ↓
 SRS v1.5       무엇을 만족해야     제품 아키텍트   ← 기술 중립
-  ├─ DS v1.0   어떻게 만들 것인가   백엔드 · AI 리드
+  ├─ DS v1.1   어떻게 만들 것인가   백엔드 · AI 리드
   └─ SRS v2.1  지정 스택에서 가능한가  제품 아키텍트  ← 기술 제약 반영 · T1 확정
 ```
 

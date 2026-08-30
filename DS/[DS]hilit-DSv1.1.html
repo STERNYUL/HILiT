@@ -76,17 +76,17 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 </style>
 </head><body>
 <div class="wrap">
-<nav><a class="lv1" href="#h0">Software Design Description (SDD)</a><a class="lv2" href="#h1">이 문서가 존재하는 이유</a><a class="lv1" href="#h2">1. 서론</a><a class="lv2" href="#h3">1.1 목적</a><a class="lv2" href="#h4">1.2 범위</a><a class="lv2" href="#h5">1.3 참조</a><a class="lv2" href="#h6">1.4 표기</a><a class="lv1" href="#h7">2. Context Viewpoint</a><a class="lv2" href="#h8">2.1 Use Case 모델</a><a class="lv2" href="#h9">2.2 시스템 경계</a><a class="lv1" href="#h10">3. Interface Viewpoint — API 명세</a><a class="lv2" href="#h11">3.1 공통 규약</a><a class="lv2" href="#h12">3.2 엔드포인트 명세</a><a class="lv1" href="#h13">4. Information Viewpoint — 데이터 모델</a><a class="lv2" href="#h14">4.1 공통 규약 [PROPOSED]</a><a class="lv2" href="#h15">4.2 엔티티 상세</a><a class="lv2" href="#h16">4.3 PRD ↔ SRS ↔ DS 명칭 매핑</a><a class="lv2" href="#h17">4.4 보존 정책 종합 [PROPOSED]</a><a class="lv1" href="#h18">5. Logical Viewpoint — 도메인 클래스</a><a class="lv1" href="#h19">6. Interaction Viewpoint — 상태 동역학</a><a class="lv1" href="#h20">7. 추적성 — DS → SRS</a><a class="lv1" href="#h21">8. 설계 결정 요약</a><a class="lv1" href="#h22">9. 🔺 SRS 개정 요청</a></nav>
+<nav><a class="lv1" href="#h0">Software Design Description (SDD)</a><a class="lv2" href="#h1">이 문서가 존재하는 이유</a><a class="lv1" href="#h2">1. 서론</a><a class="lv2" href="#h3">1.1 목적</a><a class="lv2" href="#h4">1.2 범위</a><a class="lv2" href="#h5">1.3 참조</a><a class="lv2" href="#h6">1.4 표기</a><a class="lv1" href="#h7">2. Context Viewpoint</a><a class="lv2" href="#h8">2.1 Use Case 모델 — SRS로 이관</a><a class="lv2" href="#h9">2.2 시스템 경계</a><a class="lv1" href="#h10">3. Interface Viewpoint — API 명세</a><a class="lv2" href="#h11">3.1 공통 규약</a><a class="lv2" href="#h12">3.2 엔드포인트 명세</a><a class="lv1" href="#h13">4. Information Viewpoint — 데이터 모델</a><a class="lv2" href="#h14">4.1 공통 규약 [PROPOSED]</a><a class="lv2" href="#h15">4.2 엔티티 상세</a><a class="lv2" href="#h16">4.3 PRD ↔ SRS ↔ DS 명칭 매핑</a><a class="lv2" href="#h17">4.4 보존 정책 종합 [PROPOSED]</a><a class="lv1" href="#h18">5. Logical Viewpoint — 도메인 클래스</a><a class="lv1" href="#h19">6. Interaction Viewpoint — 상태 동역학</a><a class="lv1" href="#h20">7. 추적성 — DS → SRS</a><a class="lv1" href="#h21">8. 설계 결정 요약</a><a class="lv1" href="#h22">9. 🔺 SRS 개정 요청</a></nav>
 <main>
 <h1 id="h0">Software Design Description (SDD)</h1>
 <p><strong>Document ID:</strong> DS-HILIT-MVP-001</p>
-<p><strong>version:</strong> 1.0</p>
+<p><strong>version:</strong> 1.1</p>
 <p><strong>Date:</strong> 2026-08-30</p>
 <p><strong>Standard:</strong> IEEE 1016 설계 관점(Design Viewpoints) 구조</p>
-<p><strong>상위 문서:</strong> <code>[SRS]hilit-SRSv1.7.md</code> (요구사항 45건 · 시나리오 42건)</p>
+<p><strong>상위 문서:</strong> <code>SRS/[SRS]hilit-SRSv1.7.md</code> (요구사항 45건 · 시나리오 42건 · 다이어그램 18종)</p>
 <hr>
 <h3 id="h1">판 이력</h3>
-<div class="tw"><table><thead><tr><th>판</th><th>날짜</th><th>변경</th><th>근거</th></tr></thead><tbody><tr><td><strong>1.0</strong></td><td><strong>2026-08-30</strong></td><td><strong>초판.</strong> SRS가 <em>"개요"</em> 로 한정한 세 영역을 설계 수준으로 확정 — <strong>API 스키마 · 데이터 모델 속성 · 도메인 클래스</strong>. 감사 P1-6·7·8 · P2-1 대상</td><td><code>AUDIT_SRS_2026-08-30.md</code></td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>판</th><th>날짜</th><th>변경</th><th>근거</th></tr></thead><tbody><tr><td>1.0</td><td>2026-08-30</td><td><strong>초판.</strong> SRS가 <em>"개요"</em> 로 한정한 세 영역을 설계 수준으로 확정 — <strong>API 스키마 · 데이터 모델 속성 · 도메인 클래스</strong>. 감사 P1-6·7·8 · P2-1 대상</td><td><code>AUDIT_SRS_2026-08-30.md</code></td></tr><tr><td><strong>1.1</strong></td><td><strong>2026-08-30</strong></td><td><strong>SRS v1.7 정합화.</strong> ① <strong>§2.1 Use Case 모델을 SRS로 이관</strong> — 팀 SRS에 이미 UC-01~09가 있는데 DS가 UCS-1~8을 새로 만들어 <strong><code>UC-01</code>이 두 문서에서 다른 뜻</strong>이 됐다. SRS 그림 4-1을 정본으로 단일화 ② SRS 절 참조 4건 갱신(§6.4→6.5 · §6.3→6.4) ③ §9-1(행위자 구분)은 SRS v1.7 §2.3.1에서 해소</td><td><code>SRS/[SRS]hilit-SRSv1.7.md</code></td></tr></tbody></table></div>
 <hr>
 <h2 id="h1">이 문서가 존재하는 이유</h2>
 <p>SRS v1.5는 스스로를 <strong>요구사항 명세</strong>로 한정하고 API·엔티티를 <em>"개요"</em> 로 표기했다. 감사는 그것을 <strong>P1 4건</strong>(API 스키마 전무 · Entity 속성 전무 · Use Case Diagram 부재 · Class Diagram 빈약)으로 판정했다.</p>
@@ -99,49 +99,18 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <h2 id="h3">1.1 목적</h2>
 <p>SRS v1.5의 요구사항 45건을 구현하기 위한 <strong>인터페이스 · 데이터 · 컴포넌트 · 상태 설계</strong>를 확정한다.</p>
 <h2 id="h4">1.2 범위</h2>
-<div class="tw"><table><thead><tr><th>포함</th><th>제외</th></tr></thead><tbody><tr><td>API 요청·응답·오류 스키마 · 인증·인가 · 멱등성 · 속도 제한</td><td>요구사항 정의 (SRS 소관)</td></tr><tr><td>엔티티 속성 · 타입 · 키 · 제약 · 인덱스 · 보존 정책</td><td>실험 설계 · 게이트 판정 (SRS §6.4)</td></tr><tr><td>도메인 클래스 · 상태 기계</td><td>인프라 프로비저닝 · 배포 파이프라인</td></tr><tr><td>Use Case 모델</td><td>화면 상세 디자인</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>포함</th><th>제외</th></tr></thead><tbody><tr><td>API 요청·응답·오류 스키마 · 인증·인가 · 멱등성 · 속도 제한</td><td>요구사항 정의 (SRS 소관)</td></tr><tr><td>엔티티 속성 · 타입 · 키 · 제약 · 인덱스 · 보존 정책</td><td>실험 설계 · 게이트 판정 (SRS §6.5)</td></tr><tr><td>도메인 클래스 · 상태 기계</td><td>인프라 프로비저닝 · 배포 파이프라인</td></tr><tr><td>Use Case 모델</td><td>화면 상세 디자인</td></tr></tbody></table></div>
 <h2 id="h5">1.3 참조</h2>
-<div class="tw"><table><thead><tr><th>ID</th><th>문서</th></tr></thead><tbody><tr><td><strong>DREF-01</strong></td><td><code>[SRS]hilit-SRSv1.7.md</code> — 요구사항 원천</td></tr><tr><td><strong>DREF-02</strong></td><td><code>AUDIT_SRS_2026-08-30.md</code> — 이 문서가 해소하는 지적</td></tr><tr><td><strong>DREF-03</strong></td><td><code>prototype_v0_6.html</code> — 화면 규격</td></tr><tr><td><strong>DREF-04</strong></td><td>IEEE 1016 — 설계 관점 구조</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>ID</th><th>문서</th></tr></thead><tbody><tr><td><strong>DREF-01</strong></td><td><code>SRS/[SRS]hilit-SRSv1.7.md</code> — 요구사항 원천</td></tr><tr><td><strong>DREF-02</strong></td><td><code>AUDIT_SRS_2026-08-30.md</code> — 이 문서가 해소하는 지적</td></tr><tr><td><strong>DREF-03</strong></td><td><code>prototype_v0_6.html</code> — 화면 규격</td></tr><tr><td><strong>DREF-04</strong></td><td>IEEE 1016 — 설계 관점 구조</td></tr></tbody></table></div>
 <h2 id="h6">1.4 표기</h2>
 <div class="tw"><table><thead><tr><th>태그</th><th>뜻</th></tr></thead><tbody><tr><td><code>[SOURCE·SRS]</code></td><td>SRS에 명시된 값을 그대로 옮김</td></tr><tr><td><code>[PROPOSED]</code></td><td>이 문서가 새로 제안하는 설계값</td></tr><tr><td><code>[TBD]</code></td><td>설계 결정이 남음</td></tr><tr><td>🔺</td><td><strong>SRS 개정 필요</strong> — §9에 모음</td></tr></tbody></table></div>
 <hr>
 <h1 id="h7">2. Context Viewpoint</h1>
-<h2 id="h8">2.1 Use Case 모델</h2>
-<blockquote><p>감사 <strong>P1-6</strong> 해소. SRS §2.2의 이용자 클래스 UC-01~06과 요구사항을 연결한다.</p></blockquote>
-<pre class="mermaid">flowchart LR
-    subgraph A["행위자"]
-        U1(("기록형 동호인&lt;br/&gt;UC-01"))
-        U2(("촬영 담당&lt;br/&gt;UC-02"))
-        U3(("저장공간 압박형&lt;br/&gt;UC-03"))
-        U4(("편집 포기형&lt;br/&gt;UC-04"))
-        U5(("크리에이터&lt;br/&gt;UC-05"))
-        U6(("팀 운영자&lt;br/&gt;UC-06"))
-        G(("법정대리인"))
-        OP(("운영자"))
-    end
-    subgraph S["시스템 경계 — HILiT"]
-        C1["UCS-1 원본에서 내 장면 찾기"]
-        C2["UCS-2 장면 고르고 완성하기"]
-        C3["UCS-3 공개 없이 기록 남기기"]
-        C4["UCS-4 그룹에만 열기"]
-        C5["UCS-5 피드 보고 반응하기"]
-        C6["UCS-6 원본 정리하기"]
-        C7["UCS-7 동의 관리"]
-        C8["UCS-8 신고 처리"]
-    end
-    U1 --&gt; C1 &amp; C2 &amp; C3 &amp; C5
-    U2 --&gt; C1 &amp; C4
-    U3 --&gt; C3 &amp; C6
-    U4 --&gt; C2
-    U5 --&gt; C1 &amp; C2
-    U6 --&gt; C3 &amp; C4 &amp; C5
-    G --&gt; C7
-    OP --&gt; C8
-    C1 -.-&gt;|"include"| C2
-    C2 -.-&gt;|"include"| C3
-    C4 -.-&gt;|"extend"| C3</pre>
-<div class="tw"><table><thead><tr><th>Use Case</th><th>행위자</th><th>대응 요구사항</th><th>Story</th></tr></thead><tbody><tr><td><strong>UCS-1</strong> 원본에서 내 장면 찾기</td><td>UC-01 · 02 · 05</td><td>REQ-FUNC-001 · 002 · 003 · 027</td><td>US-1 · US-4 · US-6</td></tr><tr><td><strong>UCS-2</strong> 장면 고르고 완성하기</td><td>UC-01 · 04 · 05</td><td>REQ-FUNC-004~008 · REQ-NF-018</td><td>US-1 · US-3 · US-6</td></tr><tr><td><strong>UCS-3</strong> 공개 없이 기록 남기기</td><td>UC-01 · 03 · 06</td><td>REQ-FUNC-009 · 010</td><td>US-2</td></tr><tr><td><strong>UCS-4</strong> 그룹에만 열기</td><td>UC-02 · 06</td><td>REQ-FUNC-013 · REQ-NF-009</td><td>US-4</td></tr><tr><td><strong>UCS-5</strong> 피드 보고 반응하기</td><td>UC-01 · 06</td><td>REQ-FUNC-011 · 012 · 014~017</td><td>US-5</td></tr><tr><td><strong>UCS-6</strong> 원본 정리하기</td><td>UC-03</td><td>REQ-FUNC-019 · SC-4.F2</td><td>US-2</td></tr><tr><td><strong>UCS-7</strong> 동의 관리</td><td>법정대리인</td><td>REQ-NF-016 · 017</td><td>—</td></tr><tr><td><strong>UCS-8</strong> 신고 처리</td><td>운영자</td><td>REQ-FUNC-016</td><td>US-5</td></tr></tbody></table></div>
-<blockquote><p><strong>UCS-7·8의 행위자는 SRS §2.2에 없다.</strong> 법정대리인과 운영자는 이용자 클래스가 아니지만 <strong>시스템과 상호작용하는 행위자</strong>다. 🔺 SRS §2.2에 행위자 구분 추가 필요(§9-1).</p></blockquote>
+<h2 id="h8">2.1 Use Case 모델 — SRS로 이관</h2>
+<blockquote><p>🔴 <strong>이 절은 v1.1에서 SRS로 이관됐다.</strong> 정본은 <strong><code>SRS §4 그림 4-1 유스케이스 다이어그램</code></strong>(UC-01~UC-10)이다.</p></blockquote>
+<p><strong>이관 사유</strong> — DS v1.0은 감사 P1-6(Use Case Diagram 부재)을 해소하려고 <strong>UCS-1~8</strong> 체계를 새로 만들었으나, <strong>팀 SRS에 이미 UC-01~09 체계가 있었다.</strong> 두 체계가 공존하면 같은 개념에 번호가 둘이 되고, 특히 <strong><code>UC-01</code>이 SRS에서는 "원본 불러오기"(유스케이스)를, DS에서는 "기록형 동호인"(이용자 클래스)을 가리켜</strong> 하나의 ID가 서로 다른 의미로 쓰였다.</p>
+<p><strong>SRS v1.7이 팀 체계를 채택</strong>하면서 이 문제가 해소됐다. DS는 유스케이스를 다루지 않고 <strong>설계 관점(§3~§6)에 집중</strong>한다.</p>
+<div class="tw"><table><thead><tr><th>이관 전 (DS UCS)</th><th>이관 후 (SRS UC)</th></tr></thead><tbody><tr><td>UCS-1 원본에서 내 장면 찾기</td><td><strong>UC-01 · UC-02</strong></td></tr><tr><td>UCS-2 장면 고르고 완성하기</td><td><strong>UC-03 · UC-04</strong></td></tr><tr><td>UCS-3 공개 없이 기록 남기기</td><td><strong>UC-05</strong></td></tr><tr><td>UCS-4 그룹에만 열기</td><td><strong>UC-06</strong></td></tr><tr><td>UCS-5 피드 보고 반응하기</td><td><strong>UC-07 · UC-08 · UC-09</strong></td></tr><tr><td>UCS-6 원본 정리하기</td><td><em>(REQ-FUNC-019 — 유스케이스 미부여)</em></td></tr><tr><td>UCS-7 동의 관리</td><td><strong>UC-10</strong></td></tr><tr><td>UCS-8 신고 처리</td><td><em>(UC-08에 포함)</em></td></tr></tbody></table></div>
 <h2 id="h9">2.2 시스템 경계</h2>
 <p><strong>시스템 안</strong> — 업로드 · 추적 · 후보 · 선택 · 보정 · 렌더 · 기록 · 공개 범위 · 그룹 · 피드 · 반응 · 공유 · 계측 <strong>시스템 밖</strong> — 촬영 · 갤러리 · 객체 스토리지 · GPU 인프라 · 음원 제공자 · 카카오톡 · 외부 발행</p>
 <hr>
@@ -309,7 +278,7 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <div class="tw"><table><thead><tr><th>#</th><th>원칙</th><th>이유</th></tr></thead><tbody><tr><td><strong>D1</strong></td><td><code>VisibilityEnforcer</code>를 <strong>거치지 않는 조회 경로를 두지 않는다</strong></td><td>REQ-NF-009. 우회 경로가 하나라도 있으면 요구사항이 성립하지 않는다</td></tr><tr><td><strong>D2</strong></td><td><code>ConfidenceGate</code>가 <strong>제외를 수행하되 데이터를 지우지 않는다</strong></td><td>제외 전/후 분리 집계(SRS §4.2)의 전제</td></tr><tr><td><strong>D3</strong></td><td><code>Record.isVisibleTo()</code>는 <strong>판정만</strong> 하고 <code>VisibilityEnforcer</code>가 <strong>감사 로그까지</strong> 책임진다</td><td>감사 로그 100%(REQ-NF-009)를 도메인 객체에 흩뿌리지 않는다</td></tr></tbody></table></div>
 <hr>
 <h1 id="h19">6. Interaction Viewpoint — 상태 동역학</h1>
-<p><strong>시퀀스 다이어그램은 SRS §3.5·§6.3에 9개가 있다.</strong> 여기서는 SRS가 다루지 않은 <strong>상태 전이</strong>만 설계한다.</p>
+<p><strong>시퀀스 다이어그램은 SRS §3.5·§6.4에 9개가 있다.</strong> 여기서는 SRS가 다루지 않은 <strong>상태 전이</strong>만 설계한다.</p>
 <pre class="mermaid">stateDiagram-v2
     [*] --&gt; UPLOADING : POST /videos
     UPLOADING --&gt; UPLOADING : PATCH chunks
@@ -330,7 +299,7 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <blockquote><p><strong><code>DETECTING → FAILED</code>(구간 0개)는 시스템 오류가 아니다.</strong> <code>failure_class = CAPTURE</code>로 분류하고 원인 후보를 제시한다(SC-1.F2). 이를 <code>INFRA</code>로 기록하면 실패 분류(REQ-NF-014)가 오염된다.</p></blockquote>
 <hr>
 <h1 id="h20">7. 추적성 — DS → SRS</h1>
-<div class="tw"><table><thead><tr><th>DS 산출</th><th>대응 요구사항</th><th>해소한 감사 지적</th></tr></thead><tbody><tr><td>§2.1 Use Case 모델 (UCS-1~8)</td><td>REQ-FUNC 전체 · REQ-NF-016·017</td><td><strong>P1-6</strong></td></tr><tr><td>§3.1 인증·인가 · 오류 · 멱등성</td><td>REQ-NF-009 · 013</td><td><strong>P1-7</strong></td></tr><tr><td>§3.2 API 23개 스키마</td><td>REQ-FUNC-001~019 · REQ-NF-012·014</td><td><strong>P1-7</strong></td></tr><tr><td>§4.2 엔티티 16개 속성</td><td>REQ-FUNC-009·010·013 · REQ-NF-007·011·022</td><td><strong>P1-8</strong></td></tr><tr><td>§4.3 명칭 매핑</td><td>—</td><td><strong>P1-3</strong></td></tr><tr><td>§4.4 보존 정책</td><td>REQ-NF-022</td><td>P1-8</td></tr><tr><td>§5 도메인 클래스</td><td>REQ-NF-009 · REQ-FUNC-027</td><td><strong>P2-1</strong></td></tr><tr><td>§6 상태 기계</td><td>SC-1.F2·F4 · SC-3.F1·F2 · REQ-NF-008</td><td>—</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>DS 산출</th><th>대응 요구사항</th><th>해소한 감사 지적</th></tr></thead><tbody><tr><td>~~§2.1 Use Case 모델~~ → <strong>SRS §4 그림 4-1로 이관</strong></td><td>REQ-FUNC 전체</td><td><strong>P1-6 (SRS가 해소)</strong></td></tr><tr><td>§3.1 인증·인가 · 오류 · 멱등성</td><td>REQ-NF-009 · 013</td><td><strong>P1-7</strong></td></tr><tr><td>§3.2 API 23개 스키마</td><td>REQ-FUNC-001~019 · REQ-NF-012·014</td><td><strong>P1-7</strong></td></tr><tr><td>§4.2 엔티티 16개 속성</td><td>REQ-FUNC-009·010·013 · REQ-NF-007·011·022</td><td><strong>P1-8</strong></td></tr><tr><td>§4.3 명칭 매핑</td><td>—</td><td><strong>P1-3</strong></td></tr><tr><td>§4.4 보존 정책</td><td>REQ-NF-022</td><td>P1-8</td></tr><tr><td>§5 도메인 클래스</td><td>REQ-NF-009 · REQ-FUNC-027</td><td><strong>P2-1</strong></td></tr><tr><td>§6 상태 기계</td><td>SC-1.F2·F4 · SC-3.F1·F2 · REQ-NF-008</td><td>—</td></tr></tbody></table></div>
 <p><strong>감사 P1 4건 · P2 1건 · P1-3 해소.</strong> 잔여는 <strong>P1-4</strong>(API 경로 불일치 — PRD 개정 사안) · <strong>P1-5</strong>(O3·O9 REQ-NF 복귀 — SRS 개정 사안) · <strong>P2-2</strong>(AC ID 역참조 — SRS 개정 사안)로, <strong>전부 상위 문서에서 처리할 항목</strong>이다.</p>
 <hr>
 <h1 id="h21">8. 설계 결정 요약</h1>
@@ -338,10 +307,10 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <hr>
 <h1 id="h22">9. 🔺 SRS 개정 요청</h1>
 <p>이 문서가 설계하면서 <strong>요구사항의 공백</strong>을 발견한 항목이다. <strong>DS가 요구사항을 만들지 않으므로 SRS 개정으로 올린다.</strong></p>
-<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>내용</th><th>근거</th><th>제안</th></tr></thead><tbody><tr><td style="text-align:center"><strong>9-1</strong></td><td><strong>행위자 구분 부재</strong> — 법정대리인·운영자가 §2.2 이용자 클래스에 없다</td><td>UCS-7·8의 행위자</td><td>§2.2에 <strong>행위자 절 분리</strong> 또는 §2.1 이해관계자와 연결</td></tr><tr><td style="text-align:center"><strong>9-2</strong></td><td>🔴 <strong>인증 요구사항 부재</strong> — REQ-NF-009가 인증을 전제하나 명시적 요구사항이 없다</td><td>§3.1.1</td><td><strong>REQ-NF 신설</strong> — 모든 API 인증 필수 · 미인증 <code>401</code> · 권한 없음 <code>404</code></td></tr><tr><td style="text-align:center"><strong>9-3</strong></td><td>API 3개 누락 — 업로드 세션 조회 · 프로필 조회 · 언팔로우</td><td>§3.2 A-03 · A-12 · A-18</td><td>SRS §6.1에 3행 추가. <strong>A-12는 SC-4.4의 구현 지점</strong>이라 특히 중요</td></tr><tr><td style="text-align:center"><strong>9-4</strong></td><td>보존 기간 <code>[TBD]</code></td><td>§4.4</td><td>법무 확정 후 SRS §4.4 규제 준수 표에 반영</td></tr><tr><td style="text-align:center"><strong>9-5</strong></td><td>영상 길이·크기 상한 미규정</td><td>§4.2 SourceVideo <code>CHECK</code></td><td>90분·6GB는 설계 제안값. <strong>요구사항으로 확정 필요</strong></td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>내용</th><th>근거</th><th>제안</th></tr></thead><tbody><tr><td style="text-align:center">~~9-1~~</td><td>~~행위자 구분 부재~~</td><td>—</td><td>✅ <strong>SRS v1.7 §2.3.1에서 해소</strong> — 법정대리인·운영자를 명시</td></tr><tr><td style="text-align:center"><strong>9-2</strong></td><td>🔴 <strong>인증 요구사항 부재</strong> — REQ-NF-009가 인증을 전제하나 명시적 요구사항이 없다</td><td>§3.1.1</td><td><strong>REQ-NF 신설</strong> — 모든 API 인증 필수 · 미인증 <code>401</code> · 권한 없음 <code>404</code></td></tr><tr><td style="text-align:center"><strong>9-3</strong></td><td>API 3개 누락 — 업로드 세션 조회 · 프로필 조회 · 언팔로우</td><td>§3.2 A-03 · A-12 · A-18</td><td>SRS §6.1에 3행 추가. <strong>A-12는 SC-4.4의 구현 지점</strong>이라 특히 중요</td></tr><tr><td style="text-align:center"><strong>9-4</strong></td><td>보존 기간 <code>[TBD]</code></td><td>§4.4</td><td>법무 확정 후 SRS §4.4 규제 준수 표에 반영</td></tr><tr><td style="text-align:center"><strong>9-5</strong></td><td>영상 길이·크기 상한 미규정</td><td>§4.2 SourceVideo <code>CHECK</code></td><td>90분·6GB는 설계 제안값. <strong>요구사항으로 확정 필요</strong></td></tr></tbody></table></div>
 <hr>
 <p><em>작성자: 백엔드 리드 · 검토자: AI 리드 · 클라이언트 개발자 · 보안 담당자 · 승인자: 제품 아키텍트</em></p>
-<p class="meta">Software Design Description (SDD) · 원본 [DS]hilit-DSv1.0.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+<p class="meta">Software Design Description (SDD) · 원본 [DS]hilit-DSv1.1.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
 </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
