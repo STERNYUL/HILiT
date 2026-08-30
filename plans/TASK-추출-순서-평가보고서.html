@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TASK 추출 순서 평가</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv1" href="#h0">TASK 추출 순서 평가 보고서</a><a class="lv1" href="#h1">0. 요약</a><a class="lv2" href="#h2">0.1 현재 태스크 목록의 정체</a><a class="lv2" href="#h3">0.2 4단계 방법론 대비 판정</a><a class="lv2" href="#h4">0.3 🔴 템플릿을 그대로 쓸 수 없는 것이 5종 있다</a><a class="lv1" href="#h5">1. 템플릿 저장 결과</a><a class="lv2" href="#h6">1.1 저장 위치와 이유</a><a class="lv2" href="#h7">1.2 원본 보존 · 예제 상태 유지</a><a class="lv2" href="#h8">1.3 이 템플릿이 요구하는 것 — 8개 블록</a><a class="lv1" href="#h9">2. Step별 갭 분석</a><a class="lv2" href="#h10">2.1 Step 1 — 계약·데이터 🔴</a><a class="lv2" href="#h11">2.2 Step 2 — 로직 분해 🔴</a><a class="lv2" href="#h12">2.3 Step 3 — Test Task 🔴 부재이나 원재료는 최상</a><a class="lv2" href="#h13">2.4 Step 4 — NFR·의존성 🟡</a><a class="lv1" href="#h14">3. 🔴 템플릿과 기존 태스크의 상호작용 — 조정 5건</a><a class="lv2" href="#h15">3.1 L 규모 5건 — 이 템플릿에 맞지 않는다</a><a class="lv2" href="#h16">3.2 게이트 4건 — 개발 태스크가 아니다</a><a class="lv2" href="#h17">3.3 Mock 태스크 — 템플릿의 AC가 안 맞는다</a><a class="lv2" href="#h18">3.4 Query 태스크 — AC 축이 다르다</a><a class="lv2" href="#h19">3.5 🔺 스택 불일치 — DoD 2항목 치환</a><a class="lv1" href="#h20">4. 태스크 목록 재구성안</a><a class="lv2" href="#h21">4.1 Step 1 상세 (7)</a><a class="lv2" href="#h22">4.2 Step 2 상세 (17)</a><a class="lv2" href="#h23">4.3 Step 3 상세 (10)</a><a class="lv2" href="#h24">4.4 Step 4 상세 (10)</a><a class="lv1" href="#h25">5. 🔴 풀버전 작성 순서</a><a class="lv2" href="#h26">5.1 병렬 가능 조합</a><a class="lv2" href="#h27">5.2 🔴 Wave 1을 셋으로 좁힌 이유</a><a class="lv2" href="#h28">5.3 작성 전 확정해야 할 것 2건</a><a class="lv1" href="#h29">6. 이 보고서가 제안하지 않는 것</a></nav>
+<main>
+<h1 id="h0">TASK 추출 순서 평가 보고서</h1>
+<p><strong>목적</strong> 4단계 태스크 추출 방법론에 비추어 <strong>현재 태스크 목록의 수정 여지</strong>와 <strong>풀버전 작성 순서</strong>를 정한다 <strong>대상</strong> <code>plans/PLAN_기술스택-전면적용.md</code> §3 (Phase 0~3 + 횡단 = <strong>24개 작업 항목</strong>) <strong>템플릿</strong> <code>.github/ISSUE_TEMPLATE/feature-task.md</code> <strong>작성일</strong> 2026-08-30 · <strong>상태</strong> 본문 작성 전 사전 평가</p>
+<hr>
+<h1 id="h1">0. 요약</h1>
+<h2 id="h2">0.1 현재 태스크 목록의 정체</h2>
+<p>🔴 <strong>독립된 태스크 리스트 문서는 존재하지 않는다.</strong></p>
+<p>그 역할을 하는 것은 <code>plans/PLAN_기술스택-전면적용.md</code> §3의 <strong>Phase 0~3 + 횡단 24개 항목</strong>이며, 이것은 <strong>실행 순서 계획이지 태스크 명세가 아니다.</strong> 각 항목이 한 줄 요약과 대응 요구사항만 갖는다.</p>
+<h2 id="h3">0.2 4단계 방법론 대비 판정</h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">Step</th><th>대상</th><th>현재 상태</th><th style="text-align:center">판정</th></tr></thead><tbody><tr><td style="text-align:center"><strong>1</strong></td><td>계약·데이터 명세</td><td>DB·API 명세는 <strong>DS v1.1에 완비</strong>되어 있으나 <strong>태스크로 분리되지 않음</strong>. <strong>Mock은 개념 자체가 부재</strong></td><td style="text-align:center">🔴 <strong>거의 없음</strong></td></tr><tr><td style="text-align:center"><strong>2</strong></td><td>로직 분해 (CQRS)</td><td>기능 단위로만 나뉨. <strong>Read/Write 미분리</strong></td><td style="text-align:center">🔴 <strong>분해 안 됨</strong></td></tr><tr><td style="text-align:center"><strong>3</strong></td><td>AC → Test Task</td><td>🟢 <strong>원재료는 최상급</strong> — SC 42건 · TC ID 89개 확정. <strong>그런데 테스트 작성 태스크가 0건</strong></td><td style="text-align:center">🔴 <strong>부재</strong></td></tr><tr><td style="text-align:center"><strong>4</strong></td><td>NFR + 의존성</td><td>게이트 3건만 존재. 성능·부하·보안 태스크 없음. <strong>의존성은 Phase 순서로만 암시</strong></td><td style="text-align:center">🟡 <strong>부분</strong></td></tr></tbody></table></div>
+<blockquote><p><strong>역설적인 상태다.</strong> SRS·DS의 <strong>명세 완성도는 높은데 태스크 분해가 거의 안 돼 있다.</strong> 원재료가 좋아서 Step 1~3은 <strong>새로 조사할 것 없이 옮기기만 하면 된다.</strong></p></blockquote>
+<h2 id="h4">0.3 🔴 템플릿을 그대로 쓸 수 없는 것이 5종 있다</h2>
+<p><strong>§3에서 상세히 다룬다.</strong> 요약하면 — <strong>L 규모 5건 · 게이트 4건 · Mock · Query 전용 · 스택 불일치.</strong></p>
+<hr>
+<h1 id="h5">1. 템플릿 저장 결과</h1>
+<h2 id="h6">1.1 저장 위치와 이유</h2>
+<pre class="code"><code>.github/ISSUE_TEMPLATE/feature-task.md</code></pre>
+<p><strong>GitHub이 이 경로를 읽어 이슈 생성 화면에 "Feature Task" 선택지를 띄운다.</strong> front matter의 <code>name</code> · <code>about</code> · <code>title</code> · <code>labels</code> · <code>assignees</code> 가 그 UI를 채운다. 다른 경로에 두면 문서 파일일 뿐 템플릿으로 작동하지 않는다.</p>
+<h2 id="h7">1.2 원본 보존 · 예제 상태 유지</h2>
+<p><strong>본문을 HILiT 내용으로 바꾸지 않았다.</strong> 회원가입 예시 그대로 두었고, 대신 <strong>주석 블록</strong>을 넣어 성격을 명시했다.</p>
+<pre class="code"><code>════════════════════════════════════════════
+  GitHub Project 용 TASK 템플릿
+════════════════════════════════════════════
+  용도  : SRS 요구사항을 개발 태스크로 분해할 때 쓰는 표준 서식
+  상태  : 예제 상태 그대로 보존 — 본문은 회원가입 예시이며 HILiT 내용이 아니다
+  주의  : 이 파일을 HILiT 요구사항으로 채우지 않는다.
+          풀버전 TASK 본문은 별도 파일로 작성한다.</code></pre>
+<p><strong>주석은 <code>&lt;!-- --&gt;</code> 안에 있어 이슈 본문에는 나타나지 않는다.</strong> 파일을 여는 사람에게만 보인다.</p>
+<h2 id="h8">1.3 이 템플릿이 요구하는 것 — 8개 블록</h2>
+<div class="tw"><table><thead><tr><th>블록</th><th>HILiT에서 채울 원천</th></tr></thead><tbody><tr><td>🎯 Summary</td><td>SRS §4.1 제목 · 목적</td></tr><tr><td>🔗 References</td><td>SRS 절 · 시퀀스(§3.5·§6.4) · ERD(§6.2) · API(DS §3.2)</td></tr><tr><td>✅ Task Breakdown</td><td><strong>새로 작성해야 함</strong> — 현재 문서에 없음</td></tr><tr><td>🧪 Acceptance Criteria</td><td>🟢 <strong>SRS §5.2 운영 시나리오 42건</strong>이 이미 GWT</td></tr><tr><td>⚙️ Technical &amp; NFR</td><td>SRS §4.2</td></tr><tr><td>🏁 DoD</td><td>🔺 <strong>스택에 맞게 치환 필요</strong> (§3.5)</td></tr><tr><td>🚧 Dependencies</td><td>🔴 <strong>현재 문서에 명시 없음</strong> — Step 4에서 생성</td></tr></tbody></table></div>
+<blockquote><p><strong>여덟 중 셋(References · AC · NFR)은 기존 문서에서 그대로 온다.</strong> 새로 만들어야 하는 것은 <strong>Task Breakdown</strong>과 <strong>Dependencies</strong> 둘이다.</p></blockquote>
+<hr>
+<h1 id="h9">2. Step별 갭 분석</h1>
+<h2 id="h10">2.1 Step 1 — 계약·데이터 🔴</h2>
+<h3 id="h11">있는 것</h3>
+<div class="tw"><table><thead><tr><th>자산</th><th>위치</th><th style="text-align:center">완성도</th></tr></thead><tbody><tr><td>엔티티 16종 + 타입·PK/FK·CHECK</td><td>SRS §6.2 · <strong>DS §4.2</strong></td><td style="text-align:center">🟢 높음</td></tr><tr><td>Prisma 스키마 발췌</td><td>SRS v2.2 §4.1</td><td style="text-align:center">🟡 핵심만</td></tr><tr><td>API 23개 + 요청/응답/오류/인증/멱등성</td><td><strong>DS §3.2</strong></td><td style="text-align:center">🟢 높음</td></tr><tr><td>RLS 정책 예시</td><td>SRS v2.2 §4.2</td><td style="text-align:center">🟡 예시 1개</td></tr></tbody></table></div>
+<h3 id="h11">없는 것</h3>
+<div class="tw"><table><thead><tr><th>누락</th><th>영향</th></tr></thead><tbody><tr><td><strong>DB 스키마 태스크</strong></td><td>Phase 0-4가 <em>"Supabase 로컬 스택 + Prisma 초기 스키마"</em> 로 <strong>환경 세팅과 뭉쳐 있다</strong></td></tr><tr><td><strong>API 계약 태스크</strong></td><td>DS §3.2가 명세를 갖췄으나 <strong>누가 언제 코드로 옮기는지가 없다</strong></td></tr><tr><td>🔴 <strong>Mock 태스크 — 개념 부재</strong></td><td><strong>이 프로젝트에서 특히 치명적이다.</strong> §2.1.1 참조</td></tr></tbody></table></div>
+<h3 id="h11">2.1.1 🔴 Mock이 없는 것이 왜 치명적인가</h3>
+<p><strong>이 제품의 핵심 데이터가 외부 추론 API에서 온다.</strong> 그런데 <strong>SP-1이 끝나기 전에는 그 API가 무엇인지도 모른다.</strong></p>
+<pre class="code"><code>Mock 없음  →  프론트엔드가 SP-1 완료를 기다린다
+           →  SP-1은 정답셋 15편 구축이 선행된다
+           →  정답셋은 실제 농구 영상 수급이 선행된다</code></pre>
+<p><strong>Mock을 만들면 이 사슬이 끊어진다.</strong> 후보 목록·bbox 시계열·신뢰도 값의 <strong>형태만 정하면</strong> 프론트엔드는 SP-1과 무관하게 진행한다.</p>
+<blockquote><p><strong>Mock 태스크를 Step 1에 반드시 넣는다.</strong> 이것이 현재 목록의 가장 큰 누락이다.</p></blockquote>
+<h2 id="h11">2.2 Step 2 — 로직 분해 🔴</h2>
+<p><strong>현재 Phase 항목은 기능 단위</strong>다(1-1 업로드, 1-2 추론 연동, 1-4 후보+선택 UI…). <strong>Read와 Write가 한 항목에 섞여 있다.</strong></p>
+<h3 id="h12">CQRS로 분해했을 때</h3>
+<div class="tw"><table><thead><tr><th>구분</th><th>대상</th><th>성격</th></tr></thead><tbody><tr><td><strong>Command</strong> (상태 변경)</td><td>업로드 개시 · 대상 지정 · 탐지 요청 · 선택 확정 · 렌더 등록 · 공개범위 변경 · 그룹 생성/초대/이탈 · 팔로우 · 반응 · 신고 · 공유링크 발급</td><td><strong>약 12</strong></td></tr><tr><td><strong>Query</strong> (조회)</td><td>후보 목록 · 기록 목록 · <strong>프로필(소유자/타인 이중)</strong> · 그룹 멤버 · 피드</td><td><strong>약 5</strong></td></tr></tbody></table></div>
+<h3 id="h12">🔴 분해가 특히 필요한 지점</h3>
+<p><strong>REQ-NF-009(공개 범위 서버 강제)는 Query 쪽에만 걸린다.</strong> Command는 소유자 검증이면 되지만, <strong>Query는 조회자마다 결과가 달라진다.</strong></p>
+<p><strong><code>GET /users/{id}/profile</code>(A-12)은 호출자에 따라 스키마 자체가 다르다</strong> — 소유자는 <code>counts:{total,public,group,private}</code>, 타인은 <code>counts:{public}</code>만. 이것을 Command 태스크와 같은 템플릿으로 다루면 <strong>AC가 뭉개진다.</strong></p>
+<blockquote><p><strong>Query 태스크는 "누가 조회하는가"를 축으로 AC를 써야 한다.</strong> Command는 "무엇이 바뀌는가"다.</p></blockquote>
+<h2 id="h12">2.3 Step 3 — Test Task 🔴 <strong>부재이나 원재료는 최상</strong></h2>
+<div class="tw"><table><thead><tr><th>자산</th><th style="text-align:right">규모</th></tr></thead><tbody><tr><td>운영 시나리오 (GWT)</td><td style="text-align:right"><strong>42건</strong></td></tr><tr><td>TC ID (SC·ADR·REQ)</td><td style="text-align:right"><strong>89개</strong></td></tr><tr><td>실패 경로 시나리오</td><td style="text-align:right"><strong>12건</strong></td></tr></tbody></table></div>
+<p><strong>SRS §5.2가 이미 <code>SC → 연결 REQ → TC ID</code>를 매핑해 뒀다.</strong> 방법론이 요구하는 <em>"AC를 테스트 코드 작성 Task로 변환"</em> 의 <strong>전 단계가 이미 끝나 있다.</strong></p>
+<h3 id="h13">그런데 태스크가 0건이다</h3>
+<p><strong>Phase 0~3 어디에도 테스트 작성 항목이 없다.</strong> TC-SC-1.F1 같은 ID는 매트릭스에 있으나 <strong>누가 언제 그 코드를 쓰는지가 없다.</strong></p>
+<blockquote><p><strong>방법론의 Tip대로 하면 AC는 Feature 태스크의 DoD로 들어간다.</strong> 그러나 <strong>실패 경로 12건은 Feature와 별도 태스크</strong>여야 한다 — 하나의 Feature에 실패 시나리오가 3개씩 붙으면 DoD가 감당하지 못한다.</p></blockquote>
+<h2 id="h13">2.4 Step 4 — NFR·의존성 🟡</h2>
+<h3 id="h14">있는 것</h3>
+<div class="tw"><table><thead><tr><th>항목</th><th>위치</th></tr></thead><tbody><tr><td>배포 게이트 3중 (빌드타임·저장소·킬스위치)</td><td>횡단 X-1·X-2</td></tr><tr><td>추론 API 학습 옵트아웃 게이트</td><td>횡단 X-3</td></tr></tbody></table></div>
+<h3 id="h14">없는 것</h3>
+<div class="tw"><table><thead><tr><th>누락</th><th>대응 요구사항</th></tr></thead><tbody><tr><td><strong>성능 검증 태스크</strong> (p95 7종)</td><td>REQ-NF-001~007</td></tr><tr><td><strong>부하·가용성 검증</strong></td><td>REQ-NF-006 · 008</td></tr><tr><td>🔴 <strong>RLS 우회 시도 테스트</strong></td><td>REQ-NF-009 — <em>"우회 성공 0건"</em> 을 <strong>누가 시도해 보는가</strong></td></tr><tr><td><strong>완주율 계측 구현</strong></td><td>REQ-NF-014</td></tr><tr><td><strong>암호화·TLS 점검</strong></td><td>REQ-NF-011</td></tr><tr><td><strong>법무 산출물 승인</strong> 4종</td><td>REQ-NF-010 · 016 · 017 · REQ-FUNC-007</td></tr></tbody></table></div>
+<h3 id="h14">🔴 의존성이 Phase 순서로만 암시된다</h3>
+<p><strong><code>Blocks</code> / <code>Depends on</code> 이 어디에도 명시돼 있지 않다.</strong> Phase 1 → 2 → 3 순서가 그것을 대신하고 있으나, <strong>Phase 안에서 무엇이 무엇을 막는지</strong>는 알 수 없다.</p>
+<p><strong>예 — Phase 2에서 2-2(RLS)를 첫 작업으로 둔 이유</strong>가 계획서 각주에만 있다. 이슈로 만들면 그 관계가 사라진다.</p>
+<hr>
+<h1 id="h14">3. 🔴 템플릿과 기존 태스크의 상호작용 — 조정 5건</h1>
+<h2 id="h15">3.1 L 규모 5건 — <strong>이 템플릿에 맞지 않는다</strong></h2>
+<div class="tw"><table><thead><tr><th>대상</th><th>REQ-FUNC-002 · 003 · 006 · 008 · 027</th></tr></thead><tbody><tr><td>성격</td><td><strong>수렴형</strong> — 종료 조건이 <em>"동작한다"</em> 가 아니라 <strong>"임계에 도달했다"</strong></td></tr><tr><td>충돌</td><td>템플릿 DoD의 <em>"AC 충족 / 테스트 통과 / 정적분석 / Swagger 최신화"</em> 로는 <strong>완료를 판정할 수 없다</strong></td></tr></tbody></table></div>
+<blockquote><p><strong>일반 스프린트 태스크로 만들면 매번 미완으로 이월된다</strong>(SRS §4.3). </p>
+<p>🔺 <strong>별도 서식이 필요하다</strong> — DoD를 <em>"임계 도달 여부 + 측정 회차 + 미달 시 다음 조치"</em> 로 바꾼 <strong>Convergence Task</strong> 변형.</p></blockquote>
+<h2 id="h16">3.2 게이트 4건 — <strong>개발 태스크가 아니다</strong></h2>
+<div class="tw"><table><thead><tr><th>게이트</th><th style="text-align:center">산출물</th><th>담당</th></tr></thead><tbody><tr><td>REQ-NF-010 얼굴 정보</td><td style="text-align:center">4종</td><td>법무</td></tr><tr><td>REQ-NF-016 미성년 이용자</td><td style="text-align:center">4종</td><td>법무</td></tr><tr><td>REQ-NF-017 영상 내 미성년자</td><td style="text-align:center">3종</td><td>법무</td></tr><tr><td>REQ-FUNC-007 음원 라이선스</td><td style="text-align:center">3종</td><td>사업·법무</td></tr></tbody></table></div>
+<p><strong>코드가 아니라 승인이다.</strong> Task Breakdown·AC·DoD가 전부 다른 성격이므로 🔺 <strong>Gate Task 변형</strong> 또는 별도 라벨(<code>gate</code>, <code>legal</code>)이 필요하다.</p>
+<p><strong>그리고 이 넷은 개발 태스크를 차단한다</strong> — 의존성 매핑에서 <code>Blocks</code> 관계로 반드시 표현돼야 한다.</p>
+<h2 id="h17">3.3 Mock 태스크 — 템플릿의 AC가 안 맞는다</h2>
+<p>**Mock의 인수 기준은 <em>"올바른 값을 반환한다"</em> 가 아니라 <em>"계약과 형태가 같다"</em> 다.<strong>  🔺 AC를 </strong>스키마 일치 검증**으로 쓰고, DoD에서 <em>"실제 API로 교체 시 프론트 코드 변경 0건"</em> 을 확인한다.</p>
+<h2 id="h18">3.4 Query 태스크 — AC 축이 다르다</h2>
+<p><strong>§2.2에서 본 대로 Query는 "누가 조회하는가"가 축이다.</strong>  🔺 AC 시나리오를 <strong>조회자 유형별</strong>(소유자 / 그룹 멤버 / 팔로워 / 비관계자)로 쓴다. 특히 <strong>A-12 프로필 조회</strong>는 이 넷이 전부 다른 결과를 받아야 한다.</p>
+<h2 id="h19">3.5 🔺 스택 불일치 — DoD 2항목 치환</h2>
+<div class="tw"><table><thead><tr><th>템플릿 원문</th><th>HILiT 스택에서</th></tr></thead><tbody><tr><td><em>"API Controller 연동"</em></td><td><strong>Server Action</strong> — 컨트롤러 계층이 없다</td></tr><tr><td><em>"API 명세서(Swagger 등) 최신화"</em></td><td>🔴 <strong>OpenAPI 문서가 없다.</strong> DS §3.2가 명세이므로 → <em>"DS §3.2 갱신"</em></td></tr><tr><td><em>"SonarQube / Linter"</em></td><td>ESLint + TypeScript strict</td></tr><tr><td><em>"단위 테스트 / 통합 테스트"</em></td><td>+ 🔺 <strong>RLS 정책 테스트</strong>를 별도 항목으로</td></tr></tbody></table></div>
+<hr>
+<h1 id="h20">4. 태스크 목록 재구성안</h1>
+<p><strong>24개 Phase 항목 → 약 44개 태스크.</strong> Step별 분포는 이렇다.</p>
+<div class="tw"><table><thead><tr><th style="text-align:center">Step</th><th>태스크</th><th style="text-align:right">수</th><th style="text-align:center">지금 쓸 수 있나</th></tr></thead><tbody><tr><td style="text-align:center"><strong>1</strong></td><td>계약·데이터 (DB 2 · API 3 · Mock 2)</td><td style="text-align:right"><strong>7</strong></td><td style="text-align:center">🟢 <strong>전부 가능</strong></td></tr><tr><td style="text-align:center"><strong>2</strong></td><td>로직 (Command 12 · Query 5)</td><td style="text-align:right"><strong>17</strong></td><td style="text-align:center">🟡 <strong>14개 가능</strong> — L 3건 제외</td></tr><tr><td style="text-align:center"><strong>3</strong></td><td>테스트 (정상 6 · 실패 4)</td><td style="text-align:right"><strong>10</strong></td><td style="text-align:center">🟢 가능</td></tr><tr><td style="text-align:center"><strong>4</strong></td><td>NFR·인프라 (성능 3 · 보안 3 · 게이트 4)</td><td style="text-align:right"><strong>10</strong></td><td style="text-align:center">🟢 가능</td></tr><tr><td style="text-align:center"></td><td><strong>합계</strong></td><td style="text-align:right"><strong>44</strong></td><td style="text-align:center"></td></tr></tbody></table></div>
+<h2 id="h21">4.1 Step 1 상세 (7)</h2>
+<div class="tw"><table><thead><tr><th>ID</th><th>태스크</th><th>원천</th></tr></thead><tbody><tr><td><strong>S1-1</strong></td><td><code>[DB]</code> Prisma 스키마 16 엔티티 + 마이그레이션</td><td>DS §4.2 · SRS §6.2</td></tr><tr><td><strong>S1-2</strong></td><td><code>[DB]</code> RLS 정책 — 공개 범위 3단 + 그룹</td><td>SRS v2.2 §4.2</td></tr><tr><td><strong>S1-3</strong></td><td><code>[API Spec]</code> Server Action 시그니처 + Zod + 오류 코드</td><td>DS §3.1 · §3.2</td></tr><tr><td><strong>S1-4</strong></td><td><code>[API Spec]</code> <strong>TrackingProvider 인터페이스</strong> (어댑터 아님)</td><td>효율성 검토 §2.3</td></tr><tr><td><strong>S1-5</strong></td><td><code>[API Spec]</code> webhook 수신 계약 (Storage · 추론)</td><td>SRS v2.2 §5.1</td></tr><tr><td><strong>S1-6</strong></td><td>🔴 <code>[Mock]</code> 추론 결과 Mock — bbox 시계열·신뢰도</td><td>§2.1.1</td></tr><tr><td><strong>S1-7</strong></td><td><code>[Mock]</code> 후보 목록 Mock</td><td>§2.1.1</td></tr></tbody></table></div>
+<h2 id="h22">4.2 Step 2 상세 (17)</h2>
+<p><strong>Command 12</strong> — 업로드 개시 / 대상 지정 / 탐지 요청 / 선택 확정 / 렌더 등록 / 공개범위 변경 / 그룹 생성 / 그룹 초대 / 그룹 이탈·회수 / 팔로우 / 반응·신고 / 공유링크 발급</p>
+<p><strong>Query 5</strong> — 후보 목록 / 기록 목록·필터 / <strong>프로필 이중 뷰</strong> / 그룹 멤버 / 피드·대체노출</p>
+<blockquote><p><strong>L 3건</strong>(REQ-FUNC-002 · 003 · 027 — 추론 어댑터)은 <strong>SP-1 완료 후</strong>에만 쓸 수 있다. REQ-FUNC-006·008도 SP-3 결과가 필요하다.</p></blockquote>
+<h2 id="h23">4.3 Step 3 상세 (10)</h2>
+<div class="tw"><table><thead><tr><th>분류</th><th>근거</th></tr></thead><tbody><tr><td>정상 경로 6</td><td>SC 시나리오 1~6 묶음</td></tr><tr><td>실패 경로 4</td><td>SC-1.F1~F6 · 2.F1~F2 · 3.F1~F2 · 4.F1~F2 · 5.F1 · 6.F1 (12건을 4묶음으로)</td></tr></tbody></table></div>
+<h2 id="h24">4.4 Step 4 상세 (10)</h2>
+<div class="tw"><table><thead><tr><th>분류</th><th>태스크</th></tr></thead><tbody><tr><td>성능 3</td><td>p95 계측 하니스 / 부하 시나리오 / 완주율 집계</td></tr><tr><td>보안 3</td><td><strong>RLS 우회 시도 테스트</strong> / 암호화·TLS 점검 / 감사 로그</td></tr><tr><td>게이트 4</td><td>얼굴 · 미성년 이용자 · 영상 내 미성년자 · 음원</td></tr></tbody></table></div>
+<hr>
+<h1 id="h25">5. 🔴 풀버전 작성 순서</h1>
+<p><strong>원칙 — 막는 것부터, 막지 않는 것은 병렬로. 그리고 스파이크에 종속된 것은 뒤로.</strong></p>
+<pre class="mermaid">flowchart TD
+    W1["Wave 1 · 기반 계약&lt;br/&gt;S1-1 · S1-3 · S1-4"] --&gt; W2["Wave 2 · 파생 계약&lt;br/&gt;S1-2 · S1-5 · S1-6 · S1-7"]
+    W2 --&gt; W3["Wave 3 · Command·Query&lt;br/&gt;Step 2 중 14건"]
+    W2 --&gt; W4["Wave 4 · 테스트&lt;br/&gt;Step 3 10건"]
+    W3 --&gt; W5["Wave 5 · NFR·인프라&lt;br/&gt;Step 4 10건"]
+    W4 --&gt; W5
+    W5 --&gt; W6["Wave 6 · 의존성 매핑&lt;br/&gt;전체 Blocks/Depends"]
+    SP1["SP-1 완료"] -.-&gt; W7["Wave 7 · 추론 어댑터&lt;br/&gt;L 3건"]
+    SP3["SP-3 완료"] -.-&gt; W8["Wave 8 · 렌더&lt;br/&gt;L 2건"]
+    style W1 fill:#ffd9cc,color:#111
+    style W6 fill:#e8f0ff,color:#111</pre>
+<div class="tw"><table><thead><tr><th style="text-align:center">Wave</th><th>태스크</th><th style="text-align:right">수</th><th>왜 이 순서인가</th></tr></thead><tbody><tr><td style="text-align:center"><strong>1</strong></td><td><strong>S1-1 DB 스키마 · S1-3 Server Action 계약 · S1-4 Provider 인터페이스</strong></td><td style="text-align:right">3</td><td>🔴 <strong>셋이 나머지 전부를 막는다.</strong> 엔티티 이름과 함수 시그니처가 정해져야 다른 태스크가 그것을 참조할 수 있다</td></tr><tr><td style="text-align:center"><strong>2</strong></td><td>S1-2 RLS · S1-5 webhook · <strong>S1-6·S1-7 Mock</strong></td><td style="text-align:right">4</td><td>Wave 1의 스키마·계약이 있어야 쓸 수 있다. <strong>Mock이 여기 끝나면 프론트가 SP-1을 안 기다린다</strong></td></tr><tr><td style="text-align:center"><strong>3</strong></td><td>Step 2 Command 12 + Query 2 <em>(L 제외)</em></td><td style="text-align:right">14</td><td>계약 위에서 작성. <strong>Query는 조회자 축으로 AC를 쓴다</strong></td></tr><tr><td style="text-align:center"><strong>4</strong></td><td>Step 3 테스트 10</td><td style="text-align:right">10</td><td><strong>Wave 3과 병렬 가능</strong> — SC가 이미 GWT라 Feature 본문을 기다릴 필요가 없다</td></tr><tr><td style="text-align:center"><strong>5</strong></td><td>Step 4 NFR·인프라 10</td><td style="text-align:right">10</td><td>대상 코드가 정해진 뒤. <strong>단 게이트 4건은 Wave 1과 병렬 가능</strong></td></tr><tr><td style="text-align:center"><strong>6</strong></td><td>🔵 <strong>의존성 매핑</strong></td><td style="text-align:right">—</td><td><strong>전체가 나온 뒤에만 가능.</strong> 방법론 Step 4의 핵심 오케스트레이션</td></tr><tr><td style="text-align:center"><strong>7</strong></td><td>추론 어댑터 (L 3)</td><td style="text-align:right">3</td><td>🔴 <strong>SP-1 완료 후</strong></td></tr><tr><td style="text-align:center"><strong>8</strong></td><td>렌더 (L 2)</td><td style="text-align:right">2</td><td>🔴 <strong>SP-3 완료 후</strong></td></tr></tbody></table></div>
+<h2 id="h26">5.1 병렬 가능 조합</h2>
+<div class="tw"><table><thead><tr><th>동시 진행</th><th>근거</th></tr></thead><tbody><tr><td>Wave 3 ↔ Wave 4</td><td>테스트는 SC에서 나오고 Feature 본문에 의존하지 않는다</td></tr><tr><td>Wave 1 ↔ 게이트 4건</td><td>게이트는 법무 담당이라 개발 계약과 무관</td></tr><tr><td>Wave 7 ↔ Wave 8</td><td>SP-1·SP-3이 병렬이므로 결과도 병렬</td></tr></tbody></table></div>
+<h2 id="h27">5.2 🔴 Wave 1을 셋으로 좁힌 이유</h2>
+<p><strong>S1-1(스키마)이 없으면 나머지 43개가 엔티티 이름을 확정할 수 없다.</strong> DS §4.2에 정의는 있으나 <strong>Prisma 코드로 확정되기 전에는 <code>SourceVideo</code>인지 <code>source_videos</code>인지가 태스크마다 달라진다.</strong></p>
+<p><strong>S1-3(Server Action 계약)</strong> 은 같은 이유로 함수 이름과 인자를 고정한다. <strong>S1-4(Provider 인터페이스)</strong> 는 SP-1 결과와 <strong>무관하게</strong> 지금 쓸 수 있고, 이걸 먼저 쓰면 <strong>SP-1 벤치마크 하니스가 그대로 프로덕션 어댑터가 된다</strong>(효율성 검토 §2.3).</p>
+<h2 id="h28">5.3 작성 전 확정해야 할 것 2건</h2>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>영향</th></tr></thead><tbody><tr><td style="text-align:center"><strong>1</strong></td><td>🔵 <strong>공개 발행을 MVP에 넣는가</strong>(효율성 검토 A-4)</td><td><strong>넣지 않으면 Wave 3에서 반응 3건 · Wave 5에서 게이트 2건이 빠진다</strong> — 태스크 44 → 39</td></tr><tr><td style="text-align:center"><strong>2</strong></td><td>🔺 <strong>Convergence Task 서식을 만들 것인가</strong>(§3.1)</td><td>L 5건의 작성 방식이 갈린다</td></tr></tbody></table></div>
+<blockquote><p><strong>둘 다 Wave 1 착수 전에 정하는 편이 낫다.</strong> 나중에 정하면 이미 쓴 태스크를 고쳐야 한다.</p></blockquote>
+<hr>
+<h1 id="h29">6. 이 보고서가 제안하지 않는 것</h1>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>이유</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td>태스크별 공수·기간</td><td>팀 속도 실측이 없다 <code>[TBD]</code></td></tr><tr><td style="text-align:center">2</td><td>담당자 배정</td><td>조직 구성이 문서에 없다</td></tr><tr><td style="text-align:center">3</td><td>스프린트 배치</td><td>스프린트 길이가 미정</td></tr><tr><td style="text-align:center">4</td><td>태스크 본문</td><td><strong>요청대로 착수하지 않았다.</strong> 순서 확정 후 순차 작성</td></tr></tbody></table></div>
+<hr>
+<p><em>이 보고서는 태스크 본문 작성 전의 사전 평가다. Wave 1부터 순차 작성하되, §5.3의 결정 2건을 먼저 확정할 것을 권한다.</em></p>
+<p class="meta">TASK 추출 순서 평가 · 원본 TASK-추출-순서-평가보고서.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) mermaid.initialize({startOnLoad:true, theme: dark?'dark':'neutral', securityLevel:'loose'});
+})();
+</script>
+</body></html>
