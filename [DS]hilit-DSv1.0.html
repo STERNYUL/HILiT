@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HILiT Design Spec v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv1" href="#h0">Software Design Description (SDD)</a><a class="lv2" href="#h1">이 문서가 존재하는 이유</a><a class="lv1" href="#h2">1. 서론</a><a class="lv2" href="#h3">1.1 목적</a><a class="lv2" href="#h4">1.2 범위</a><a class="lv2" href="#h5">1.3 참조</a><a class="lv2" href="#h6">1.4 표기</a><a class="lv1" href="#h7">2. Context Viewpoint</a><a class="lv2" href="#h8">2.1 Use Case 모델</a><a class="lv2" href="#h9">2.2 시스템 경계</a><a class="lv1" href="#h10">3. Interface Viewpoint — API 명세</a><a class="lv2" href="#h11">3.1 공통 규약</a><a class="lv2" href="#h12">3.2 엔드포인트 명세</a><a class="lv1" href="#h13">4. Information Viewpoint — 데이터 모델</a><a class="lv2" href="#h14">4.1 공통 규약 [PROPOSED]</a><a class="lv2" href="#h15">4.2 엔티티 상세</a><a class="lv2" href="#h16">4.3 PRD ↔ SRS ↔ DS 명칭 매핑</a><a class="lv2" href="#h17">4.4 보존 정책 종합 [PROPOSED]</a><a class="lv1" href="#h18">5. Logical Viewpoint — 도메인 클래스</a><a class="lv1" href="#h19">6. Interaction Viewpoint — 상태 동역학</a><a class="lv1" href="#h20">7. 추적성 — DS → SRS</a><a class="lv1" href="#h21">8. 설계 결정 요약</a><a class="lv1" href="#h22">9. 🔺 SRS 개정 요청</a></nav>
+<main>
+<h1 id="h0">Software Design Description (SDD)</h1>
+<p><strong>Document ID:</strong> DS-HILIT-MVP-001</p>
+<p><strong>version:</strong> 1.0</p>
+<p><strong>Date:</strong> 2026-08-30</p>
+<p><strong>Standard:</strong> IEEE 1016 설계 관점(Design Viewpoints) 구조</p>
+<p><strong>상위 문서:</strong> <code>[SRS]hilit-SRSv1.5.md</code> (요구사항 45건 · 시나리오 42건)</p>
+<hr>
+<h3 id="h1">판 이력</h3>
+<div class="tw"><table><thead><tr><th>판</th><th>날짜</th><th>변경</th><th>근거</th></tr></thead><tbody><tr><td><strong>1.0</strong></td><td><strong>2026-08-30</strong></td><td><strong>초판.</strong> SRS가 <em>"개요"</em> 로 한정한 세 영역을 설계 수준으로 확정 — <strong>API 스키마 · 데이터 모델 속성 · 도메인 클래스</strong>. 감사 P1-6·7·8 · P2-1 대상</td><td><code>AUDIT_SRS_2026-08-30.md</code></td></tr></tbody></table></div>
+<hr>
+<h2 id="h1">이 문서가 존재하는 이유</h2>
+<p>SRS v1.5는 스스로를 <strong>요구사항 명세</strong>로 한정하고 API·엔티티를 <em>"개요"</em> 로 표기했다. 감사는 그것을 <strong>P1 4건</strong>(API 스키마 전무 · Entity 속성 전무 · Use Case Diagram 부재 · Class Diagram 빈약)으로 판정했다.</p>
+<p>이를 SRS 안에서 해소하면 <strong>문서의 성격이 바뀐다</strong> — 요구사항 명세가 설계 명세를 겸하게 되고, <em>"무엇을 만족해야 하는가"</em> 와 <em>"어떻게 만들 것인가"</em> 가 한 문서에 섞인다. <strong>분리가 표준적 분업이다.</strong></p>
+<div class="tw"><table><thead><tr><th>문서</th><th>답하는 질문</th><th>변경 주체</th></tr></thead><tbody><tr><td>VPS 0.3</td><td>왜 만드는가</td><td>사업·제품</td></tr><tr><td>PRD v0.1</td><td>무엇을 해결하는가</td><td>제품</td></tr><tr><td><strong>SRS v1.5</strong></td><td><strong>무엇을 만족해야 하는가</strong></td><td>제품 아키텍트</td></tr><tr><td><strong>DS v1.0</strong> <em>(이 문서)</em></td><td><strong>어떻게 만들 것인가</strong></td><td>백엔드·AI·클라이언트 리드</td></tr></tbody></table></div>
+<blockquote><p><strong>이 문서는 요구사항을 만들지 않는다.</strong> SRS의 요구사항을 만족시키는 <strong>설계 결정</strong>만 담는다. 여기서 새 요구가 필요해지면 <strong>SRS 개정으로 올린다</strong> — 그 항목은 §9에 모았다.</p></blockquote>
+<p><strong>모든 설계값은 <code>[PROPOSED]</code>다.</strong> SRS에 근거가 있는 값만 <code>[SOURCE·SRS]</code>로 표기한다.</p>
+<hr>
+<h1 id="h2">1. 서론</h1>
+<h2 id="h3">1.1 목적</h2>
+<p>SRS v1.5의 요구사항 45건을 구현하기 위한 <strong>인터페이스 · 데이터 · 컴포넌트 · 상태 설계</strong>를 확정한다.</p>
+<h2 id="h4">1.2 범위</h2>
+<div class="tw"><table><thead><tr><th>포함</th><th>제외</th></tr></thead><tbody><tr><td>API 요청·응답·오류 스키마 · 인증·인가 · 멱등성 · 속도 제한</td><td>요구사항 정의 (SRS 소관)</td></tr><tr><td>엔티티 속성 · 타입 · 키 · 제약 · 인덱스 · 보존 정책</td><td>실험 설계 · 게이트 판정 (SRS §6.4)</td></tr><tr><td>도메인 클래스 · 상태 기계</td><td>인프라 프로비저닝 · 배포 파이프라인</td></tr><tr><td>Use Case 모델</td><td>화면 상세 디자인</td></tr></tbody></table></div>
+<h2 id="h5">1.3 참조</h2>
+<div class="tw"><table><thead><tr><th>ID</th><th>문서</th></tr></thead><tbody><tr><td><strong>DREF-01</strong></td><td><code>[SRS]hilit-SRSv1.5.md</code> — 요구사항 원천</td></tr><tr><td><strong>DREF-02</strong></td><td><code>AUDIT_SRS_2026-08-30.md</code> — 이 문서가 해소하는 지적</td></tr><tr><td><strong>DREF-03</strong></td><td><code>prototype_v0_6.html</code> — 화면 규격</td></tr><tr><td><strong>DREF-04</strong></td><td>IEEE 1016 — 설계 관점 구조</td></tr></tbody></table></div>
+<h2 id="h6">1.4 표기</h2>
+<div class="tw"><table><thead><tr><th>태그</th><th>뜻</th></tr></thead><tbody><tr><td><code>[SOURCE·SRS]</code></td><td>SRS에 명시된 값을 그대로 옮김</td></tr><tr><td><code>[PROPOSED]</code></td><td>이 문서가 새로 제안하는 설계값</td></tr><tr><td><code>[TBD]</code></td><td>설계 결정이 남음</td></tr><tr><td>🔺</td><td><strong>SRS 개정 필요</strong> — §9에 모음</td></tr></tbody></table></div>
+<hr>
+<h1 id="h7">2. Context Viewpoint</h1>
+<h2 id="h8">2.1 Use Case 모델</h2>
+<blockquote><p>감사 <strong>P1-6</strong> 해소. SRS §2.2의 이용자 클래스 UC-01~06과 요구사항을 연결한다.</p></blockquote>
+<pre class="mermaid">flowchart LR
+    subgraph A["행위자"]
+        U1(("기록형 동호인&lt;br/&gt;UC-01"))
+        U2(("촬영 담당&lt;br/&gt;UC-02"))
+        U3(("저장공간 압박형&lt;br/&gt;UC-03"))
+        U4(("편집 포기형&lt;br/&gt;UC-04"))
+        U5(("크리에이터&lt;br/&gt;UC-05"))
+        U6(("팀 운영자&lt;br/&gt;UC-06"))
+        G(("법정대리인"))
+        OP(("운영자"))
+    end
+    subgraph S["시스템 경계 — HILiT"]
+        C1["UCS-1 원본에서 내 장면 찾기"]
+        C2["UCS-2 장면 고르고 완성하기"]
+        C3["UCS-3 공개 없이 기록 남기기"]
+        C4["UCS-4 그룹에만 열기"]
+        C5["UCS-5 피드 보고 반응하기"]
+        C6["UCS-6 원본 정리하기"]
+        C7["UCS-7 동의 관리"]
+        C8["UCS-8 신고 처리"]
+    end
+    U1 --&gt; C1 &amp; C2 &amp; C3 &amp; C5
+    U2 --&gt; C1 &amp; C4
+    U3 --&gt; C3 &amp; C6
+    U4 --&gt; C2
+    U5 --&gt; C1 &amp; C2
+    U6 --&gt; C3 &amp; C4 &amp; C5
+    G --&gt; C7
+    OP --&gt; C8
+    C1 -.-&gt;|"include"| C2
+    C2 -.-&gt;|"include"| C3
+    C4 -.-&gt;|"extend"| C3</pre>
+<div class="tw"><table><thead><tr><th>Use Case</th><th>행위자</th><th>대응 요구사항</th><th>Story</th></tr></thead><tbody><tr><td><strong>UCS-1</strong> 원본에서 내 장면 찾기</td><td>UC-01 · 02 · 05</td><td>REQ-FUNC-001 · 002 · 003 · 027</td><td>US-1 · US-4 · US-6</td></tr><tr><td><strong>UCS-2</strong> 장면 고르고 완성하기</td><td>UC-01 · 04 · 05</td><td>REQ-FUNC-004~008 · REQ-NF-018</td><td>US-1 · US-3 · US-6</td></tr><tr><td><strong>UCS-3</strong> 공개 없이 기록 남기기</td><td>UC-01 · 03 · 06</td><td>REQ-FUNC-009 · 010</td><td>US-2</td></tr><tr><td><strong>UCS-4</strong> 그룹에만 열기</td><td>UC-02 · 06</td><td>REQ-FUNC-013 · REQ-NF-009</td><td>US-4</td></tr><tr><td><strong>UCS-5</strong> 피드 보고 반응하기</td><td>UC-01 · 06</td><td>REQ-FUNC-011 · 012 · 014~017</td><td>US-5</td></tr><tr><td><strong>UCS-6</strong> 원본 정리하기</td><td>UC-03</td><td>REQ-FUNC-019 · SC-4.F2</td><td>US-2</td></tr><tr><td><strong>UCS-7</strong> 동의 관리</td><td>법정대리인</td><td>REQ-NF-016 · 017</td><td>—</td></tr><tr><td><strong>UCS-8</strong> 신고 처리</td><td>운영자</td><td>REQ-FUNC-016</td><td>US-5</td></tr></tbody></table></div>
+<blockquote><p><strong>UCS-7·8의 행위자는 SRS §2.2에 없다.</strong> 법정대리인과 운영자는 이용자 클래스가 아니지만 <strong>시스템과 상호작용하는 행위자</strong>다. 🔺 SRS §2.2에 행위자 구분 추가 필요(§9-1).</p></blockquote>
+<h2 id="h9">2.2 시스템 경계</h2>
+<p><strong>시스템 안</strong> — 업로드 · 추적 · 후보 · 선택 · 보정 · 렌더 · 기록 · 공개 범위 · 그룹 · 피드 · 반응 · 공유 · 계측 <strong>시스템 밖</strong> — 촬영 · 갤러리 · 객체 스토리지 · GPU 인프라 · 음원 제공자 · 카카오톡 · 외부 발행</p>
+<hr>
+<h1 id="h10">3. Interface Viewpoint — API 명세</h1>
+<blockquote><p>감사 <strong>P1-7</strong> 해소. SRS §6.1의 20개 엔드포인트에 스키마·오류·인증·멱등성을 부여한다.</p></blockquote>
+<h2 id="h11">3.1 공통 규약</h2>
+<h3 id="h12">3.1.1 인증 · 인가</h3>
+<p>🔺 <strong>SRS에 인증 요구사항이 없다.</strong> REQ-NF-009(공개 범위 서버 측 강제)가 인증을 전제하지만 <strong>명시적 요구사항이 없어</strong> 이 문서가 설계를 제안한다(§9-2).</p>
+<div class="tw"><table><thead><tr><th>항목</th><th>설계</th><th>근거</th></tr></thead><tbody><tr><td>인증 방식</td><td><strong>Bearer 토큰</strong> · 모든 API 필수</td><td><code>[PROPOSED]</code></td></tr><tr><td>미인증</td><td><code>401 Unauthorized</code></td><td><code>[PROPOSED]</code></td></tr><tr><td>권한 없음</td><td>🔴 <strong><code>404 Not Found</code></strong> — <code>403</code>을 쓰지 않는다</td><td><strong>REQ-NF-009</strong> <em>"자원의 존재를 노출하지 않는다"</em> <code>[SOURCE·SRS]</code></td></tr><tr><td>소유권</td><td>모든 자원 접근은 <code>owner_id == subject</code> 또는 <strong>VisibilityEnforcer 통과</strong></td><td>REQ-NF-009</td></tr><tr><td>역할</td><td><code>user</code> · <code>operator</code> 2종. MVP는 <code>user</code>만 발급</td><td><code>[PROPOSED]</code></td></tr></tbody></table></div>
+<blockquote><p><strong><code>403</code>이 아니라 <code>404</code>인 이유</strong> — <code>403</code>은 <em>"그 자원은 있는데 당신은 못 본다"</em> 를 알려준다. SRS §4.2 REQ-NF-009는 <strong>건수·존재를 유추할 수 있는 정보도 반환 금지</strong>를 요구하므로 <code>403</code>은 위반이다.</p></blockquote>
+<h3 id="h12">3.1.2 오류 응답 형식 <code>[PROPOSED]</code></h3>
+<pre class="code"><code class="language-json">{
+  "error": {
+    "code": "CODEC_UNSUPPORTED",
+    "message": "지원하지 않는 형식입니다",
+    "detail": { "codec": "hevc-hdr", "supported": ["h264", "hevc-sdr"] },
+    "traceId": "01J8..."
+  }
+}</code></pre>
+<div class="tw"><table><thead><tr><th>상태</th><th>사용처</th></tr></thead><tbody><tr><td><code>400</code></td><td>요청 형식 오류 · 검증 실패</td></tr><tr><td><code>401</code></td><td>미인증</td></tr><tr><td><code>404</code></td><td>자원 없음 <strong>또는 권한 없음</strong></td></tr><tr><td><code>409</code></td><td>상태 충돌 (중복 처리 요청 · 그룹 정원 초과)</td></tr><tr><td><code>413</code></td><td>파일 크기 초과</td></tr><tr><td><code>415</code></td><td>미지원 코덱·컨테이너</td></tr><tr><td><code>429</code></td><td>속도 제한</td></tr><tr><td><code>503</code></td><td>처리 큐 포화</td></tr></tbody></table></div>
+<h3 id="h12">3.1.3 멱등성 · 속도 제한 · 타임아웃 <code>[PROPOSED]</code></h3>
+<div class="tw"><table><thead><tr><th>항목</th><th>설계</th></tr></thead><tbody><tr><td>멱등성</td><td>상태를 만드는 <code>POST</code>는 <strong><code>Idempotency-Key</code> 헤더 필수</strong> — <code>/videos</code> · <code>/records</code> · <code>/groups</code> · <code>/follows</code> · <code>/reactions</code> · <code>/share</code></td></tr><tr><td>키 보존</td><td>24시간. 동일 키 재요청은 <strong>최초 응답을 재생</strong></td></tr><tr><td>속도 제한</td><td>사용자당 분당 60건. 업로드 개시는 <strong>분당 3건</strong></td></tr><tr><td>초과 시</td><td><code>429</code> + <code>Retry-After</code></td></tr><tr><td>타임아웃</td><td>동기 API <strong>5초</strong> · 업로드 청크 <strong>30초</strong> · 비동기 작업은 큐 위임</td></tr></tbody></table></div>
+<h3 id="h12">3.1.4 비동기 처리</h3>
+<p><strong>탐지(<code>/detect</code>)와 렌더(<code>/records</code>)는 즉시 완료되지 않는다.</strong> <code>202 Accepted</code> + <code>jobId</code>를 반환하고 <code>GET /jobs/{id}</code>로 상태를 조회한다.</p>
+<h2 id="h12">3.2 엔드포인트 명세</h2>
+<h3 id="h13">Media Ingest Service</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>API</th><th>요청</th><th>응답</th><th>오류</th><th style="text-align:center">멱등</th><th>REQ</th></tr></thead><tbody><tr><td style="text-align:center"><strong>A-01</strong></td><td><code>POST /videos</code></td><td><code>{filename, sizeBytes, durationSec, codec, container}</code></td><td><code>201 {videoId, uploadSessionId, chunkSizeBytes, expiresAt}</code></td><td><code>415</code> 미지원 코덱 · <code>413</code> 크기 초과</td><td style="text-align:center">✅</td><td>REQ-FUNC-001 · SC-1.F1</td></tr><tr><td style="text-align:center"><strong>A-02</strong></td><td><code>PATCH /videos/{id}/chunks</code></td><td><code>Content-Range</code> 헤더 + 바이너리</td><td><code>200 {receivedBytes, nextOffset}</code> · 완료 시 <code>201 {status:"UPLOADED"}</code></td><td><code>409</code> 오프셋 불일치 · <code>404</code> 세션 만료</td><td style="text-align:center">➖ 자연 멱등</td><td>REQ-FUNC-001 · SC-1.F3</td></tr><tr><td style="text-align:center"><strong>A-03</strong></td><td><code>GET /videos/{id}/upload-session</code></td><td>—</td><td><code>200 {nextOffset, receivedBytes, expiresAt}</code></td><td><code>404</code></td><td style="text-align:center">➖</td><td>SC-1.F3 · F4</td></tr><tr><td style="text-align:center"><strong>A-04</strong></td><td><code>DELETE /videos/{id}</code></td><td>—</td><td><code>204</code></td><td><code>404</code> · <code>409</code> 처리 중</td><td style="text-align:center">➖</td><td>REQ-FUNC-019 · REQ-NF-022</td></tr></tbody></table></div>
+<blockquote><p><strong>A-01이 코덱을 요청 본문으로 받는 이유</strong> — SC-1.F1은 <em>"업로드 개시 전 거부 · GPU 작업 생성 0건"</em> 을 요구한다. <strong>바이트를 받기 전에 판정</strong>하려면 메타데이터가 먼저 와야 한다. A-03은 SC-1.F4(앱 종료 후 재개)의 복구 지점이다.</p></blockquote>
+<h3 id="h13">Vision Tracking Engine</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>API</th><th>요청</th><th>응답</th><th>오류</th><th style="text-align:center">멱등</th><th>REQ</th></tr></thead><tbody><tr><td style="text-align:center"><strong>A-05</strong></td><td><code>POST /videos/{id}/subject</code></td><td><code>{frameTimeMs, bbox:{x,y,w,h}}</code></td><td><code>201 {personTrackId}</code></td><td><code>400</code> bbox 범위 초과 · <code>409</code> 이미 지정됨</td><td style="text-align:center">✅</td><td>REQ-FUNC-002</td></tr><tr><td style="text-align:center"><strong>A-06</strong></td><td><code>POST /videos/{id}/detect</code></td><td><code>{personTrackId}</code></td><td><code>202 {jobId}</code></td><td><code>409</code> 진행 중 · <code>503</code> 큐 포화</td><td style="text-align:center">✅</td><td>REQ-FUNC-002 · 003</td></tr><tr><td style="text-align:center"><strong>A-07</strong></td><td><code>GET /jobs/{id}</code></td><td>—</td><td><code>200 {stage, status, progressPct, checkpoint, failureClass?}</code></td><td><code>404</code></td><td style="text-align:center">➖</td><td>SC-1.F4</td></tr></tbody></table></div>
+<h3 id="h13">Highlight Composer</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>API</th><th>요청</th><th>응답</th><th>오류</th><th style="text-align:center">멱등</th><th>REQ</th></tr></thead><tbody><tr><td style="text-align:center"><strong>A-08</strong></td><td><code>GET /videos/{id}/candidates</code></td><td><code>?cursor&amp;limit</code></td><td><code>200 {items:[{candidateId, startTc, endTc, rank, thumbnailUrl, confidenceFlag}], excludedCount, nextCursor}</code></td><td><code>404</code> · <code>409</code> 탐지 미완</td><td style="text-align:center">➖</td><td>REQ-FUNC-004 · 027</td></tr><tr><td style="text-align:center"><strong>A-09</strong></td><td><code>GET /music</code></td><td><code>?category&amp;cursor</code></td><td><code>200 {items:[{musicTrackId, title, durationSec, category, previewUrl}], nextCursor}</code></td><td>—</td><td style="text-align:center">➖</td><td>REQ-FUNC-007</td></tr><tr><td style="text-align:center"><strong>A-10</strong></td><td><code>POST /records</code></td><td><code>{videoId, candidateIds:[], musicTrackId?, visibility?}</code></td><td><code>202 {jobId, recordDraftId}</code></td><td><code>400</code> 후보 0개 · <code>404</code> · <code>409</code></td><td style="text-align:center">✅</td><td>REQ-FUNC-005~009</td></tr></tbody></table></div>
+<blockquote><p><strong>A-08의 <code>excludedCount</code>가 SC-1.F6을 구현한다.</strong> ConfidenceGate가 제외한 건수를 응답에 포함해야 <em>"제외로 후보가 현저히 줄었을 때 사유를 안내"</em> 할 수 있다. <code>confidenceFlag</code>는 <code>NORMAL</code>만 반환된다 — <code>LOW</code>·<code>EXCLUDED</code>는 목록에 오르지 않는다(REQ-FUNC-027).</p></blockquote>
+<h3 id="h13">Record Store Service</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>API</th><th>요청</th><th>응답</th><th>오류</th><th style="text-align:center">멱등</th><th>REQ</th></tr></thead><tbody><tr><td style="text-align:center"><strong>A-11</strong></td><td><code>GET /records</code></td><td><code>?scope&amp;sport&amp;cursor&amp;limit</code></td><td><code>200 {items:[{recordId, thumbnailUrl, createdAt, visibility}], counts:{total, public, group, private}, nextCursor}</code></td><td>—</td><td style="text-align:center">➖</td><td>REQ-FUNC-010 · SC-4.3 · 4.5</td></tr><tr><td style="text-align:center"><strong>A-12</strong></td><td><code>GET /users/{id}/profile</code></td><td>—</td><td>🔴 <strong>소유자</strong>: <code>{counts:{total,public,group,private}, items:[전체]}</code>&lt;br&gt;🔴 <strong>타인</strong>: <code>{counts:{public}, items:[공개만]}</code></td><td><code>404</code></td><td style="text-align:center">➖</td><td><strong>REQ-NF-009</strong> · SC-4.4</td></tr><tr><td style="text-align:center"><strong>A-13</strong></td><td><code>PATCH /records/{id}/visibility</code></td><td><code>{scope:"public"|"group"|"private", groupIds?:[]}</code></td><td><code>200 {recordId, scope, groupIds}</code></td><td><code>400</code> 그룹 미지정 · <code>404</code> · <code>409</code> 미성년 동의 미확보</td><td style="text-align:center">➖ 자연 멱등</td><td>REQ-FUNC-010 · REQ-NF-017</td></tr><tr><td style="text-align:center"><strong>A-14</strong></td><td><code>POST /groups</code></td><td><code>{name, memberUserIds:[]}</code></td><td><code>201 {groupId, inviteToken}</code></td><td><code>400</code> 정원 초과</td><td style="text-align:center">✅</td><td>REQ-FUNC-013</td></tr><tr><td style="text-align:center"><strong>A-15</strong></td><td><code>GET /groups/{id}/members</code></td><td><code>?cursor</code></td><td><code>200 {items:[{userId, handle, joinedAt}], nextCursor}</code></td><td><code>404</code></td><td style="text-align:center">➖</td><td>REQ-FUNC-013</td></tr><tr><td style="text-align:center"><strong>A-16</strong></td><td><code>DELETE /groups/{id}/members/{userId}</code></td><td>—</td><td><code>204</code></td><td><code>404</code> · <code>409</code> 마지막 소유자</td><td style="text-align:center">➖</td><td>REQ-FUNC-013 · SC-2.F1 · F2</td></tr></tbody></table></div>
+<blockquote><p>🔴 <strong>A-12가 이 시스템에서 가장 위험한 엔드포인트다.</strong> 같은 URL이 <strong>호출자에 따라 다른 스키마를 반환</strong>한다. 타인 조회 시 <code>counts</code>에 <code>total</code>·<code>group</code>·<code>private</code>이 <strong>키 자체로 존재해서는 안 된다</strong> — 키가 있으면 값이 0이어도 <em>"비공개 기록이 있다는 개념"</em> 이 노출된다. SC-4.4의 <em>"개수에도 미포함"</em> 이 이 뜻이다.</p></blockquote>
+<h3 id="h13">Social Graph · Feed Service</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>API</th><th>요청</th><th>응답</th><th>오류</th><th style="text-align:center">멱등</th><th>REQ</th></tr></thead><tbody><tr><td style="text-align:center"><strong>A-17</strong></td><td><code>POST /follows</code></td><td><code>{followeeId}</code></td><td><code>201 {followerId, followeeId}</code></td><td><code>404</code> · <code>409</code> 자기 자신</td><td style="text-align:center">✅</td><td>REQ-FUNC-012</td></tr><tr><td style="text-align:center"><strong>A-18</strong></td><td><code>DELETE /follows/{followeeId}</code></td><td>—</td><td><code>204</code></td><td><code>404</code></td><td style="text-align:center">➖</td><td>REQ-FUNC-012</td></tr><tr><td style="text-align:center"><strong>A-19</strong></td><td><code>GET /feed</code></td><td><code>?tab=following|recommend|group&amp;groupId?&amp;cursor</code></td><td><code>200 {items:[...], fallbackType?, nextCursor}</code></td><td><code>400</code> 잘못된 tab</td><td style="text-align:center">➖</td><td>REQ-FUNC-014 · SC-6.F1</td></tr><tr><td style="text-align:center"><strong>A-20</strong></td><td><code>POST /records/{id}/reactions</code></td><td><code>{type:"like"|"comment", text?}</code></td><td><code>201 {reactionId}</code></td><td><code>404</code> <strong>비공개 기록</strong> · <code>400</code> 빈 댓글</td><td style="text-align:center">✅</td><td>REQ-FUNC-015 · 016 · SC-6.2</td></tr><tr><td style="text-align:center"><strong>A-21</strong></td><td><code>POST /reactions/{id}/report</code></td><td><code>{reason}</code></td><td><code>202 {reportId}</code></td><td><code>404</code></td><td style="text-align:center">✅</td><td>REQ-FUNC-016 · SC-6.3</td></tr><tr><td style="text-align:center"><strong>A-22</strong></td><td><code>POST /records/{id}/share</code></td><td>—</td><td><code>201 {shareUrl, token, expiresAt}</code></td><td><code>404</code> <strong>비공개 기록</strong></td><td style="text-align:center">✅</td><td>REQ-FUNC-017 · REQ-NF-012</td></tr><tr><td style="text-align:center"><strong>A-23</strong></td><td><code>POST /events</code></td><td><code>{events:[{name, occurredAt, sessionId, schemaVersion, props}]}</code></td><td><code>202 {accepted, rejected}</code></td><td><code>400</code> 스키마 위반</td><td style="text-align:center">➖</td><td>REQ-NF-014</td></tr></tbody></table></div>
+<p><strong><code>fallbackType</code>이 SC-6.F1을 구현한다</strong> — 피드가 비면 <code>"own_records"</code> 또는 <code>"recommend"</code> 를 담아 클라이언트가 대체 노출을 알 수 있게 한다.</p>
+<p><strong>A-20·A-22가 비공개 기록에 <code>404</code>를 반환한다</strong> — <code>400</code>이나 <code>403</code>이면 <em>"그 기록은 존재하나 비공개"</em> 가 드러난다.</p>
+<p><strong>총 23개</strong> — SRS §6.1의 20개에 <strong>A-03(업로드 세션 조회) · A-12(프로필) · A-18(언팔로우)</strong> 3개를 추가했다. 🔺 SRS §6.1 갱신 필요(§9-3).</p>
+<hr>
+<h1 id="h13">4. Information Viewpoint — 데이터 모델</h1>
+<blockquote><p>감사 <strong>P1-8</strong> 해소. SRS §6.2의 엔티티 16개에 타입·키·제약·인덱스·보존을 부여한다.</p></blockquote>
+<h2 id="h14">4.1 공통 규약 <code>[PROPOSED]</code></h2>
+<div class="tw"><table><thead><tr><th>항목</th><th>설계</th></tr></thead><tbody><tr><td>PK</td><td><code>ULID</code> (26자) — 시간 정렬 가능 · 분산 생성</td></tr><tr><td>시각</td><td><code>TIMESTAMPTZ</code> · UTC 저장 · 응답은 ISO 8601</td></tr><tr><td>공통 컬럼</td><td><code>created_at</code> 필수 · <code>updated_at</code> 변경 가능 엔티티만</td></tr><tr><td>논리 삭제</td><td>사업 자원만 <code>deleted_at</code>. <strong>개인정보·영상은 물리 삭제</strong></td></tr><tr><td>문자열</td><td><code>TEXT</code> + <code>CHECK</code> 길이 제약</td></tr></tbody></table></div>
+<blockquote><p><strong>논리/물리 삭제 분리 근거</strong> — REQ-NF-022는 <em>"원본과 모든 파생물을 전량 삭제"</em> 를 요구한다. 논리 삭제는 이를 만족하지 않는다.</p></blockquote>
+<h2 id="h15">4.2 엔티티 상세</h2>
+<h3 id="h16">User</h3>
+<div class="tw"><table><thead><tr><th>컬럼</th><th>타입</th><th>제약</th><th>비고</th></tr></thead><tbody><tr><td><code>id</code></td><td>ULID</td><td><strong>PK</strong></td><td></td></tr><tr><td><code>handle</code></td><td>TEXT(30)</td><td><strong>UNIQUE</strong> · NOT NULL</td><td></td></tr><tr><td><code>display_name</code></td><td>TEXT(50)</td><td>NOT NULL</td><td></td></tr><tr><td><code>birth_year</code></td><td>SMALLINT</td><td>NULL 허용</td><td>🔴 <strong>개인정보</strong> · REQ-NF-016 연령 분기</td></tr><tr><td><code>guardian_consent_at</code></td><td>TIMESTAMPTZ</td><td>NULL</td><td>만 14세 미만만</td></tr><tr><td><code>role</code></td><td>ENUM</td><td>NOT NULL · 기본 <code>user</code></td><td><code>user</code> · <code>operator</code></td></tr><tr><td><code>created_at</code> / <code>deleted_at</code></td><td>TIMESTAMPTZ</td><td></td><td></td></tr></tbody></table></div>
+<p><strong>인덱스</strong> <code>UNIQUE(handle)</code> · <code>INDEX(deleted_at)</code> <strong>보존</strong> 마지막 활동 후 <strong>1년</strong> <code>[PROPOSED]</code> → 삭제 요청 시 즉시 물리 삭제</p>
+<h3 id="h16">SourceVideo</h3>
+<div class="tw"><table><thead><tr><th>컬럼</th><th>타입</th><th>제약</th><th>비고</th></tr></thead><tbody><tr><td><code>id</code></td><td>ULID</td><td><strong>PK</strong></td><td></td></tr><tr><td><code>owner_id</code></td><td>ULID</td><td><strong>FK → User</strong> · NOT NULL · <code>ON DELETE CASCADE</code></td><td></td></tr><tr><td><code>duration_sec</code></td><td>INTEGER</td><td><code>CHECK (0 &lt; duration_sec &lt;= 5400)</code></td><td>90분 상한 <code>[PROPOSED]</code></td></tr><tr><td><code>size_bytes</code></td><td>BIGINT</td><td><code>CHECK (&lt;= 6442450944)</code></td><td>6GB 상한 <code>[PROPOSED]</code></td></tr><tr><td><code>codec</code></td><td>TEXT(20)</td><td>NOT NULL</td><td>검증 통과분만 저장</td></tr><tr><td><code>storage_uri</code></td><td>TEXT</td><td>NOT NULL</td><td></td></tr><tr><td><code>status</code></td><td>ENUM</td><td>NOT NULL</td><td><code>UPLOADING</code>·<code>UPLOADED</code>·<code>PROCESSING</code>·<code>READY</code>·<code>FAILED</code></td></tr><tr><td><code>created_at</code></td><td>TIMESTAMPTZ</td><td></td><td></td></tr></tbody></table></div>
+<p><strong>인덱스</strong> <code>INDEX(owner_id, created_at DESC)</code> <strong>보존</strong> 🔴 <strong>결과물 확보 후 사용자 삭제 유도</strong>(REQ-FUNC-019). 자동 삭제 정책 <code>[TBD]</code> <strong>개인정보</strong> 🔴 <strong>영상 자체가 개인정보</strong> — 저장 시 암호화(REQ-NF-011)</p>
+<h3 id="h16">PersonTrack</h3>
+<div class="tw"><table><thead><tr><th>컬럼</th><th>타입</th><th>제약</th></tr></thead><tbody><tr><td><code>id</code></td><td>ULID</td><td><strong>PK</strong></td></tr><tr><td><code>video_id</code></td><td>ULID</td><td><strong>FK → SourceVideo</strong> · <code>CASCADE</code></td></tr><tr><td><code>anchor_frame_ms</code></td><td>INTEGER</td><td>NOT NULL</td></tr><tr><td><code>anchor_bbox</code></td><td>JSONB</td><td><code>{x,y,w,h}</code> 정규화 좌표 0~1</td></tr><tr><td><code>bbox_timeline</code></td><td>JSONB</td><td>프레임별 좌표 배열</td></tr></tbody></table></div>
+<p><strong>인덱스</strong> <code>UNIQUE(video_id)</code> — 대상 지정은 영상당 1회(REQ-FUNC-002) <strong>보존</strong> SourceVideo와 동일 생명주기 · 🔴 <strong>얼굴 특징 벡터를 저장하지 않는다</strong> <code>[PROPOSED]</code></p>
+<blockquote><p><strong>특징 벡터 미저장 근거</strong> — REQ-NF-010(얼굴 정보 동의·파기)의 적용 범위를 좁힌다. 좌표만 남기면 원본 삭제 시 재식별 가능성이 사라진다.</p></blockquote>
+<h3 id="h16">AppearanceInterval</h3>
+<div class="tw"><table><thead><tr><th>컬럼</th><th>타입</th><th>제약</th></tr></thead><tbody><tr><td><code>id</code></td><td>ULID</td><td><strong>PK</strong></td></tr><tr><td><code>video_id</code></td><td>ULID</td><td><strong>FK → SourceVideo</strong> · <code>CASCADE</code></td></tr><tr><td><code>start_tc_ms</code> / <code>end_tc_ms</code></td><td>INTEGER</td><td><code>CHECK (start &lt; end)</code></td></tr><tr><td><code>confidence</code></td><td>REAL</td><td><code>CHECK (0 &lt;= confidence &lt;= 1)</code></td></tr><tr><td><code>excluded_reason</code></td><td>ENUM</td><td>NULL — <code>LOW_CONFIDENCE</code></td></tr></tbody></table></div>
+<p><strong>인덱스</strong> <code>INDEX(video_id, start_tc_ms)</code> · <code>INDEX(video_id, excluded_reason)</code> <strong>설계 주</strong> <code>excluded_reason</code>이 <strong>제외 전/후 탐지율 분리 집계의 근거</strong>다(SRS §4.2). 제외분을 지우지 않고 사유와 함께 남긴다.</p>
+<h3 id="h16">Candidate</h3>
+<div class="tw"><table><thead><tr><th>컬럼</th><th>타입</th><th>제약</th></tr></thead><tbody><tr><td><code>id</code></td><td>ULID</td><td><strong>PK</strong></td></tr><tr><td><code>interval_id</code></td><td>ULID</td><td><strong>FK → AppearanceInterval</strong> · <code>CASCADE</code></td></tr><tr><td><code>rank</code></td><td>SMALLINT</td><td>NOT NULL</td></tr><tr><td><code>thumbnail_uri</code></td><td>TEXT</td><td></td></tr><tr><td><code>confidence_flag</code></td><td>ENUM</td><td><code>NORMAL</code>·<code>LOW</code>·<code>EXCLUDED</code></td></tr></tbody></table></div>
+<p><strong>인덱스</strong> <code>INDEX(interval_id)</code> · <code>UNIQUE(interval_id, rank)</code> <strong>제약</strong> <code>confidence_flag != 'NORMAL'</code> 인 행은 <strong>API 응답에서 제외</strong>(REQ-FUNC-027)</p>
+<h3 id="h16">Selection</h3>
+<div class="tw"><table><thead><tr><th>컬럼</th><th>타입</th><th>제약</th></tr></thead><tbody><tr><td><code>id</code></td><td>ULID</td><td><strong>PK</strong></td></tr><tr><td><code>candidate_id</code></td><td>ULID</td><td><strong>FK → Candidate</strong></td></tr><tr><td><code>user_id</code></td><td>ULID</td><td><strong>FK → User</strong></td></tr><tr><td><code>selected_at</code></td><td>TIMESTAMPTZ</td><td>NOT NULL</td></tr><tr><td><code>is_reselection</code></td><td>BOOLEAN</td><td>기본 <code>false</code></td></tr></tbody></table></div>
+<p><strong>인덱스</strong> <code>INDEX(user_id, selected_at)</code> · <code>UNIQUE(candidate_id, user_id)</code> <strong>보존</strong> 🔴 <strong>원본 삭제 후에도 유지</strong> — 향후 학습 원천(REQ-FUNC-023). 단 <strong>사용자 삭제 요청 시 물리 삭제</strong> <strong>설계 주</strong> <code>is_reselection</code>이 <strong>ADR-3의 판정 지표</strong>(<code>reselection_started</code>) 근거다.</p>
+<h3 id="h16">GeneratedVideo · Record · VisibilitySetting</h3>
+<div class="tw"><table><thead><tr><th>엔티티</th><th>주요 컬럼</th><th>제약</th></tr></thead><tbody><tr><td><strong>GeneratedVideo</strong></td><td><code>id</code> PK · <code>owner_id</code> FK · <code>source_video_id</code> FK <code>ON DELETE SET NULL</code> · <code>music_track_id</code> FK · <code>duration_sec CHECK(&lt;=60)</code> · <code>storage_uri</code></td><td>🔴 <code>SET NULL</code> — <strong>원본을 지워도 결과물은 남는다</strong>(REQ-FUNC-019)</td></tr><tr><td><strong>Record</strong></td><td><code>id</code> PK · <code>generated_video_id</code> FK <strong>UNIQUE</strong> · <code>owner_id</code> FK · <code>sport</code> TEXT · <code>created_at</code></td><td>1:1 · <code>INDEX(owner_id, created_at DESC)</code></td></tr><tr><td><strong>VisibilitySetting</strong></td><td><code>record_id</code> <strong>PK·FK</strong> · <code>scope</code> ENUM NOT NULL <strong>기본 <code>private</code></strong> · <code>group_ids</code> ULID[] · <code>updated_at</code></td><td><code>CHECK (scope != 'group' OR array_length(group_ids,1) &gt;= 1)</code></td></tr></tbody></table></div>
+<blockquote><p><strong><code>scope</code> 기본값 <code>private</code>이 DB 레벨 <code>DEFAULT</code>여야 한다</strong> — 애플리케이션 기본값만으로는 REQ-FUNC-010(ADR-4)이 보장되지 않는다. 신규 삽입 경로가 늘면 누락된다.</p></blockquote>
+<h3 id="h16">Group · GroupMember</h3>
+<div class="tw"><table><thead><tr><th>엔티티</th><th>주요 컬럼</th><th>제약</th></tr></thead><tbody><tr><td><strong>Group</strong></td><td><code>id</code> PK · <code>owner_id</code> FK · <code>name</code> TEXT(30) · <code>member_count</code> SMALLINT</td><td>🔴 <code>CHECK (member_count &lt;= 20)</code> · <strong>이름 중복 허용</strong>(UNIQUE 없음)</td></tr><tr><td><strong>GroupMember</strong></td><td><code>group_id</code>+<code>user_id</code> <strong>복합 PK</strong> · <code>joined_at</code> · <code>left_at</code> NULL</td><td><code>INDEX(user_id)</code> · <strong>이탈 이력 보존</strong>(<code>left_at</code> 소프트)</td></tr></tbody></table></div>
+<p><strong>정원 20명 강제</strong> — <code>member_count</code>를 <strong>동일 트랜잭션 내 원자 증가 + CHECK</strong>로 처리한다. 조회 후 삽입 방식은 동시 초대 시 정원을 넘긴다(SC-5.F1).</p>
+<h3 id="h16">FollowRelation · MusicTrack · Reaction · ShareLink</h3>
+<div class="tw"><table><thead><tr><th>엔티티</th><th>주요 컬럼</th><th>제약</th></tr></thead><tbody><tr><td><strong>FollowRelation</strong></td><td><code>follower_id</code>+<code>followee_id</code> <strong>복합 PK</strong> · <code>created_at</code></td><td><code>CHECK (follower_id != followee_id)</code> · <code>INDEX(followee_id)</code> · <strong>단방향</strong></td></tr><tr><td><strong>MusicTrack</strong></td><td><code>id</code> PK · <code>title</code> · <code>category</code> ENUM(5) · <code>duration_sec</code> · <code>license_ref</code> NOT NULL · <code>license_expires_at</code></td><td>🔴 <code>license_ref</code> <strong>NOT NULL</strong> — 라이선스 없는 곡은 행 자체가 생기지 않는다(REQ-FUNC-007)</td></tr><tr><td><strong>Reaction</strong></td><td><code>id</code> PK · <code>record_id</code> FK <code>CASCADE</code> · <code>user_id</code> FK · <code>type</code> ENUM · <code>text</code> TEXT(300) · <code>report_flag</code> BOOLEAN</td><td><code>UNIQUE(record_id, user_id) WHERE type='like'</code> · <code>CHECK (type!='comment' OR text IS NOT NULL)</code></td></tr><tr><td><strong>ShareLink</strong></td><td><code>id</code> PK · <code>record_id</code> FK <code>CASCADE</code> · <code>token</code> TEXT <strong>UNIQUE</strong> · <code>expires_at</code> NOT NULL · <code>revoked_at</code> NULL · <code>target_user_id</code> FK NULL</td><td><code>INDEX(token)</code> · <code>INDEX(record_id, revoked_at)</code> · <strong>기본 만료 30일</strong>(REQ-NF-012)</td></tr></tbody></table></div>
+<h3 id="h16">ProcessingJob</h3>
+<div class="tw"><table><thead><tr><th>컬럼</th><th>타입</th><th>제약</th></tr></thead><tbody><tr><td><code>id</code></td><td>ULID</td><td><strong>PK</strong></td></tr><tr><td><code>video_id</code></td><td>ULID</td><td><strong>FK → SourceVideo</strong> · <code>CASCADE</code></td></tr><tr><td><code>stage</code></td><td>ENUM</td><td><code>UPLOADING</code>·<code>SUBJECT_ANCHORED</code>·<code>DETECTING</code>·<code>SELECTION_READY</code>·<code>RENDERING</code>·<code>COMPLETED</code>·<code>FAILED</code></td></tr><tr><td><code>status</code></td><td>ENUM</td><td><code>QUEUED</code>·<code>RUNNING</code>·<code>SUCCEEDED</code>·<code>FAILED</code></td></tr><tr><td><code>retry_count</code></td><td>SMALLINT</td><td>기본 0 · <code>CHECK (&lt;= 3)</code></td></tr><tr><td><code>checkpoint</code></td><td>JSONB</td><td>재개 지점</td></tr><tr><td><code>failure_class</code></td><td>ENUM</td><td><code>CAPTURE</code>·<code>MODEL</code>·<code>UX</code>·<code>INFRA</code>·<code>POLICY</code></td></tr></tbody></table></div>
+<p><strong>인덱스</strong> <code>INDEX(status, created_at)</code> — 큐 폴링 · <code>INDEX(video_id)</code> <strong>설계 주</strong> <code>checkpoint</code>가 SC-1.F4(앱 종료 재개)의 저장소다. <code>retry_count &lt;= 3</code>이 REQ-NF-008을 DB에서 강제한다.</p>
+<h2 id="h16">4.3 PRD ↔ SRS ↔ DS 명칭 매핑</h2>
+<blockquote><p>감사 <strong>P1-3</strong> 해소.</p></blockquote>
+<div class="tw"><table><thead><tr><th>PRD</th><th>SRS · DS</th><th>변경 사유</th></tr></thead><tbody><tr><td><code>Video</code></td><td><strong><code>SourceVideo</code></strong></td><td><code>GeneratedVideo</code>와 구분</td></tr><tr><td><code>VideoSegment</code></td><td><strong><code>AppearanceInterval</code></strong></td><td>등장 구간임을 명시</td></tr><tr><td><code>HighlightCandidate</code></td><td><strong><code>Candidate</code></strong></td><td>축약</td></tr><tr><td><code>HighlightSelection</code></td><td><strong><code>Selection</code></strong></td><td>축약</td></tr><tr><td><code>PrivacySetting</code></td><td><strong><code>VisibilitySetting</code></strong></td><td>API 경로 <code>/visibility</code>와 일치</td></tr></tbody></table></div>
+<h2 id="h17">4.4 보존 정책 종합 <code>[PROPOSED]</code></h2>
+<div class="tw"><table><thead><tr><th>데이터</th><th>보존</th><th>삭제 요청 시</th></tr></thead><tbody><tr><td>원본 영상 · 추적 궤적</td><td>사용자 삭제까지</td><td><strong>물리 삭제</strong></td></tr><tr><td>완성 영상 · 기록</td><td>사용자 삭제까지</td><td><strong>물리 삭제</strong></td></tr><tr><td>선택 이력</td><td>무기한</td><td><strong>물리 삭제</strong></td></tr><tr><td>계측 이벤트</td><td><strong>90일</strong></td><td>사용자 식별자 <strong>비식별화</strong> · 집계는 유지</td></tr><tr><td>감사 로그(REQ-NF-009)</td><td><strong>1년</strong></td><td>유지 — 보안 기록</td></tr><tr><td>그룹 이탈 이력</td><td>그룹 존속 기간</td><td>물리 삭제</td></tr></tbody></table></div>
+<p>🔺 <strong>보존 기간은 SRS에서 <code>[TBD]</code>였다.</strong> 위 값은 이 문서의 제안이며 법무 확정이 필요하다(§9-4).</p>
+<hr>
+<h1 id="h18">5. Logical Viewpoint — 도메인 클래스</h1>
+<blockquote><p>감사 <strong>P2-1</strong> 해소. SRS §6.2의 열거형 다이어그램에 <strong>도메인 클래스</strong>를 더한다.</p></blockquote>
+<pre class="mermaid">classDiagram
+    class SourceVideo {
+        +ULID id
+        +ULID ownerId
+        +int durationSec
+        +VideoStatus status
+        +canStartDetection() bool
+        +markProcessing() void
+    }
+    class PersonTrack {
+        +ULID id
+        +BBox anchorBbox
+        +BBoxTimeline timeline
+        +positionAt(ms) BBox
+    }
+    class AppearanceInterval {
+        +ULID id
+        +int startTcMs
+        +int endTcMs
+        +float confidence
+        +ExcludeReason excludedReason
+        +isExcluded() bool
+        +durationMs() int
+    }
+    class Candidate {
+        +ULID id
+        +short rank
+        +ConfidenceFlag flag
+        +isPresentable() bool
+    }
+    class ConfidenceGate {
+        &lt;&lt;service&gt;&gt;
+        +float tau
+        +evaluate(interval) ConfidenceFlag
+        +excludedCount(videoId) int
+    }
+    class Record {
+        +ULID id
+        +ULID ownerId
+        +VisibilitySetting visibility
+        +isVisibleTo(viewer) bool
+    }
+    class VisibilitySetting {
+        +VisibilityScope scope
+        +ULID[] groupIds
+        +allows(viewer) bool
+    }
+    class VisibilityEnforcer {
+        &lt;&lt;service&gt;&gt;
+        +filter(records, viewer) Record[]
+        +assertReadable(record, viewer) void
+        +audit(decision) void
+    }
+    class Group {
+        +ULID id
+        +short memberCount
+        +canAdmit() bool
+        +revokeSharesFor(userId) void
+    }
+    class ProcessingJob {
+        +ProcessingStage stage
+        +short retryCount
+        +Checkpoint checkpoint
+        +canRetry() bool
+        +resumeFrom() ProcessingStage
+    }
+    SourceVideo "1" --&gt; "1" PersonTrack
+    SourceVideo "1" --&gt; "*" AppearanceInterval
+    AppearanceInterval "1" --&gt; "0..1" Candidate
+    ConfidenceGate ..&gt; AppearanceInterval : 판정
+    ConfidenceGate ..&gt; Candidate : 플래그 부여
+    Record "1" --&gt; "1" VisibilitySetting
+    VisibilityEnforcer ..&gt; VisibilitySetting : 질의
+    VisibilityEnforcer ..&gt; Record : 필터
+    Group ..&gt; VisibilitySetting : 대상
+    SourceVideo "1" --&gt; "1" ProcessingJob</pre>
+<p><strong>설계 원칙 3가지</strong></p>
+<div class="tw"><table><thead><tr><th>#</th><th>원칙</th><th>이유</th></tr></thead><tbody><tr><td><strong>D1</strong></td><td><code>VisibilityEnforcer</code>를 <strong>거치지 않는 조회 경로를 두지 않는다</strong></td><td>REQ-NF-009. 우회 경로가 하나라도 있으면 요구사항이 성립하지 않는다</td></tr><tr><td><strong>D2</strong></td><td><code>ConfidenceGate</code>가 <strong>제외를 수행하되 데이터를 지우지 않는다</strong></td><td>제외 전/후 분리 집계(SRS §4.2)의 전제</td></tr><tr><td><strong>D3</strong></td><td><code>Record.isVisibleTo()</code>는 <strong>판정만</strong> 하고 <code>VisibilityEnforcer</code>가 <strong>감사 로그까지</strong> 책임진다</td><td>감사 로그 100%(REQ-NF-009)를 도메인 객체에 흩뿌리지 않는다</td></tr></tbody></table></div>
+<hr>
+<h1 id="h19">6. Interaction Viewpoint — 상태 동역학</h1>
+<p><strong>시퀀스 다이어그램은 SRS §3.5·§6.3에 9개가 있다.</strong> 여기서는 SRS가 다루지 않은 <strong>상태 전이</strong>만 설계한다.</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; UPLOADING : POST /videos
+    UPLOADING --&gt; UPLOADING : PATCH chunks
+    UPLOADING --&gt; FAILED : 코덱 거부 · 크기 초과
+    UPLOADING --&gt; UPLOADED : 마지막 청크
+    UPLOADED --&gt; SUBJECT_ANCHORED : POST subject
+    SUBJECT_ANCHORED --&gt; DETECTING : POST detect
+    DETECTING --&gt; SELECTION_READY : 구간 1개 이상
+    DETECTING --&gt; FAILED : 구간 0개 (SC-1.F2)
+    SELECTION_READY --&gt; RENDERING : POST records
+    RENDERING --&gt; RENDERING : 재시도 (≤3)
+    RENDERING --&gt; COMPLETED : 렌더 성공
+    RENDERING --&gt; FAILED : 3회 연속 실패 (SC-3.F1)
+    SELECTION_READY --&gt; SELECTION_READY : 다시 고르기 (SC-3.F2)
+    FAILED --&gt; SELECTION_READY : 선택 상태 보존 복귀
+    COMPLETED --&gt; [*]</pre>
+<div class="tw"><table><thead><tr><th>전이</th><th>보존되는 것</th><th>근거</th></tr></thead><tbody><tr><td><code>RENDERING → FAILED</code></td><td><strong>선택 · 음악 설정 · 원본</strong></td><td>SC-3.F1 <em>"원본을 삭제하지 않는다"</em></td></tr><tr><td><code>FAILED → SELECTION_READY</code></td><td>위 전부</td><td>사용자를 처음으로 되돌리지 않는다</td></tr><tr><td><code>SELECTION_READY</code> 자기 전이</td><td>기존 선택</td><td>SC-3.F2 · <code>is_reselection = true</code> 기록</td></tr><tr><td>앱 종료 후 재진입</td><td><code>checkpoint</code></td><td>SC-1.F4</td></tr></tbody></table></div>
+<blockquote><p><strong><code>DETECTING → FAILED</code>(구간 0개)는 시스템 오류가 아니다.</strong> <code>failure_class = CAPTURE</code>로 분류하고 원인 후보를 제시한다(SC-1.F2). 이를 <code>INFRA</code>로 기록하면 실패 분류(REQ-NF-014)가 오염된다.</p></blockquote>
+<hr>
+<h1 id="h20">7. 추적성 — DS → SRS</h1>
+<div class="tw"><table><thead><tr><th>DS 산출</th><th>대응 요구사항</th><th>해소한 감사 지적</th></tr></thead><tbody><tr><td>§2.1 Use Case 모델 (UCS-1~8)</td><td>REQ-FUNC 전체 · REQ-NF-016·017</td><td><strong>P1-6</strong></td></tr><tr><td>§3.1 인증·인가 · 오류 · 멱등성</td><td>REQ-NF-009 · 013</td><td><strong>P1-7</strong></td></tr><tr><td>§3.2 API 23개 스키마</td><td>REQ-FUNC-001~019 · REQ-NF-012·014</td><td><strong>P1-7</strong></td></tr><tr><td>§4.2 엔티티 16개 속성</td><td>REQ-FUNC-009·010·013 · REQ-NF-007·011·022</td><td><strong>P1-8</strong></td></tr><tr><td>§4.3 명칭 매핑</td><td>—</td><td><strong>P1-3</strong></td></tr><tr><td>§4.4 보존 정책</td><td>REQ-NF-022</td><td>P1-8</td></tr><tr><td>§5 도메인 클래스</td><td>REQ-NF-009 · REQ-FUNC-027</td><td><strong>P2-1</strong></td></tr><tr><td>§6 상태 기계</td><td>SC-1.F2·F4 · SC-3.F1·F2 · REQ-NF-008</td><td>—</td></tr></tbody></table></div>
+<p><strong>감사 P1 4건 · P2 1건 · P1-3 해소.</strong> 잔여는 <strong>P1-4</strong>(API 경로 불일치 — PRD 개정 사안) · <strong>P1-5</strong>(O3·O9 REQ-NF 복귀 — SRS 개정 사안) · <strong>P2-2</strong>(AC ID 역참조 — SRS 개정 사안)로, <strong>전부 상위 문서에서 처리할 항목</strong>이다.</p>
+<hr>
+<h1 id="h21">8. 설계 결정 요약</h1>
+<div class="tw"><table><thead><tr><th>#</th><th>결정</th><th>대안</th><th>선택 이유</th></tr></thead><tbody><tr><td><strong>DD-1</strong></td><td>권한 없음에 <code>404</code></td><td><code>403</code></td><td><code>403</code>은 자원 존재를 노출한다 — REQ-NF-009 위반</td></tr><tr><td><strong>DD-2</strong></td><td>코덱을 업로드 <strong>개시 요청 본문</strong>으로 수신</td><td>첫 청크 분석</td><td>바이트 수신 전 거부 · <strong>GPU 작업 0건</strong>(SC-1.F1)</td></tr><tr><td><strong>DD-3</strong></td><td><code>visibility.scope</code> <strong>DB 기본값</strong> <code>private</code></td><td>애플리케이션 기본값</td><td>삽입 경로가 늘어도 누락되지 않는다 (ADR-4)</td></tr><tr><td><strong>DD-4</strong></td><td>제외 구간을 <strong>사유와 함께 보존</strong></td><td>삭제</td><td>제외 전/후 분리 집계의 전제</td></tr><tr><td><strong>DD-5</strong></td><td>얼굴 <strong>특징 벡터 미저장</strong></td><td>저장해 재사용</td><td>REQ-NF-010의 적용 범위 축소 · 원본 삭제로 재식별 불가</td></tr><tr><td><strong>DD-6</strong></td><td><code>GeneratedVideo.source_video_id</code> <code>ON DELETE SET NULL</code></td><td><code>CASCADE</code></td><td>원본을 지워도 결과물이 남아야 한다(REQ-FUNC-019 · O4)</td></tr><tr><td><strong>DD-7</strong></td><td>그룹 정원을 <strong>원자 증가 + CHECK</strong></td><td>조회 후 삽입</td><td>동시 초대 시 정원 초과 방지(SC-5.F1)</td></tr><tr><td><strong>DD-8</strong></td><td>선택 이력을 원본 삭제 후에도 유지</td><td>함께 삭제</td><td>REQ-FUNC-023 학습 원천 · 단 삭제 요청 시 물리 삭제</td></tr></tbody></table></div>
+<hr>
+<h1 id="h22">9. 🔺 SRS 개정 요청</h1>
+<p>이 문서가 설계하면서 <strong>요구사항의 공백</strong>을 발견한 항목이다. <strong>DS가 요구사항을 만들지 않으므로 SRS 개정으로 올린다.</strong></p>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>내용</th><th>근거</th><th>제안</th></tr></thead><tbody><tr><td style="text-align:center"><strong>9-1</strong></td><td><strong>행위자 구분 부재</strong> — 법정대리인·운영자가 §2.2 이용자 클래스에 없다</td><td>UCS-7·8의 행위자</td><td>§2.2에 <strong>행위자 절 분리</strong> 또는 §2.1 이해관계자와 연결</td></tr><tr><td style="text-align:center"><strong>9-2</strong></td><td>🔴 <strong>인증 요구사항 부재</strong> — REQ-NF-009가 인증을 전제하나 명시적 요구사항이 없다</td><td>§3.1.1</td><td><strong>REQ-NF 신설</strong> — 모든 API 인증 필수 · 미인증 <code>401</code> · 권한 없음 <code>404</code></td></tr><tr><td style="text-align:center"><strong>9-3</strong></td><td>API 3개 누락 — 업로드 세션 조회 · 프로필 조회 · 언팔로우</td><td>§3.2 A-03 · A-12 · A-18</td><td>SRS §6.1에 3행 추가. <strong>A-12는 SC-4.4의 구현 지점</strong>이라 특히 중요</td></tr><tr><td style="text-align:center"><strong>9-4</strong></td><td>보존 기간 <code>[TBD]</code></td><td>§4.4</td><td>법무 확정 후 SRS §4.4 규제 준수 표에 반영</td></tr><tr><td style="text-align:center"><strong>9-5</strong></td><td>영상 길이·크기 상한 미규정</td><td>§4.2 SourceVideo <code>CHECK</code></td><td>90분·6GB는 설계 제안값. <strong>요구사항으로 확정 필요</strong></td></tr></tbody></table></div>
+<hr>
+<p><em>작성자: 백엔드 리드 · 검토자: AI 리드 · 클라이언트 개발자 · 보안 담당자 · 승인자: 제품 아키텍트</em></p>
+<p class="meta">HILiT Design Spec v1.0 · 원본 [DS]hilit-DSv1.0.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) mermaid.initialize({startOnLoad:true, theme: dark?'dark':'neutral', securityLevel:'loose'});
+})();
+</script>
+</body></html>
