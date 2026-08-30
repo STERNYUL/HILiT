@@ -195,7 +195,7 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <p><strong>S1-1(스키마)이 없으면 나머지 43개가 엔티티 이름을 확정할 수 없다.</strong> DS §4.2에 정의는 있으나 <strong>Prisma 코드로 확정되기 전에는 <code>SourceVideo</code>인지 <code>source_videos</code>인지가 태스크마다 달라진다.</strong></p>
 <p><strong>S1-3(Server Action 계약)</strong> 은 같은 이유로 함수 이름과 인자를 고정한다. <strong>S1-4(Provider 인터페이스)</strong> 는 SP-1 결과와 <strong>무관하게</strong> 지금 쓸 수 있고, 이걸 먼저 쓰면 <strong>SP-1 벤치마크 하니스가 그대로 프로덕션 어댑터가 된다</strong>(효율성 검토 §2.3).</p>
 <h2 id="h28">5.3 작성 전 확정해야 할 것 2건</h2>
-<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>영향</th></tr></thead><tbody><tr><td style="text-align:center"><strong>1</strong></td><td>🔵 <strong>공개 발행을 MVP에 넣는가</strong>(효율성 검토 A-4)</td><td><strong>넣지 않으면 Wave 3에서 반응 3건 · Wave 5에서 게이트 2건이 빠진다</strong> — 태스크 44 → 39</td></tr><tr><td style="text-align:center"><strong>2</strong></td><td>🔺 <strong>Convergence Task 서식을 만들 것인가</strong>(§3.1)</td><td>L 5건의 작성 방식이 갈린다</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>항목</th><th>영향</th></tr></thead><tbody><tr><td style="text-align:center">~~1~~</td><td>~~공개 발행을 MVP에 넣는가~~</td><td>✅ <strong>결정 — 포함</strong>(2026-08-30). 태스크 <strong>44개 유지</strong> · 게이트 4건 전부 MVP 경로에 남는다</td></tr><tr><td style="text-align:center"><strong>2</strong></td><td>🔺 <strong>Convergence Task 서식을 만들 것인가</strong>(§3.1)</td><td>L 5건의 작성 방식이 갈린다</td></tr></tbody></table></div>
 <blockquote><p><strong>둘 다 Wave 1 착수 전에 정하는 편이 낫다.</strong> 나중에 정하면 이미 쓴 태스크를 고쳐야 한다.</p></blockquote>
 <hr>
 <h1 id="h29">6. 이 보고서가 제안하지 않는 것</h1>
