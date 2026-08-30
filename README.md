@@ -144,7 +144,7 @@ v1.1~v1.2는 실패 경로를 요구사항으로 승격해 REQ를 41 → 60건�
 
 | 문서 | 설명 |
 | --- | --- |
-| **[`[SRS]hilit-SRSv1.4.md`](%5BSRS%5Dhilit-SRSv1.4.md)** | **이번 변환의 산출물.** 요구사항 **44건** · 운영 시나리오 **42건** · 설계 결정 **3건** · 시퀀스 다이어그램 9개 |
+| **[`[SRS]hilit-SRSv1.5.md`](%5BSRS%5Dhilit-SRSv1.5.md)** | **이번 변환의 산출물.** 요구사항 **44건** · 운영 시나리오 **42건** · 설계 결정 **3건** · 시퀀스 다이어그램 9개 |
 | [`PRD/HILiT_PRD_v0.1.md`](PRD/HILiT_PRD_v0.1.md) | 변환 원천 PRD. 12장 · Evidence Gap 13건 · Open Question 13건 |
 | [`VPS_v0_3.html`](VPS_v0_3.html) | **Source of Truth.** Core Job · Outcome · 차별점 · MVP 범위의 원천 |
 

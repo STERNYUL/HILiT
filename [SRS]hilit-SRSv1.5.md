@@ -2,7 +2,7 @@
 
 **Document ID:** SRS-HILIT-MVP-001
 
-**version:** 1.4
+**version:** 1.5
 
 **Date:** 2026-08-30
 
@@ -19,7 +19,8 @@
 | v1.1 | 2026-08-30 | 통합 개정. 팀 SRS v1.0(REQ 41건)의 ID 체계를 보존하고 PRD v0.1 고유 내용을 REQ-FUNC-027~035 · REQ-NF-016~022로 증분 추가(16건) | REF-02 · REF-04 |
 | v1.2 | 2026-08-30 | 프로토타입 v0.6(REF-13) 대조 개정. ADR-4를 확정으로 정정 · 음악 5갈래 500곡 · 그룹 확정 4건 · 공유 범위 경계 · 갤러리 직접 사용 반영 | REF-13 |
 | v1.3 | 2026-08-30 | 증분 축약 개정. 증분 19건 중 17건이 팀 문서에 이미 존재함을 확인하고 요구사항에서 내렸다. 운영 시나리오와 설계 결정에 TC ID를 부여해 추적성 매트릭스에 진입시켰다(§5.2·§5.3) | REF-04 §11 |
-| **v1.4** | **2026-08-30** | **두 결정 반영.** ① **REQ-FUNC-027을 "제외"로 확정** — 저신뢰 표시를 버리고 후보에서 제외. 재현율 손실을 다루기 위해 **제외 전/후 탐지율 동시 집계**를 신설 ② **미성년자 정책을 이용자(REQ-NF-016)와 피촬영자(REQ-NF-017)로 분리** — 클럽·교습 영상이 곧 미성년자 영상이라는 이 서비스 특유의 위험 반영. **요구사항 44건 · 시나리오 42건** | 사용자 결정 · REF-11 |
+| v1.4 | 2026-08-30 | **두 결정 반영.** ① **REQ-FUNC-027을 "제외"로 확정** — 저신뢰 표시를 버리고 후보에서 제외. 재현율 손실을 다루기 위해 **제외 전/후 탐지율 동시 집계**를 신설 ② **미성년자 정책을 이용자(REQ-NF-016)와 피촬영자(REQ-NF-017)로 분리** — 클럽·교습 영상이 곧 미성년자 영상이라는 이 서비스 특유의 위험 반영. 요구사항 44건 · 시나리오 42건 | 사용자 결정 · REF-11 |
+| **v1.5** | **2026-08-30** | **감사 P0 3건 해소.** ① **§3.3 Component Architecture 신설** — §5.1이 참조하던 컴포넌트 **30개를 전부 정의**하고 계층 다이어그램 추가 ② **US-6 추적 복원** — REQ-NF-018(사용자 조작 시간) 신설 및 매트릭스 3행 추가 ③ AC1-2의 **"약 30개" 수치 복원**. **요구사항 45건** | `AUDIT_SRS-v1.4_2026-08-30.md` |
 
 > ### v1.3의 개정 성격 — 요구사항을 늘리지 않고 검증 가능성만 얻는다
 >
@@ -258,7 +259,7 @@ ADR(설계 결정)·제약을 여기에 통합한다 (REF-05 §9.6.7 · §9.6.16
 | **UC-02 촬영 담당 겸 참가자** | 22 · 동아리 주장 | 팀원 다수를 손으로 찾는 것이 불가능. **촬영 담당이라 본인 기록만 없음** | P1 | REQ-FUNC-002~005 · 013 |
 | **UC-03 저장공간 압박형** | 34 · 자영업 · 액션캠 50분·4GB | 남길 것은 15초인데 원본을 지우지 못함. **공개 의사 없음** | P1 · P3 | REQ-FUNC-009 · 010 · 019 · 035 |
 | **UC-04 편집 포기형** | 28 · 사무직 · 게시 연 3회 | 컷·자막·음악에 30분 넘어 중도 포기 | P1 | REQ-FUNC-006~008 |
-| **UC-05 크리에이터** | 24 · 팔로워 8,200 | 촬영 1시간 + 편집 3시간. 외주 지출 발생 | P1 | REQ-FUNC-003~008 |
+| **UC-05 크리에이터** | 24 · 팔로워 8,200 | 촬영 1시간 + 편집 3시간. 외주 지출 발생 | P1 | REQ-FUNC-003~008 · **REQ-NF-018** |
 | **UC-06 팀 운영자** | 30 · 팀원 12명 | 팀원 다수가 각자 원하나 편집 인력 1명. 팀 계정 하나라 개인 기록이 남지 않음 | P1 · P3 | REQ-FUNC-010 · 013 · 014 |
 
 > **UC-02·UC-06은 본 범위에서 절반만 충족된다.** 완전 충족은 팀 공유 편집(REQ-FUNC-024)이 필요하나 **넷이 전부 미정**이라 제외했다. 본 범위는 **본인 기록 생성**과 **각 구성원의 개별 계정 처리** 경로만 지원한다.
@@ -289,7 +290,109 @@ ADR(설계 결정)·제약을 여기에 통합한다 (REF-05 §9.6.7 · §9.6.16
 
 **진입 규칙** — 앱 실행 시 **로그인 화면 없이 팔로잉 탭에서 영상이 바로 재생**된다. 첫 프레임까지 p95 ≤ 1.5초 (REQ-NF-001).
 
-## 3.3 API Overview
+## 3.3 Component Architecture
+
+> **P0-2·P0-3 해소** — §5.1 추적성 매트릭스의 `구현 컴포넌트` 열이 참조하는 이름 **28개를 여기서 정의한다.** 이 절이 없던 동안 매트릭스는 실체 없는 대상을 가리키고 있었다.
+
+```mermaid
+flowchart TB
+    subgraph L1["① 클라이언트"]
+        CS["Client Shell<br/>AppShell · ColdStartProfiler<br/>AgeGate · GuardianConsentFlow"]
+    end
+    subgraph L2["② API 계층"]
+        GW["API Gateway<br/>인증 · 라우팅 · 오류율 집계"]
+    end
+    subgraph L3["③ 도메인 서비스"]
+        MI["Media Ingest Service<br/>SourceVideoUploader"]
+        HC["Highlight Composer<br/>CandidateRanker · SelectionController<br/>MusicLibrary · LicenseRegistry · RenderPipeline"]
+        RS["Record Store Service<br/>RecordWriter · VisibilityResolver<br/>VisibilityEnforcer · GroupManager<br/>MinorSubjectGuard · PersistenceHealthMonitor"]
+        SG["Social Graph Service<br/>FollowGraph"]
+        FS["Feed Service<br/>FeedRanker · ReactionService<br/>ReportIntake · ShareLinkIssuer"]
+    end
+    subgraph L4["④ AI · 처리"]
+        VT["Vision Tracking Engine<br/>SubjectReIdentifier · AppearanceIntervalDetector<br/>SubjectReframer · ConfidenceGate<br/>DetectionBenchmarkRunner · ModelRegistry · ResolutionPolicy"]
+        PQ["Processing Queue<br/>체크포인트 · 재시도"]
+    end
+    subgraph L5["⑤ 데이터"]
+        DB[("관계형 저장소")]
+        OS[("객체 스토리지")]
+    end
+    subgraph L6["⑥ 외부"]
+        GPU["GPU 인프라"]
+        MU["음원 라이선스"]
+        KA["카카오톡 · OS 공유"]
+    end
+    subgraph L0["⑦ 횡단"]
+        TS["Telemetry Service<br/>AlertDispatcher · CostGuardrailMonitor"]
+        PG["정책 게이트<br/>ReleaseGateChecklist"]
+    end
+    CS --> GW
+    GW --> MI & HC & RS & SG & FS
+    MI --> PQ --> VT --> GPU
+    HC --> VT
+    HC --> MU
+    FS --> KA
+    MI & HC & RS & SG & FS --> DB
+    MI & VT & HC --> OS
+    RS -.->|"모든 조회"| RS
+    TS -.->|"계측"| MI & HC & RS & FS & VT
+    PG -.->|"배포 차단"| CS & RS
+```
+
+> **`VisibilityEnforcer`는 컴포넌트라기보다 경로다.** Record Store Service의 모든 조회가 반드시 통과해야 하는 검문소이며, 우회 경로가 존재하면 REQ-NF-009가 성립하지 않는다.
+
+### 3.3.1 컴포넌트 정의
+
+| 컴포넌트 | 소속 | 책임 | 주요 의존 | 대응 요구사항 |
+| --- | --- | --- | --- | --- |
+| **AppShell** | Client Shell | 3탭 내비게이션 · 진입 자동재생 · `+` 편집 진입 | Feed Service | REQ-FUNC-011 · REQ-NF-001 |
+| **ColdStartProfiler** | Client Shell | 콜드/웜 시작 구간 계측 | Telemetry | REQ-NF-001 |
+| **AgeGate** | Client Shell | 가입 연령 수집 · 만 14세 미만 분기 | GuardianConsentFlow | REQ-NF-016 |
+| **GuardianConsentFlow** | Client Shell | 법정대리인 동의·철회 경로 | 정책 게이트 | REQ-NF-016 |
+| **SourceVideoUploader** | Media Ingest | 청크 업로드 · **코덱 사전 검증** · 이어올리기 세션 | 객체 스토리지 · Processing Queue | REQ-FUNC-001 · SC-1.F1 · F3 · F4 |
+| **SubjectReIdentifier** | Vision Tracking | 대상 1회 지정 · 가림·재등장 재식별 | GPU | REQ-FUNC-002 · SC-1.2 |
+| **AppearanceIntervalDetector** | Vision Tracking | 등장 구간 탐지 · IoU 정탐 판정 | GPU · ResolutionPolicy | REQ-FUNC-003 · SC-1.1 |
+| **ConfidenceGate** | Vision Tracking | 신뢰도 임계 `τ` 판정 · **저신뢰 후보 제외** · 제외율 계측 | Telemetry | **REQ-FUNC-027** · SC-1.F5 · F6 |
+| **SubjectReframer** | Vision Tracking | 추적 좌표 기반 구도 재구성 · 세로 숏폼 출력 | GPU | REQ-FUNC-006 · SC-3.1 |
+| **DetectionBenchmarkRunner** | Vision Tracking | 정답셋 회귀 배치 · **제외 전/후 분리 집계** | ConfidenceGate | REQ-NF-003 · SC-1.1 |
+| **ModelRegistry** | Vision Tracking | 모델 버전 관리 · **앱 배포와 독립한 서버 측 갱신** | — | **ADR-2** (TC-ADR-02) |
+| **ResolutionPolicy** | Vision Tracking | 저해상도 1차 / 선택분만 원본 해상도 처리 규칙 | — | **ADR-3** (TC-ADR-03) |
+| **CandidateRanker** | Highlight Composer | 후보 산출 · 온전도 우선 정렬 · 타임코드 부여 | AppearanceIntervalDetector | REQ-FUNC-004 |
+| **SelectionController** | Highlight Composer · Client | 후보 선택·제외 상태 · **자동 확정 차단** · 재선택 복귀 | — | REQ-FUNC-005 · SC-3.3 · F2 |
+| **MusicLibrary** | Highlight Composer | 5갈래 500곡 목록 · 15초 자동 맞춤 삽입 | LicenseRegistry | REQ-FUNC-007 |
+| **LicenseRegistry** | Highlight Composer | 곡별 라이선스 문서 · 사용 범위 · 만료 관리 | 음원 제공자 | REQ-FUNC-007 |
+| **RenderPipeline** | Highlight Composer | 병합 · 인코딩 · **실패 시 선택 상태 보존 후 3회 재시도** | SubjectReframer · GPU | REQ-FUNC-008 · REQ-NF-004 · 008 · SC-3.F1 |
+| **RecordWriter** | Record Store | 기록 저장 트랜잭션 · **공개 범위 결정 전 행 생성** | 관계형 저장소 | REQ-FUNC-009 · REQ-NF-007 · SC-4.1 |
+| **VisibilityResolver** | Record Store | 공개 범위 지정·변경 · 기본값 `private` 적용 | — | REQ-FUNC-010 · ADR-4 |
+| **VisibilityEnforcer** | Record Store | 🔴 **서버 측 공개 범위 강제 검문소** · 감사 로그 · 미허용 자원 응답 완전 제외 | 감사 로그 | **REQ-NF-009** · SC-4.4 · 4.F1 · 5.2 · 5.5 |
+| **GroupManager** | Record Store | 그룹 생성(승인 없음) · 상한 20명 · 초대 · **이탈 시 공유 회수** | ShareLinkIssuer | REQ-FUNC-013 · SC-2.F1 · F2 · 5.F1 |
+| **MinorSubjectGuard** | Record Store | 영상 내 미성년자 동의 확인 · **미확보 시 공개 경로 차단** | 정책 게이트 | **REQ-NF-017** · SC-0.F1 |
+| **PersistenceHealthMonitor** | Record Store | 저장 성공률 상시 감시 · 1차 대응 SLA 15분 | Telemetry | REQ-NF-007 |
+| **FollowGraph** | Social Graph | 단방향 팔로우 관계 · **공개 기록만 노출 대상** | — | REQ-FUNC-012 · SC-5.5 |
+| **FeedRanker** | Feed Service | 팔로잉·인기 정렬 · **빈 피드 대체 노출** | VisibilityEnforcer | REQ-FUNC-014 · SC-6.F1 |
+| **ReactionService** | Feed Service | 좋아요·댓글 · **비공개 기록에 반응 UI 미부착** | VisibilityEnforcer | REQ-FUNC-015 · 016 · SC-6.2 |
+| **ReportIntake** | Feed Service | 신고 접수 · 이력 보존 (처리 절차 `[TBD]`) | — | REQ-FUNC-016 · SC-6.3 |
+| **ShareLinkIssuer** | Feed Service | 링크 발급 · **공개 범위 승계** · 만료 30일 · 회수 | VisibilityEnforcer | REQ-FUNC-017 · REQ-NF-012 |
+| **AlertDispatcher** | Telemetry | 게이트 지표 · 저장 성공률 · 보안 위반 · 큐 적체 · **완주율** · 비용 알림 | 전 서비스 | REQ-NF-014 |
+| **CostGuardrailMonitor** | Telemetry | 편당 처리 원가 추적 · 상한 초과 시 업로드 제한 | ResolutionPolicy | REQ-NF-013 |
+| **ReleaseGateChecklist** | 정책 게이트 | 산출물 승인 상태 판정 · **미승인 시 CI 배포 차단** | — | REQ-NF-010 · 016 · 017 |
+
+**30개 컴포넌트 · 8개 소속.** §5.1이 참조하는 이름은 전부 이 표에 있다.
+
+### 3.3.2 설계 시 확정으로 남긴 것
+
+§5.1에서 `설계 시 확정`으로 표기한 항목은 **컴포넌트를 특정하지 않고 책임만 규정한다.** 파이프라인 전 구간에 걸리므로 단일 컴포넌트로 귀속시킬 수 없다.
+
+| 책임 | 소속 | 대응 요구사항 | 단일 책임자 |
+| --- | --- | --- | --- |
+| 가용성 감시 · 이중화 | 전 서비스 공통 | REQ-NF-006 | 백엔드 온콜 |
+| 오류율 · 재시도 정책 | 전 서비스 공통 | REQ-NF-008 | 백엔드 리드 |
+| 저장 시 암호화 · TLS 1.2+ | 전 서비스 공통 | REQ-NF-011 | 보안 담당자 |
+| 업로드·렌더·조회 지연 계측 | API Gateway · AI Pipeline | REQ-NF-002 · 004 · 005 | 백엔드 리드 |
+
+> **전원의 일은 아무의 일도 아니므로 단일 책임자를 지정했다.** 컴포넌트가 정해지지 않았다는 사실 자체는 숨기지 않는다.
+
+## 3.4 API Overview
 
 | 서비스 | 책임 | 주요 엔드포인트 |
 | --- | --- | --- |
@@ -303,11 +406,11 @@ ADR(설계 결정)·제약을 여기에 통합한다 (REF-05 §9.6.7 · §9.6.16
 
 전체 목록은 **6.1**에 있다.
 
-## 3.4 Interaction Sequences
+## 3.5 Interaction Sequences
 
 > **시퀀스 다이어그램 읽는 법** — 위쪽 가로줄이 참여자(사람·서비스), 아래로 내려가는 세로선이 시간이다. 가로 화살표는 요청·응답이고, `alt`로 묶인 영역은 **조건에 따라 갈리는 분기**다.
 
-### 3.4.1 원본 업로드 및 등장 구간 탐지
+### 3.5.1 원본 업로드 및 등장 구간 탐지
 
 ```mermaid
 sequenceDiagram
@@ -332,7 +435,7 @@ sequenceDiagram
     end
 ```
 
-### 3.4.2 후보 선택 및 완성
+### 3.5.2 후보 선택 및 완성
 
 ```mermaid
 sequenceDiagram
@@ -356,7 +459,7 @@ sequenceDiagram
     end
 ```
 
-### 3.4.3 기록 저장 및 공개 범위 지정
+### 3.5.3 기록 저장 및 공개 범위 지정
 
 ```mermaid
 sequenceDiagram
@@ -373,7 +476,7 @@ sequenceDiagram
     RS-->>C: 반영 완료
 ```
 
-### 3.4.4 피드 조회와 공개 범위 강제
+### 3.5.4 피드 조회와 공개 범위 강제
 
 ```mermaid
 sequenceDiagram
@@ -404,14 +507,14 @@ sequenceDiagram
 
 ## 4.1 Functional Requirements
 
-**REQ-FUNC-001~026 · REQ-NF-001~015는 REF-04(팀 SRS v1.0)의 식별자와 의미를 보존한다.** 증분은 **REQ-FUNC-027 · REQ-NF-016 · REQ-NF-017 세 건뿐**이며, 나머지는 §5.2 운영 시나리오와 §5.3 설계 결정으로 옮겼다 — **총 44건**(REQ-FUNC 27 · REQ-NF 17).
+**REQ-FUNC-001~026 · REQ-NF-001~015는 REF-04(팀 SRS v1.0)의 식별자와 의미를 보존한다.** 증분은 **REQ-FUNC-027 · REQ-NF-016 · 017 · 018 네 건**이며, 나머지는 §5.2 운영 시나리오와 §5.3 설계 결정으로 옮겼다 — **총 45건**(REQ-FUNC 27 · REQ-NF 18).
 
 | ID | 제목 | 출처 | 우선순위 | 유형 | 검증 방식 | 인수 기준 | 상태 | 담당자 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | **REQ-FUNC-001** | 장시간 원본 영상 업로드 | US-1 · REF-03 4-1 (F1)<br>+ REF-13 화면 06 | Must Have | Functional | 1) 대용량 업로드 테스트<br>2) 형식 수용 검증<br>3) QA 검증 | 40~50분·4GB급 원본을 업로드할 수 있어야 한다. **원본 선택은 앱이 만든 목록이 아니라 OS 갤러리를 그대로 사용**해야 하며, 날짜별 썸네일과 재생 시간이 보여야 한다 | Draft | 백엔드 리드 |
 | **REQ-FUNC-002** | 추적 대상 지정 및 재식별 | US-1 · REF-03 4-1 (F2a) | Must Have | Functional | 1) 재식별 정확도 테스트<br>2) 가림 구간 라벨 정답셋 검증<br>3) QA 검증 | 사용자가 자기를 **1회 지정**하면, 대상이 가려지거나 화면을 벗어났다 다시 나타나도 **동일 인물로 인식**해야 한다. 재식별 정확도 **≥ 90%**, **오인식 ≤ 2%** `[SOURCE · REF-04]` | Draft | AI 리드 |
 | **REQ-FUNC-003** | 사용자 등장 구간 자동 탐지 | US-1 · REF-03 4-1 (F2b) | Must Have | Functional | 1) 정답셋 회귀 배치<br>2) **IoU 기반 정탐 판정**<br>3) **제외 전/후 분리 집계**<br>4) QA 검증 | 사람이 표시한 정답 구간 대비 **사용자에게 제시된**(REQ-FUNC-027 제외 적용 후) 탐지 구간 비율이 **85% 이상**이어야 한다 `[HYPOTHESIS · Gate A 판정]`. **제외 전 비율도 함께 집계**하되 이는 진단용이며 게이트 판정에 쓰지 않는다 | Draft | AI 리드 |
-| **REQ-FUNC-004** | 장면 후보 제시 | US-1 · REF-03 4-1 (F3) | Must Have | Functional | 1) 후보 산출 테스트<br>2) 온전도 우선순위 검증<br>3) QA 검증 | 탐지 결과를 사용자가 판단 가능한 개수의 후보로 좁혀 제시해야 하며, 각 후보에 **시작·종료 타임코드**가 표시되어야 한다. 온전히 잡힌 구간을 우선 배열한다 | Draft | AI 리드 |
+| **REQ-FUNC-004** | 장면 후보 제시 | US-1 · US-6 · REF-03 4-1 (F3)<br>REF-02 AC1-2 | Must Have | Functional | 1) 후보 개수 검증<br>2) 온전도 우선순위 검증<br>3) QA 검증 | 탐지 결과를 **약 30개**의 후보로 좁혀 제시해야 하며 `[SOURCE·초안 — 가정 A3]`, 각 후보에 **시작·종료 타임코드**가 표시되어야 한다. 온전히 잡힌 구간을 우선 배열한다. **개수는 15/30/50 A/B/n 실측 후 확정한다** | Draft | AI 리드 |
 | **REQ-FUNC-005** | 사용자 장면 선택 | US-1 · REF-03 4-1 (F4) | Must Have | Functional | 1) 선택 이벤트 검증<br>2) **자동 확정 차단 테스트**<br>3) QA 검증 | **최종 선택권은 사람에게 있어야 한다.** 사용자의 명시적 선택 없이 결과물이 확정되어서는 안 되며, 제시된 후보 **100% 전부**에 선택·제외가 가능해야 한다 | Draft | 제품 아키텍트 |
 | **REQ-FUNC-006** | 사용자 중심 크롭·리프레이밍 | US-3 · REF-03 4-1 (F5a) | Must Have | Functional | 1) 주관 평가(5점 척도)<br>2) 출력 해상도 검증<br>3) QA 검증 | 화면 구석에 작게 잡힌 대상을 **중앙·확대 배치**해 세로 숏폼으로 출력해야 한다 | Draft | AI 리드 |
 | **REQ-FUNC-007** | 음악 라이브러리 | US-3 · REF-03 4-1 (F18a)<br>+ REF-13 화면 10 | Must Have | Functional | 1) 곡 선택·삽입 테스트<br>2) 저작권 메타 검증<br>3) 카테고리 배분 검증<br>4) QA 검증 | **개인 기록 영상 삽입 용도로 사전 허락을 받은 자체 곡만** 제공해야 하며, 사용자가 외부에서 곡을 반입하는 경로를 열어서는 안 된다. 규모는 **5개 카테고리 총 500곡**(감성 120 · 여행 80 · 일상 110 · 운동 105 · 추억 85)으로 하되 **카테고리별 배분은 초안**이다 `[SOURCE·초안]`. 선택한 곡은 **15초 길이에 맞춰 자동 삽입**된다. 라이선스 문서 확보율 **100%** · 삽입 성공률 **≥ 99%** | Draft | 사업 담당자 |
@@ -456,6 +559,7 @@ sequenceDiagram
 | **REQ-NF-014** | 모니터링 · 알림 · 대응 SLA | REF-03 5-5 | Must Have | Operability | 알림 발화 테스트 및 대응 훈련 | 게이트 지표 · 저장 성공률 · 보안 위반 · 큐 적체 · 완주율 · 비용에 대해 **알림 기준 · 수신자 · 1차 대응 SLA**가 정의되어야 한다. **파이프라인 완주율**(`render_succeeded ÷ detection_started`)의 알림 임계는 **95%** 로 한다 `[PROPOSED · v1.3 추가]` — 개별 실패 시나리오가 잡지 못한 누수를 탐지하는 상위 지표다 | Draft | 백엔드 온콜 |
 | **REQ-NF-015** | 유지보수성 — 열거형 확장 방식 | REF-03 6-1 | Could Have | Maintainability | 코드 리뷰 및 확장성 테스트 | 공개 범위·피드 탭·계측 이벤트 등 분류값을 추가할 때 **열거형(enum) 패턴**으로 코드 변경을 최소화해야 한다 | Draft | 백엔드 리드 |
 | **REQ-NF-016** | 미성년 **이용자** 보호 | REF-02 5.4<br>*(v1.3 승격 — 팀 문서 전무)* | Must Have | Security | 1) 연령 분기 흐름 테스트<br>2) 법정대리인 동의 경로 검증<br>3) 법무 산출물 체크리스트 승인 | ① 가입 시 **연령을 수집**하고 만 **14세 미만**은 **법정대리인 동의 없이는 가입을 완료할 수 없어야** 한다(개인정보보호법 제22조의2 — 적용 범위는 법무 확정) ② 미성년 이용자의 공개 범위 기본값은 **나만 보기**를 유지하며 **전체공개 전환 시 추가 확인**을 거쳐야 한다 ③ 법정대리인의 **열람·삭제·동의 철회** 경로를 제공해야 한다 ④ **산출물 4종**(최소 연령 정책 · 연령 확인 방식 · 법정대리인 동의 경로 · 철회·삭제 절차)이 **전부 승인되기 전까지 가입 플로우를 배포할 수 없다** `[TBD]` | Proposed | 법무 담당자 |
+| **REQ-NF-018** | 완성까지의 사용자 조작 시간 | REF-02 AC6-1 · US-6<br>*(v1.5 승격 — 팀 문서 전무)* | Must Have | Efficiency | 1) 세션 조작 시간 계측<br>2) Gate B 이후 실측 기준선 확보 | 원본 업로드부터 완성까지 **사용자가 직접 조작한 시간**(대기 시간 제외)을 계측해야 한다. 목표값은 **Gate B 이후 실측으로 설정**한다 `[TBD]`. 계측 구간은 `upload_started` → `record_saved` 중 **화면이 사용자 입력을 기다린 시간의 합**으로 정의한다 | Proposed | 제품 아키텍트 |
 | **REQ-NF-017** | 영상 **내** 미성년자 보호 | REF-02 5.4 · REF-11<br>*(v1.3 승격 — 이 서비스 특유 위험)* | Must Have | Security | 1) 클럽 영상 표본 점검<br>2) 동의 확보 절차 검증<br>3) 법무 산출물 체크리스트 승인 | 업로더가 성인이어도 **영상에 함께 잡힌 인물이 미성년자일 수 있다.** ① 미성년자가 포함될 개연성이 높은 경로(**클럽·교습 영상**)에 대해 **업로드 단계에서 고지**해야 한다 ② 해당 영상의 **공개 발행**은 REQ-NF-010의 얼굴 정보 동의에 더해 **법정대리인 동의 확보 절차**를 거쳐야 한다 ③ 동의가 확보되지 않은 영상은 **비공개 기록까지만** 허용하고 전체공개·그룹 공개를 차단해야 한다 `[TBD]` ④ **산출물 3종**(적용 대상 판별 기준 · 동의 확보 절차 · 미확보 시 차단 로직)이 승인되기 전까지 **공개 발행 기능을 배포할 수 없다** | Proposed | 법무 담당자 |
 
 > **v1.3에서 증분 요구사항 19건을 2건으로 줄였다.** 나머지 17건은 요구사항이 아니라 **팀의 운영 시나리오(§11)와 설계 결정(1.5.2)에 이미 존재하던 내용**이었다. 그 내용에 **테스트 케이스 ID를 부여**해 §5 추적성 매트릭스에 진입시키는 것으로 대체했다 — 요구사항을 늘리지 않고 검증 가능성만 얻는다.
@@ -602,6 +706,13 @@ flowchart LR
 | US-5 | REQ-FUNC-015 | Feed Service | ReactionService | TC-FUNC-015 |
 | US-5 | REQ-FUNC-016 | Feed Service | ReportIntake | TC-FUNC-016 |
 | US-5 | REQ-FUNC-017 | Feed Service | ShareLinkIssuer | TC-FUNC-017 |
+| **US-6** | **REQ-NF-018** | Telemetry Service | AlertDispatcher *(조작 시간 집계)* | **TC-NF-018** |
+| **US-6** | REQ-FUNC-004 · 005 | Highlight Composer | CandidateRanker · SelectionController | TC-FUNC-004 · 005 |
+| **US-6** | REQ-NF-005 | Highlight Composer | 설계 시 확정 | TC-NF-005 |
+
+> **US-6(크리에이터) 추적 복원** — v1.4까지 이 Story는 §2.2 이용자 클래스(UC-05)로만 존재하고 **추적성 매트릭스에 행이 없었다.** Story의 핵심 요구(*"편집 시간을 3시간에서 크게 줄여 주기를"*)에 대응하는 요구사항이 **REQ-NF-018로 신설**되면서 체인이 연결됐다.
+>
+> **AC6-2(외부 내보내기)는 여전히 요구사항이 아니다** — ADR-5로 보류돼 있고 상위 문서에 근거가 없다(§1.5.2). 이는 누락이 아니라 **미결로 표기된 상태**다.
 | US-1 | **REQ-FUNC-027** | Vision Tracking Engine | ConfidenceGate | **TC-FUNC-027** |
 | — | REQ-NF-001 | Client Shell | ColdStartProfiler | TC-NF-001 |
 | — | REQ-NF-002 | Media Ingest Service | 설계 시 확정 | TC-NF-002 |
@@ -618,6 +729,7 @@ flowchart LR
 | — | REQ-NF-014 | Telemetry Service | AlertDispatcher | TC-NF-014 |
 | — | **REQ-NF-016** | Client Shell · 정책 게이트 *(책임자: 법무 담당자)* | AgeGate · GuardianConsentFlow | **TC-NF-016** |
 | — | **REQ-NF-017** | Record Store Service · 정책 게이트 *(책임자: 법무 담당자)* | MinorSubjectGuard | **TC-NF-017** |
+| — | **REQ-NF-018** | Telemetry Service | AlertDispatcher | **TC-NF-018** |
 
 > **전 서비스 공통 3건에 대하여** — REQ-NF-006(가용성) · 008(오류율·재시도) · 011(암호화)은 단일 서비스가 아니라 파이프라인 전 구간에 걸린다. **모듈이 `전 서비스 공통`인 행에는 단일 책임자를 함께 지정했다. 전원의 일은 아무의 일도 아니기 때문이다.**
 
@@ -698,7 +810,8 @@ flowchart LR
 | **O5** 비공개 기록 비율 | `private` 기록 ÷ 전체 기록 | 0% | 30% | REQ-FUNC-009 · 010 | `[HYPOTHESIS]` |
 | **O6** 월 기록 생성 | 사용자당 월 기록 건수 | 0.7건 | 4건 | REQ-FUNC-009 | `[HYPOTHESIS]` |
 | **O7** **북극성** — 기록 3개 이상 사용자 | 월 코호트 집계 | **—** | 1만 명 | REQ-FUNC-009~017 | `[HYPOTHESIS]` |
-| **O8** 편집 외주 지출 | 인터뷰 | 월 60만 원대 | 0원 | REQ-FUNC-003~008 | `[HYPOTHESIS]` |
+| **O8** 편집 외주 지출 | 인터뷰 | 월 60만 원대 | 0원 | REQ-FUNC-003~008 · **REQ-NF-018** | `[HYPOTHESIS]` |
+| **S-조작** 사용자 조작 시간 | `upload_started`→`record_saved` 중 입력 대기 시간 합 | 미측정 | **[TBD]** | **REQ-NF-018** · US-6 | `[PROPOSED]` |
 | **O9** 등장 구간 탐지율 | 정답셋 대비 재현율 — **제외 후 기준** | 해당 없음 | 85% 이상 | REQ-FUNC-003 · SC-1.1 | `[HYPOTHESIS]` |
 | **S-제외전** 원 탐지율 | 제외 적용 전 재현율 | 미측정 | **[TBD]** | 진단 · ADR-1 입력 | `[PROPOSED]` |
 | **S-제외손실** 제외로 잃은 양 | S-제외전 − O9 | 미측정 | **[TBD]** | 임계 `τ` 재조정 판단 | `[PROPOSED]` |
