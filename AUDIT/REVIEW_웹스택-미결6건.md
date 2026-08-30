@@ -1,7 +1,7 @@
 # 검토 — 웹 스택 SRS 미결 6건
 
 **대상** 팀 웹 스택 SRS의 미결 항목 6건 (§11-S2 · S3 · S5 · S6 외)
-**검토 기준** `SRS/[SRS]hilit-SRSv1.6.md` · `SRS/[SRS]hilit-SRSv2.0-nextjs.md`(v2.1 · T1 확정) · `VPS_v0_3.html`
+**검토 기준** `SRS/[SRS]hilit-SRSv1.7.md` · `SRS/[SRS]hilit-SRSv2.0-nextjs.md`(v2.1 · T1 확정) · `VPS_v0_3.html`
 **검토일** 2026-08-30
 
 > ⚠️ **웹 스택 SRS 원문은 이 저장소에 없다.** 제시된 6건의 요약만 놓고 검토했으므로, §11 스파이크의 상세 설계와 어긋나는 부분이 있을 수 있다. **판정이 아니라 검토 의견이다.**

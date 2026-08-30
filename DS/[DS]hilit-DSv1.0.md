@@ -8,7 +8,7 @@
 
 **Standard:** IEEE 1016 설계 관점(Design Viewpoints) 구조
 
-**상위 문서:** `[SRS]hilit-SRSv1.6.md` (요구사항 45건 · 시나리오 42건)
+**상위 문서:** `[SRS]hilit-SRSv1.7.md` (요구사항 45건 · 시나리오 42건)
 
 ---
 
@@ -58,7 +58,7 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | ID | 문서 |
 | --- | --- |
-| **DREF-01** | `[SRS]hilit-SRSv1.6.md` — 요구사항 원천 |
+| **DREF-01** | `[SRS]hilit-SRSv1.7.md` — 요구사항 원천 |
 | **DREF-02** | `AUDIT_SRS_2026-08-30.md` — 이 문서가 해소하는 지적 |
 | **DREF-03** | `prototype_v0_6.html` — 화면 규격 |
 | **DREF-04** | IEEE 1016 — 설계 관점 구조 |
