@@ -152,6 +152,7 @@ v1.1~v1.2는 실패 경로를 요구사항으로 승격해 REQ를 41 → 60건�
 | [`AUDIT/AUDIT_SRS-v1.4_초기감사.md`](AUDIT/AUDIT_SRS-v1.4_%EC%B4%88%EA%B8%B0%EA%B0%90%EC%82%AC.md) | ISO 29148 기반 초기 감사 — 판정 **FAIL** |
 | [`AUDIT/AUDIT_SRS-v1.5_재감사.md`](AUDIT/AUDIT_SRS-v1.5_%EC%9E%AC%EA%B0%90%EC%82%AC.md) | P0 3건 해소 후 재감사 — **CONDITIONAL PASS** |
 | [`AUDIT/REVIEW_웹스택-미결6건.md`](AUDIT/REVIEW_%EC%9B%B9%EC%8A%A4%ED%83%9D-%EB%AF%B8%EA%B2%B06%EA%B1%B4.md) | 팀 웹 스택 SRS 미결 6건 검토 — **자동재생 음소거가 최우선** |
+| **[`plans/PLAN_기술스택-전면적용.md`](plans/PLAN_%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D-%EC%A0%84%EB%A9%B4%EC%A0%81%EC%9A%A9.md)** | **실행 계획.** 스택 적용 순서 + 🔴 **MVP 가치 보존 검토** |
 
 `.md`와 `.html`을 함께 둡니다 — 마크다운은 리뷰·diff용, HTML은 열람용입니다. **HTML은 마크다운에서 자동 변환되므로 마크다운이 정본입니다.**
 
