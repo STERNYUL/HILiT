@@ -79,14 +79,14 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
 <main>
 <hr>
-<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[DB] S1-1: Prisma 스키마 16 엔티티 및 마이그레이션 작성" labels: 'database, contract, priority:critical, wave-1' assignees: ''</p>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[DB] CT-001: Prisma 스키마 16 엔티티 및 마이그레이션 작성" labels: 'database, contract, priority:critical, step-1, wave-1' assignees: ''</p>
 <hr>
 <h2 id="h0">🎯 Summary</h2>
-<ul><li>기능명: <strong>[S1-1] 데이터베이스 스키마 확정 및 마이그레이션</strong></li><li>목적: <strong>나머지 43개 태스크가 참조할 엔티티 이름·타입·제약을 코드로 확정한다.</strong> 설계 문서에 정의는 있으나 Prisma 코드로 고정되기 전에는 태스크마다 표기가 갈린다.</li></ul>
+<ul><li>기능명: <strong>[CT-001] 데이터베이스 스키마 확정 및 마이그레이션</strong></li><li>목적: <strong>나머지 92개 태스크가 참조할 엔티티 이름·타입·제약을 코드로 확정한다.</strong> 설계 문서에 정의는 있으나 Prisma 코드로 고정되기 전에는 태스크마다 표기가 갈린다.</li></ul>
 <blockquote><p>🔴 <strong>이 태스크가 Wave 1의 첫 번째인 이유</strong> — <code>SourceVideo</code>인지 <code>source_videos</code>인지, <code>visibility</code>인지 <code>privacy</code>인지가 여기서 확정된다. 이것 없이 다른 태스크를 쓰면 나중에 전부 고쳐야 한다.</p></blockquote>
 <h2 id="h1">🔗 References (Spec &amp; Context)</h2>
 <blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
-<ul><li><strong>데이터 모델 (ERD)</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2 — 16 엔티티 관계·타입·CHECK</li><li><strong>요구사항이 정한 제약 5건</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2.1 — 🔴 <strong>반드시 읽을 것</strong></li><li><strong>속성 상세</strong>: <code>DS/[DS]hilit-DSv1.1.md</code> §4.2 — 인덱스·보존 정책·Cascade</li><li><strong>명칭 매핑</strong>: <code>DS/[DS]hilit-DSv1.1.md</code> §4.3 — PRD ↔ SRS 개명 5건</li><li><strong>Prisma 사상</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §4.1</li><li><strong>RLS 전제</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §4.2 <em>(정책 자체는 S1-2)</em></li><li>비즈니스 규칙: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.3</li></ul>
+<ul><li><strong>데이터 모델 (ERD)</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2 — 16 엔티티 관계·타입·CHECK</li><li><strong>요구사항이 정한 제약 5건</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2.1 — 🔴 <strong>반드시 읽을 것</strong></li><li><strong>속성 상세</strong>: <code>DS/[DS]hilit-DSv1.1.md</code> §4.2 — 인덱스·보존 정책·Cascade</li><li><strong>명칭 매핑</strong>: <code>DS/[DS]hilit-DSv1.1.md</code> §4.3 — PRD ↔ SRS 개명 5건</li><li><strong>Prisma 사상</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §4.1</li><li><strong>RLS 전제</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §4.2 <em>(정책 자체는 CT-003)</em></li><li>비즈니스 규칙: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.3</li></ul>
 <h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
 <ul><li>[ ] Supabase 로컬 스택 기동 · <code>prisma init</code> · <code>DATABASE_URL</code> 연결 확인</li><li>[ ] <strong>16 엔티티 모델 작성</strong> — User · SourceVideo · PersonTrack · AppearanceInterval · Candidate · Selection · GeneratedVideo · Record · VisibilitySetting · Group · GroupMember · FollowRelation · MusicTrack · Reaction · ShareLink · ProcessingJob</li><li>[ ] 열거형 4종 정의 — <code>VisibilityScope</code> · <code>ProcessingStage</code> · <code>FailureClass</code> · <code>ConfidenceFlag</code></li><li>[ ] 🔴 <strong>Prisma가 표현하지 못하는 제약을 마이그레이션 SQL에 직접 작성</strong> (아래 §제약 목록)</li><li>[ ] 인덱스 작성 — DS §4.2의 <code>@@index</code> 전량</li><li>[ ] <code>prisma migrate dev</code> 로 로컬 적용 · 롤백 시나리오 1회 확인</li><li>[ ] <strong>스키마 파일에 주석으로 SQL 제약 목록 병기</strong> — 다음 <code>migrate</code> 때 유실 방지</li><li>[ ] 시드 스크립트 작성 (개발용 최소 데이터)</li></ul>
 <h3 id="h3">🔴 Prisma로 표현할 수 없어 SQL로 써야 하는 제약</h3>
@@ -109,8 +109,8 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <h2 id="h5">🏁 Definition of Done (DoD)</h2>
 <ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>SQL 제약 11건이 마이그레이션에 포함되고, 스키마 파일에 주석으로 병기되었는가?</strong></li><li>[ ] <code>prisma migrate dev</code> 가 클린 DB에서 오류 없이 완주하는가?</li><li>[ ] 롤백을 1회 수행해 복구되는가?</li><li>[ ] 🔺 <strong><code>DS/[DS]hilit-DSv1.1.md</code> §4.2와 실제 스키마가 일치하는가?</strong> <em>(불일치 시 DS를 갱신하고 사유를 남긴다)</em></li><li>[ ] ESLint · TypeScript strict 경고가 없는가?</li><li>[ ] 생성된 Prisma Client 타입이 <code>SRS §6.2</code> 엔티티명과 일치하는가?</li></ul>
 <h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
-<ul><li><strong>Depends on</strong>: 없음 — 🔴 <strong>Wave 1의 시작점</strong></li><li><strong>Blocks</strong>: <strong>S1-2</strong>(RLS 정책) · <strong>S1-3</strong>(Server Action 계약) · Step 2 전량(17건) · Step 3 전량(10건)</li><li><strong>참고</strong>: S1-4(Provider 인터페이스)와는 <strong>무관</strong> — 병렬 진행 가능</li></ul>
-<p class="meta">Document · 원본 S1-1_DB_Prisma스키마-마이그레이션.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+<ul><li><strong>Depends on</strong>: 없음 — 🔴 <strong>Wave 1의 시작점</strong></li><li><strong>Blocks</strong>: <strong>CT-003</strong>(RLS 정책) · <strong>CT-004</strong>(Server Action 계약) · FR 전량(36건) · TS 전량(11건)</li><li><strong>참고</strong>: CT-006(Provider 인터페이스)와는 <strong>무관</strong> — 병렬 진행 가능</li></ul>
+<p class="meta">Document · 원본 CT-001_DB_Prisma스키마.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
 </main>
 </div>
 

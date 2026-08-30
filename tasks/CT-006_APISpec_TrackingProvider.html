@@ -79,10 +79,10 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
 <main>
 <hr>
-<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[API Spec] S1-4: 외부 추론 TrackingProvider 인터페이스 정의" labels: 'api-spec, contract, ai, priority:critical, wave-1' assignees: ''</p>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[API Spec] CT-006: 외부 추론 TrackingProvider 인터페이스 정의" labels: 'api-spec, contract, ai, priority:critical, step-1, wave-1' assignees: ''</p>
 <hr>
 <h2 id="h0">🎯 Summary</h2>
-<ul><li>기능명: <strong>[S1-4] 외부 추론 서비스 추상화 계층</strong></li><li>목적: <strong>추론 API를 갈아 끼울 수 있는 인터페이스를 SP-1 전에 확정한다.</strong> 이 인터페이스로 벤치마크 하니스를 짜면 <strong>선정된 어댑터가 그대로 프로덕션 코드가 된다.</strong></li></ul>
+<ul><li>기능명: <strong>[CT-006] 외부 추론 서비스 추상화 계층</strong></li><li>목적: <strong>추론 API를 갈아 끼울 수 있는 인터페이스를 SP-1 전에 확정한다.</strong> 이 인터페이스로 벤치마크 하니스를 짜면 <strong>선정된 어댑터가 그대로 프로덕션 코드가 된다.</strong></li></ul>
 <blockquote><p>🔴 <strong>이것이 이 아키텍처의 유일한 실질 잠금이다.</strong> 다른 외부 의존(Supabase·Vercel·Gemini)은 대체가 쉽지만, <strong>추론 API는 API 스펙이 아니라 정확도 특성에 잠긴다</strong> — 바꾸면 O9·오탐률이 달라져 <strong>Gate A를 다시 통과해야 한다</strong>.</p>
 <p>🟢 <strong>그리고 이 태스크는 SP-1 결과와 무관하게 지금 쓸 수 있다.</strong> 후보가 정해지기 전에 인터페이스를 먼저 정하는 것이 순서상 맞다.</p></blockquote>
 <h2 id="h1">🔗 References (Spec &amp; Context)</h2>
@@ -133,8 +133,8 @@ export interface TrackingResult {
 <h2 id="h5">🏁 Definition of Done (DoD)</h2>
 <ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>SP-1 벤치마크 하니스가 이 인터페이스로 두 후보를 돌릴 수 있는가?</strong> <em>(설계 검토로 확인)</em></li><li>[ ] <code>reidConfidence</code> 와 구간 점수가 타입·주석으로 구분되었는가?</li><li>[ ] B8(해상도 3단)이 인터페이스로 표현되었는가?</li><li>[ ] 타입 테스트 — 잘못된 구현체가 컴파일 오류로 걸리는가?</li><li>[ ] ESLint · TypeScript strict 경고가 없는가?</li><li>[ ] 🔺 <strong><code>DS/[DS]hilit-DSv1.1.md</code> 에 이 인터페이스를 반영했는가?</strong> <em>(현재 DS에 없다)</em></li></ul>
 <h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
-<ul><li><strong>Depends on</strong>: 없음 — 🟢 <strong>S1-1·S1-3과 병렬 가능</strong></li><li><strong>Blocks</strong>: <strong>SP-1 벤치마크 하니스</strong> · S1-6(추론 결과 Mock) · Wave 7(어댑터 구현 2건)</li><li>🔴 <strong>Blocked by (구현 단계)</strong>: <strong>SP-1 완료</strong> — 어댑터 실제 구현은 후보 선정 후</li><li><strong>참고</strong>: 이 태스크가 늦어지면 <strong>SP-1 하니스를 임시 코드로 짜게 되고, 그 코드는 버려진다</strong></li></ul>
-<p class="meta">Document · 원본 S1-4_APISpec_TrackingProvider-인터페이스.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+<ul><li><strong>Depends on</strong>: 없음 — 🟢 <strong>CT-001·CT-004와 병렬 가능</strong></li><li><strong>Blocks</strong>: <strong>SP-1 벤치마크 하니스</strong> · CT-007(추론 결과 Mock) · Wave 7(어댑터 구현 2건)</li><li>🔴 <strong>Blocked by (구현 단계)</strong>: <strong>SP-1 완료</strong> — 어댑터 실제 구현은 후보 선정 후</li><li><strong>참고</strong>: 이 태스크가 늦어지면 <strong>SP-1 하니스를 임시 코드로 짜게 되고, 그 코드는 버려진다</strong></li></ul>
+<p class="meta">Document · 원본 CT-006_APISpec_TrackingProvider.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
 </main>
 </div>
 

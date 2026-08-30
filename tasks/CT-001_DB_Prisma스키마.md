@@ -1,14 +1,14 @@
 ---
 name: Feature Task
 about: SRS 기반의 구체적인 개발 태스크 명세
-title: "[DB] S1-1: Prisma 스키마 16 엔티티 및 마이그레이션 작성"
-labels: 'database, contract, priority:critical, wave-1'
+title: "[DB] CT-001: Prisma 스키마 16 엔티티 및 마이그레이션 작성"
+labels: 'database, contract, priority:critical, step-1, wave-1'
 assignees: ''
 ---
 
 ## 🎯 Summary
-- 기능명: **[S1-1] 데이터베이스 스키마 확정 및 마이그레이션**
-- 목적: **나머지 43개 태스크가 참조할 엔티티 이름·타입·제약을 코드로 확정한다.** 설계 문서에 정의는 있으나 Prisma 코드로 고정되기 전에는 태스크마다 표기가 갈린다.
+- 기능명: **[CT-001] 데이터베이스 스키마 확정 및 마이그레이션**
+- 목적: **나머지 92개 태스크가 참조할 엔티티 이름·타입·제약을 코드로 확정한다.** 설계 문서에 정의는 있으나 Prisma 코드로 고정되기 전에는 태스크마다 표기가 갈린다.
 
 > 🔴 **이 태스크가 Wave 1의 첫 번째인 이유** — `SourceVideo`인지 `source_videos`인지, `visibility`인지 `privacy`인지가 여기서 확정된다. 이것 없이 다른 태스크를 쓰면 나중에 전부 고쳐야 한다.
 
@@ -19,7 +19,7 @@ assignees: ''
 - **속성 상세**: `DS/[DS]hilit-DSv1.1.md` §4.2 — 인덱스·보존 정책·Cascade
 - **명칭 매핑**: `DS/[DS]hilit-DSv1.1.md` §4.3 — PRD ↔ SRS 개명 5건
 - **Prisma 사상**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §4.1
-- **RLS 전제**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §4.2 *(정책 자체는 S1-2)*
+- **RLS 전제**: `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §4.2 *(정책 자체는 CT-003)*
 - 비즈니스 규칙: `SRS/[SRS]hilit-SRSv1.8.md` §6.3
 
 ## ✅ Task Breakdown (실행 계획)
@@ -98,5 +98,5 @@ assignees: ''
 
 ## 🚧 Dependencies & Blockers
 - **Depends on**: 없음 — 🔴 **Wave 1의 시작점**
-- **Blocks**: **S1-2**(RLS 정책) · **S1-3**(Server Action 계약) · Step 2 전량(17건) · Step 3 전량(10건)
-- **참고**: S1-4(Provider 인터페이스)와는 **무관** — 병렬 진행 가능
+- **Blocks**: **CT-003**(RLS 정책) · **CT-004**(Server Action 계약) · FR 전량(36건) · TS 전량(11건)
+- **참고**: CT-006(Provider 인터페이스)와는 **무관** — 병렬 진행 가능

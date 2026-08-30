@@ -1,13 +1,13 @@
 ---
 name: Feature Task
 about: SRS 기반의 구체적인 개발 태스크 명세
-title: "[API Spec] S1-4: 외부 추론 TrackingProvider 인터페이스 정의"
-labels: 'api-spec, contract, ai, priority:critical, wave-1'
+title: "[API Spec] CT-006: 외부 추론 TrackingProvider 인터페이스 정의"
+labels: 'api-spec, contract, ai, priority:critical, step-1, wave-1'
 assignees: ''
 ---
 
 ## 🎯 Summary
-- 기능명: **[S1-4] 외부 추론 서비스 추상화 계층**
+- 기능명: **[CT-006] 외부 추론 서비스 추상화 계층**
 - 목적: **추론 API를 갈아 끼울 수 있는 인터페이스를 SP-1 전에 확정한다.** 이 인터페이스로 벤치마크 하니스를 짜면 **선정된 어댑터가 그대로 프로덕션 코드가 된다.**
 
 > 🔴 **이것이 이 아키텍처의 유일한 실질 잠금이다.** 다른 외부 의존(Supabase·Vercel·Gemini)은 대체가 쉽지만, **추론 API는 API 스펙이 아니라 정확도 특성에 잠긴다** — 바꾸면 O9·오탐률이 달라져 **Gate A를 다시 통과해야 한다**.
@@ -117,7 +117,7 @@ export interface TrackingResult {
 - [ ] 🔺 **`DS/[DS]hilit-DSv1.1.md` 에 이 인터페이스를 반영했는가?** *(현재 DS에 없다)*
 
 ## 🚧 Dependencies & Blockers
-- **Depends on**: 없음 — 🟢 **S1-1·S1-3과 병렬 가능**
-- **Blocks**: **SP-1 벤치마크 하니스** · S1-6(추론 결과 Mock) · Wave 7(어댑터 구현 2건)
+- **Depends on**: 없음 — 🟢 **CT-001·CT-004와 병렬 가능**
+- **Blocks**: **SP-1 벤치마크 하니스** · CT-007(추론 결과 Mock) · Wave 7(어댑터 구현 2건)
 - 🔴 **Blocked by (구현 단계)**: **SP-1 완료** — 어댑터 실제 구현은 후보 선정 후
 - **참고**: 이 태스크가 늦어지면 **SP-1 하니스를 임시 코드로 짜게 되고, 그 코드는 버려진다**

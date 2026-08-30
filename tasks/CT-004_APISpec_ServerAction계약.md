@@ -1,13 +1,13 @@
 ---
 name: Feature Task
 about: SRS 기반의 구체적인 개발 태스크 명세
-title: "[API Spec] S1-3: Server Action 시그니처 · Zod 스키마 · 오류 코드 정의"
-labels: 'api-spec, contract, priority:critical, wave-1'
+title: "[API Spec] CT-004: Server Action 시그니처 · Zod 스키마 · 오류 코드 정의"
+labels: 'api-spec, contract, priority:critical, step-1, wave-1'
 assignees: ''
 ---
 
 ## 🎯 Summary
-- 기능명: **[S1-3] 서버 로직 계약 확정**
+- 기능명: **[CT-004] 서버 로직 계약 확정**
 - 목적: **모든 상태 변경·조회의 함수 이름·인자·반환·오류를 코드로 고정한다.** 이후 17개 로직 태스크와 10개 테스트 태스크가 이 계약을 참조한다.
 
 > 🔴 **이 스택에는 API Controller도 OpenAPI 문서도 없다.** Server Action은 함수이므로 **타입 정의 자체가 계약**이다. 그래서 이 태스크의 산출물은 문서가 아니라 **타입 파일**이다.
@@ -29,7 +29,7 @@ assignees: ''
 - [ ] **오류 코드 열거형** — DS §3.1.2의 상태 코드 대응표를 코드로
 - [ ] 🔴 **권한 없음은 `404` 계열로 통일** — `403`을 쓰지 않는다 (아래 참조)
 - [ ] `Idempotency-Key` 를 받는 Action 식별 및 인자 추가
-- [ ] Route Handler 계약 별도 정의 — webhook 2종 *(수신 규격은 S1-5)*
+- [ ] Route Handler 계약 별도 정의 — webhook 2종 *(수신 규격은 CT-005)*
 - [ ] 타입 전용 export barrel 구성 — 클라이언트에서 서버 코드가 딸려오지 않게
 
 ### 정의할 Server Action 목록 *(SRS v2.2 §5.1)*
@@ -99,7 +99,7 @@ assignees: ''
 - [ ] 🔺 **`403`을 반환하는 경로가 하나도 없는가?**
 
 ## 🚧 Dependencies & Blockers
-- **Depends on**: **S1-1**(스키마) — 엔티티 타입을 참조한다
-- **Blocks**: S1-5(webhook 계약) · S1-6·S1-7(Mock) · Step 2 전량(17건)
-- **참고**: S1-4(Provider 인터페이스)와 **무관** — 병렬 가능
+- **Depends on**: **CT-001**(스키마) — 엔티티 타입을 참조한다
+- **Blocks**: CT-005(webhook 계약) · CT-007·CT-008(Mock) · Step 2 전량(17건)
+- **참고**: CT-006(Provider 인터페이스)와 **무관** — 병렬 가능
 - 🔺 **미결**: 속도 제한 구현 방식 *(DS §9-3)* — 이 태스크에서는 **인터페이스만** 정하고 구현은 Wave 5
