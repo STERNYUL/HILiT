@@ -144,7 +144,7 @@ v1.1~v1.2는 실패 경로를 요구사항으로 승격해 REQ를 41 → 60건�
 
 | 문서 | 설명 |
 | --- | --- |
-| **[`SRS/[SRS]hilit-SRSv1.5.md`](SRS/%5BSRS%5Dhilit-SRSv1.5.md)** | **요구사항 원천.** 요구사항 **45건** · 운영 시나리오 **42건** · 설계 결정 **3건** · 시퀀스 다이어그램 9개 |
+| **[`SRS/[SRS]hilit-SRSv1.6.md`](SRS/%5BSRS%5Dhilit-SRSv1.6.md)** | **요구사항 원천.** 요구사항 **45건** · 운영 시나리오 **42건** · 설계 결정 **3건** · 시퀀스 다이어그램 9개 |
 | [`PRD/HILiT_PRD_v0.1.md`](PRD/HILiT_PRD_v0.1.md) | 변환 원천 PRD. 12장 · Evidence Gap 13건 · Open Question 13건 |
 | [`VPS_v0_3.html`](VPS_v0_3.html) | **Source of Truth.** Core Job · Outcome · 차별점 · MVP 범위의 원천 |
 | **[`DS/[DS]hilit-DSv1.0.md`](DS/%5BDS%5Dhilit-DSv1.0.md)** | **설계 명세.** API 스키마 23건 · 엔티티 속성 16건 · 도메인 클래스 · Use Case 모델 |

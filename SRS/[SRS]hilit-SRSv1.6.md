@@ -2,7 +2,7 @@
 
 **Document ID:** SRS-HILIT-MVP-001
 
-**version:** 1.5
+**version:** 1.6
 
 **Date:** 2026-08-30
 
@@ -20,7 +20,8 @@
 | v1.2 | 2026-08-30 | 프로토타입 v0.6(REF-13) 대조 개정. ADR-4를 확정으로 정정 · 음악 5갈래 500곡 · 그룹 확정 4건 · 공유 범위 경계 · 갤러리 직접 사용 반영 | REF-13 |
 | v1.3 | 2026-08-30 | 증분 축약 개정. 증분 19건 중 17건이 팀 문서에 이미 존재함을 확인하고 요구사항에서 내렸다. 운영 시나리오와 설계 결정에 TC ID를 부여해 추적성 매트릭스에 진입시켰다(§5.2·§5.3) | REF-04 §11 |
 | v1.4 | 2026-08-30 | **두 결정 반영.** ① **REQ-FUNC-027을 "제외"로 확정** — 저신뢰 표시를 버리고 후보에서 제외. 재현율 손실을 다루기 위해 **제외 전/후 탐지율 동시 집계**를 신설 ② **미성년자 정책을 이용자(REQ-NF-016)와 피촬영자(REQ-NF-017)로 분리** — 클럽·교습 영상이 곧 미성년자 영상이라는 이 서비스 특유의 위험 반영. 요구사항 44건 · 시나리오 42건 | 사용자 결정 · REF-11 |
-| **v1.5** | **2026-08-30** | **감사 P0 3건 해소.** ① **§3.3 Component Architecture 신설** — §5.1이 참조하던 컴포넌트 **30개를 전부 정의**하고 계층 다이어그램 추가 ② **US-6 추적 복원** — REQ-NF-018(사용자 조작 시간) 신설 및 매트릭스 3행 추가 ③ AC1-2의 **"약 30개" 수치 복원**. **요구사항 45건** | `AUDIT_SRS-v1.4_2026-08-30.md` |
+| v1.5 | 2026-08-30 | **감사 P0 3건 해소.** ① **§3.3 Component Architecture 신설** — §5.1이 참조하던 컴포넌트 **30개를 전부 정의**하고 계층 다이어그램 추가 ② **US-6 추적 복원** — REQ-NF-018(사용자 조작 시간) 신설 및 매트릭스 3행 추가 ③ AC1-2의 **"약 30개" 수치 복원**. 요구사항 45건 | `AUDIT/AUDIT_SRS-v1.4_초기감사.md` |
+| **v1.6** | **2026-08-30** | **§6.2 데이터 모델 확장.** ERD에 **필드·타입·키·CHECK 제약**을 넣고, **요구사항이 직접 정한 제약 5건**을 별도 절(§6.2.1)로 분리. DS §4.2와의 분담을 명문화 — 인덱스·보존 기간·Prisma 사상은 DS에만 둔다. 중복이던 SQL 테이블 목록 제거 | 사용자 요청 |
 
 > ### v1.3의 개정 성격 — 요구사항을 늘리지 않고 검증 가능성만 얻는다
 >
@@ -856,45 +857,184 @@ flowchart LR
 
 ## 6.2 Entity & Data Model
 
+> **이 절과 `DS/[DS]hilit-DSv1.0.md` §4.2의 분담** — 여기에는 **요구사항 수준의 제약**만 둔다(필드·타입·키·요구사항이 직접 정한 CHECK). **인덱스 · 보존 기간 · Cascade 세부 · Prisma 사상**은 DS §4.2에만 있다. **중복 기재하지 않는다.**
+
 ```mermaid
 erDiagram
     User ||--o{ SourceVideo : "업로드"
     User ||--o{ Record : "소유"
+    User ||--o{ Selection : "선택"
     User ||--o{ FollowRelation : "팔로우"
     User ||--o{ Group : "생성"
-    SourceVideo ||--o{ PersonTrack : "추적 궤적"
+    User ||--o{ GroupMember : "소속"
+    SourceVideo ||--|| PersonTrack : "추적 궤적"
     SourceVideo ||--o{ AppearanceInterval : "등장 구간"
     SourceVideo ||--|| ProcessingJob : "처리 작업"
-    AppearanceInterval ||--|| Candidate : "후보화"
+    SourceVideo |o--o{ GeneratedVideo : "원본 (SET NULL)"
+    AppearanceInterval ||--o| Candidate : "후보화"
     Candidate ||--o| Selection : "사용자 선택"
     Selection }o--|| GeneratedVideo : "렌더 입력"
+    MusicTrack ||--o{ GeneratedVideo : "삽입"
     GeneratedVideo ||--|| Record : "기록화"
     Record ||--|| VisibilitySetting : "공개 범위"
     Record ||--o{ Reaction : "반응"
     Record ||--o{ ShareLink : "공유"
     Group ||--o{ GroupMember : "구성원"
     Group ||--o{ VisibilitySetting : "그룹 공개 대상"
-    MusicTrack ||--o{ GeneratedVideo : "삽입"
+
+    User {
+        ULID id PK
+        text handle UK "30자"
+        text display_name "50자"
+        smallint birth_year "개인정보 · NULL 허용"
+        timestamptz guardian_consent_at "만14세 미만만"
+        enum role "user | operator"
+        timestamptz deleted_at "논리 삭제"
+    }
+    SourceVideo {
+        ULID id PK
+        ULID owner_id FK "CASCADE"
+        int duration_sec "CHECK 5400 이하"
+        bigint size_bytes "CHECK 6GB 이하"
+        text codec "검증 통과분만"
+        text storage_path "암호화 저장"
+        enum status "UPLOADING…FAILED"
+    }
+    PersonTrack {
+        ULID id PK
+        ULID video_id FK "UNIQUE · 영상당 1회"
+        int anchor_frame_ms
+        jsonb anchor_bbox "정규화 0~1"
+        jsonb bbox_timeline "특징벡터 미저장"
+    }
+    AppearanceInterval {
+        ULID id PK
+        ULID video_id FK
+        int start_tc_ms "CHECK start 작음"
+        int end_tc_ms
+        real confidence "0~1"
+        enum excluded_reason "LOW_CONFIDENCE 또는 NULL"
+    }
+    Candidate {
+        ULID id PK
+        ULID interval_id FK
+        smallint rank "UNIQUE interval rank"
+        text thumbnail_uri
+        enum confidence_flag "NORMAL | LOW | EXCLUDED"
+    }
+    Selection {
+        ULID id PK
+        ULID candidate_id FK "UNIQUE cand user"
+        ULID user_id FK
+        timestamptz selected_at
+        bool is_reselection "ADR-3 판정 지표"
+    }
+    GeneratedVideo {
+        ULID id PK
+        ULID owner_id FK
+        ULID source_video_id FK "SET NULL"
+        ULID music_track_id FK
+        int duration_sec "CHECK 60 이하"
+        text storage_path
+    }
+    Record {
+        ULID id PK
+        ULID generated_video_id FK "UNIQUE"
+        ULID owner_id FK
+        text sport "필터용"
+        timestamptz created_at
+    }
+    VisibilitySetting {
+        ULID record_id PK "FK"
+        enum scope "DEFAULT private"
+        ULID_array group_ids "CHECK group이면 1개 이상"
+        timestamptz updated_at
+    }
+    Group {
+        ULID id PK
+        ULID owner_id FK
+        text name "30자 · 중복 허용"
+        smallint member_count "CHECK 20 이하"
+    }
+    GroupMember {
+        ULID group_id PK "FK"
+        ULID user_id PK "FK"
+        timestamptz joined_at
+        timestamptz left_at "이탈 이력 보존"
+    }
+    FollowRelation {
+        ULID follower_id PK "FK"
+        ULID followee_id PK "FK · CHECK 자기 아님"
+        timestamptz created_at
+    }
+    MusicTrack {
+        ULID id PK
+        text title
+        enum category "감성|여행|일상|운동|추억"
+        text license_ref "NOT NULL"
+        timestamptz license_expires_at
+    }
+    Reaction {
+        ULID id PK
+        ULID record_id FK "CASCADE"
+        ULID user_id FK
+        enum type "like | comment"
+        text text "300자 · comment면 NOT NULL"
+        bool report_flag
+    }
+    ShareLink {
+        ULID id PK
+        ULID record_id FK "CASCADE"
+        text token UK
+        ULID target_user_id FK "NULL 허용"
+        timestamptz expires_at "기본 30일"
+        timestamptz revoked_at "이탈 시 회수"
+    }
+    ProcessingJob {
+        ULID id PK
+        ULID video_id FK
+        enum stage "7단계"
+        enum status "QUEUED…FAILED"
+        smallint retry_count "CHECK 3 이하"
+        jsonb checkpoint "SC-1.F4 재개점"
+        enum failure_class "5분류"
+    }
 ```
 
-| Entity | 주요 필드 | 설명 | 대응 요구사항 |
-| --- | --- | --- | --- |
-| **User** | `id` · `handle` · `profile` · `birth_year` | 개인 계정 | REQ-NF-016 |
-| **SourceVideo** | `id` · `owner_id` · `duration` · `size` · `codec` · `storage_uri` · `status` | 업로드된 긴 원본 | REQ-FUNC-001 · 028 |
-| **PersonTrack** | `id` · `video_id` · `subject_ref` · `bbox_timeline` | 지정 대상의 추적 궤적 | REQ-FUNC-002 |
-| **AppearanceInterval** | `id` · `video_id` · `start_tc` · `end_tc` · `confidence` | 탐지된 등장 구간 | REQ-FUNC-003 |
-| **Candidate** | `id` · `interval_id` · `rank` · `thumbnail_uri` · `confidence_flag` | 사용자에게 제시되는 후보 | REQ-FUNC-004 · 029 |
-| **Selection** | `id` · `candidate_id` · `user_id` · `selected_at` | **사용자 선택 기록.** 향후 학습의 원천 | REQ-FUNC-005 · 023 |
-| **GeneratedVideo** | `id` · `owner_id` · `source_video_id` · `duration` · `music_id` | 완성 영상 | REQ-FUNC-008 |
-| **Record** | `id` · `generated_video_id` · `created_at` | **공개와 무관하게 존재하는 기록 단위** | REQ-FUNC-009 |
-| **VisibilitySetting** | `record_id` · `scope` · `group_ids` | 기록 단위 공개 범위 | REQ-FUNC-010 · REQ-NF-009 |
-| **Group** | `id` · `owner_id` · `name` · `member_count` | 승인 절차 없이 생성 · **상한 20명** | REQ-FUNC-013 |
-| **GroupMember** | `group_id` · `user_id` · `joined_at` · `left_at` | 구성원 · 이탈 이력 | SC-2.F1·F2 |
-| **FollowRelation** | `follower_id` · `followee_id` | **단방향** — 맞팔 개념 없음 | REQ-FUNC-012 |
-| **ProcessingJob** | `id` · `video_id` · `stage` · `status` · `retry_count` · `checkpoint` | 비동기 작업 | SC-1.F4 · REQ-NF-008 |
-| **MusicTrack** | `id` · `title` · `license_ref` · `license_expires_at` | 라이선스가 확보된 곡만 | REQ-FUNC-007 |
-| **Reaction** | `id` · `record_id` · `user_id` · `type` · `report_flag` | 공개 범위 내에서만 | REQ-FUNC-015 · 016 |
-| **ShareLink** | `id` · `record_id` · `token` · `expires_at` · `revoked_at` | 만료 30일 · 회수 대상 | REQ-FUNC-017 · 033 · REQ-NF-012 |
+### 6.2.1 🔴 요구사항이 직접 정한 제약 다섯
+
+**도식의 다른 값은 설계 판단이지만, 아래 다섯은 요구사항에서 나왔다. 바꾸려면 요구사항을 먼저 바꿔야 한다.**
+
+| # | 제약 | 근거 | 어기면 |
+| :--: | --- | --- | --- |
+| **1** | `VisibilitySetting.scope` **DEFAULT `private`** | REQ-FUNC-010 · ADR-4 | 애플리케이션 기본값만으로는 **삽입 경로가 늘 때 누락**된다. DB 계층이어야 보장된다 |
+| **2** | `GeneratedVideo.source_video_id` **SET NULL** | REQ-FUNC-019 · O4 | 다른 FK는 CASCADE인데 여기만 다르다. **원본을 지워도 결과물이 남아야** 원본 삭제 안내가 성립한다 |
+| **3** | `AppearanceInterval.excluded_reason` **보존** | REQ-FUNC-027 · REQ-FUNC-003 | 제외 구간을 지우면 **제외 전/후 탐지율 분리 집계**의 근거가 사라진다 |
+| **4** | `PersonTrack`에 **얼굴 특징 벡터 없음** | REQ-NF-010 · DD-5 | 좌표만 남기면 원본 삭제로 재식별 가능성이 사라져 **동의·파기 요건의 범위가 좁아진다** |
+| **5** | `Group.member_count` **CHECK ≤ 20** | REQ-FUNC-013 · SC-5.F1 | 조회 후 삽입이 아니라 **원자 증가 + CHECK**여야 한다. 동시 초대 시 정원을 넘긴다 |
+
+> **4번이 추론 API 선정과 직결된다.** SAM 2 경로는 클릭 좌표 기반이라 이 설계와 그대로 맞고, 얼굴 대조 경로를 택하면 **face collection 엔티티가 추가**되며 REQ-NF-010의 산출물이 늘어난다. `실행 계획/04_SP-1_API후보조사.md` 참조.
+
+### 6.2.2 엔티티 요약
+
+| Entity | 설명 | 대응 요구사항 |
+| --- | --- | --- |
+| **User** | 개인 계정 | REQ-NF-016 |
+| **SourceVideo** | 업로드된 긴 원본 | REQ-FUNC-001 · SC-1.F1 |
+| **PersonTrack** | 지정 대상의 추적 궤적 | REQ-FUNC-002 |
+| **AppearanceInterval** | 탐지된 등장 구간 | REQ-FUNC-003 |
+| **Candidate** | 사용자에게 제시되는 후보 | REQ-FUNC-004 · 027 |
+| **Selection** | **사용자 선택 기록.** 향후 학습의 원천 | REQ-FUNC-005 · 023 |
+| **GeneratedVideo** | 완성 영상 | REQ-FUNC-008 |
+| **Record** | **공개와 무관하게 존재하는 기록 단위** | REQ-FUNC-009 |
+| **VisibilitySetting** | 기록 단위 공개 범위 | REQ-FUNC-010 · REQ-NF-009 |
+| **Group** | 승인 절차 없이 생성 · 상한 20명 | REQ-FUNC-013 |
+| **GroupMember** | 구성원 · 이탈 이력 | SC-2.F1 · F2 |
+| **FollowRelation** | **단방향** — 맞팔 개념 없음 | REQ-FUNC-012 |
+| **ProcessingJob** | 비동기 작업 · 체크포인트 | SC-1.F4 · REQ-NF-008 |
+| **MusicTrack** | 라이선스가 확보된 곡만 | REQ-FUNC-007 |
+| **Reaction** | 공개 범위 내에서만 | REQ-FUNC-015 · 016 |
+| **ShareLink** | 만료 30일 · 회수 대상 | REQ-FUNC-017 · REQ-NF-012 |
 
 ```mermaid
 classDiagram
@@ -934,28 +1074,19 @@ classDiagram
     Candidate --> ConfidenceFlag
 ```
 
-**데이터베이스 스키마 개요**
+### 6.2.3 물리 저장 — 요구사항이 정한 것만
 
-```sql
-users                     -- 개인 계정
-source_videos             -- 원본 (storage_uri, codec, status)
-person_tracks             -- 추적 궤적 (bbox_timeline)
-appearance_intervals      -- 등장 구간 (start_tc, end_tc, confidence)
-candidates                -- 후보 (rank, thumbnail_uri, confidence_flag)
-selections                -- 사용자 선택 이력 (학습 원천 데이터)
-generated_videos          -- 완성 영상
-records                   -- 기록 (공개와 무관하게 존재)
-visibility_settings       -- 기록 단위 공개 범위 (scope, group_ids)
-groups / group_members    -- 그룹 (상한 20명) 및 구성원·이탈 이력
-follow_relations          -- 단방향 팔로우
-processing_jobs           -- 비동기 작업 (stage, retry_count, checkpoint)
-music_tracks              -- 라이선스 확보 곡 (license_ref, expires_at)
-reactions                 -- 좋아요 · 댓글 · 신고 플래그
-share_links               -- 공유 링크 (만료 30일, 회수 대상)
-telemetry_events          -- 계측 이벤트 (schema_version)
-```
+> **테이블 목록은 위 ERD가 대신한다.** 여기에는 **삭제 요구**만 남긴다. 인덱스·보존 기간·Prisma 사상은 `DS §4.2`에 있다.
 
-**보존 및 삭제** — 사용자의 삭제 요청 시 `source_videos` · `person_tracks` · `appearance_intervals` · `candidates` · `generated_videos` · `records` 및 객체 스토리지의 모든 파생물을 **전량 삭제**한다 (REQ-NF-014). 구체적 보존 기간은 미정이다 `[TBD]`.
+**삭제 요구 (REQ-NF-014)** — 사용자의 삭제 요청 시 원본·추적 궤적·등장 구간·후보·완성 영상·기록 및 **객체 스토리지의 모든 파생물을 전량 삭제**한다.
+
+| 구분 | 처리 | 근거 |
+| --- | --- | --- |
+| 개인정보 · 영상 | 🔴 **물리 삭제** | 논리 삭제는 REQ-NF-014의 *"전량 삭제"* 를 만족하지 않는다 |
+| 사업 자원 (그룹 등) | 논리 삭제(`deleted_at`) 허용 | 이력 보존이 필요하다 |
+| 계측 이벤트 | 식별자 **비식별화** · 집계는 유지 | 개인 식별성이 사라지면 보존 가능 |
+
+**구체적 보존 기간은 미정이다** `[TBD]` — Q4(법무) 확정 후 DS §4.4에 반영한다.
 
 ## 6.3 Detailed Interaction Models
 

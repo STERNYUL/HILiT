@@ -2,7 +2,7 @@
 <html lang="ko"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HILiT Design Spec v1.0</title>
+<title>Software Design Description (SDD)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -83,7 +83,7 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <p><strong>version:</strong> 1.0</p>
 <p><strong>Date:</strong> 2026-08-30</p>
 <p><strong>Standard:</strong> IEEE 1016 설계 관점(Design Viewpoints) 구조</p>
-<p><strong>상위 문서:</strong> <code>[SRS]hilit-SRSv1.5.md</code> (요구사항 45건 · 시나리오 42건)</p>
+<p><strong>상위 문서:</strong> <code>[SRS]hilit-SRSv1.6.md</code> (요구사항 45건 · 시나리오 42건)</p>
 <hr>
 <h3 id="h1">판 이력</h3>
 <div class="tw"><table><thead><tr><th>판</th><th>날짜</th><th>변경</th><th>근거</th></tr></thead><tbody><tr><td><strong>1.0</strong></td><td><strong>2026-08-30</strong></td><td><strong>초판.</strong> SRS가 <em>"개요"</em> 로 한정한 세 영역을 설계 수준으로 확정 — <strong>API 스키마 · 데이터 모델 속성 · 도메인 클래스</strong>. 감사 P1-6·7·8 · P2-1 대상</td><td><code>AUDIT_SRS_2026-08-30.md</code></td></tr></tbody></table></div>
@@ -101,7 +101,7 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <h2 id="h4">1.2 범위</h2>
 <div class="tw"><table><thead><tr><th>포함</th><th>제외</th></tr></thead><tbody><tr><td>API 요청·응답·오류 스키마 · 인증·인가 · 멱등성 · 속도 제한</td><td>요구사항 정의 (SRS 소관)</td></tr><tr><td>엔티티 속성 · 타입 · 키 · 제약 · 인덱스 · 보존 정책</td><td>실험 설계 · 게이트 판정 (SRS §6.4)</td></tr><tr><td>도메인 클래스 · 상태 기계</td><td>인프라 프로비저닝 · 배포 파이프라인</td></tr><tr><td>Use Case 모델</td><td>화면 상세 디자인</td></tr></tbody></table></div>
 <h2 id="h5">1.3 참조</h2>
-<div class="tw"><table><thead><tr><th>ID</th><th>문서</th></tr></thead><tbody><tr><td><strong>DREF-01</strong></td><td><code>[SRS]hilit-SRSv1.5.md</code> — 요구사항 원천</td></tr><tr><td><strong>DREF-02</strong></td><td><code>AUDIT_SRS_2026-08-30.md</code> — 이 문서가 해소하는 지적</td></tr><tr><td><strong>DREF-03</strong></td><td><code>prototype_v0_6.html</code> — 화면 규격</td></tr><tr><td><strong>DREF-04</strong></td><td>IEEE 1016 — 설계 관점 구조</td></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>ID</th><th>문서</th></tr></thead><tbody><tr><td><strong>DREF-01</strong></td><td><code>[SRS]hilit-SRSv1.6.md</code> — 요구사항 원천</td></tr><tr><td><strong>DREF-02</strong></td><td><code>AUDIT_SRS_2026-08-30.md</code> — 이 문서가 해소하는 지적</td></tr><tr><td><strong>DREF-03</strong></td><td><code>prototype_v0_6.html</code> — 화면 규격</td></tr><tr><td><strong>DREF-04</strong></td><td>IEEE 1016 — 설계 관점 구조</td></tr></tbody></table></div>
 <h2 id="h6">1.4 표기</h2>
 <div class="tw"><table><thead><tr><th>태그</th><th>뜻</th></tr></thead><tbody><tr><td><code>[SOURCE·SRS]</code></td><td>SRS에 명시된 값을 그대로 옮김</td></tr><tr><td><code>[PROPOSED]</code></td><td>이 문서가 새로 제안하는 설계값</td></tr><tr><td><code>[TBD]</code></td><td>설계 결정이 남음</td></tr><tr><td>🔺</td><td><strong>SRS 개정 필요</strong> — §9에 모음</td></tr></tbody></table></div>
 <hr>
@@ -341,7 +341,7 @@ pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius
 <div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>내용</th><th>근거</th><th>제안</th></tr></thead><tbody><tr><td style="text-align:center"><strong>9-1</strong></td><td><strong>행위자 구분 부재</strong> — 법정대리인·운영자가 §2.2 이용자 클래스에 없다</td><td>UCS-7·8의 행위자</td><td>§2.2에 <strong>행위자 절 분리</strong> 또는 §2.1 이해관계자와 연결</td></tr><tr><td style="text-align:center"><strong>9-2</strong></td><td>🔴 <strong>인증 요구사항 부재</strong> — REQ-NF-009가 인증을 전제하나 명시적 요구사항이 없다</td><td>§3.1.1</td><td><strong>REQ-NF 신설</strong> — 모든 API 인증 필수 · 미인증 <code>401</code> · 권한 없음 <code>404</code></td></tr><tr><td style="text-align:center"><strong>9-3</strong></td><td>API 3개 누락 — 업로드 세션 조회 · 프로필 조회 · 언팔로우</td><td>§3.2 A-03 · A-12 · A-18</td><td>SRS §6.1에 3행 추가. <strong>A-12는 SC-4.4의 구현 지점</strong>이라 특히 중요</td></tr><tr><td style="text-align:center"><strong>9-4</strong></td><td>보존 기간 <code>[TBD]</code></td><td>§4.4</td><td>법무 확정 후 SRS §4.4 규제 준수 표에 반영</td></tr><tr><td style="text-align:center"><strong>9-5</strong></td><td>영상 길이·크기 상한 미규정</td><td>§4.2 SourceVideo <code>CHECK</code></td><td>90분·6GB는 설계 제안값. <strong>요구사항으로 확정 필요</strong></td></tr></tbody></table></div>
 <hr>
 <p><em>작성자: 백엔드 리드 · 검토자: AI 리드 · 클라이언트 개발자 · 보안 담당자 · 승인자: 제품 아키텍트</em></p>
-<p class="meta">HILiT Design Spec v1.0 · 원본 [DS]hilit-DSv1.0.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+<p class="meta">Software Design Description (SDD) · 원본 [DS]hilit-DSv1.0.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
 </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
