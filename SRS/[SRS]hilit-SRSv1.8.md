@@ -1081,7 +1081,7 @@ erDiagram
     Group ||--o{ VisibilitySetting : "그룹 공개 대상"
 
     User {
-        ULID id PK
+        uuid id PK
         text handle UK "30자"
         text display_name "50자"
         smallint birth_year "개인정보 · NULL 허용"
@@ -1090,8 +1090,8 @@ erDiagram
         timestamptz deleted_at "논리 삭제"
     }
     SourceVideo {
-        ULID id PK
-        ULID owner_id FK "CASCADE"
+        uuid id PK
+        uuid owner_id FK "CASCADE"
         int duration_sec "CHECK 5400 이하"
         bigint size_bytes "CHECK 6GB 이하"
         text codec "검증 통과분만"
@@ -1099,98 +1099,98 @@ erDiagram
         enum status "UPLOADING…FAILED"
     }
     PersonTrack {
-        ULID id PK
-        ULID video_id FK "UNIQUE · 영상당 1회"
+        uuid id PK
+        uuid video_id FK "UNIQUE · 영상당 1회"
         int anchor_frame_ms
         jsonb anchor_bbox "정규화 0~1"
         jsonb bbox_timeline "특징벡터 미저장"
     }
     AppearanceInterval {
-        ULID id PK
-        ULID video_id FK
+        uuid id PK
+        uuid video_id FK
         int start_tc_ms "CHECK start 작음"
         int end_tc_ms
         real confidence "0~1"
         enum excluded_reason "LOW_CONFIDENCE 또는 NULL"
     }
     Candidate {
-        ULID id PK
-        ULID interval_id FK
+        uuid id PK
+        uuid interval_id FK
         smallint rank "UNIQUE interval rank"
         text thumbnail_uri
         enum confidence_flag "NORMAL | LOW | EXCLUDED"
     }
     Selection {
-        ULID id PK
-        ULID candidate_id FK "UNIQUE cand user"
-        ULID user_id FK
+        uuid id PK
+        uuid candidate_id FK "UNIQUE cand user"
+        uuid user_id FK
         timestamptz selected_at
         bool is_reselection "ADR-3 판정 지표"
     }
     GeneratedVideo {
-        ULID id PK
-        ULID owner_id FK
-        ULID source_video_id FK "SET NULL"
-        ULID music_track_id FK
+        uuid id PK
+        uuid owner_id FK
+        uuid source_video_id FK "SET NULL"
+        uuid music_track_id FK
         int duration_sec "CHECK 60 이하"
         text storage_path
     }
     Record {
-        ULID id PK
-        ULID generated_video_id FK "UNIQUE"
-        ULID owner_id FK
+        uuid id PK
+        uuid generated_video_id FK "UNIQUE"
+        uuid owner_id FK
         text sport "필터용"
         timestamptz created_at
     }
     VisibilitySetting {
-        ULID record_id PK "FK"
+        uuid record_id PK "FK"
         enum scope "DEFAULT private"
-        ULID_array group_ids "CHECK group이면 1개 이상"
+        uuid_array group_ids "CHECK group이면 1개 이상"
         timestamptz updated_at
     }
     Group {
-        ULID id PK
-        ULID owner_id FK
+        uuid id PK
+        uuid owner_id FK
         text name "30자 · 중복 허용"
         smallint member_count "CHECK 20 이하"
     }
     GroupMember {
-        ULID group_id PK "FK"
-        ULID user_id PK "FK"
+        uuid group_id PK "FK"
+        uuid user_id PK "FK"
         timestamptz joined_at
         timestamptz left_at "이탈 이력 보존"
     }
     FollowRelation {
-        ULID follower_id PK "FK"
-        ULID followee_id PK "FK · CHECK 자기 아님"
+        uuid follower_id PK "FK"
+        uuid followee_id PK "FK · CHECK 자기 아님"
         timestamptz created_at
     }
     MusicTrack {
-        ULID id PK
+        uuid id PK
         text title
         enum category "감성|여행|일상|운동|추억"
         text license_ref "NOT NULL"
         timestamptz license_expires_at
     }
     Reaction {
-        ULID id PK
-        ULID record_id FK "CASCADE"
-        ULID user_id FK
+        uuid id PK
+        uuid record_id FK "CASCADE"
+        uuid user_id FK
         enum type "like | comment"
         text text "300자 · comment면 NOT NULL"
         bool report_flag
     }
     ShareLink {
-        ULID id PK
-        ULID record_id FK "CASCADE"
+        uuid id PK
+        uuid record_id FK "CASCADE"
         text token UK
-        ULID target_user_id FK "NULL 허용"
+        uuid target_user_id FK "NULL 허용"
         timestamptz expires_at "기본 30일"
         timestamptz revoked_at "이탈 시 회수"
     }
     ProcessingJob {
-        ULID id PK
-        ULID video_id FK
+        uuid id PK
+        uuid video_id FK
         enum stage "7단계"
         enum status "QUEUED…FAILED"
         smallint retry_count "CHECK 3 이하"

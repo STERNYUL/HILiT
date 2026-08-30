@@ -105,6 +105,6 @@ create policy record_read on records for select using (
 - [ ] 🔺 `SRS/[SRS]hilit-SRSv2.0-nextjs.md` §4.2와 실제 정책이 일치하는가?
 
 ## 🚧 Dependencies & Blockers
-- **Depends on**: **CT-001**(스키마) · **CT-002**(인덱스)
-- **Blocks**: **FR-019**(기록 저장) · **FR-020**(공개범위) · **FR-027**(좋아요) · **FR-028**(공유) · **FR-032·033·035**(Query 전량) · **NF-007**(우회 테스트) · TS-004 · TS-005 · TS-009
+- **Depends on**: **CT-001**(스키마 · 제약 · 인덱스)
+- **Blocks**: **FR-019**(기록 저장) · **FR-020**(공개범위) · **FR-027**(좋아요) · **FR-028**(공유) · **FR-032·033·035**(Query 전량) · **NF-007**(우회 테스트) · TS-004 · TS-002 · TS-007
 - 🔺 **관련**: NF-009(감사 로그)는 RLS가 못 하는 부분을 메운다 — 함께 설계할 것

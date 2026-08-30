@@ -233,7 +233,7 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 항목 | 설계 |
 | --- | --- |
-| PK | `ULID` (26자) — 시간 정렬 가능 · 분산 생성 |
+| PK | `uuid` — `gen_random_uuid()` · Prisma·PostgreSQL 기본 지원 `[확정 2026-08-30]` |
 | 시각 | `TIMESTAMPTZ` · UTC 저장 · 응답은 ISO 8601 |
 | 공통 컬럼 | `created_at` 필수 · `updated_at` 변경 가능 엔티티만 |
 | 논리 삭제 | 사업 자원만 `deleted_at`. **개인정보·영상은 물리 삭제** |
@@ -247,7 +247,7 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 컬럼 | 타입 | 제약 | 비고 |
 | --- | --- | --- | --- |
-| `id` | ULID | **PK** | |
+| `id` | uuid | **PK** | |
 | `handle` | TEXT(30) | **UNIQUE** · NOT NULL | |
 | `display_name` | TEXT(50) | NOT NULL | |
 | `birth_year` | SMALLINT | NULL 허용 | 🔴 **개인정보** · REQ-NF-016 연령 분기 |
@@ -262,8 +262,8 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 컬럼 | 타입 | 제약 | 비고 |
 | --- | --- | --- | --- |
-| `id` | ULID | **PK** | |
-| `owner_id` | ULID | **FK → User** · NOT NULL · `ON DELETE CASCADE` | |
+| `id` | uuid | **PK** | |
+| `owner_id` | uuid | **FK → User** · NOT NULL · `ON DELETE CASCADE` | |
 | `duration_sec` | INTEGER | `CHECK (0 < duration_sec <= 5400)` | 90분 상한 `[PROPOSED]` |
 | `size_bytes` | BIGINT | `CHECK (<= 6442450944)` | 6GB 상한 `[PROPOSED]` |
 | `codec` | TEXT(20) | NOT NULL | 검증 통과분만 저장 |
@@ -279,8 +279,8 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 컬럼 | 타입 | 제약 |
 | --- | --- | --- |
-| `id` | ULID | **PK** |
-| `video_id` | ULID | **FK → SourceVideo** · `CASCADE` |
+| `id` | uuid | **PK** |
+| `video_id` | uuid | **FK → SourceVideo** · `CASCADE` |
 | `anchor_frame_ms` | INTEGER | NOT NULL |
 | `anchor_bbox` | JSONB | `{x,y,w,h}` 정규화 좌표 0~1 |
 | `bbox_timeline` | JSONB | 프레임별 좌표 배열 |
@@ -294,8 +294,8 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 컬럼 | 타입 | 제약 |
 | --- | --- | --- |
-| `id` | ULID | **PK** |
-| `video_id` | ULID | **FK → SourceVideo** · `CASCADE` |
+| `id` | uuid | **PK** |
+| `video_id` | uuid | **FK → SourceVideo** · `CASCADE` |
 | `start_tc_ms` / `end_tc_ms` | INTEGER | `CHECK (start < end)` |
 | `confidence` | REAL | `CHECK (0 <= confidence <= 1)` |
 | `excluded_reason` | ENUM | NULL — `LOW_CONFIDENCE` |
@@ -307,8 +307,8 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 컬럼 | 타입 | 제약 |
 | --- | --- | --- |
-| `id` | ULID | **PK** |
-| `interval_id` | ULID | **FK → AppearanceInterval** · `CASCADE` |
+| `id` | uuid | **PK** |
+| `interval_id` | uuid | **FK → AppearanceInterval** · `CASCADE` |
 | `rank` | SMALLINT | NOT NULL |
 | `thumbnail_uri` | TEXT | |
 | `confidence_flag` | ENUM | `NORMAL`·`LOW`·`EXCLUDED` |
@@ -320,9 +320,9 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 컬럼 | 타입 | 제약 |
 | --- | --- | --- |
-| `id` | ULID | **PK** |
-| `candidate_id` | ULID | **FK → Candidate** |
-| `user_id` | ULID | **FK → User** |
+| `id` | uuid | **PK** |
+| `candidate_id` | uuid | **FK → Candidate** |
+| `user_id` | uuid | **FK → User** |
 | `selected_at` | TIMESTAMPTZ | NOT NULL |
 | `is_reselection` | BOOLEAN | 기본 `false` |
 
@@ -336,7 +336,7 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 | --- | --- | --- |
 | **GeneratedVideo** | `id` PK · `owner_id` FK · `source_video_id` FK `ON DELETE SET NULL` · `music_track_id` FK · `duration_sec CHECK(<=60)` · `storage_uri` | 🔴 `SET NULL` — **원본을 지워도 결과물은 남는다**(REQ-FUNC-019) |
 | **Record** | `id` PK · `generated_video_id` FK **UNIQUE** · `owner_id` FK · `sport` TEXT · `created_at` | 1:1 · `INDEX(owner_id, created_at DESC)` |
-| **VisibilitySetting** | `record_id` **PK·FK** · `scope` ENUM NOT NULL **기본 `private`** · `group_ids` ULID[] · `updated_at` | `CHECK (scope != 'group' OR array_length(group_ids,1) >= 1)` |
+| **VisibilitySetting** | `record_id` **PK·FK** · `scope` ENUM NOT NULL **기본 `private`** · `group_ids` uuid[] · `updated_at` | `CHECK (scope != 'group' OR array_length(group_ids,1) >= 1)` |
 
 > **`scope` 기본값 `private`이 DB 레벨 `DEFAULT`여야 한다** — 애플리케이션 기본값만으로는 REQ-FUNC-010(ADR-4)이 보장되지 않는다. 신규 삽입 경로가 늘면 누락된다.
 
@@ -362,8 +362,8 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 
 | 컬럼 | 타입 | 제약 |
 | --- | --- | --- |
-| `id` | ULID | **PK** |
-| `video_id` | ULID | **FK → SourceVideo** · `CASCADE` |
+| `id` | uuid | **PK** |
+| `video_id` | uuid | **FK → SourceVideo** · `CASCADE` |
 | `stage` | ENUM | `UPLOADING`·`SUBJECT_ANCHORED`·`DETECTING`·`SELECTION_READY`·`RENDERING`·`COMPLETED`·`FAILED` |
 | `status` | ENUM | `QUEUED`·`RUNNING`·`SUCCEEDED`·`FAILED` |
 | `retry_count` | SMALLINT | 기본 0 · `CHECK (<= 3)` |
@@ -407,21 +407,21 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 ```mermaid
 classDiagram
     class SourceVideo {
-        +ULID id
-        +ULID ownerId
+        +uuid id
+        +uuid ownerId
         +int durationSec
         +VideoStatus status
         +canStartDetection() bool
         +markProcessing() void
     }
     class PersonTrack {
-        +ULID id
+        +uuid id
         +BBox anchorBbox
         +BBoxTimeline timeline
         +positionAt(ms) BBox
     }
     class AppearanceInterval {
-        +ULID id
+        +uuid id
         +int startTcMs
         +int endTcMs
         +float confidence
@@ -430,7 +430,7 @@ classDiagram
         +durationMs() int
     }
     class Candidate {
-        +ULID id
+        +uuid id
         +short rank
         +ConfidenceFlag flag
         +isPresentable() bool
@@ -442,14 +442,14 @@ classDiagram
         +excludedCount(videoId) int
     }
     class Record {
-        +ULID id
-        +ULID ownerId
+        +uuid id
+        +uuid ownerId
         +VisibilitySetting visibility
         +isVisibleTo(viewer) bool
     }
     class VisibilitySetting {
         +VisibilityScope scope
-        +ULID[] groupIds
+        +uuid[] groupIds
         +allows(viewer) bool
     }
     class VisibilityEnforcer {
@@ -459,7 +459,7 @@ classDiagram
         +audit(decision) void
     }
     class Group {
-        +ULID id
+        +uuid id
         +short memberCount
         +canAdmit() bool
         +revokeSharesFor(userId) void

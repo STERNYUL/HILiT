@@ -330,9 +330,9 @@ enum Role { user operator }
 
 | DS 설계 | Prisma·PG 구현 |
 | --- | --- |
-| ULID PK | 🔺 `uuid` 로 대체 — Prisma·PG 기본 지원 우선 |
+| ~~ULID PK~~ | ✅ **`uuid` 로 확정** — `gen_random_uuid()` · Prisma·PG 기본 지원 우선 `[확정 2026-08-30 · DS 갱신 완료]` |
 | `CHECK` 제약 | Prisma 미지원 → **마이그레이션 SQL에 직접 작성** |
-| `ULID[]` 배열 | `String[] @db.Uuid` — PG 네이티브 배열 |
+| `uuid[]` 배열 | `String[] @db.Uuid` — PG 네이티브 배열 |
 | 부분 UNIQUE | Prisma 미지원 → 마이그레이션 SQL |
 | 논리/물리 삭제 분리 | `deletedAt` + `onDelete: Cascade` 병용 |
 
