@@ -9,3 +9,14 @@ desktop.ini
 
 # 사내 양식 참조본
 reference/
+
+# Node
+node_modules/
+.next/
+.env
+.env.local
+*.log
+
+# Prisma
+prisma/generated/
+tsconfig.tsbuildinfo
