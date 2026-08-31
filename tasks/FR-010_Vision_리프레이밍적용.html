@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-010 리프레이밍적용</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command] FR-010: 리프레이밍 적용 (추적 좌표 기반 구도 재구성)" labels: 'backend, command, vision, priority:critical, step-2' assignees: ''</p>
+<hr>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-010] 화면 구석의 작은 사람을 화면의 주인공으로 만든다</strong></li><li>목적: <strong>원본을 자르지 않고 보여줬을 때 성립하지 않는 "내 하이라이트"를 성립시킨다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 기능이 없으면 결과물이 원본의 부분집합일 뿐이다.</strong></p>
+<p>아마추어 경기 영상은 코트 전체를 멀리서 찍는다. 그 안의 사용자는 <strong>화면의 5%를 차지하는 점</strong>이다. 구간을 잘라 세로로 만들어도 <strong>주인공이 보이지 않는다.</strong> 리프레이밍은 편집 옵션이 아니라 <strong>결과물을 결과물로 만드는 조건</strong>이다.</p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-006</strong> — 🔴 <strong>중앙·확대 배치 · 세로 숏폼 출력</strong></li><li><strong>시나리오</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-3.1</strong>(구석 인물 → 주인공 · <em>"잘 잡혔다"</em> ≥ 80%) · <strong>SC-3.2</strong>(세션 내 재업로드 0건)</li><li><strong>해상도 정책</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §5.1 <strong>ResolutionPolicy</strong> · <strong>ADR-3</strong> — 🔴 <strong>선택분만 원본 해상도</strong></li><li><strong>시퀀스</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.3 — <code>HC → VT: 선택분만 원본 해상도 리프레이밍</code> · <em>"후보 전량 고화질 처리 금지"</em></li><li><strong>입력</strong>: <code>tasks/CT-006_APISpec_TrackingProvider.md</code> — <code>bboxTimeline</code> (정규화 0~1)</li><li><strong>다시 고르기</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-3.F2</strong> · <strong>TC-ADR-03</strong></li><li>검증: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §5.3 <strong>TC-ADR-03</strong></li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] <code>bboxTimeline</code> 을 입력으로 <strong>크롭 창 궤적 산출</strong></li><li>[ ] 🔴 <strong>흔들림 억제</strong> — 프레임별 bbox를 그대로 따라가면 화면이 요동친다(§제약)</li><li>[ ] 세로 숏폼 종횡비로 크롭 창 정규화</li><li>[ ] <strong>화면 경계 처리</strong> — 대상이 가장자리에 있을 때 크롭 창이 프레임 밖으로 나가지 않게</li><li>[ ] 🔴 <strong>ADR-3 준수</strong> — <strong>선택된 구간만</strong> 원본 해상도로 처리. 후보 전량 고화질 금지</li><li>[ ] 대상 소실 구간 처리 — <code>bbox</code> 가 없는 프레임의 크롭 창 결정</li><li>[ ] 출력 해상도 검증</li><li>[ ] 계측 — <code>reframe_completed</code> · <strong>처리 구간 수 · 해상도</strong></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 구석의 인물이 중앙에 온다</strong> <em>(SC-3.1 · REQ-FUNC-006)</em></p>
+<ul><li><strong>Given</strong>: 화면 우하단에 작게 잡힌 대상</li><li><strong>When</strong>: 리프레이밍을 적용함</li><li><strong>Then</strong>: <strong>대상이 중앙에 확대 배치</strong>되고 세로 숏폼으로 출력된다</li></ul>
+<p><strong>Scenario 2: 화면이 흔들리지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 프레임마다 미세하게 진동하는 bbox 시계열</li><li><strong>When</strong>: 크롭 창 궤적을 산출함</li><li><strong>Then</strong>: 🔴 <strong>크롭 창이 부드럽게 이동한다.</strong> bbox를 그대로 따라가면 <strong>탐지는 성공했는데 결과물은 볼 수 없는 상태</strong>가 된다</li></ul>
+<p><strong>Scenario 3: 후보 전량을 고화질로 처리하지 않는다</strong> <em>(ADR-3 · TC-ADR-03)</em></p>
+<ul><li><strong>Given</strong>: 약 30개의 후보 중 사용자가 5개를 선택함</li><li><strong>When</strong>: 리프레이밍을 실행함</li><li><strong>Then</strong>: 🔴 <strong>선택된 5개만 원본 해상도로 처리</strong>된다. 30개 전부를 고화질 처리하면 <strong>RISK-03(성장이 곧 적자)이 현실이 된다</strong></li></ul>
+<p><strong>Scenario 4: 크롭 창이 프레임을 벗어나지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 대상이 화면 가장자리에 있는 구간</li><li><strong>When</strong>: 크롭 창을 배치함</li><li><strong>Then</strong>: <strong>프레임 안으로 제한</strong>된다. 대상이 완벽히 중앙에 오지 않더라도 <strong>검은 여백이 생기지 않는다</strong></li></ul>
+<p><strong>Scenario 5: 대상이 잠시 사라져도 화면이 튀지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 가림으로 <code>bbox</code> 가 없는 짧은 구간</li><li><strong>When</strong>: 크롭 창을 결정함</li><li><strong>Then</strong>: <strong>직전 위치를 유지하거나 부드럽게 보간</strong>한다. 원위치로 급격히 되돌아가지 않는다</li></ul>
+<p><strong>Scenario 6: 다시 고르기가 결과를 버리지 않는다</strong> <em>(SC-3.F2)</em></p>
+<ul><li><strong>Given</strong>: 리프레이밍 결과가 마음에 들지 않음</li><li><strong>When</strong>: 다시 고르기로 복귀함</li><li><strong>Then</strong>: 🔴 <strong>기존 선택이 보존</strong>되고 <code>reselection_started</code> 가 발행된다 — <strong>ADR-3의 유일한 판정 경로다</strong></li></ul>
+<p><strong>Scenario 7 (실패): 정규화 좌표를 픽셀로 오해하지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 🔺 B8에 따라 절반 해상도로 추론한 결과의 <code>bboxTimeline</code></li><li><strong>When</strong>: 원본 해상도에 크롭 창을 적용함</li><li><strong>Then</strong>: 🔴 <strong>좌표가 그대로 유효하다.</strong> 정규화 0~1 규약(FR-005 · CT-006)이 여기서 값을 한다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>흔들림 억제 방식이 <code>[TBD]</code></strong> — 이동 평균 / 칼만 / 데드존 중 무엇을 쓸지 미정. <strong>SC-3.1의 주관 평가(5점 척도) ≥ 80%가 이 선택의 판정자다</strong></li><li>🔴 <strong>ADR-3이 원가를 지킨다</strong> — 후보 30개 전량 고화질은 원가를 6배로 만든다(선택 5개 기준). 이 제약을 깨면 REQ-NF-013 상한이 무너진다</li><li>🔺 <strong>실행 위치가 <code>[TBD]</code></strong> — 서버(추론 서비스)인지 클라이언트(WebCodecs)인지에 따라 구현이 다르다. <strong>SP-3 결과에 종속</strong>되며, FR-016(렌더)과 같은 위치에 두는 것이 자연스럽다</li><li>세로 숏폼 종횡비는 프로토타입 v0.6을 따른다</li><li><code>reselection_started</code> 는 <strong>ADR-3의 검증 지표</strong>이므로 반드시 발행한다</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>선택된 구간만 원본 해상도로 처리되는가?</strong> <em>(TC-ADR-03)</em></li><li>[ ] 🔴 <strong>흔들림 억제가 적용되어 SC-3.1 주관 평가 ≥ 80%인가?</strong></li><li>[ ] 크롭 창이 프레임 경계를 벗어나지 않는가?</li><li>[ ] 대상 소실 구간에서 화면이 튀지 않는가?</li><li>[ ] 정규화 좌표가 해상도 변경에도 유효한가?</li><li>[ ] <code>reframe_completed</code> · <code>reselection_started</code> 가 발행되는가?</li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li>🔴 <strong>Depends on</strong>: <strong>FR-008</strong>(<code>bboxTimeline</code> 실측) — Mock의 궤적은 형태 검증용이며 흔들림 억제 튜닝에는 실제 궤적이 필요하다</li><li>🔺 <strong>실행 위치 결정</strong>: <strong>SP-3</strong></li><li><strong>Blocks</strong>: <strong>FR-016</strong>(렌더) · <strong>FE-004</strong>(비교 UI) · <strong>TS-002</strong> · <strong>TS-002</strong></li><li><strong>연관</strong>: <strong>CT-007</strong>의 <em>"bbox 시계열은 실제 궤적처럼 연속적이어야 한다"</em> 는 제약이 이 태스크를 위한 것이다</li></ul>
+<p class="meta">FR-010 리프레이밍적용 · 원본 FR-010_Vision_리프레이밍적용.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>
