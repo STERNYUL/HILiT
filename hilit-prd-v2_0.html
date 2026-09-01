@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HILiT_project v2.0 · 제품 요구사항 문서(PRD)</title>
+<style>
+/* HILiT PRD v0.1 — 단일 HTML · 외부 폰트/CDN/이미지 의존 없음 */
+:root{
+  --bg:#111310; --bg-soft:#181b17; --surface:#20231e; --surface-strong:#292d27;
+  --line:#3b4038; --line-soft:#2d312b;
+  --ink:#f6f3ea; --ink-soft:#c6c9be; --ink-muted:#90968a;
+  --mint:#b9f0d5; --mint-soft:#d9f8e9; --mint-deep:#5eb58d; --brown:#4b2d20;
+  --amber:#e7bf75; --danger:#df8a7d; --violet:#b9b6ef; --sky:#9fd2ef;
+  --font-sans:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji","Segoe UI Symbol",sans-serif;
+  --font-display:"Arial Black","Pretendard","Noto Sans KR","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji","Segoe UI Symbol",sans-serif;
+  --font-mono:"D2Coding","Consolas","Menlo","Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji","Segoe UI Symbol",monospace;
+  --s-2:.68rem; --s-1:.8rem; --s0:.94rem; --s1:1.12rem; --s2:1.45rem; --s3:2rem; --s4:2.7rem;
+  --sp1:.35rem; --sp2:.6rem; --sp3:.9rem; --sp4:1.25rem; --sp5:1.75rem; --sp6:2.6rem;
+  --r-s:.6rem; --r-m:1rem; --r-l:1.5rem;
+  --rail:15.5rem; --max:74rem;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color-scheme:dark;scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{
+  margin:0;padding:0;
+  background:radial-gradient(circle at 88% 4%,color-mix(in srgb,var(--mint-deep) 10%,transparent),transparent 34rem),var(--bg);
+  color:var(--ink);font-family:var(--font-sans);font-size:var(--s0);line-height:1.62;letter-spacing:-.02em;
+}
+h1,h2,h3,h4,h5,p,ul,ol,figure,blockquote{margin:0}
+ul,ol{padding-left:1.15rem}
+h1,h2,h3,h4,h5,li,td,th,strong,b,blockquote,caption,summary,.kb{word-break:keep-all;overflow-wrap:break-word}
+h1,h2,h3,h4{text-wrap:balance}
+a{color:var(--sky)}
+svg{display:block;max-width:100%}
+:focus-visible{outline:.16rem solid var(--mint);outline-offset:.2rem}
+
+/* ---------- 좌측 레일 ---------- */
+.rail{
+  position:fixed;inset:0 auto 0 0;z-index:30;width:var(--rail);
+  display:flex;flex-direction:column;gap:var(--sp3);
+  padding:var(--sp4) var(--sp3);border-right:1px solid var(--line-soft);
+  background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(1rem);overflow-y:auto;
+}
+.rail-brand{display:flex;align-items:center;gap:.55rem}
+.rail-brand svg{width:2.5rem;flex:none}
+.rail-brand b{font-size:var(--s-1);line-height:1.25;color:var(--ink-soft)}
+.rail-brand b small{display:block;color:var(--ink-muted);font-size:var(--s-2);font-weight:600}
+.rail-nav{display:grid;gap:.15rem;margin-top:var(--sp2)}
+.rail-nav a{
+  display:grid;grid-template-columns:1.6rem 1fr;gap:.4rem;align-items:baseline;
+  padding:.4rem .5rem;border-radius:var(--r-s);color:var(--ink-soft);font-size:var(--s-1);
+  text-decoration:none;border:1px solid transparent;transition:background-color 150ms var(--ease)
+}
+.rail-nav a b{color:var(--mint-deep);font-variant-numeric:tabular-nums;font-size:var(--s-2)}
+.rail-nav a:hover{background:var(--surface)}
+.rail-nav a.is-current{background:var(--surface-strong);border-color:var(--line);color:var(--ink)}
+.rail-nav a.is-current b{color:var(--mint)}
+.rail-foot{margin-top:auto;padding-top:var(--sp3);border-top:1px solid var(--line-soft);color:var(--ink-muted);font-size:var(--s-2);line-height:1.5}
+.brand-defs{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.brand-mark__field{fill:var(--mint)}
+.brand-mark__spark{fill:var(--ink)}
+.brand-mark__letter{fill:var(--brown)}
+
+/* ---------- 본문 ---------- */
+.doc{margin-left:var(--rail);padding:clamp(1.8rem,3.4vw,3.6rem) clamp(1.2rem,4vw,4rem) 6rem}
+.doc-inner{width:min(100%,var(--max));margin:0 auto;display:grid;gap:var(--sp6)}
+
+/* 표지 */
+.cover{display:grid;gap:var(--sp4);padding-bottom:var(--sp5);border-bottom:1px solid var(--line)}
+.cover-wordmark{width:clamp(9rem,20vw,13rem);overflow:visible}
+.cover-wordmark__field{fill:var(--mint-soft)}
+.cover-wordmark__detail{fill:var(--mint);opacity:.7}
+.cover h1{font-family:var(--font-display);font-size:clamp(1.8rem,1.3rem + 2.1vw,3rem);line-height:1.14;letter-spacing:-.045em;max-width:20ch}
+.cover h1 em{color:var(--mint);font-style:normal}
+.cover-lead{max-width:60ch;color:var(--ink-soft);font-size:var(--s1)}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.1rem;border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden;background:var(--line-soft)}
+.meta-cell{display:grid;gap:.2rem;padding:var(--sp3) var(--sp3);background:var(--bg-soft)}
+.meta-cell b{color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.05em}
+.meta-cell span{font-size:var(--s-1);line-height:1.45}
+
+/* 섹션 */
+.sec{display:grid;gap:var(--sp4);scroll-margin-top:1.5rem}
+.sec-head{display:grid;gap:.45rem;padding-bottom:var(--sp2);border-bottom:.14rem solid var(--line)}
+.sec-num{display:flex;align-items:center;gap:.6rem;color:var(--mint);font-size:var(--s-1);font-weight:900;letter-spacing:.09em}
+.sec-num::before{content:"";width:1.9rem;height:.14rem;background:var(--mint)}
+.sec h2{font-family:var(--font-display);font-size:var(--s3);line-height:1.2;letter-spacing:-.038em;max-width:30ch}
+.sec h3{font-size:var(--s1);line-height:1.35;color:var(--ink)}
+.sec h3 .kb{color:var(--mint)}
+.sec h4{font-size:var(--s0);line-height:1.4;color:var(--ink-soft)}
+.block{display:grid;gap:var(--sp3)}
+.lead{max-width:76ch;color:var(--ink-soft)}
+
+/* 쉬운 말 상자 */
+.easy{
+  display:grid;gap:.4rem;padding:var(--sp3) var(--sp4);
+  border-left:.22rem solid var(--mint);border-radius:0 var(--r-s) var(--r-s) 0;background:var(--bg-soft)
+}
+.easy b{color:var(--mint);font-size:var(--s-2);font-weight:900;letter-spacing:.06em}
+.easy p{color:var(--ink-soft);font-size:var(--s-1);line-height:1.6}
+.note{padding:var(--sp3) var(--sp4);border-left:.2rem solid var(--amber);background:var(--bg-soft);color:var(--ink-muted);font-size:var(--s-1);line-height:1.58}
+.note b{color:var(--amber)}
+.note.danger{border-left-color:var(--danger)}
+.note.danger b{color:var(--danger)}
+
+/* 표 */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-m)}
+table{width:100%;border-collapse:collapse;font-size:var(--s-1)}
+table.wide{min-width:58rem}
+table.mid{min-width:44rem}
+caption{padding:.55rem .8rem;color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.05em;text-align:left}
+thead th{padding:.55rem .7rem;background:var(--surface-strong);color:var(--ink-soft);font-size:var(--s-2);font-weight:900;letter-spacing:.04em;text-align:left;vertical-align:bottom}
+tbody td,tbody th{padding:.6rem .7rem;border-top:1px solid var(--line-soft);vertical-align:top;line-height:1.5;text-align:left}
+tbody th{font-weight:800;color:var(--ink)}
+tbody tr:nth-child(odd) td,tbody tr:nth-child(odd) th{background:var(--bg-soft)}
+td b,th b{color:var(--mint)}
+td .bad{color:var(--danger);font-weight:800}
+td .good{color:var(--mint);font-weight:800}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 태그 */
+.tag{display:inline-flex;align-items:center;gap:.25rem;padding:.14rem .45rem;border:1px solid var(--line);border-radius:999px;font-size:var(--s-2);font-weight:800;white-space:nowrap;color:var(--ink-soft)}
+.tag.mint{border-color:var(--mint-deep);color:var(--mint)}
+.tag.amber{border-color:var(--amber);color:var(--amber)}
+.tag.danger{border-color:var(--danger);color:var(--danger)}
+.tag.sky{border-color:var(--sky);color:var(--sky)}
+.tag.violet{border-color:var(--violet);color:var(--violet)}
+.tag.solid{background:var(--mint);border-color:var(--mint);color:var(--bg)}
+.tags{display:flex;flex-wrap:wrap;gap:.3rem}
+
+/* 카드 */
+.cards{display:grid;gap:var(--sp3)}
+.cards[data-c="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cards[data-c="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cards[data-c="4"]{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{display:grid;align-content:start;gap:var(--sp2);padding:var(--sp4);border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface)}
+.card.soft{background:var(--bg-soft)}
+.card h4{font-size:var(--s0);line-height:1.35;color:var(--ink)}
+.card p{color:var(--ink-soft);font-size:var(--s-1);line-height:1.55}
+.card ul{display:grid;gap:.25rem;color:var(--ink-soft);font-size:var(--s-1);line-height:1.5}
+.card ul li::marker{color:var(--ink-muted)}
+
+/* KPI 카드 */
+.kpi{display:grid;gap:.3rem;padding:var(--sp4);border:1px solid var(--line);border-radius:var(--r-m);background:var(--surface)}
+.kpi.north{border-color:var(--mint-deep);background:linear-gradient(150deg,color-mix(in srgb,var(--mint) 12%,var(--surface)),var(--bg-soft))}
+.kpi b.k-label{color:var(--ink-muted);font-size:var(--s-2);font-weight:900;letter-spacing:.06em}
+.kpi .k-name{font-size:var(--s0);font-weight:800;line-height:1.35}
+.kpi .k-val{font-family:var(--font-display);font-size:var(--s2);line-height:1.1;letter-spacing:-.03em;color:var(--mint)}
+.kpi .k-sub{color:var(--ink-muted);font-size:var(--s-2);line-height:1.5}
+
+/* 스토리 */
+.story{display:grid;gap:var(--sp3);padding:var(--sp4);border:1px solid var(--line);border-left-width:.32rem;border-left-color:var(--mint-deep);border-radius:var(--r-m);background:var(--surface)}
+.story-head{display:grid;gap:.35rem;padding-bottom:var(--sp2);border-bottom:1px solid var(--line-soft)}
+.story-id{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.story-id strong{font-family:var(--font-display);font-size:var(--s0);letter-spacing:-.02em;color:var(--mint)}
+.story-sent{font-size:var(--s0);font-weight:750;line-height:1.5}
+.story-sent i{color:var(--mint);font-style:normal}
+.ac{display:grid;gap:var(--sp2)}
+.ac-row{display:grid;grid-template-columns:2.6rem 1fr;gap:var(--sp2);padding:var(--sp2) var(--sp3);border-radius:var(--r-s);background:var(--bg-soft)}
+.ac-row>b{color:var(--mint);font-size:var(--s-2);font-weight:900;padding-top:.15rem}
+.gwt{display:grid;gap:.22rem;font-size:var(--s-1);line-height:1.55}
+.gwt span{display:grid;grid-template-columns:3.4rem 1fr;gap:.5rem}
+.gwt span>i{font-style:normal;color:var(--ink-muted);font-weight:800;font-size:var(--s-2);letter-spacing:.05em;padding-top:.12rem}
+.gwt em{font-style:normal;color:var(--mint);font-weight:800;font-variant-numeric:tabular-nums}
+
+/* 다이어그램 */
+figure.dg{display:grid;gap:var(--sp2);margin:0;padding:var(--sp4);border:1px solid var(--line);border-radius:var(--r-m);background:var(--bg-soft)}
+figure.dg figcaption{color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.05em}
+.dg-scroll{overflow-x:auto}
+.dg-scroll svg{min-width:38rem}
+.dg text{font-family:var(--font-sans);fill:var(--ink)}
+details.src{border:1px solid var(--line-soft);border-radius:var(--r-s);background:var(--surface)}
+details.src>summary{cursor:pointer;padding:.45rem .7rem;color:var(--ink-muted);font-size:var(--s-2);font-weight:800;letter-spacing:.04em;list-style:none}
+details.src>summary::-webkit-details-marker{display:none}
+details.src>summary::before{content:"▸ ";color:var(--mint-deep)}
+details.src[open]>summary::before{content:"▾ "}
+details.src pre{margin:0;padding:.7rem .9rem;border-top:1px solid var(--line-soft);overflow-x:auto;color:var(--ink-soft);font-family:var(--font-mono);font-size:var(--s-2);line-height:1.55;white-space:pre}
+
+/* 기타 */
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp3)}
+.stack{display:grid;gap:var(--sp3)}
+hr.rule{border:0;border-top:1px solid var(--line-soft);margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:.55rem;color:var(--ink-muted);font-size:var(--s-2)}
+.legend span{display:inline-flex;align-items:center;gap:.28rem}
+.dot{width:.55rem;height:.55rem;border-radius:50%;flex:none}
+.top{position:fixed;right:1.1rem;bottom:1.1rem;z-index:40;padding:.55rem .85rem;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink-soft);font-size:var(--s-2);font-weight:800;cursor:pointer}
+.top:hover{border-color:var(--mint-deep);color:var(--mint)}
+.mobile-head{display:none}
+
+@media (max-width:78rem){
+  .cards[data-c="4"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:64rem){
+  .cards[data-c="3"],.cards[data-c="2"],.split{grid-template-columns:1fr}
+}
+@media (max-width:52rem){
+  .rail{display:none}
+  .doc{margin-left:0;padding-top:4.6rem}
+  .mobile-head{display:flex;position:fixed;z-index:35;inset:0 0 auto;height:3.5rem;align-items:center;gap:.6rem;padding:0 1rem;border-bottom:1px solid var(--line-soft);background:var(--bg)}
+  .mobile-head svg{width:2.1rem;flex:none}
+  .mobile-head strong{flex:1;font-size:var(--s-1);color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cards[data-c="4"]{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:1ms!important;scroll-behavior:auto!important}}
+@media print{.rail,.top,.mobile-head{display:none}.doc{margin-left:0}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>.fig{margin:1.1rem 0;padding:1.2rem .8rem;background:#F7F4EF;border:1px solid #E3DCD2;border-radius:.7rem;overflow-x:auto}.fig .mermaid{background:transparent;text-align:center}.fig .mermaid, .fig .mermaid *{color:#2E2119 !important}.fig .mermaid .edgeLabel{background:#F7F4EF !important}pre.src{white-space:pre-wrap;font-size:.8rem;background:var(--bg-soft,#f6f3ef);padding:.9rem 1.1rem;border-radius:.6rem;overflow-x:auto}</style>
+</head>
+<body>
+
+<svg class="brand-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="hilit-wordmark-shape" viewBox="0 0 700 210">
+      <path class="brand-mark__letter" d="M67 52 Q66 42 77 41 L104 39 Q114 38 115 50 L121 94 L162 90 L157 46 Q156 36 167 35 L194 33 Q204 32 205 44 L217 160 Q218 171 207 173 L181 176 Q170 177 169 165 L165 122 L126 127 L132 169 Q133 180 122 181 L95 184 Q84 184 82 172 Z"/>
+      <path class="brand-mark__letter" d="M271 51 Q270 42 280 41 L305 41 Q315 41 315 52 L313 165 Q313 176 302 176 L278 175 Q267 175 268 164 Z"/>
+      <path class="brand-mark__letter" d="M356 50 Q356 39 367 40 L393 42 Q404 43 403 54 L398 150 L446 154 Q457 155 456 166 L454 183 Q453 193 442 192 L365 184 Q354 183 355 172 Z"/>
+      <path class="brand-mark__letter" d="M493 70 Q492 60 503 59 L527 58 Q538 58 538 69 L536 166 Q536 176 525 177 L502 177 Q491 177 492 166 Z"/>
+      <path class="brand-mark__letter" d="M493 27 Q492 16 503 15 L527 14 Q538 14 539 25 L539 42 Q539 52 528 53 L503 53 Q492 53 492 42 Z"/>
+      <path class="brand-mark__letter" d="M565 48 Q565 37 576 38 L665 42 Q676 43 675 54 L673 73 Q672 83 661 82 L633 80 L628 171 Q627 182 616 181 L590 178 Q579 177 580 166 L585 77 L576 77 Q565 76 565 65 Z"/>
+    </symbol>
+    <symbol id="hilit-app-mark" viewBox="0 0 100 100">
+      <rect class="brand-mark__field" x="6" y="6" width="88" height="88" rx="24"/>
+      <path class="brand-mark__spark" d="M27 18 L31 22 L27 26 L23 22 Z M73 18 L77 22 L73 26 L69 22 Z M27 74 L31 78 L27 82 L23 78 Z M73 74 L77 78 L73 82 L69 78 Z"/>
+      <circle class="brand-mark__spark" cx="18" cy="50" r="2.5"/>
+      <circle class="brand-mark__spark" cx="82" cy="50" r="2.5"/>
+      <use href="#hilit-wordmark-shape" x="14" y="35" width="72" height="24"/>
+    </symbol>
+  </defs>
+</svg>
+
+<aside class="rail" aria-label="문서 목차">
+  <div class="rail-brand">
+    <svg viewBox="0 0 100 100" role="img" aria-label="HILiT 앱 로고"><use href="#hilit-app-mark"/></svg>
+    <b>HILiT PRD<small>v2.0 · 제품 요구사항</small></b>
+  </div>
+  <nav class="rail-nav" id="railNav">
+    <a href="#s0"><b>00</b><span>읽기 전에</span></a>
+    <a href="#s1"><b>01</b><span>개요·목표</span></a>
+    <a href="#s2"><b>02</b><span>사용자와 페르소나</span></a>
+    <a href="#s3"><b>03</b><span>사용자 스토리와 AC</span></a>
+    <a href="#s4"><b>04</b><span>기능 요구사항</span></a>
+    <a href="#s5"><b>05</b><span>비기능 요구사항</span></a>
+    <a href="#s6"><b>06</b><span>데이터·인터페이스</span></a>
+    <a href="#s7"><b>07</b><span>범위·리스크</span></a>
+    <a href="#s8"><b>08</b><span>실험·롤아웃·측정</span></a>
+    <a href="#s9"><b>09</b><span>근거(Proof)</span></a>
+    <a href="#s10"><b>10</b><span>부록 · 결정 기록</span></a>
+    <a href="#s11"><b>11</b><span>기술 검토</span></a>
+  </nav>
+  <div class="rail-foot">
+    좌우 방향키로 이전·다음 장으로 이동한다.<br>
+    <b style="color:var(--mint-deep)">민트색</b> 수치는 확정 지표,
+    <b style="color:var(--amber)">주황색</b> 표시는 초안 또는 미정이다.
+  </div>
+</aside>
+
+<header class="mobile-head">
+  <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#hilit-app-mark"/></svg>
+  <strong>HILiT_project v1.0 · PRD</strong>
+</header>
+
+<main class="doc">
+<div class="doc-inner">
+
+<!-- ================= 표지 ================= -->
+<header class="cover">
+  <svg class="cover-wordmark" viewBox="0 0 360 120" role="img" aria-label="HILiT">
+    <path class="cover-wordmark__field" d="M24 13 Q15 15 14 29 L10 91 Q10 106 27 108 L329 113 Q345 113 347 98 L350 26 Q350 11 333 10 Z"/>
+    <path class="cover-wordmark__detail" d="M25 28 L30 33 L25 38 L20 33 Z M333 83 L338 88 L333 93 L328 88 Z"/>
+    <use href="#hilit-wordmark-shape" x="25" y="22" width="310" height="92"/>
+  </svg>
+  <p class="sec-num">HILiT_project v2.0 · Product Requirements Document</p>
+  <h1>40분 원본에서 <em>내가 주인공인 15초</em>를 만들고,<br>올리지 않아도 남기는 앱을 만든다</h1>
+  <p class="cover-lead">
+    이 문서는 무엇을 만들지, 무엇을 만들지 않을지, 그리고 그것이 잘 됐는지를
+    어떤 숫자로 판정할지를 정한 개발 착수 기준 문서다.
+  </p>
+  <div class="meta-grid">
+    <div class="meta-cell"><b>OWNER 팀</b><span>HILiT Product (제품 아키텍트 / AI 팀 / 클라이언트 / 백엔드)</span></div>
+    <div class="meta-cell"><b>최종 업데이트</b><span>2026-09-01</span></div>
+    <div class="meta-cell"><b>문서 단계</b><span>7. PRD<br>편집 서비스 과금 모델 반영판</span></div>
+    <div class="meta-cell"><b>원천 문서</b><span><a href="./hilit-prd-v1_0.md"><code>hilit-prd-v1_0.md</code></a> · <a href="./HILIT_추적PoC_기술기획서.md"><code>HILIT_추적PoC_기술기획서.md</code></a></span></div>
+    <div class="meta-cell"><b>이번 릴리스 범위</b><span>MVP 기능 23개 · AC 44개<br>Gate A(구독 등급) · Gate B(무료 등급) 통과가 조건</span></div>
+    <div class="meta-cell"><b>이 문서가 다루지 않는 것</b><span>그룹 기능 · 팀 단위 결제 · 앱 내 촬영<br>편당 원가 상한(ADR-05)이 미정이다</span></div>
+  </div>
+</header>
+
+<!-- ================= 00 · How to read ================= -->
+<section class="sec" id="s0">
+  <div class="sec-head"><p class="sec-num">00 · How to read</p><h2>이 문서를 읽기 전에</h2></div>
+  <div class="block">
+<h5>숫자 읽는 법 — 확정과 초안을 섞지 않는다</h5>
+<div class="tw"><table class="wide">
+<thead><tr><th>표기</th><th>뜻</th></tr></thead>
+<tbody>
+<tr><th><span class="tag mint">확정</span></th><td>VPS 0.3 또는 사용자 결정으로 <b>확정</b>한 값. 그대로 옮겼다</td></tr>
+<tr><th><span class="tag amber">가설</span></th><td>VPS 0.3이 <b>1년차 <span class="tag amber">가설</span>·추정</b>으로 명시한 값. 실측치가 아니다</td></tr>
+<tr><th><span class="tag sky">초안</span></th><td><b>이 PRD가 새로 제안하는 초안</b>. 상위 문서에 근거가 없다. 착수 전 팀 합의가 필요하다</td></tr>
+<tr><th>🔴 <code>[TBD]</code></th><td><b>값이 없다.</b> 지어내지 않고 비워 뒀다. 옆 칸에 <em>언제 무엇으로 정하는지</em>를 적었다</td></tr>
+<tr><th>🔺</th><td>미결·주의 — 결정은 됐으나 상위 문서와 정합이 안 맞거나 확인이 남았다</td></tr>
+</tbody></table></div>
+<p>NFR(5장)·데이터/API(6장)의 수치는 <b>대부분 초안</b>이다. 초안을 확정처럼 말하지 않기 위해 표기를 분리했다.</p>
+  </div>
+  <div class="block">
+    <h3>0-1. v1.0 → v2.0 변경 요약</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>변경</th><th>범위</th></tr></thead>
+<tbody>
+<tr><th><b>C1</b></th><td><b>편집 서비스 과금 모델 신설</b> — 무료(기본 편집도구) · 구독(월 9,900원 3편) · 충전형 종량제(19,800원 3편) 3종</td><td>§4-4 · §4-5 · §7-3 ADR-13~16</td></tr>
+<tr><th><b>C2</b></th><td><b>그룹 기능 전면 제외</b> — F23 · US-5 · ADR-06a~d · <code>POST /groups</code> 계열 · E7 삭제</td><td>§3 · §4 · §6 · §7 · §8</td></tr>
+<tr><th><b>C3</b></th><td><b>공개 범위 3종 → 2종</b> — <code>{private, public}</code>. <code>group</code> 상태·<code>group_id</code> 필드 제거</td><td>§4-3 · §6-1 · AC4-2b</td></tr>
+<tr><th><b>C4</b></th><td><b>무료 기본 편집도구 신설</b> — 좌우반전 · 수동 컷 · 수동 트래킹 · 자막(OFL 폰트)</td><td>US-5 재정의 · F24~F26 · F18b 승격</td></tr>
+<tr><th><b>C5</b></th><td><b>프롬프트 컷 신설</b> — Gemini 구간 메타데이터 → Claude Haiku 4.5 대조 판정 2단 파이프라인</td><td>US-7 · F27 · §4-6 · §11-2</td></tr>
+<tr><th><b>C6</b></th><td><b>AI 음악(Suno) 신설</b> — 1회 생성 2곡 중 선택 · 편당 3회 상한</td><td>US-7 · F28 · §4-6 · §11-3</td></tr>
+<tr><th><b>C7</b></th><td><b>원본 임시 보관 7일 + 리캡 신설</b> — 재편집 경로</td><td>F29 · §6-1</td></tr>
+<tr><th><b>C8</b></th><td><b>기술 검토 장 신설</b> — 추적 PoC 실측 · 2단 컷 파이프라인 · 원가 상한 · Vercel 제약 정합</td><td><b>§11 신규</b></td></tr>
+<tr><th><b>C9</b></th><td><b>SNS 형식은 유지</b> — 팔로워·팔로잉 · 추천 피드 · 좋아요 · 댓글·신고 · 공유 그대로</td><td>§3 US-6 · §4-1</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>0-2. 🔴 상위 문서와 충돌하는 것 3건 — 개정이 필요하다</h3>
+<p>이 문서가 새 과금 모델을 반영하면서 <b>상위 문서의 <span class="tag mint">확정</span> 결정 3건과 정면으로 어긋난다.</b> 숨기지 않고 여기 모았다. 개정 전까지 이 문서는 <b>PRD 단독 판정</b>이다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>충돌 대상</th><th>무엇이 어긋나는가</th><th>이 문서의 처리</th></tr></thead>
+<tbody>
+<tr><th><b>X1</b></th><td><b>SRS v1.8 ADR-8</b> — <em>"기능은 전부 열고 분량·횟수·규격에만 과금"</em> · 🔴 <em>"Gate A · Gate B의 판정 대상은 무료 등급"</em></td><td>새 모델은 <b>AI 트래킹·AI 컷·AI 음악을 구독 전용</b>으로 둔다. 무료 등급은 탐지를 실행하지 않으므로 <b>무료 등급으로 Gate A(탐지율 85%)를 잴 대상 자체가 없다</b></td><td><b>ADR-8을 개정한다</b>(ADR-13). <b>Gate A 판정 대상 = 구독 등급</b> · <b>Gate B 판정 대상 = 무료 등급</b>(기록 저장·공개 범위는 전 등급 무료로 남으므로 판정이 성립한다). ADR-8의 금지 5건 중 <b>품질 등급화 · <code>τ</code> 차등 · 기록 저장 등급화 3건은 그대로 유지</b> — 🔴 <b>구독 등급 내부에서 다시 나누지 않는다</b></td></tr>
+<tr><th><b>X2</b></th><td><b>PRD v1.0 ADR-01</b> — <em>"편집으로 과금하지 않는다"</em></td><td>새 모델은 <b>편집 기능(AI 컷·AI 트래킹)에 값을 받는다</b></td><td><b>ADR-01을 폐기하고 ADR-13으로 대체한다.</b> 값을 받는 대상은 <em>"편집"</em> 이 아니라 <b>"사람 대신 판단하는 추론"</b> 이라는 정의로 좁힌다 — 손으로 하는 편집은 무료로 남는다</td></tr>
+<tr><th><b>X3</b></th><td><b>CLAUDE.md 규칙 4</b> — <em>"편집을 늘리지 않는다 · 원본 자르기·수동 구도 조정을 추가하지 않는다"</em></td><td>무료 등급이 <b>수동 컷 · 수동 트래킹 · 좌우반전</b>을 포함한다 — 규칙 4가 막으려던 바로 그 도구다</td><td><b>규칙 4를 "유료 등급에 한정"으로 좁힌다</b>(ADR-14). 🔴 <b>위험은 그대로 남는다</b> — §3 여정 분석의 <em>"④ 편집은 2차 이탈 지점"</em> 은 무료 등급에서 되살아난다. 그래서 무료 등급의 판정 지표를 <b>완주율이 아니라 구독 전환율</b>로 바꿔 두었다(S12)</td></tr>
+</tbody></table></div>
+<div class="note"><p>🔺 <b>번호 체계 주의</b> — 이 문서의 <code>ADR-01</code>~<code>ADR-20</code>과 SRS v1.8의 <code>ADR-1</code>~<code>ADR-8</code>은 <b>독립된 번호 체계</b>다. 예컨대 본 문서 <code>ADR-08</code>(후보 30개)과 SRS <code>ADR-8</code>(편집 과금의 경계)은 <b>다른 결정</b>이다. 이 문서는 SRS 쪽을 인용할 때 항상 <b><code>SRS ADR-n</code></b> 으로 적는다.</p>
+<p>🔺 <b>X3이 가장 위험하다.</b> 무료 사용자가 손으로 30분을 쓰다 지치면 구독으로 올라오는 것이 아니라 앱을 지운다. <b>E12(무료 등급 이탈 구조)가 이 가설의 검증 장치</b>이며, 실패 시 무료 등급 설계를 되돌린다(§8-2).</p></div>
+  </div>
+</section>
+
+<!-- ================= 01 · Overview & Goal ================= -->
+<section class="sec" id="s1">
+  <div class="sec-head"><p class="sec-num">01 · Overview &amp; Goal</p><h2>개요·목표</h2></div>
+  <div class="block">
+    <h3>1-1. 한 문장</h3>
+<p><b>40분 원본에서 나를 끝까지 추적해 15초 하이라이트를 만들고, 올리지 않아도 내 기록으로 남긴다.</b> <span class="tag mint">확정</span></p>
+<p>앱은 촬영하지 않는다. 이미 찍어둔 긴 영상을 받아 ①내 구간을 찾고 ②나를 화면 주인공으로 다시 잡고 ③공개와 무관하게 보관한다.</p>
+<p><b>v2.0이 덧붙인 한 줄 — 값은 "편집"이 아니라 "사람 대신 판단하는 추론"에 붙는다.</b> <span class="tag sky">초안</span></p>
+<pre class="src">무료   사람이 손으로 한다     좌우반전 · 수동 컷 · 수동 트래킹 · 자막 · 무료 라이브러리 음악
+                              → 원가 ≈ 0 (GPU 호출 0회 · 외부 추론 0회)
+유료   AI가 대신 판단한다     AI 트래킹 · 프롬프트 컷 · AI 음악 · 원본 임시 보관
+                              → 원가 = GPU 초 + 추론 토큰 + 생성 단가에 직접 비례</pre>
+<p>이 경계가 원가선과 정확히 겹친다는 점이 근거다. <b>무료 등급이 원가를 만들지 않으므로 Q4(약 450만 명 · 지불의향 없음)를 무제한에 가깝게 받아도 사업이 무너지지 않는다.</b> <span class="tag sky">초안</span></p>
+  </div>
+  <div class="block">
+    <h3>1-2. 문제 정의 — Pain과 실패 KPI</h3>
+<p class="lead">선별 페르소나 6명에게 공통으로 나타난 Pain 3가지다. <b>실패 KPI</b>는 "지금 얼마나 실패하고 있는가"를 수치로 적은 것이다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>Pain</th><th>근본 원인</th><th>해당</th><th>실패 KPI (현재)</th></tr></thead>
+<tbody>
+<tr><th><b>P1</b></th><td>원본에서 자기 장면을 찾는 시간이 편집보다 오래 걸린다</td><td>고정 카메라는 경기를 담지만 <b>누가 어디에 있었는지는 기록하지 않는다</b></td><td><b>6/6</b> <span class="tag mint">확정</span></td><td>원본 1편당 탐색 <b>60분 이상</b> <span class="tag mint">확정</span> · 원본→완성 전환율 <b>약 4%</b>(원본 47편 → 업로드 2건) <span class="tag mint">확정</span></td></tr>
+<tr><th><b>P2</b></th><td>고정 카메라는 사람을 따라오지 않아 화면에 작게 잡힌다</td><td>P1과 <b>원인이 동일</b>하다</td><td>3/6 <span class="tag mint">확정</span></td><td>재촬영 <b>1~3회/결과물</b> <span class="tag mint">확정</span> · "잘 잡혔다" 평가 <b>측정 불가</b>(재촬영으로 대응) <span class="tag mint">확정</span></td></tr>
+<tr><th><b>P3</b></th><td>공개할 자신이 없으면 기록도 남지 않는다</td><td>기존 SNS는 <b>올려야 남는</b> 구조다</td><td>3/6 <span class="tag mint">확정</span></td><td>비공개 기록 비율 <b>0%</b> <span class="tag mint">확정</span> · 월 기록 생성 <b>0.7건</b> <span class="tag mint">확정</span> · 편집 외주 <b>월 60만 원</b>(강태오) <span class="tag amber">가설</span></td></tr>
+</tbody></table></div>
+<p><b>P1과 P2의 원인은 하나다.</b> 고정 카메라가 사람의 위치를 모른다는 사실이 두 문제를 동시에 만들었다. 그래서 <b>사용자 트래킹 하나(F2a·F2b·F5a)가 P1과 P2를 함께 없앤다</b> — 이것이 F2b를 최우선 검증 대상으로 삼는 근거다. <span class="tag mint">확정</span></p>
+  </div>
+  <div class="block">
+    <h3>1-3. 이탈 지점 — 문제는 촬영이 아니라 그 다음에 있다</h3>
+<figure class="fig"><pre class="mermaid">flowchart LR
+    A["① 촬영&lt;br/&gt;삼각대·녹화&lt;br/&gt;1분"] --&gt; B["② 귀가·보관&lt;br/&gt;원본 4GB 적재"]
+    B --&gt; C["③ 찾기&lt;br/&gt;40분에서 나를 찾기&lt;br/&gt;60분 이상"]
+    C --&gt; D["④ 편집&lt;br/&gt;컷·자막·음악&lt;br/&gt;30분 초과"]
+    D --&gt; E["⑤ 남기기·공개&lt;br/&gt;올릴 수준인가 판단"]
+    E --&gt; F["⑥ 재방문&lt;br/&gt;다음 경기"]
+
+    C -.최대 이탈.-&gt; X1["포기"]
+    D -.2차 이탈.-&gt; X2["포기"]
+    E -.3차 이탈.-&gt; X3["포기"]
+
+    style A fill:#E6F8F3,stroke:#33A992
+    style C fill:#FBEDE4,stroke:#C2673F
+    style D fill:#FBEDE4,stroke:#C2673F
+    style E fill:#FBEDE4,stroke:#C2673F
+    style X1 fill:#fff,stroke:#C2673F,stroke-dasharray:4
+    style X2 fill:#fff,stroke:#C2673F,stroke-dasharray:4
+    style X3 fill:#fff,stroke:#C2673F,stroke-dasharray:4</pre></figure>
+<p>가설의 표현을 "편집이 어려워서 못 올린다"에서 <b>"촬영 이후에 발생하는 시간·기술·반복 작업의 부담"</b>으로 바꿔야 한다. 앞의 표현은 직접 조사 데이터가 없어 반박당하고, 뒤의 표현은 서로 다른 조사 여러 건에서 반복 확인된다. <span class="tag mint">확정</span></p>
+  </div>
+  <div class="block">
+    <h3>1-4. 목표 — Desired Outcome 수치화</h3>
+<p>Outcome은 기능이 아니라 <b>고객이 도달하려는 상태</b>다. 목표값은 전부 <b>1년차 가설</b>이며 실측치가 아니다. <span class="tag amber">가설</span> <b>측정 경로</b>는 "이 숫자를 어느 이벤트에서, 어떤 산식으로 뽑는가"다 — 전부 <span class="tag sky">초안</span> 신규 정의이며 계측 착수 전 데이터팀 확인이 필요하다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>도달 상태</th><th>지표</th><th>기준선</th><th>1년차 목표 <span class="tag amber">가설</span></th><th><b>측정 경로 (이벤트 · 산식)</b> <span class="tag sky">초안</span></th><th>검증</th></tr></thead>
+<tbody>
+<tr><th><b>O1</b></th><td>내 장면을 찾는 데 시간을 쓰지 않는다</td><td>탐색 소요 시간</td><td>60분+</td><td><b>≤ 5분</b>(중앙값)</td><td><code>detection_started</code> → <code>selection_opened</code> 구간 합. 앱 백그라운드 시간 제외</td><td><b>E4</b></td></tr>
+<tr><th><b>O2</b></th><td>찍은 영상이 완성으로 이어진다</td><td>원본→완성 전환율</td><td>약 4%</td><td><b>≥ 60%</b></td><td><code>render_succeeded</code> 고유 <code>source_video_id</code> ÷ <code>upload_completed</code> 고유 건수 · 30일 코호트</td><td><b>E5</b></td></tr>
+<tr><th><b>O3</b></th><td>화면에서 알아볼 수 있게 잡힌다</td><td>"잘 잡혔다" 비율</td><td><b>베타 1주차 실측으로 확정</b> <span class="tag sky">초안</span></td><td><b>≥ 80%</b></td><td>렌더 직후 <b>5점 척도 1문항</b>, <code>reframe_rating</code> <b>4점 이상 ÷ 전체 응답</b>. 응답률 &lt; 30%면 무효 처리</td><td><b>E3</b></td></tr>
+<tr><th><b>O4</b></th><td>원본을 지울 수 있다</td><td>원본 삭제 실행률</td><td>0%</td><td><b>≥ 50%</b></td><td><code>source_deleted</code> ÷ <code>render_succeeded</code> (F9 노출 사용자 한정)</td><td>E5 파생</td></tr>
+<tr><th><b>O5</b></th><td>공개와 무관하게 기록이 쌓인다</td><td>비공개 기록 비율</td><td>0%</td><td><b>≥ 30%</b></td><td><code>RECORD.visibility='private'</code> ÷ 전체 RECORD · 월말 스냅샷</td><td><b>E6</b></td></tr>
+<tr><th><b>O6</b></th><td>기록이 끊기지 않는다</td><td>월간 기록 생성 편수</td><td>0.7건</td><td><b>4건</b></td><td>월간 <code>render_succeeded</code> ÷ MAU</td><td>E8</td></tr>
+<tr><th><b>O7</b></th><td>다음 경기에도 돌아온다</td><td><b>기록 3편 이상 보유 사용자 수</b></td><td>0명</td><td><b>10,000명</b></td><td><code>RECORD</code> 보유 ≥ 3인 <b>순 user_id</b>, <b>월말 스냅샷</b>(누적 아님)</td><td><b>E8</b></td></tr>
+<tr><th><b>O8</b></th><td>편집을 남에게 맡기지 않아도 된다</td><td>편집 외주 지출</td><td>월 60만 원 <span class="tag amber">가설</span></td><td><b>0원</b></td><td><b>분기 설문 n≥30</b> <span class="tag sky">초안</span> — 로그로 잡히지 않는 유일한 지표</td><td>설문</td></tr>
+<tr><th><b>O9</b></th><td>놓치지 않고 추적된다</td><td>등장 구간 탐지율</td><td><b>정답셋 구축 시 확정</b> <span class="tag sky">초안</span></td><td><b>≥ 85%</b></td><td>정답 구간과 모델 출력의 <b>IoU ≥ 0.5</b>를 정탐으로 보고 <code>정탐 ÷ 정답 총 구간</code>. 모델 버전 태깅 필수</td><td><b>E1 · Gate A</b></td></tr>
+<tr><th><b>O10</b></th><td>같은 동작을 다시 찍지 않는다</td><td>재촬영 횟수</td><td>1~3회</td><td><b>0회</b></td><td>동일 <code>session_id</code> 내 <code>upload_completed</code> 2건 이상 발생률 + E3 재촬영 의향 문항</td><td><b>E3</b></td></tr>
+<tr><th><b>O11</b> <span class="tag sky">초안</span></th><td><b>손으로 하다 지치지 않는다</b></td><td><b>무료 등급 편집 완주율</b></td><td>🔴 <b><code>[TBD]</code></b> — 무료 등급 미출시</td><td><b>≥ 40%</b> <span class="tag sky">초안</span></td><td>무료 등급 <code>render_succeeded</code> ÷ <code>edit_session_started</code> · 30일 코호트</td><td><b>E12</b></td></tr>
+<tr><th><b>O12</b> <span class="tag sky">초안</span></th><td><b>AI가 대신 하는 값을 지불한다</b></td><td><b>무료 → 유료 전환율</b></td><td>🔴 <b>Baseline: 미측정</b> — 대조군은 CapCut 약 <b>0.44%</b>(매출 역산 <code>추정치</code>)뿐</td><td>🔴 <b>Target: TBD</b> — E10 실측 후 <span class="tag mint">확정</span></td><td>최초 결제 고유 <code>user_id</code> ÷ 무료 등급 활성 <code>user_id</code> · 월말 스냅샷</td><td><b>E10</b></td></tr>
+</tbody></table></div>
+<p><b>O3·O9·O11·O12의 기준선은 지금 "없음"이 맞다.</b> 없는 숫자를 지어내는 대신 <b>언제 무엇으로 확정할지</b>를 적었다 — O3는 베타 1주차 실측, O9는 정답셋 구축 시점, O11·O12는 무료 등급 출시 후 첫 30일 코호트.</p>
+<p class="lead">🔴 <b>O12에 목표 숫자를 넣지 않았다.</b> 자체 기준선이 없는 상태에서 전환율 목표를 적으면 그 숫자가 이후 모든 원가 계산의 분모로 쓰인다. <b>E10이 실측을 내기 전까지 비워 둔다.</b></p>
+  </div>
+  <div class="block">
+    <h3>1-5. 성공 지표 — 북극성 KPI와 보조 KPI</h3>
+<p><b>북극성 KPI</b></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>KPI</th><th>정의</th><th>기준선</th><th>1년차 목표</th><th>측정 주기</th><th><b>측정 경로</b> <span class="tag sky">초안</span></th><th><b>판정 주체</b> <span class="tag sky">초안</span></th></tr></thead>
+<tbody>
+<tr><th><b>O7 · 기록 3편 이상 보유 사용자 수</b></th><td>개인 기록 저장소에 결과물 3편 이상을 보유한 <b>순 사용자</b></td><td>0명</td><td><b>10,000명</b> <span class="tag amber">가설</span></td><td>주간 추이 · <b>월말 판정</b></td><td><code>SELECT COUNT(DISTINCT user_id) FROM record GROUP BY user_id HAVING COUNT(*)&gt;=3</code> · <b>월말 23:59 스냅샷</b></td><td>제품 리드 (월간 리뷰)</td></tr>
+</tbody></table></div>
+<p><b>왜 설치 수가 아니라 축적 사용자인가.</b> 설치는 마케팅으로 만들 수 있지만 기록 3편은 제품이 실제로 작동해야 쌓인다. <span class="tag mint">확정</span></p>
+<p><b>스냅샷이지 누적이 아니다</b> <span class="tag sky">초안</span> — 기록을 지워 3편 아래로 내려간 사용자는 그 달 집계에서 빠진다. 이탈을 성공으로 세지 않기 위해서다.</p>
+<p>처리 물량 <b>연 약 12만 편</b>(1만 명 × 월 1편)이 붙고, 이 숫자는 GPU 원가에 직접 비례한다. <span class="tag mint">확정</span></p>
+<p><b>보조 KPI</b></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>KPI</th><th>기준선</th><th>목표 <span class="tag amber">가설</span></th><th>주기</th><th><b>측정 경로</b> <span class="tag sky">초안</span></th><th><b>판정 주체</b> <span class="tag sky">초안</span></th><th>게이트</th></tr></thead>
+<tbody>
+<tr><th>S1</th><td>등장 구간 탐지율 (O9)</td><td>정답셋 구축 시 <span class="tag mint">확정</span></td><td>≥ 85%</td><td>릴리스마다 + 주간</td><td>정답셋 회귀 배치 · 모델 버전별</td><td><b>AI 리드</b></td><td><b>Gate A</b></td></tr>
+<tr><th>S2</th><td>"잘 잡혔다" 비율 (O3)</td><td>베타 1주차 <span class="tag mint">확정</span></td><td>≥ 80%</td><td>주간</td><td><code>reframe_rating</code> 4점↑ 비율 · 응답률 동시 보고</td><td>AI 리드</td><td>Gate A 이후</td></tr>
+<tr><th>S3</th><td>원본→완성 전환율 (O2)</td><td>4%</td><td>≥ 60%</td><td>주간</td><td>30일 코호트 · 이탈 단계 분해 동시 보고</td><td>제품 리드</td><td>흐름 완성</td></tr>
+<tr><th>S4</th><td>탐색 소요 시간 (O1)</td><td>60분+</td><td>≤ 5분</td><td>주간</td><td>이벤트 구간 중앙값 · p90 병기</td><td>제품 리드</td><td>Gate A</td></tr>
+<tr><th>S5</th><td>비공개 기록 비율 (O5)</td><td>0%</td><td>≥ 30%</td><td>월간</td><td>월말 스냅샷</td><td>제품 리드</td><td><b>Gate B</b></td></tr>
+<tr><th>S6</th><td>월간 기록 생성 편수 (O6)</td><td>0.7건</td><td>4건</td><td>월간</td><td><code>render_succeeded</code> ÷ MAU</td><td>제품 리드</td><td>Gate B</td></tr>
+<tr><th>S7</th><td>원본 삭제 실행률 (O4)</td><td>0%</td><td>≥ 50%</td><td>월간</td><td>F9 노출 사용자 한정</td><td>제품 리드</td><td>P1(F9) 이후</td></tr>
+<tr><th>S8</th><td>재촬영 횟수 (O10)</td><td>1~3회</td><td>0회</td><td>월간</td><td>세션 내 중복 업로드율</td><td>AI 리드</td><td>Gate A 이후</td></tr>
+<tr><th>S9</th><td>편집 외주 지출 (O8)</td><td>월 60만 원 <span class="tag amber">가설</span></td><td>0원</td><td>분기</td><td><b>설문 n≥30</b> — 로그 측정 불가 명시</td><td>제품 리드</td><td>—</td></tr>
+<tr><th><b>S10</b> <span class="tag sky">초안</span></th><td><b>파이프라인 완주율</b></td><td>—</td><td><b>≥ 95%</b></td><td>주간</td><td><code>render_succeeded</code> ÷ <code>detection_started</code> — <b>실패 AC들의 상위 지표</b></td><td>백엔드 리드</td><td>전 구간</td></tr>
+<tr><th><b>S11</b> <span class="tag sky">초안</span></th><td><b>편당 실처리 원가</b></td><td>🔴 <code>[TBD]</code></td><td>🔴 <code>[TBD]</code> — <b>ADR-05 <span class="tag mint">확정</span> 시 삽입</b></td><td>주간</td><td><code>(GPU초 × 시간당단가) + 추론토큰원가 + 음악생성원가 + 전송량원가</code> ÷ <code>render_succeeded</code> · <b>등급별 분리 집계</b></td><td>백엔드 리드</td><td><b>ADR-05</b></td></tr>
+<tr><th><b>S12</b> <span class="tag sky">초안</span></th><td><b>무료 등급 편집 완주율</b> (O11)</td><td>🔴 <code>[TBD]</code></td><td>≥ 40%</td><td>주간</td><td>무료 <code>render_succeeded</code> ÷ <code>edit_session_started</code> · <b>이탈 도구 분해 동시 보고</b>(컷·트래킹·자막 중 어디서 멈췄는가)</td><td>제품 리드</td><td><b>X3 검증</b></td></tr>
+<tr><th><b>S13</b> <span class="tag sky">초안</span></th><td><b>무료 → 유료 전환율</b> (O12)</td><td>🔴 Baseline: 미측정</td><td>🔴 Target: TBD</td><td>월간</td><td>최초 결제 고유 <code>user_id</code> ÷ 무료 활성 <code>user_id</code> · 월말 스냅샷</td><td>제품 리드 + 경영</td><td><b>E10</b></td></tr>
+</tbody></table></div>
+<p>🔴 <b>S11이 새 요금제의 생사를 가른다.</b> 구독 9,900원 ÷ 3편 = <b>편당 3,300원</b>이 매출 상한이고, S11이 그 아래 어디에 앉는지가 아직 실측되지 않았다. §11-5에 <b>원가 구성요소별 상한 추정</b>을 적었으나 그중 Gemini 단가와 저장·전송 원가가 <code>[TBD]</code>라 합계가 닫히지 않는다.</p>
+  </div>
+  <div class="block">
+    <h3>1-6. 차별 가치 — 기존 대안 대비 수치 비교</h3>
+<p class="lead">각 비교는 <b>어떤 조건에서 잰 값인지</b>를 함께 적어야 반박에 견딘다. 조건·표본은 전부 <span class="tag sky">초안</span> 제안이다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>축</th><th>기존 대안</th><th>HILiT 목표</th><th>개선폭</th><th><b>측정 조건 (동일 조건 비교)</b> <span class="tag sky">초안</span></th><th><b>검증</b></th></tr></thead>
+<tbody>
+<tr><th><b>탐색 시간</b></th><td>사람 눈으로 60분+ <span class="tag mint">확정</span></td><td><b>≤ 5분</b> <span class="tag amber">가설</span></td><td><b>12배 ↓</b></td><td>동일 사용자 <b>n=30명</b> × 자기 원본 3편 · within-subject 전후 비교 · 중앙값</td><td><b>E4</b></td></tr>
+<tr><th><b>원본→완성 전환율</b></th><td>약 4% <span class="tag mint">확정</span></td><td><b>≥ 60%</b> <span class="tag amber">가설</span></td><td><b>15배 ↑</b></td><td>베타 <b>30일 코호트</b> · 분모는 업로드 완료 원본</td><td><b>E5</b></td></tr>
+<tr><th><b>편집 외주 비용</b></th><td>월 60만 원 <span class="tag amber">가설</span></td><td><b>0원</b> <span class="tag amber">가설</span></td><td><b>100% ↓</b></td><td>분기 설문 <b>n≥30</b> · 자기보고 — <em>로그 검증 불가를 명시</em></td><td>설문</td></tr>
+<tr><th><b>재촬영 횟수</b></th><td>1~3회 <span class="tag mint">확정</span></td><td><b>0회</b> <span class="tag amber">가설</span></td><td><b>100% ↓</b></td><td>세션 내 중복 업로드율 + 주관 의향 문항 <b>n=50명</b></td><td><b>E3</b></td></tr>
+<tr><th><b>추적 대상</b></th><td>AlphaCut·Filmora·Vrew = <b>화자만</b> <span class="tag mint">확정</span></td><td>말하지 않고 움직이는 사람</td><td><b>탐지율 ≥ 2배</b> <span class="tag sky">초안</span></td><td><b>동일 원본 n=100편</b>을 양쪽에 투입 · 동일 정답셋 · IoU ≥ 0.5</td><td><b>E2</b></td></tr>
+<tr><th><b>하드웨어 전제</b></th><td>Veo·Pixellot·Hudl = 전용 카메라·팀 계약 <span class="tag mint">확정</span></td><td>휴대폰 영상만</td><td><b>초기 비용 0원</b></td><td>공개 가격표 기준 정성 비교 — <em>실험 대상 아님</em></td><td>—</td></tr>
+</tbody></table></div>
+<p><b><code>12배 ↓</code>는 동일 사용자가 같은 원본을 두 방식으로 처리했을 때의 중앙값 비교</b>다. 조건을 밝히지 않은 배수는 근거가 아니라 구호다. <span class="tag sky">초안</span></p>
+  </div>
+</section>
+
+<!-- ================= 02 · Users & Personas ================= -->
+<section class="sec" id="s2">
+  <div class="sec-head"><p class="sec-num">02 · Users &amp; Personas</p><h2>사용자와 페르소나</h2></div>
+  <div class="block">
+    <h3>2-1. 세그먼트 — Q1으로 들어가 Q4로 넓힌다</h3>
+<p>1순위 기준은 <b>원본 영상이 있는가</b>다. 앱에서 촬영하지 않으므로 원본이 없으면 제품이 작동하지 않는다. 2순위는 <b>지불의향</b>이다. <span class="tag mint">확정</span></p>
+<figure class="fig"><pre class="mermaid">quadrantChart
+    title 세그먼트 — 가로 원본 보유 / 세로 지불의향
+    x-axis "원본 없음" --&gt; "원본 있음"
+    y-axis "지불의향 낮음" --&gt; "지불의향 높음"
+    quadrant-1 "Q1 · 1순위 · 50만명"
+    quadrant-2 "Q2 · 보류 · 200만명"
+    quadrant-3 "Q3 · 타깃 아님 · 2800만명"
+    quadrant-4 "Q4 · 2순위 · 450만명"
+    "김도현 A-1": [0.82, 0.80]
+    "박서연 A-2": [0.86, 0.72]
+    "강태오 C-1": [0.90, 0.88]
+    "오세진 C-3": [0.88, 0.76]
+    "이준혁 A-3": [0.80, 0.24]
+    "정민수 B-2": [0.74, 0.18]
+    "최윤아 B-1": [0.16, 0.70]</pre></figure>
+<ul><li><b>Q1 (약 50만 명 <span class="tag amber">가설</span> )</b> — 김도현·박서연·강태오·오세진. 촬영 습관이 있고 편집 부담을 몸으로 안다. <b>전환이 가장 싸다.</b></li><li><b>Q4 (약 450만 명 <span class="tag amber">가설</span> )</b> — 이준혁·정민수. 페인이 가장 크고 시장이 <b>9배</b>지만 돈을 내지 않는다. 값을 편집이 아니라 <b>기록 축적</b>에서 받기로 이미 정했으므로, Q4를 무료로 확보하는 일이 사업의 본체다. <span class="tag mint">확정</span></li><li><b>범위 밖</b> — 최윤아(Q2·원본 없음), 한지우·서하린(첫 카테고리 밖). 버리지 않고 <b>Proof 근거로 재활용</b>한다.</li></ul>
+  </div>
+  <div class="block">
+    <h3>2-2. 대상 페르소나 6명 — Pain·Needs·여정 단계</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>페르소나</th><th>세그</th><th>프로필</th><th>여정 Pain (단계)</th><th>Needs</th><th>실패 KPI</th></tr></thead>
+<tbody>
+<tr><th><b>김도현</b> A-1</th><td>Q1</td><td>26세 · 주 2회 사회인 농구 · 본계정+농구 부계정</td><td>③ 자기 장면 탐색 60분+ · ④ 구석에 작게 잡힘, 확대 시 화질 파괴 · ⑥ 기억 흐려짐</td><td>원본을 뒤지지 않고 잘 나온 장면만 남기기</td><td>원본 <b>47개</b> 적재 / 3개월 업로드 <b>2건</b> <span class="tag amber">가설</span></td></tr>
+<tr><th><b>박서연</b> A-2</th><td>Q1</td><td>22세 · 풋살 동아리 주장 겸 촬영 담당</td><td>③ 팀원 <b>8명분</b> 수작업 불가 · ③ 자기 편집이 늘 마지막 순위 · ③ 원본 전송 시 화질 파괴 · ⑤ 모집 영상 급조</td><td>원본 하나로 각자 가져가게 · 촬영 담당인 자기 기록도</td><td><b>자기 기록만 0건</b></td></tr>
+<tr><th><b>강태오</b> C-1</th><td>Q1</td><td>24세 · 농구 크리에이터 · 팔로워 8,200 <span class="tag amber">가설</span> · 주 3회 목표</td><td>④ 촬영 1h + 편집 <b>3h</b> · ④ 외주 <b>월 60만 원</b>이 수익 초과 · ⑤ 큰 계정에 묻힘</td><td>완성도 유지하며 편집 시간만 줄이기</td><td>업로드 전환 <b>절반 미달</b></td></tr>
+<tr><th><b>오세진</b> C-3</th><td>Q1</td><td>30세 · 풋살팀 운영 · 팀원 <b>12명</b> · 팔로워 4,500 <span class="tag amber">가설</span></td><td>③ 12명분 편집 인력 <b>1명</b> · ⑤ 개인 성장 기록이 아무에게도 안 남음</td><td>팀원이 각자 스스로 만들게</td><td>매주 원본 생성 / 업로드 <b>월 2회</b></td></tr>
+<tr><th><b>이준혁</b> A-3</th><td>Q4</td><td>34세 · 자영업 · 액션캠 50분 · 파일 4GB</td><td>② 15초 위해 50분을 못 지움 · ④ 유료 앱 <b>3개 결제 후 전부 해지</b> · ⑤ "보여줄 수준인가"에서 멈춤</td><td>15초 건지고 원본 지우기 · 공개 없이 해마다 쌓기</td><td>저장공간 경고 <b>반복</b> / 남은 건 원본 폴더뿐</td></tr>
+<tr><th><b>정민수</b> B-2</th><td>Q4</td><td>28세 · 사무직 · 갤러리 미편집 <b>약 200개</b> <span class="tag amber">가설</span></td><td>④ 30분 넘겨 매번 중도 포기 · ⑤ 비교 후 "못 올린다" · ⑥ 1년 뒤 기억 안 남</td><td>실력 없이도 볼 만한 영상 하나</td><td>업로드 <b>연 3회</b> <span class="tag amber">가설</span></td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>2-3. 페르소나 → 요금제 매핑 <span class="tag sky">초안</span></h3>
+<p><b>어느 페르소나가 어느 등급에 앉는지를 정해야 요금제가 검증 가능해진다.</b> 전부 초안이며 E10이 실측 대상이다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>페르소나</th><th>예상 등급</th><th>근거</th><th>🔴 이 매핑이 틀리면</th></tr></thead>
+<tbody>
+<tr><th><b>강태오</b> C-1 (크리에이터 · 주 3회)</th><td><b>구독</b></td><td>월 3편이 촬영 주기와 맞고, 외주 60만 원 대비 9,900원은 자릿수가 다르다</td><td>월 3편 상한이 부족하면 충전 추가 결제로 흘러 <b>단가가 9,900원/편</b>이 된다 — 🔺 아래 표의 단가 역전 참조</td></tr>
+<tr><th><b>오세진</b> C-3 (팀 운영 · 12명)</th><td><b>충전형</b></td><td>팀 이벤트 후 몰아서 편집한다. 월 구독보다 <b>필요할 때 3편 충전</b>이 형태에 맞다</td><td>12명분을 각자 결제하게 두면 팀 단위 지불 의사가 흩어진다 — 🔴 <b>팀 결제 수단 없음</b>(§7-1 Out)</td></tr>
+<tr><th><b>김도현</b> A-1 (주 2회 사회인)</th><td><b>구독 ↔ 무료 경계</b></td><td>월 8회 촬영에 월 3편이면 3분의 1만 남긴다. 지불의향은 있으나 <b>금액 민감</b></td><td>🔺 <b>이 경계가 O12의 실질 분모다.</b> 김도현이 무료에 머물면 전환율이 무너진다</td></tr>
+<tr><th><b>박서연</b> A-2 (촬영 담당)</th><td><b>무료</b></td><td>자기 기록 <b>0건</b>이 출발점이다. 먼저 손으로 한 편이라도 완주해야 유료 판단이 생긴다</td><td>무료 완주가 30분을 넘으면 전환 이전에 이탈한다 (<b>X3 · S12</b>)</td></tr>
+<tr><th><b>이준혁</b> A-3 · <b>정민수</b> B-2 (Q4)</th><td><b>무료 고착</b></td><td><em>"유료 앱 3개 결제 후 전부 해지"</em>(이준혁) — 지불의향 없음이 정의다</td><td>🟢 <b>의도된 결과다.</b> Q4는 원가를 만들지 않는 무료 등급에 머물러도 손실이 아니다 — §1-1의 경계 설계가 이걸 노렸다</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<!-- ================= 03 · Stories & Acceptance Criteria ================= -->
+<section class="sec" id="s3">
+  <div class="sec-head"><p class="sec-num">03 · Stories &amp; Acceptance Criteria</p><h2>사용자 스토리와 수용 기준(AC)</h2></div>
+  <div class="block">
+<p class="lead">각 Job을 <b>Given–When–Then</b>으로 옮기고, AC마다 <b>측정 가능한 임계치</b>를 붙였다. <b>모든 스토리에 정상 AC 3개 이상 + 실패 AC 1개 이상</b>을 둔다(US-2는 2개). 실패 AC는 <code>AC*-F*</code>로 표기한다. <span class="tag sky">초안</span></p>
+<p><code>[Gate A]</code> 실패 시 이후 전부 무의미해지는 관문 · <code>[Gate B]</code> 기록 공간 관문 <span class="tag mint">확정</span></p>
+<h4>US-1 · 40분 원본에서 내 장면을 대신 찾아준다 <code>[Gate A]</code> <code>[구독 전용]</code></h4>
+<p><b>As a</b> 김도현(Q1), <b>I want</b> 40분 원본에서 내가 잘 나온 장면을 대신 찾아주기를, <b>so that</b> 편집에 한 시간을 쓰지 않고도 오늘의 기록을 남긴다. <span class="tag mint">확정</span></p>
+<p class="lead">🔴 <b>v2.0에서 이 스토리는 구독·충전 등급 전용이 됐다.</b> 무료 등급의 대응 경로는 <b>US-5(수동 트래킹)</b> 이며, 두 경로의 결과물은 <b>같은 <code>RECORD</code> 테이블에 같은 품질 규격(1080×1920)으로 저장된다</b> — 규격을 등급으로 나누지 않는다(ADR-13).</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC1-1</b></th><td><b>Given</b> 40분·4GB 원본과 지정된 추적 대상이 있을 때 / <b>When</b> 탐지를 실행하면 / <b>Then</b> 정답 구간 대비 탐지 구간 비율이 기준을 넘는다</td><td><b>탐지율 ≥ 85%</b> <span class="tag mint">확정</span> · IoU ≥ 0.5를 정탐으로 · 정답셋 회귀 배치 (<b>Gate A 판정</b>)</td></tr>
+<tr><th><b>AC1-2</b></th><td><b>Given</b> 사용자가 자기를 한 번 지정했을 때 / <b>When</b> 대상이 가려졌다 다시 나타나면 / <b>Then</b> 같은 사람으로 재식별한다</td><td><b>재식별 정확도 ≥ 90%</b> <span class="tag sky">초안</span> · <b>오인식 ≤ 2%</b> <span class="tag sky">초안</span> · 가림 구간 라벨 포함 정답셋</td></tr>
+<tr><th><b>AC1-3</b></th><td><b>Given</b> 탐지가 끝났을 때 / <b>When</b> 사용자가 선택 화면에 도달하면 / <b>Then</b> <code>detection_started</code>→<code>selection_opened</code> 구간이 기준 이하다</td><td><b>중앙값 ≤ 5분</b> <span class="tag mint">확정</span> · <b>p90 ≤ 10분</b> <span class="tag sky">초안</span> · 백그라운드 시간 제외 <em>(원문 <code>체감 시간</code> → 계측 이벤트로 치환)</em></td></tr>
+<tr><th><b>AC1-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 손상·미지원 코덱 원본을 올렸을 때 / <b>When</b> 검증 단계에서 판별되면 / <b>Then</b> <b>업로드 전에</b> 사유를 안내하고 과금 없이 중단한다</td><td>사전 판별율 <b>≥ 95%</b> · 판별 소요 <b>≤ 10초</b> · <b>GPU 작업 생성 0건</b></td></tr>
+<tr><th><b>AC1-F2</b> <span class="tag sky">초안</span></th><td><b>Given</b> 원본에 대상이 한 번도 등장하지 않을 때 / <b>When</b> 탐지가 끝나면 / <b>Then</b> 빈 결과가 아니라 <b>"찾지 못함" 상태와 재지정 경로</b>를 제공한다</td><td>빈 화면 노출 <b>0건</b> · 재지정 진입률 측정 · 오탐(없는데 있다고) <b>≤ 3%</b></td></tr>
+<tr><th><b>AC1-F3</b> <span class="tag sky">초안</span></th><td><b>Given</b> 업로드 중 네트워크가 끊겼을 때 / <b>When</b> 재연결되면 / <b>Then</b> 이어올리기로 복구된다</td><td><b>재개 성공률 ≥ 99%</b> <span class="tag sky">초안</span> · 업로드 실패율 <b>≤ 1%</b> <span class="tag sky">초안</span> · 재시도 <b>≥ 3회</b></td></tr>
+<tr><th><b>AC1-4</b> <span class="tag sky">초안</span></th><td><b>Given</b> 잔여 편수가 0인 사용자일 때 / <b>When</b> AI 탐지를 요청하면 / <b>Then</b> <b>탐지를 시작하기 전에</b> 잔여 0을 알리고 충전·구독 경로를 안내한다</td><td><b>잔여 0에서 발생한 <code>detection_started</code> 0건</b> · <b>GPU 작업 생성 0건</b> · 안내 노출률 <b>100%</b> · 🔴 <b>차감은 <code>detection_started</code>가 아니라 <code>render_succeeded</code> 시점</b>(AC8-2)</td></tr>
+<tr><th><b>AC1-F4</b> <span class="tag sky">초안</span></th><td><b>Given</b> 탐지가 파이프라인 내부 오류로 실패했을 때 / <b>When</b> 최종 실패가 확정되면 / <b>Then</b> <b>차감된 편수를 환원하고</b> 사유를 안내한다</td><td><b>실패 건에 대한 편수 차감 잔존 0건</b> · 환원 반영 지연 <b>≤ 60초</b> · <code>usage_ledger</code>에 <b>차감·환원 쌍이 모두 기록</b>됨 <b>100%</b></td></tr>
+</tbody></table></div>
+<h4>US-2 · 팀원이 각자 자기 장면을 가져간다</h4>
+<p><b>As a</b> 박서연(촬영 담당) / 오세진(팀 운영), <b>I want</b> 사람마다 자기가 나온 장면을 각자 골라 가져가기를, <b>so that</b> 촬영 담당인 나도 내 기록을 남기고 홍보 주기를 내 편집 속도에서 떼어낸다. <span class="tag mint">확정</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC2-1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 팔로잉한 팀원들이 전체공개 기록을 보유할 때 / <b>When</b> 팔로잉 탭을 열면 / <b>Then</b> 각자가 만든 기록이 사람별로 구분돼 표시된다</td><td><b>p95 ≤ 400ms</b> <span class="tag sky">초안</span> · <b>비공개 기록 노출 0건</b> <span class="tag mint">확정</span> · 🔴 <b>팔로우는 권한이 아니다</b> — 조회 조건에 팔로우를 넣지 않고 <code>visibility='public'</code> 만으로 거른다</td></tr>
+<tr><th><b>AC2-2</b></th><td><b>Given</b> 촬영 담당 본인이 원본을 올렸을 때 / <b>When</b> 본인 대상으로 탐지하면 / <b>Then</b> 본인 기록도 동일 품질로 생성된다</td><td>렌더 성공률 <b>타 사용자와 ±2%p 이내</b> <span class="tag sky">초안</span> · 탐지율 차 <b>≤ 3%p</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC2-3</b></th><td><b>Given</b> 팀원 12명이 각자 자기 원본을 올렸을 때 / <b>When</b> 각자 하이라이트를 만들면 / <b>Then</b> <b>타인 계정에서 발생한 편집 이벤트가 0건</b>이다</td><td><b>타 계정 <code>selection_*</code> 이벤트 0건</b> <span class="tag sky">초안</span> <em>(원문 <code>편집 담당 개입 0회</code> → 관찰 가능한 이벤트로 치환)</em></td></tr>
+<tr><th><b>AC2-4</b></th><td><b>Given</b> 한 원본을 여러 사용자가 쓰려 할 때 / <b>When</b> MVP 버전에서 시도하면 / <b>Then</b> <b>기능 없음을 명시하고 각자 업로드 경로를 안내</b>한다</td><td>안내 노출률 <b>100%</b> · 무응답·오류 종료 <b>0건</b> · F16 = <b>P3 보류</b> <span class="tag mint">확정</span></td></tr>
+<tr><th><b>AC2-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 팀원 각자가 자기 편수 쿼터를 쓰는 상태일 때 / <b>When</b> 한 사람이 잔여 0에 도달하면 / <b>Then</b> <b>그 사람만 막히고 다른 팀원의 편집은 영향받지 않는다</b></td><td>타인 쿼터 오차감 <b>0건</b> <span class="tag mint">확정</span> · <code>usage_ledger</code>의 <code>user_id</code> 불일치 <b>0건</b> · 🔴 <b>팀·조직 단위 결제 수단 없음</b>(§7-1 Out)</td></tr>
+<tr><th><b>AC2-F2</b> <span class="tag sky">초안</span></th><td><b>Given</b> 팀원이 자기 기록을 전체공개했다가 되돌릴 때 / <b>When</b> <code>private</code>로 바꾸면 / <b>Then</b> <b>팔로워 피드·검색·직접 URL 세 경로 모두에서 즉시 사라지되 본인 기록에는 남는다</b></td><td><b>3경로 전부 0건</b> <span class="tag mint">확정</span> · <b>본인 기록 유실 0건</b> <span class="tag mint">확정</span> · 회수 반영 지연 <b>≤ 60초</b> <span class="tag sky">초안</span> · 검색 색인 제외 <b>100%</b> <span class="tag sky">초안</span></td></tr>
+</tbody></table></div>
+<div class="note"><p><b>v2.0 변경</b> — AC2-1·AC2-F1·AC2-F2는 그룹 기능(F23) 제거에 따라 재작성했다. <em>"팀원이 각자 자기 장면을 가져간다"</em> 는 Job 자체는 <b>그룹 없이도 성립한다</b> — 각자 자기 원본을 올려 자기 계정에서 편집하는 구조였으므로 그룹은 애초에 <b>공유 경로</b>였지 <b>편집 경로</b>가 아니었다. 잃은 것은 <em>"함께 뛰는 대여섯 명에게만 연다"</em> 는 중간 공개 범위 하나뿐이며, 그 상실은 §7-2 R7에 리스크로 남겼다.</p></div>
+<h4>US-3 · 구석의 내가 화면 주인공이 된다 <code>[구독 전용]</code></h4>
+<p><b>As a</b> 강태오 / 김도현, <b>I want</b> 편집 시간을 3시간에서 크게 줄여 주기를, <b>so that</b> 쌓인 원본을 업로드로 연결하고 성장 근거를 만든다. <span class="tag mint">확정</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC3-1</b></th><td><b>Given</b> 대상이 화면 구석에 작게 잡힌 원본일 때 / <b>When</b> 리프레이밍 결과를 보여주면 / <b>Then</b> 렌더 직후 <b>5점 척도 1문항</b>에서 4점 이상 응답 비율이 기준을 넘는다</td><td><b>≥ 80%</b> <span class="tag mint">확정</span> · <b>응답률 ≥ 30%</b> <span class="tag sky">초안</span> (미만이면 무효) <em>(측정 도구를 AC 안으로 끌어옴)</em></td></tr>
+<tr><th><b>AC3-2</b></th><td><b>Given</b> 리프레이밍 결과가 나왔을 때 / <b>When</b> 사용자가 확인하면 / <b>Then</b> 세션 내 재업로드가 발생하지 않는다</td><td><b>세션 내 중복 업로드 0건</b> <span class="tag sky">초안</span> · 출력 <b>≥ 1080×1920</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC3-3</b></th><td><b>Given</b> 후보가 제시됐을 때 / <b>When</b> 결과물이 생성되면 / <b>Then</b> 사용자의 명시적 선택 없이 확정된 건이 없다</td><td><b><code>selection_confirmed</code> 없는 <code>render_started</code> 0건</b> <span class="tag sky">초안</span> (D2 보장) · 후보 수 <b>30개는 초안</b> <span class="tag amber">가설</span></td></tr>
+<tr><th><b>AC3-4</b></th><td><b>Given</b> 선택이 끝났을 때 / <b>When</b> 합치기·렌더링을 실행하면 / <b>Then</b> 앱 안에서 완성된다</td><td><b>렌더 p95 ≤ 90초</b> <span class="tag sky">초안</span> · 외부 앱 전환 이벤트 <b>0건</b></td></tr>
+<tr><th><b>AC3-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 렌더링이 실패했을 때 / <b>When</b> 재시도해도 3회 연속 실패하면 / <b>Then</b> <b>선택 결과를 보존한 채</b> 사유를 안내하고 원본을 삭제하지 않는다</td><td>선택 데이터 유실 <b>0건</b> · 재시도 <b>≥ 3회</b> · 최종 실패율 <b>≤ 0.5%</b></td></tr>
+</tbody></table></div>
+<h4>US-4 · 공개하지 않아도 기록이 남는다 <code>[Gate B]</code></h4>
+<p><b>As a</b> 이준혁 / 정민수(Q4), <b>I want</b> 남길 15초를 확실히 건지기를, <b>so that</b> 공개하지 않고도 기록을 해마다 쌓는다. <span class="tag mint">확정</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC4-1</b></th><td><b>Given</b> 렌더가 완료됐을 때 / <b>When</b> 공개 범위를 정하기 <b>전</b>이라도 / <b>Then</b> RECORD 행이 이미 존재한다</td><td><b>저장 성공률 ≥ 99.9%</b> <span class="tag sky">초안</span> · <code>render_succeeded</code> 대비 RECORD 누락 <b>0건</b> · <b>기본 공개 범위 = <code>private</code>(나만 보기)</b> <span class="tag mint">확정</span> · 렌더 직후 <code>visibility</code> 값이 <code>private</code>이 아닌 건 <b>0건</b></td></tr>
+<tr><th><b>AC4-2</b></th><td><b>Given</b> 기록이 쌓였을 때 / <b>When</b> 월말 스냅샷을 뽑으면 / <b>Then</b> 비공개 비율이 기준을 넘는다</td><td><b>≥ 30%</b> <span class="tag mint">확정</span> · <code>visibility='private'</code> ÷ 전체</td></tr>
+<tr><th><b>AC4-2b</b> <span class="tag sky">초안</span></th><td><b>Given</b> 마이페이지 격자에 기록이 있을 때 / <b>When</b> 목록을 보면 / <b>Then</b> 각 기록에 공개 범위 배지(<code>공개</code>/<code>나만</code>)가 붙되 <b>영상 내용을 가리지 않는다</b></td><td>배지 미표시 <b>0건</b> · <b>명도 대비 ≥ 4.5:1</b>(밝은·어두운 영상 모두) <span class="tag sky">초안</span> · 배지 면적 <b>≤ 썸네일의 8%</b> <span class="tag sky">초안</span> · <b>중앙 안전영역(가운데 60%) 침범 0</b> <span class="tag sky">초안</span> · <b>v2.0 — 배지 3종 → 2종</b>(<code>그룹</code> 제거)</td></tr>
+<tr><th><b>AC4-3</b></th><td><b>Given</b> 남이 내 프로필을 열었을 때 / <b>When</b> 목록·개수를 조회하면 / <b>Then</b> 전체공개만 보이고 나머지는 <b>개수에도 포함되지 않는다</b></td><td>비공개 노출 <b>0건</b> <span class="tag mint">확정</span> · <b>API 응답 필드 단위 검증</b> <span class="tag sky">초안</span> · <b>p95 ≤ 400ms</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC4-4</b> <span class="tag sky">초안</span></th><td><b>Given</b> 구독이 만료되거나 충전 편수가 소멸했을 때 / <b>When</b> 기존 기록을 열면 / <b>Then</b> <b>결과물은 그대로 재생·다운로드·공개 범위 변경이 가능하다</b></td><td>🔴 <b>결제 상태에 따른 <code>RECORD</code> 접근 차단 0건</b> 확정(ADR-13) · 만료 후 재생 성공률 <b>≥ 99.9%</b> · 만료를 이유로 한 결과물 삭제 <b>0건</b></td></tr>
+<tr><th><b>AC4-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 클라이언트가 조작된 요청으로 타인의 비공개 기록을 직접 조회할 때 / <b>When</b> 서버가 처리하면 / <b>Then</b> <b>403으로 차단하고 감사 로그를 남긴다</b></td><td>우회 성공 <b>0건</b> · 감사 로그 기록률 <b>100%</b> · <b>회귀 테스트 스위트 상시 통과</b></td></tr>
+</tbody></table></div>
+<h4>US-5 · 돈을 내지 않아도 한 편을 끝낸다 (무료 기본 편집도구) <code>[무료]</code> 🆕 v2.0</h4>
+<p><b>As a</b> 박서연(자기 기록 0건) / 이준혁·정민수(Q4 · 지불의향 없음), <b>I want</b> AI 없이도 앱 안에서 한 편을 끝까지 만들기를, <b>so that</b> 결제 판단 전에 이 앱이 내 기록을 남겨준다는 것을 직접 확인한다. <span class="tag sky">초안</span></p>
+<div class="note"><p><b>v1.0의 US-5(그룹)를 대체한다.</b> 그룹 기능 제외로 비게 된 자리에 <b>무료 등급의 완주 경로</b>를 넣었다. 🔴 이 스토리가 <b>Gate B의 판정 입력</b>이다 — 기록 공간 수용성은 무료 등급에서 재야 결제 의사와 섞이지 않는다(ADR-13).</p></div>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC5-1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 무료 등급 사용자가 20분 이하 원본을 올렸을 때 / <b>When</b> 편집 화면에 들어가면 / <b>Then</b> <b>좌우반전 · 수동 컷 · 수동 트래킹 · 자막 네 도구가 전부 열려 있다</b></td><td>도구 잠금 노출 <b>0건</b> · 유료 유도 배너 <b>0건</b>(🔴 첫 완주 이전 페이월 금지) · 편집 화면 진입 <b>p95 ≤ 2초</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC5-2</b> <span class="tag sky">초안</span></th><td><b>Given</b> 사용자가 수동 트래킹으로 키프레임 <b>2개 이상</b>을 찍었을 때 / <b>When</b> 미리보기를 재생하면 / <b>Then</b> 키프레임 사이가 <b>보간된 궤적</b>으로 이어지고 <b>GPU 서버 호출이 0건</b>이다</td><td>🔴 <b>무료 등급 <code>recovery_request</code> 0건</b> <span class="tag mint">확정</span> · <b>무료 등급 편당 GPU 초 = 0</b> <span class="tag mint">확정</span> · 보간 미리보기 지연 <b>≤ 500ms</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC5-3</b> <span class="tag sky">초안</span></th><td><b>Given</b> 자막을 넣을 때 / <b>When</b> 폰트를 고르면 / <b>Then</b> <b>OFL 폰트 4종이 전부 무료로 제공되고 잠긴 폰트가 목록에 없다</b></td><td>잠금 폰트 노출 <b>0건</b> · 폰트 4종 로드 실패 <b>0건</b> · <b>라이선스 고지 화면 접근 경로 100%</b> 제공 · 🔺 <b>Freesentation 라이선스 원문 확인 필요</b>(§11-4)</td></tr>
+<tr><th><b>AC5-4</b> <span class="tag sky">초안</span></th><td><b>Given</b> 무료 편집이 끝났을 때 / <b>When</b> 렌더를 실행하면 / <b>Then</b> <b>구독 등급과 같은 출력 규격으로 저장되고 <code>RECORD</code>가 생성된다</b></td><td>🔴 <b>출력 ≥ 1080×1920 — 등급 차 0</b> 확정(ADR-13) · fps 등급 차 <b>0</b> · <code>RECORD</code> 누락 <b>0건</b></td></tr>
+<tr><th><b>AC5-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 무료 업로드 잔여가 0일 때 / <b>When</b> 새 업로드를 시도하면 / <b>Then</b> <b>업로드를 시작하기 전에</b> 잔여 0을 알리고, <b>이미 만든 기록은 그대로 열린다</b></td><td>잔여 0에서 발생한 <code>upload_completed</code> <b>0건</b> · Storage 쓰기 <b>0바이트</b> · 기존 <code>RECORD</code> 접근 차단 <b>0건</b> · 🔴 <b>무료 업로드 2회의 갱신 주기 <code>[TBD]</code></b>(ADR-16)</td></tr>
+<tr><th><b>AC5-F2</b> <span class="tag sky">초안</span></th><td><b>Given</b> 사용자가 무료 편집을 하다 앱을 닫았을 때 / <b>When</b> 다시 들어오면 / <b>Then</b> <b>편집 상태(컷 지점·키프레임·자막)가 복원된다</b></td><td>편집 상태 유실 <b>0건</b> · 복원 성공률 <b>≥ 99%</b> <span class="tag sky">초안</span> · 🔴 <b>X3 완화 장치</b> — 30분을 한 번에 쓰게 하지 않는 것이 이탈 방어의 본체다</td></tr>
+</tbody></table></div>
+<h4>US-6 · 앱을 열면 볼 것이 있다 (소비 루프)</h4>
+<p><b>As a</b> 전원, <b>I want</b> 열었을 때 볼 것이 있고 반응을 주고받기를, <b>so that</b> 다음 경기에도 앱을 연다. <span class="tag mint">확정</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC6-1</b></th><td><b>Given</b> 앱을 실행했을 때 / <b>When</b> 진입하면 / <b>Then</b> 로그인 없이 팔로잉 탭에서 영상이 재생된다</td><td><b>첫 프레임 p95 ≤ 1.5초</b> <span class="tag sky">초안</span> · 빈 피드 노출률 🔴 <code>[TBD]</code> — <em>v1.0 원문에서 값이 유실됐다. 지어내지 않고 비워 둔다</em></td></tr>
+<tr><th><b>AC6-2</b></th><td><b>Given</b> "나만 보기" 기록일 때 / <b>When</b> 피드를 구성하면 / <b>Then</b> 좋아요·댓글 UI가 붙지 않는다</td><td><b>비공개 기록 반응 노출 0건</b> <span class="tag mint">확정</span></td></tr>
+<tr><th><b>AC6-3</b></th><td><b>Given</b> 부적절한 댓글을 만났을 때 / <b>When</b> 신고하면 / <b>Then</b> 접수 확인이 표시된다</td><td><b>접수 성공률 ≥ 99%</b> <span class="tag sky">초안</span> · <em>처리 기준·주체는 <b>미정</b> <span class="tag mint">확정</span> — 접수까지만 테스트 대상</em></td></tr>
+<tr><th><b>AC6-4</b></th><td><b>Given</b> 기록을 만든 사용자일 때 / <b>When</b> 가입 30일이 지나면 / <b>Then</b> 기록 3편 이상을 보유한다</td><td><b>D30 코호트 전환 ≥ 30%</b> <span class="tag sky">초안</span> (북극성 선행지표)</td></tr>
+<tr><th><b>AC6-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 팔로잉이 0명이라 피드가 비었을 때 / <b>When</b> 앱에 진입하면 / <b>Then</b> <b>빈 화면 대신 추천 탭으로 대체 노출</b>한다</td><td>빈 화면 체류 <b>0초</b> · 대체 노출률 <b>100%</b> · 신규 사용자 첫 세션 이탈률 <b>≤ 20%</b> <span class="tag sky">초안</span></td></tr>
+</tbody></table></div>
+<h4>US-7 · 말로 고르고, 음악까지 붙여준다 <code>[구독 전용]</code> 🆕 v2.0</h4>
+<p><b>As a</b> 강태오(크리에이터), <b>I want</b> <em>"3점 슛 넣은 데만"</em> 처럼 말로 기준을 적어 구간을 고르고 음악까지 자동으로 받기를, <b>so that</b> 후보 30개를 하나씩 보는 시간마저 없앤다. <span class="tag sky">초안</span></p>
+<p>🔴 <b>이 스토리는 CLAUDE.md 절대 규칙 2의 선 위에 있다.</b> <em>"내가 나온 구간"</em> 은 <b>추적 API(D1)</b> 가 정하고, <em>"무엇을 했는가"</em> 만 <b>Gemini</b>가 읽는다. <b>Gemini를 인물 식별에 쓰지 않는다</b> — 아마추어 농구 원본에는 자막이 없어 인물 특정 근거가 없기 때문이다. 파이프라인 순서(추적 → 구간 축소 → Gemini)가 이 선을 구조로 강제한다(§4-6-1).</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC7-1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 추적이 끝나 등장 구간이 확정됐을 때 / <b>When</b> 사용자가 자연어 기준을 입력하면 / <b>Then</b> <b>그 구간에 한해서만</b> Gemini가 행동 메타데이터를 만든다</td><td>🔴 <b>등장 구간 밖 프레임의 Gemini 투입 0건</b> <span class="tag mint">확정</span> · 투입 영상 길이 = 등장 구간 합 <b>±5% 이내</b> · 메타데이터 생성 <b>p95 ≤ 4분</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC7-2</b> <span class="tag sky">초안</span></th><td><b>Given</b> 구간 메타데이터가 만들어졌을 때 / <b>When</b> Claude Haiku 4.5가 사용자 프롬프트와 대조하면 / <b>Then</b> 선택된 구간마다 <b>왜 골랐는지 근거 문장</b>이 함께 반환된다</td><td>🔴 <b>근거 없는 선택 구간 0건</b> 확정(CLAUDE.md 규칙 2 — <em>"AI가 무엇을 골랐는지 표시"</em>) · 판정 <b>p95 ≤ 20초</b> <span class="tag sky">초안</span> · 판정 원가 <b>≤ $0.05/편</b> 초안(§11-2)</td></tr>
+<tr><th><b>AC7-3</b> <span class="tag sky">초안</span></th><td><b>Given</b> 사용자가 프롬프트를 바꿔 다시 고르려 할 때 / <b>When</b> 재판정을 실행하면 / <b>Then</b> <b>영상을 다시 읽지 않고</b> 저장된 메타데이터 위에서만 판정한다</td><td>🔴 <b>재판정 시 Gemini 호출 0건</b> <span class="tag mint">확정</span> · 재판정 <b>p95 ≤ 20초</b> · 재판정 원가가 최초 판정 원가의 <b>≤ 20%</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC7-4</b> <span class="tag sky">초안</span></th><td><b>Given</b> 완성본이 만들어졌을 때 / <b>When</b> 사용자가 확인하면 / <b>Then</b> <b>[이대로 저장]과 [직접 고르기]가 둘 다 보인다</b></td><td>🔴 <b><code>[직접 고르기]</code> 미노출 0건</b> 확정(<b>SRS</b> ADR-6) · 🔴 <b>등급에 따른 <code>[직접 고르기]</code> 접근 제한 0건</b> 확정(ADR-13 금지 유지) · 미리 체크된 후보 <b>0건</b>(단 <code>[직접 고르기]</code> 진입 시 AI 선택분 체크는 허용)</td></tr>
+<tr><th><b>AC7-5</b> <span class="tag sky">초안</span></th><td><b>Given</b> 음악을 AI로 만들 때 / <b>When</b> 1회 생성을 실행하면 / <b>Then</b> <b>2곡이 나오고 사용자가 그중 하나를 고른다</b></td><td>🔴 <b>사용자 선택 없는 음악 <span class="tag mint">확정</span> 0건</b> 확정(D2) · 생성 <b>p95 ≤ 3분</b> <span class="tag sky">초안</span> · <b>편당 생성 3회 상한</b> <span class="tag mint">확정</span> · 4회째 시도 성공 <b>0건</b></td></tr>
+<tr><th><b>AC7-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 사용자 프롬프트에 맞는 구간이 하나도 없을 때 / <b>When</b> 판정이 끝나면 / <b>Then</b> <b>빈 결과가 아니라 "찾지 못함" + 기준 완화 제안 + <code>[직접 고르기]</code> 경로</b>를 준다</td><td>빈 화면 노출 <b>0건</b> · 대체 경로 노출률 <b>100%</b> · 🔴 <b>없는 구간을 억지로 채워 반환 0건</b>(REQ-FUNC-027 — <em>"확신이 없으면 보여주지 않는다"</em>)</td></tr>
+<tr><th><b>AC7-F2</b> <span class="tag sky">초안</span></th><td><b>Given</b> Gemini 또는 Haiku 호출이 실패했을 때 / <b>When</b> 재시도해도 실패하면 / <b>Then</b> <b>편수를 차감하지 않고</b> 후보 목록(F3) 수동 선택으로 되돌린다</td><td>실패 건 차감 잔존 <b>0건</b> · 대체 경로 진입 성공률 <b>≥ 99%</b> · 재시도 <b>≥ 2회</b> · 🔺 <b>외부 API 2곳 의존 — 가용성이 곱해진다</b>(§11-2)</td></tr>
+</tbody></table></div>
+<h4>US-8 · 편수를 사고, 7일 안에 다시 손본다 <code>[유료]</code> 🆕 v2.0</h4>
+<p><b>As a</b> 오세진(팀 운영 · 몰아서 편집), <b>I want</b> 필요한 만큼 편수를 사고 만든 뒤 며칠 안에 다시 손보기를, <b>so that</b> 한 번에 완벽하게 만들어야 한다는 부담 없이 시작한다. <span class="tag sky">초안</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>AC</th><th>Given / When / Then</th><th>임계치 · 측정 경로</th></tr></thead>
+<tbody>
+<tr><th><b>AC8-1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 결제 화면을 열었을 때 / <b>When</b> 요금제를 보면 / <b>Then</b> <b>구독 3편·충전 3편·추가 1편의 가격과 유효기간이 편당 단가와 함께 표시된다</b></td><td>편당 단가 미표시 <b>0건</b> · 유효기간 미표시 <b>0건</b> · 🔺 <b>추가 1편 9,900원 = 충전 팩 편당 6,600원보다 50% 비싸다</b> — 의도 확인 필요(ADR-15)</td></tr>
+<tr><th><b>AC8-2</b> <span class="tag sky">초안</span></th><td><b>Given</b> 편집을 시작했을 때 / <b>When</b> 렌더가 성공하면 / <b>Then</b> <b>그때 편수 1이 차감되고 원장에 기록된다</b></td><td>🔴 <b>차감 시점 = <code>render_succeeded</code></b> <span class="tag mint">확정</span> · 중복 차감 <b>0건</b> · <code>usage_ledger</code> 미기록 차감 <b>0건</b> · 잔여 표시 반영 지연 <b>≤ 5초</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>AC8-3</b> <span class="tag sky">초안</span></th><td><b>Given</b> 렌더가 끝난 유료 건일 때 / <b>When</b> 7일 이내에 다시 들어오면 / <b>Then</b> <b>원본과 중간 산출물이 남아 있어 편수 차감 없이 재편집된다</b></td><td>🔴 <b>7일 이내 재편집의 추가 차감 0건</b> <span class="tag mint">확정</span> · 원본 조기 파기 <b>0건</b> · 보관 만료 <b>정확도 ±1시간</b> <span class="tag sky">초안</span> · <b>7일 = 유료 전용</b>(무료는 렌더 직후 원본 파기)</td></tr>
+<tr><th><b>AC8-4</b> <span class="tag sky">초안</span></th><td><b>Given</b> 보관 만료 <b>24시간 전</b>일 때 / <b>When</b> 알림 시점이 되면 / <b>Then</b> <b>"원본이 내일 지워집니다 · 결과물은 그대로 남습니다"</b>를 알린다</td><td>사전 알림 발송률 <b>100%</b> · 🔴 <b>결과물이 지워진다는 오해를 부르는 문구 0건</b> · 알림 후 재진입률 측정(리캡 효과)</td></tr>
+<tr><th><b>AC8-F1</b> <span class="tag sky">초안</span></th><td><b>Given</b> 충전 편수의 <b>1개월 유효기간</b>이 끝났을 때 / <b>When</b> 소멸이 실행되면 / <b>Then</b> <b>미리 알리고, 소멸 후에도 만든 기록은 전부 열린다</b></td><td>사전 알림 <b>≥ 1회</b> <span class="tag sky">초안</span> · 🔴 <b>소멸을 이유로 한 <code>RECORD</code> 접근 차단 0건</b> 확정(AC4-4) · 소멸 원장 기록률 <b>100%</b></td></tr>
+<tr><th><b>AC8-F2</b> <span class="tag sky">초안</span></th><td><b>Given</b> 결제가 승인됐으나 편수 적립이 실패했을 때 / <b>When</b> 불일치가 감지되면 / <b>Then</b> <b>자동 보정하고 감사 로그를 남긴다</b></td><td>결제·적립 불일치 잔존 <b>0건</b> <span class="tag mint">확정</span> · 보정 지연 <b>≤ 5분</b> <span class="tag sky">초안</span> · 감사 로그 <b>100%</b> · 🔴 <b>미적립 상태로 종료되는 결제 0건</b></td></tr>
+</tbody></table></div>
+<p><b>AC 총계: 정상 30 + 실패 14 = 44개.</b> (v1.0 33개 → v2.0 44개 · 그룹 AC 7건 삭제 · 과금·무료편집·프롬프트컷 AC 18건 신설.) 모든 Then은 로그·쿼리·테스트로 관찰 가능하며, 주관어는 전부 계측 이벤트나 척도 문항으로 정의했다.</p>
+  </div>
+</section>
+
+<!-- ================= 04 · Functional Requirements ================= -->
+<section class="sec" id="s4">
+  <div class="sec-head"><p class="sec-num">04 · Functional Requirements</p><h2>기능 요구사항(Functional)</h2></div>
+  <div class="block">
+    <h3>4-1. MoSCoW 우선순위</h3>
+<p><b>MVP = 23개</b> <span class="tag sky">초안</span> — 무료 편집 5 · 유료 편집 8 · 기록 공간 3 · 소비·관계 5 · 과금 2 <em>(v1.0 17개 → 그룹 F23 삭제 · 신규 7건)</em></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>MoSCoW</th><th>기능</th><th>등급</th><th>근거 (대안 대비 가치)</th></tr></thead>
+<tbody>
+<tr><th><b>Must — 무료 편집 5</b></th><td><b>F1</b> 긴 원본 업로드 · <b>F24</b> 좌우반전 🆕 · <b>F25</b> 수동 컷(분할) 🆕 · <b>F26</b> 수동 트래킹 🆕 · <b>F18b</b> 자막 편집 <em>(P3 → Must 승격)</em></td><td>무료</td><td><b>원가 ≈ 0에서 완주 경로를 만든다.</b> 전부 클라이언트 연산이라 GPU·외부 추론 호출이 0건이다(§11-5). <b>Gate B의 판정 입력</b>이며 Q4(450만 명)의 유일한 유입 경로다</td></tr>
+<tr><th><b>Must — 유료 편집 8</b></th><td><b>F2a</b> 대상 지정·재식별 · <b>F2b</b> 등장 구간 탐지 · <b>F3</b> 후보 30개 · <b>F4</b> 사용자 선택 · <b>F5a</b> 크롭·리프레이밍 · <b>F6</b> 합치기·렌더링 · <b>F27</b> 프롬프트 컷 🆕 · <b>F28</b> AI 음악(Suno) 🆕</td><td>구독·충전</td><td>F2a·F2b·F5a가 <b>D1(6/6 커버)</b>의 본체 — 조사한 대안 중 <em>말하지 않고 움직이는 사람</em>을 추적하는 곳이 없다. <b>F27·F28이 v2.0의 신규 지불 근거</b>다</td></tr>
+<tr><th><b>Must — 기록 공간 3</b></th><td><b>F18a</b> 음악 라이브러리 · <b>F7</b> 기록 자동 저장 · <b>F8</b> 공개 범위(2종)</td><td>🔴 <b>전 등급 무료</b></td><td><b>D4</b> — Instagram은 올려야 남고, CapCut·VLLO는 보관하지 않는다. 🔴 <b>기록 저장·공개 범위를 등급으로 나누지 않는다</b>(ADR-13 금지 유지 · Gate B)</td></tr>
+<tr><th><b>Must — 소비·관계 5</b></th><td><b>F22</b> 앱 셸 · <b>F11</b> 팔로워·팔로잉 · <b>F13</b> 추천 피드 · <b>F19</b> 좋아요 · <b>F20</b> 댓글·신고 · <b>F21</b> 공유</td><td>전 등급 무료</td><td><b>O7 재방문</b>의 조건 — 열었을 때 볼 것이 없으면 돌아오지 않는다. <b>v2.0에서 SNS 형식은 그대로 유지</b>한다</td></tr>
+<tr><th><b>Must — 과금 2</b></th><td><b>F30</b> 요금제·쿼터·크레딧(Entitlement) 🆕 · <b>F29</b> 원본 임시 보관 7일 + 리캡 🆕</td><td>유료</td><td>F30 없이는 세 등급이 코드에서 구분되지 않는다. F29는 <em>"한 번에 완벽하게"</em> 부담을 없애는 재편집 경로이자 <b>원본 보관 원가의 상한 장치</b>다</td></tr>
+<tr><th><b>Should</b> (P1 · MVP 직후)</th><td><b>F5b</b> 구도 규칙·앵글 · <b>F9</b> 원본 삭제·저장공간 회수 · <b>F10</b> 기록 타임라인 · <b>F12</b> 취향 설문 · <b>F15</b> 카테고리 랭킹</td><td>—</td><td>F9는 O4(삭제율 50%)의 유일한 수단. F15는 <em>"게시 이후 결과 문제는 풀지 않는다"</em> 선 바로 위 — <b>도입 여부는 미정</b> <span class="tag mint">확정</span></td></tr>
+<tr><th><b>Could</b> (P2)</th><td><b>F14</b> 선택 데이터 학습 → 정확도 개선</td><td>—</td><td>가장 강한 방어선(KSF 5번)이지만 <b>학습할 선택 데이터가 사용자 없이는 생기지 않는다.</b> 순서상 나중이 맞다 <span class="tag mint">확정</span></td></tr>
+<tr><th><b>Won't</b> (P3 · 이번 범위 밖)</th><td><b>F16</b> 팀 공유 편집 · <b>F17</b> 촬영 가이드 · <b>F23</b> <s>그룹</s> <b>삭제</b> · <b>팀·조직 단위 결제</b></td><td>—</td><td><b>F23은 v2.0에서 제외</b>(C2) — 기능 자체를 범위에서 뺐다. F16은 <b>팀 계정·원본 공유 권한·얼굴 정보 동의·인원 비례 원가</b> 넷이 전부 미정이다</td></tr>
+</tbody></table></div>
+<p>🔴 <b>F18b(자막 편집)를 Won't에서 Must로 올린 것이 v1.0 대비 가장 큰 방향 전환이다.</b> v1.0은 CLAUDE.md 규칙 4(<em>"편집을 늘리지 않는다"</em>)에 따라 자막을 뺐다. v2.0은 <b>자막을 무료 등급의 완주 도구로 되살린다.</b> 대가는 X3의 위험이고, 방어 장치는 <b>AC5-F2(편집 상태 복원)</b> 와 <b>S12(무료 완주율 · 이탈 도구 분해)</b> 다.</p>
+  </div>
+  <div class="block">
+    <h3>4-2. MVP 흐름 — 두 갈래로 갈렸다가 한 곳에서 만난다</h3>
+<p class="lead">🔴 <b>두 경로가 같은 <code>RECORD</code>로 수렴한다는 점이 이 그림의 핵심이다.</b> 결과물의 품질 규격·저장·공개 범위는 등급과 무관하다(ADR-13).</p>
+<figure class="fig"><pre class="mermaid">flowchart TD
+    F1["F1 원본 업로드&lt;br/&gt;≤ 20분 · 쿼터 검사(F30)"]
+
+    F1 --&gt; GATE{"등급 분기&lt;br/&gt;F30 Entitlement"}
+
+    subgraph FREE["① 무료 — 사람이 손으로 한다 · 원가 ≈ 0"]
+        F24["F24 좌우반전"]
+        F25["F25 수동 컷(분할)"]
+        F26["F26 수동 트래킹&lt;br/&gt;키프레임 + 보간 · GPU 0회"]
+        F18b["F18b 자막 편집&lt;br/&gt;OFL 폰트 4종"]
+        F24 --&gt; F25 --&gt; F26 --&gt; F18b
+    end
+
+    subgraph PAID["② 유료 — AI가 대신 판단한다 · 원가 비례"]
+        F2a["F2a 대상 지정·재식별"]
+        F2b["F2b 등장 구간 탐지&lt;br/&gt;Gate A · 탐지율 85%"]
+        F27["F27 프롬프트 컷&lt;br/&gt;Gemini → Haiku 4.5"]
+        F3["F3 후보 30개"]
+        F4["F4 사용자 선택&lt;br/&gt;판단은 사람이"]
+        F5a["F5a 크롭·리프레이밍&lt;br/&gt;잘잡힘 80%"]
+        F28["F28 AI 음악(Suno)&lt;br/&gt;2곡 중 선택 · 3회 상한"]
+        F2a --&gt; F2b --&gt; F27 --&gt; F3 --&gt; F4 --&gt; F5a --&gt; F28
+    end
+
+    GATE --&gt;|무료| FREE
+    GATE --&gt;|구독·충전| PAID
+
+    F18b --&gt; F18a["F18a 음악 라이브러리&lt;br/&gt;전 등급 무료"]
+    F28 --&gt; F18a
+    F18a --&gt; F6["F6 합치기·렌더링&lt;br/&gt;≥ 1080×1920 · 등급 차 0"]
+
+    subgraph KEEP["③ 기록 공간 3 — 🔴 전 등급 무료"]
+        F6 --&gt; F7["F7 기록 자동 저장&lt;br/&gt;Gate B · 공개 전에 이미 저장"]
+        F7 --&gt; F8["F8 공개 범위&lt;br/&gt;private / public"]
+        F8 --&gt; F22["F22 앱 셸&lt;br/&gt;3탭 · 마이페이지"]
+    end
+
+    F6 -.유료만.-&gt; F29["F29 원본 임시 보관 7일&lt;br/&gt;재편집 · 차감 없음"]
+    F29 -.재편집.-&gt; PAID
+
+    subgraph SOCIAL["④ 소비·관계 5 — SNS 형식 유지"]
+        F22 --&gt; F11["F11 팔로워·팔로잉"]
+        F22 --&gt; F13["F13 추천 피드"]
+        F13 --&gt; F19["F19 좋아요"]
+        F13 --&gt; F20["F20 댓글·신고"]
+        F13 --&gt; F21["F21 공유"]
+    end
+
+    style F2b fill:#FBEDE4,stroke:#C2673F,stroke-width:3px
+    style F27 fill:#FBEDE4,stroke:#C2673F,stroke-width:3px
+    style F5a fill:#E6F8F3,stroke:#33A992,stroke-width:3px
+    style F2a fill:#E6F8F3,stroke:#33A992,stroke-width:3px
+    style F26 fill:#E6F8F3,stroke:#33A992,stroke-width:3px
+    style F7 fill:#FFF3C4,stroke:#8A6A22,stroke-width:3px
+    style F6 fill:#FFF3C4,stroke:#8A6A22,stroke-width:2px
+    style GATE fill:#EEF2FF,stroke:#4C5FD5,stroke-width:2px</pre></figure>
+  </div>
+  <div class="block">
+    <h3>4-3. 공개 범위 상태 — 2종으로 줄었다</h3>
+<p><b>v2.0 변경</b> — <code>group</code> 상태를 제거했다. 남은 것은 <code>private</code>·<code>public</code> 둘뿐이며, <code>RECORD.group_id</code> 필드도 함께 삭제한다.</p>
+<figure class="fig"><pre class="mermaid">stateDiagram-v2
+    [*] --&gt; 저장됨: F6 렌더링 완료 (F7 자동)
+    저장됨 --&gt; 나만보기: 기본값 private (DB DEFAULT · ADR-07a)
+    나만보기 --&gt; 전체공개: F8
+    전체공개 --&gt; 나만보기: F8 — 내려도 기록은 남는다
+    나만보기 --&gt; [*]: 사용자 삭제만
+
+    note right of 저장됨
+        공개 범위를 정하기 전에
+        이미 저장돼 있다 (Gate B)
+        결제 상태와 무관하다 (AC4-4)
+    end note
+    note right of 나만보기
+        DB DEFAULT로 강제한다
+        공개를 권유하는 문구를 두지 않는다
+    end note
+    note right of 전체공개
+        🔴 RLS 정책에 팔로우 조건을 넣지 않는다
+        팔로우는 권한이 아니다
+    end note</pre></figure>
+<p>🔴 <b>그룹 제거로 잃은 것을 명시한다.</b> <em>"팔로워 128명 전부가 아니라 함께 뛰는 대여섯 명에게만"</em> 이라는 <b>중간 공개 범위가 사라졌다.</b> 남은 선택지는 <em>전부에게 열거나 아무에게도 안 열거나</em> 둘뿐이다. 이 상실이 공개 전환율에 미치는 영향은 <b>R7</b>로 리스크에 올렸고, <b>E7이 그룹 A/B에서 "2종 공개 범위의 전환율 기준선 측정"으로 재정의</b>됐다(§8-2).</p>
+  </div>
+  <div class="block">
+    <h3>4-4. 요금제 구성 🆕 v2.0</h3>
+<p><b>전부 확정</b> — 사용자 결정(2026-09-01). 단 <code>[TBD]</code> 표시 항목은 값이 정해지지 않았다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>등급</th><th>가격</th><th>편수</th><th>원본 길이</th><th>유효기간</th><th>편당 단가</th></tr></thead>
+<tbody>
+<tr><th><b>무료</b></th><td>0원</td><td><b>업로드 2회</b></td><td>회당 <b>≤ 20분</b></td><td>🔴 <b><code>[TBD]</code> — 갱신 주기 미정</b>(월 2회? 계정당 2회?) · ADR-16</td><td>—</td></tr>
+<tr><th><b>구독</b></th><td><b>월 9,900원</b></td><td><b>3편 / 월</b></td><td>편당 <b>≤ 20분</b></td><td>월 단위 갱신 · 🔴 <b>이월 여부 <code>[TBD]</code></b> · ADR-16</td><td><b>3,300원</b></td></tr>
+<tr><th><b>충전형 종량제</b></th><td><b>19,800원</b></td><td><b>3편</b></td><td>편당 <b>≤ 20분</b></td><td><b>결제 후 1개월 소멸</b></td><td><b>6,600원</b></td></tr>
+<tr><th><b>충전 추가</b></th><td><b>9,900원</b></td><td><b>+1편</b></td><td><b>≤ 20분</b></td><td><b>결제 후 1개월 소멸</b></td><td><b>9,900원</b></td></tr>
+</tbody></table></div>
+<p>🔺 <b>단가가 계단을 거꾸로 오른다 — 확인이 필요하다.</b> 구독 3,300원 → 충전 6,600원(2배)까지는 구독 유인으로 설명된다. 그런데 <b>충전 추가 1편이 9,900원으로 충전 팩 편당 단가(6,600원)보다 50% 비싸다.</b> 통상 추가 구매는 단가가 같거나 낮다. 세 가지 해석이 가능하다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>해석</th><th>함의</th><th>판정</th></tr></thead>
+<tbody>
+<tr><th>① 의도된 설계 — 추가 구매를 막고 <b>구독으로 밀어낸다</b></th><td>성립한다. 다만 오세진(몰아서 편집)이 4편째에서 <b>구독+충전 둘 다 사지 않고 멈출</b> 수 있다</td><td>ADR-15에서 결정</td></tr>
+<tr><th>② 추가 1편도 <b>6,600원</b>이어야 한다</th><td>단가 일관 · 오세진 이탈 방지</td><td>🔺 사용자 확인 필요</td></tr>
+<tr><th>③ 추가 결제는 <b>3편 단위 재충전만</b> 허용한다</th><td>계단이 없어진다. 단 1편만 필요한 사용자가 19,800원을 내야 한다</td><td>대안</td></tr>
+</tbody></table></div>
+<div class="note"><p>🔴 <b>이 문서는 사용자가 준 값(9,900원)을 그대로 적었다.</b> 지어내 고치지 않는다. <b>ADR-15의 결정 대상</b>으로 올린다.</p></div>
+  </div>
+  <div class="block">
+    <h3>4-5. 무료 / 유료 경계 — 기능 × 등급 행렬 🆕 v2.0</h3>
+<p><b>●</b> 제공 · <b>○</b> 미제공 · 🔴 = 등급으로 나누는 것이 금지된 항목</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>기능</th><th>무료</th><th>구독</th><th>충전</th><th>원가 동인</th></tr></thead>
+<tbody>
+<tr><th>F1</th><td>원본 업로드</td><td>● 2회 · ≤20분</td><td>● 3편/월 · ≤20분</td><td>● 3편 · ≤20분</td><td>③ 저장·전송</td></tr>
+<tr><th>F24</th><td>좌우반전</td><td>●</td><td>●</td><td>●</td><td>없음 (클라이언트)</td></tr>
+<tr><th>F25</th><td>수동 컷(분할)</td><td>●</td><td>●</td><td>●</td><td>없음 (클라이언트)</td></tr>
+<tr><th>F26</th><td>수동 트래킹</td><td>●</td><td>●</td><td>●</td><td>없음 (키프레임 보간)</td></tr>
+<tr><th>F18b</th><td>자막 편집 · OFL 폰트 4종</td><td>●</td><td>●</td><td>●</td><td>없음 (클라이언트)</td></tr>
+<tr><th>F18a</th><td>무료 라이브러리 음악 · 삽입</td><td>●</td><td>●</td><td>●</td><td>없음 (정적 자산)</td></tr>
+<tr><th><b>F2a·F2b</b></th><td><b>AI 대상 지정·재식별·등장 구간 탐지</b></td><td><b>○</b></td><td>●</td><td>●</td><td>① 추론 — GPU 초</td></tr>
+<tr><th><b>F5a</b></th><td><b>AI 크롭·리프레이밍</b></td><td><b>○</b></td><td>●</td><td>●</td><td>① 추론</td></tr>
+<tr><th><b>F27</b></th><td><b>프롬프트 컷</b> (Gemini → Haiku 4.5)</td><td><b>○</b></td><td>●</td><td>●</td><td>① 추론 — 토큰</td></tr>
+<tr><th><b>F28</b></th><td><b>AI 음악</b>(Suno · 2곡/회 · 편당 3회)</td><td><b>○</b></td><td>●</td><td>●</td><td>① 추론 — 생성 단가</td></tr>
+<tr><th><b>F29</b></th><td><b>원본 임시 보관 7일 + 리캡</b></td><td><b>○</b></td><td>●</td><td>●</td><td>③ 저장</td></tr>
+<tr><th>F3</th><td>후보 목록</td><td>○ <em>(AI 탐지 산출물이라 무료엔 대상이 없다)</em></td><td>● <b>30개</b></td><td>● <b>30개</b></td><td>🔴 <b>개수 등급화 금지</b></td></tr>
+<tr><th>F4</th><td><code>[직접 고르기]</code> · 사용자 선택</td><td>—</td><td>●</td><td>●</td><td>🔴 <b>접근 제한 금지</b></td></tr>
+<tr><th>F6</th><td>합치기·렌더링</td><td>●</td><td>●</td><td>●</td><td>🔴 <b>출력 규격 등급화 금지</b> — 전 등급 ≥ 1080×1920</td></tr>
+<tr><th>F7</th><td>기록 자동 저장</td><td>● <b>영구</b></td><td>● <b>영구</b></td><td>● <b>영구</b></td><td>🔴 <b>저장 등급화 금지</b></td></tr>
+<tr><th>F8</th><td>공개 범위(private/public)</td><td>●</td><td>●</td><td>●</td><td>🔴 <b>등급화 금지</b></td></tr>
+<tr><th>F11·F13·F19·F20·F21·F22</th><td>SNS — 팔로우·피드·좋아요·댓글·공유</td><td>●</td><td>●</td><td>●</td><td>🔴 <b>등급화 금지</b></td></tr>
+<tr><th>—</th><td>신뢰도 임계 <code>τ</code></td><td>—</td><td><b>동일 값</b></td><td><b>동일 값</b></td><td>🔴 <b>차등 금지</b></td></tr>
+</tbody></table></div>
+<p><b>금지 5건의 v2.0 처리</b> — <b>SRS</b> ADR-8의 금지 목록 중 무엇이 살아남고 무엇이 바뀌었는지를 여기서 못박는다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th><b>SRS</b> ADR-8 금지 항목</th><th>v2.0 처리</th></tr></thead>
+<tbody>
+<tr><th>탐지·재식별·리프레이밍 <b>품질 등급화</b></th><td>🔴 <b>유지.</b> 구독과 충전이 같은 모델·같은 파라미터를 쓴다. <b>유료 등급 내부에서 다시 나누지 않는다</b></td></tr>
+<tr><th>후보 <b>개수</b> 등급화</th><td>🔴 <b>유지.</b> 유료 전 등급 30개 동일. Q7 실측이 가능하다</td></tr>
+<tr><th><b><code>[직접 고르기]</code> 접근 제한</b></th><td>🔴 <b>유지.</b> 유료 전 등급에서 항상 노출(AC7-4)</td></tr>
+<tr><th>임계 <b><code>τ</code></b> 등급별 차등</th><td>🔴 <b>유지.</b> 단일 값</td></tr>
+<tr><th><b>기록 저장 · 공개 범위</b></th><td>🔴 <b>유지 + 강화.</b> 전 등급 무료이며 <b>결제 만료 후에도 접근을 막지 않는다</b>(AC4-4 · AC8-F1)</td></tr>
+<tr><th><s>기능 잠금 금지</s></th><td>⚠️ <b>폐기.</b> AI 기능 4종(F2a·F2b·F5a·F27·F28)을 무료에서 잠근다 → <b>X1 · ADR-13</b></td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>4-6. 시퀀스 다이어그램 🆕 v2.0</h3>
+<h4>4-6-1. 프롬프트 컷 — Gemini가 읽고, Haiku 4.5가 고른다</h4>
+<p class="lead">🔴 <b>순서가 곧 안전장치다.</b> 추적이 먼저 등장 구간을 좁히므로 ①Gemini에 들어가는 영상 길이가 줄어 원가가 내려가고 ②<b>Gemini가 인물을 식별할 필요가 사라진다</b>(CLAUDE.md 절대 규칙 2).</p>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant APP as Next.js&lt;br/&gt;(Server Action)
+    participant ENT as F30 Entitlement&lt;br/&gt;Resolver
+    participant TRK as 추적 API&lt;br/&gt;(D1 · 외부 전용)
+    participant GEM as Gemini&lt;br/&gt;(Vercel AI SDK)
+    participant HAI as Claude Haiku 4.5&lt;br/&gt;claude-haiku-4-5
+    participant DB as Supabase
+
+    U-&gt;&gt;APP: 원본 업로드 완료 + "3점 슛 넣은 데만"
+    APP-&gt;&gt;ENT: 잔여 편수 조회
+    ENT--&gt;&gt;APP: 잔여 ≥ 1 (Mock: 무제한)
+    Note over APP,ENT: 🔴 잔여 0이면 여기서 중단&lt;br/&gt;GPU 작업 생성 0건 (AC1-4)
+
+    APP-&gt;&gt;TRK: 추적 요청 (subject_ref 1회 지정)
+    Note over TRK: "누가" 는 추적이 정한다&lt;br/&gt;Gemini에 넘기지 않는다
+    TRK--&gt;&gt;DB: 등장 구간 배열 저장
+    TRK--&gt;&gt;APP: detection_id (비동기 · webhook)
+
+    APP-&gt;&gt;GEM: 등장 구간 영상만 투입&lt;br/&gt;"무엇을 했는가" 서술 요청
+    Note over GEM: 🔴 등장 구간 밖 프레임 투입 0건 (AC7-1)&lt;br/&gt;20분 전체가 아니라 등장 구간 합만
+    GEM--&gt;&gt;DB: 구간 메타데이터 저장&lt;br/&gt;[{start,end,행동서술}]
+    GEM--&gt;&gt;APP: metadata_id
+
+    APP-&gt;&gt;HAI: 메타데이터(텍스트) + 사용자 프롬프트
+    Note over HAI: 영상이 아니라 텍스트 위에서 대조&lt;br/&gt;200K 컨텍스트 · $1/$5 per MTok
+    HAI--&gt;&gt;APP: 선택 구간 + 🔴 선택 근거 문장&lt;br/&gt;(근거 없는 선택 0건 · AC7-2)
+
+    APP--&gt;&gt;U: 완성본 재생 + "AI가 무엇을 골랐는지"
+    Note over U,APP: 🔴 [이대로 저장] / [직접 고르기] 병존&lt;br/&gt;SRS ADR-6 · AC7-4
+
+    alt 프롬프트를 바꿔 재판정
+        U-&gt;&gt;APP: "리바운드도 넣어줘"
+        APP-&gt;&gt;DB: 저장된 메타데이터 조회
+        APP-&gt;&gt;HAI: 같은 메타데이터 + 새 프롬프트
+        Note over GEM: 🔴 Gemini 재호출 0건 (AC7-3)&lt;br/&gt;재판정 원가 = 텍스트 비용만
+        HAI--&gt;&gt;APP: 새 선택 구간 + 근거
+    end
+
+    U-&gt;&gt;APP: [이대로 저장]
+    APP-&gt;&gt;DB: RECORD 생성 (visibility=private)
+    APP-&gt;&gt;ENT: 편수 1 차감 (render_succeeded 시점)
+    Note over ENT: 🔴 차감은 성공 후에만 (AC8-2)&lt;br/&gt;실패 시 환원 (AC1-F4)</pre></figure>
+<p><b>왜 2단으로 나눴는가 — 세 가지 이유</b> <span class="tag sky">초안</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>이유</th><th>근거</th></tr></thead>
+<tbody>
+<tr><th><b>①</b></th><td><b>재판정이 싸진다</b></td><td>프롬프트를 바꿀 때마다 영상을 다시 읽으면 재판정 원가가 매번 전액이다. 메타데이터를 텍스트로 한 번 뽑아두면 <b>재판정은 Haiku 토큰 비용만</b> 든다. 추적 PoC의 <code>POST .../threshold</code>(다시 추적하지 않고 threshold만 바꿔 재판정)와 <b>같은 원리</b>다</td></tr>
+<tr><th><b>②</b></th><td><b>근거가 남는다</b></td><td>텍스트 위 판정은 <em>"어느 구간을 왜 골랐는가"</em> 를 문장으로 반환할 수 있다. CLAUDE.md 절대 규칙 2 — 🔴 <em>"완성본 화면에 AI가 무엇을 골랐는지 표시한다"</em> 의 <b>구현 수단</b>이다</td></tr>
+<tr><th><b>③</b></th><td><b>인물 식별 경로가 구조로 막힌다</b></td><td>Gemini는 이미 좁혀진 <em>"내 구간"</em> 만 받는다. <b>누구인지 판단할 여지가 입력에 없다</b> — 규칙을 문서로 지키는 대신 파이프라인으로 강제한다</td></tr>
+</tbody></table></div>
+<h4>4-6-2. AI 음악 — 1회 생성에 2곡, 사람이 고른다</h4>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant APP as Next.js
+    participant ENT as F30 Entitlement
+    participant SUNO as Suno API
+    participant STO as Supabase Storage
+    participant DB as Supabase
+
+    U-&gt;&gt;APP: [AI로 음악 만들기]
+    APP-&gt;&gt;ENT: 편당 생성 횟수 조회
+    ENT--&gt;&gt;APP: 사용 0 / 상한 3
+    Note over ENT: 🔴 4회째 시도 성공 0건 (AC7-5)
+
+    APP-&gt;&gt;SUNO: 생성 요청 (분위기·길이)
+    Note over SUNO: 비동기 · A-T1(함수 실행 시간 상한)&lt;br/&gt;동기 대기 불가 → job_id 폴링
+    SUNO--&gt;&gt;APP: job_id
+    APP--&gt;&gt;U: "만드는 중" (진행 표시)
+
+    SUNO-&gt;&gt;APP: webhook — 2곡 완료
+    APP-&gt;&gt;STO: 2곡 저장
+    APP-&gt;&gt;DB: music_generation 기록 (사용 1/3)
+    APP--&gt;&gt;U: 🔴 2곡 재생 + 선택 요구
+
+    alt 마음에 드는 곡이 있다
+        U-&gt;&gt;APP: A곡 선택
+        APP-&gt;&gt;DB: RECORD.music_id = A
+        Note over U,DB: 🔴 사용자 선택 없는 음악 확정 0건 (D2)
+    else 둘 다 아니다
+        U-&gt;&gt;APP: [다시 만들기] (남은 2회)
+        APP-&gt;&gt;SUNO: 재생성
+    else 무료 라이브러리로 간다
+        U-&gt;&gt;APP: F18a 라이브러리에서 선택
+        Note over U,APP: 🟢 AI 음악은 대체 경로이지 유일 경로가 아니다
+    end</pre></figure>
+<h4>4-6-3. 쿼터·크레딧 차감 — Entitlement Resolver</h4>
+<p class="lead">🔴 <b>지금 만드는 것은 Mock(전부 무제한 반환)이고, 실제 교체 시 호출부 변경이 0건이어야 한다</b>(SRS ADR-8 · CLAUDE.md).</p>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    participant APP as 호출부&lt;br/&gt;(Server Action / RSC)
+    participant ENT as EntitlementResolver&lt;br/&gt;(인터페이스)
+    participant MOCK as MockResolver&lt;br/&gt;지금
+    participant REAL as RealResolver&lt;br/&gt;Gate B 이후
+    participant DB as subscription ·&lt;br/&gt;credit_wallet · usage_ledger
+
+    Note over APP,ENT: 🔴 호출부는 인터페이스만 안다&lt;br/&gt;구현 교체 시 변경 0건이 인수 기준
+
+    APP-&gt;&gt;ENT: can(userId, "AI_TRACKING")
+    alt 지금 — Mock
+        ENT-&gt;&gt;MOCK: 위임
+        MOCK--&gt;&gt;ENT: { allowed: true, remaining: ∞ }
+    else Gate B 통과 후 — Real
+        ENT-&gt;&gt;REAL: 위임
+        REAL-&gt;&gt;DB: 구독 상태 + 지갑 잔액 조회
+        DB--&gt;&gt;REAL: plan=SUBSCRIPTION, remaining=2
+        REAL--&gt;&gt;ENT: { allowed: true, remaining: 2 }
+    end
+    ENT--&gt;&gt;APP: 판정 결과
+
+    Note over APP: 편집 수행 …
+
+    APP-&gt;&gt;ENT: consume(userId, "EDIT_UNIT", recordId)
+    Note over ENT,DB: 🔴 차감 시점 = render_succeeded (AC8-2)&lt;br/&gt;detection_started 아님
+    ENT-&gt;&gt;DB: usage_ledger INSERT (차감 +1)
+    ENT-&gt;&gt;DB: credit_wallet UPDATE (remaining -1)
+    Note over DB: 같은 트랜잭션 · 중복 차감 0건
+
+    alt 렌더 실패가 확정되면
+        APP-&gt;&gt;ENT: refund(userId, "EDIT_UNIT", recordId)
+        ENT-&gt;&gt;DB: usage_ledger INSERT (환원 -1)
+        Note over DB: 🔴 차감·환원 쌍이 모두 남는다 (AC1-F4)
+    end</pre></figure>
+<h4>4-6-4. 무료 등급 — 손으로 한 편을 끝낸다</h4>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor U as 사용자 (무료)
+    participant APP as Next.js
+    participant CL as 클라이언트 편집기
+    participant STO as Supabase Storage
+    participant DB as Supabase
+
+    U-&gt;&gt;APP: 원본 업로드 (≤ 20분 · 잔여 2 → 1)
+    Note over APP: 🔴 잔여 0이면 Storage 쓰기 0바이트 (AC5-F1)
+    APP-&gt;&gt;STO: 직접 전송 (A-T2 — 요청 본문 상한 우회)
+
+    U-&gt;&gt;CL: F26 수동 트래킹 — 키프레임 찍기
+    CL-&gt;&gt;CL: 키프레임 사이 선형 보간
+    Note over CL: 🔴 GPU 서버 호출 0건 (AC5-2)&lt;br/&gt;무료 등급 편당 GPU 초 = 0
+
+    U-&gt;&gt;CL: F25 수동 컷 · F24 좌우반전
+    U-&gt;&gt;CL: F18b 자막 — OFL 폰트 4종
+    Note over CL: 폰트는 클라이언트에서 래스터화&lt;br/&gt;OFL 사본 동봉 (§11-4)
+
+    CL-&gt;&gt;DB: 편집 상태 자동 저장
+    Note over U,DB: 🔴 앱을 닫아도 복원된다 (AC5-F2)&lt;br/&gt;X3(30분 이탈) 완화 장치
+
+    U-&gt;&gt;CL: [완성]
+    CL-&gt;&gt;APP: 렌더 요청 (≥ 1080×1920)
+    Note over APP: 🔴 출력 규격 등급 차 0 (AC5-4)
+    APP-&gt;&gt;DB: RECORD 생성 (visibility=private DEFAULT)
+    APP-&gt;&gt;STO: 원본 파기 (무료는 7일 보관 없음)
+    APP--&gt;&gt;U: 기록 저장됨 — 공개 범위는 그 다음이다
+    Note over U,APP: 🔴 첫 완주 이전 페이월 노출 0건&lt;br/&gt;Gate B 판정이 오염되지 않는다</pre></figure>
+  </div>
+</section>
+
+<!-- ================= 05 · Non-Functional Requirements ================= -->
+<section class="sec" id="s5">
+  <div class="sec-head"><p class="sec-num">05 · Non-Functional Requirements</p><h2>비기능 요구사항(NFR)</h2></div>
+  <div class="block">
+<p><span class="tag amber">가설</span> <b>이 장의 수치는 대부분 <span class="tag sky">초안</span> 초안이다.</b> VPS 0.3은 제품 가치를 다루고 시스템 사양을 다루지 않았다. 착수 전 팀 합의가 필요하며, 원가에 직접 영향을 주는 항목은 별도 표시했다.</p>
+  </div>
+  <div class="block">
+    <h3>5-1. 성능</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>목표</th><th>근거</th></tr></thead>
+<tbody>
+<tr><th>앱 진입 → 첫 영상 프레임</th><td><b>p95 ≤ 1.5초</b> <span class="tag sky">초안</span></td><td>AC6-1 · "로그인 화면 없이 바로 재생" <span class="tag mint">확정</span></td></tr>
+<tr><th>40분·4GB 원본 업로드(LTE)</th><td><b>p95 ≤ 6분</b> <span class="tag sky">초안</span> · 이어올리기 필수</td><td>AC1-F3</td></tr>
+<tr><th>탐지(F2b) 완료 — 40분 원본</th><td><b>p95 ≤ 8분</b> <span class="tag sky">초안</span></td><td>AC1-3 · O1(체감 5분) 달성의 상한</td></tr>
+<tr><th>후보 목록(F3) 렌더</th><td><b>p95 ≤ 1초</b> <span class="tag sky">초안</span></td><td>—</td></tr>
+<tr><th>15초 결과물 렌더(F6)</th><td><b>p95 ≤ 90초</b> <span class="tag sky">초안</span></td><td>AC3-4</td></tr>
+<tr><th>피드·목록 API</th><td><b>p95 ≤ 400ms</b> <span class="tag sky">초안</span></td><td>AC4-3</td></tr>
+<tr><th><b>무료 편집기 진입</b> 🆕</th><td><b>p95 ≤ 2초</b> <span class="tag sky">초안</span></td><td>AC5-1</td></tr>
+<tr><th><b>수동 트래킹 보간 미리보기</b> 🆕</th><td><b>p95 ≤ 500ms</b> <span class="tag sky">초안</span></td><td>AC5-2 · 클라이언트 연산</td></tr>
+<tr><th><b>Gemini 구간 메타데이터 생성</b> 🆕</th><td><b>p95 ≤ 4분</b> <span class="tag sky">초안</span></td><td>AC7-1 · 🔴 <b>A-T1 — 동기 대기 불가</b>(§11-6)</td></tr>
+<tr><th><b>Haiku 4.5 대조 판정</b> 🆕</th><td><b>p95 ≤ 20초</b> <span class="tag sky">초안</span></td><td>AC7-2 · 텍스트 입력 ~20K 토큰 기준</td></tr>
+<tr><th><b>프롬프트 재판정</b> 🆕</th><td><b>p95 ≤ 20초</b> <span class="tag sky">초안</span></td><td>AC7-3 · Gemini 재호출 없음</td></tr>
+<tr><th><b>Suno 음악 생성(2곡)</b> 🆕</th><td><b>p95 ≤ 3분</b> <span class="tag sky">초안</span></td><td>AC7-5 · webhook 수신 기준</td></tr>
+<tr><th><b>잔여 편수 표시 반영</b> 🆕</th><td><b>≤ 5초</b> <span class="tag sky">초안</span></td><td>AC8-2</td></tr>
+</tbody></table></div>
+<div class="note"><p>🔴 <b>탐지 p95 ≤ 8분은 유료 등급 전체에 동일 적용한다.</b> 무료를 일부러 느리게 만들지 않는 것과 같은 이유로, <b>구독과 충전 사이에 우선 처리 큐 차등을 두지 않는다</b>(ADR-13). 차이는 혼잡 구간에서만 발생한다.</p></div>
+  </div>
+  <div class="block">
+    <h3>5-2. 신뢰성</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>목표</th></tr></thead>
+<tbody>
+<tr><th>월 가용성(앱 셸·피드·기록 조회)</th><td><b>≥ 99.5%</b> <span class="tag sky">초안</span></td></tr>
+<tr><th>월 가용성(AI 처리 파이프라인)</th><td><b>≥ 99.0%</b> <span class="tag sky">초안</span> — 비동기 큐로 처리 지연은 허용, 유실은 불허</td></tr>
+<tr><th><b>기록 저장 성공률(F7)</b></th><td><b>≥ 99.9%</b> <span class="tag sky">초안</span> — <em>Gate B의 전제. 여기서 유실되면 제품 주장 자체가 무너진다</em></td></tr>
+<tr><th>업로드 실패율</th><td><b>≤ 1%</b> <span class="tag sky">초안</span> · 재개 성공률 <b>≥ 99%</b> <span class="tag sky">초안</span></td></tr>
+<tr><th>API 5xx 오류율</th><td><b>≤ 0.1%</b> <span class="tag sky">초안</span></td></tr>
+<tr><th>처리 실패 시</th><td>원본·중간 산출물 <b>보존 후 재시도 ≥ 3회</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>결제·적립 정합성</b> 🆕</th><td>🔴 <b>불일치 잔존 0건</b> <span class="tag mint">확정</span> · 보정 지연 <b>≤ 5분</b> <span class="tag sky">초안</span> — <em>여기서 어긋나면 사용자가 돈을 내고 아무것도 못 받는다</em></td></tr>
+<tr><th><b>편수 차감 정확성</b> 🆕</th><td>🔴 <b>중복 차감 0건 · 실패 건 차감 잔존 0건</b> <span class="tag mint">확정</span> · 차감·환원 <b>원장 기록률 100%</b></td></tr>
+<tr><th><b>외부 추론 API 가용성</b> 🆕</th><td>🔺 <b>Gemini · Haiku · Suno 3곳 의존 — 가용성이 곱해진다.</b> 각 <b>≥ 99.0%</b> 가정 시 F27+F28 결합 가용성은 <b>약 97%</b> <code>[산출]</code> → 🔴 <b>어느 하나가 죽어도 F3(후보 목록) 수동 선택으로 되돌아가는 대체 경로가 필수</b>(AC7-F2)</td></tr>
+<tr><th><b>무료 등급 GPU 초</b> 🆕</th><td>🔴 <b>편당 0초</b> <span class="tag mint">확정</span> — 1건이라도 발생하면 즉시 알림(무료 등급 원가 가정이 깨진 것이다)</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>5-3. 보안·프라이버시</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>요구</th><th><b>임계치 · 검증 방법</b> <span class="tag sky">초안</span></th></tr></thead>
+<tbody>
+<tr><th><b>얼굴 정보</b></th><td>추적을 위해 인물 특징을 처리한다</td><td><b>ADR-11 산출물 체크리스트 4종</b>(동의 문구 · 보관 기간 · 파기 절차 · 처리 위탁)이 <b>전부 승인되기 전 프로덕션 배포 0건</b>. 미승인 시 CI 배포 차단</td></tr>
+<tr><th>영상 저장</th><td>at-rest 암호화 · TLS 1.2+</td><td>미암호화 객체 <b>0건</b>(주간 스캔) · TLS 1.1 이하 핸드셰이크 <b>0건</b></td></tr>
+<tr><th><b>공개 범위 강제</b></th><td>서버 측 강제</td><td><b>회귀 테스트 스위트</b>(AC4-F1·AC5-2·AC5-4) <b>릴리스마다 100% 통과</b> · 위반 접근 시도 <b>월 0건</b> 목표, 1건이라도 감지 시 즉시 알림</td></tr>
+<tr><th>공유 링크(F21)</th><td>링크도 공개 범위를 따른다</td><td>링크 기본 만료 <b>30일</b> <span class="tag sky">초안</span> · 만료 후 접근 성공 <b>0건</b> · 회수 반영 지연 <b>≤ 60초</b></td></tr>
+<tr><th>신고(F20)</th><td>접수는 MVP</td><td>접수 성공률 <b>≥ 99%</b> · <em>처리 기준·운영 주체 <b>미정</b> <span class="tag mint">확정</span> — 처리 SLA는 <span class="tag mint">확정</span> 후 삽입</em></td></tr>
+<tr><th><b>결제 정보</b> 🆕</th><td>🔴 <b>카드 정보를 자체 저장하지 않는다</b></td><td>PG사 토큰만 보관 · 자체 DB 내 PAN·CVC <b>0건</b>(주간 스캔) · 🔴 <b>PG사 선정 <code>[TBD]</code></b> — ADR-17</td></tr>
+<tr><th><b>외부 추론 위탁</b> 🆕</th><td>Gemini · Haiku · Suno에 <b>영상·메타데이터가 나간다</b></td><td>🔴 <b>ADR-11(얼굴 정보 동의) 체크리스트의 "처리 위탁" 항목에 3개 사업자를 명시</b>하고 승인 전 배포 0건 · 위탁 미고지 상태의 호출 <b>0건</b></td></tr>
+<tr><th><b>AI 음악 권리</b> 🆕</th><td>Suno 생성물의 <b>상업적 이용·재배포 권리</b></td><td>🔴 <b><code>MUSIC_LICENSE</code> 법무 게이트 확장.</b> 사용자가 만든 곡을 <b>전체공개 기록에 실어 배포</b>할 권리가 API 약관상 사용자에게 있는지 확인 전 F28 배포 <b>0건</b> — §11-3</td></tr>
+<tr><th><b>폰트 라이선스</b> 🆕</th><td>OFL 폰트 4종</td><td>🔴 <b>OFL 사본 동봉 100%</b> · Reserved Font Name 위반 <b>0건</b>(폰트 파일명·패밀리명 변경 금지) · 🔺 <b>Freesentation 라이선스 원문 확인 필요</b> — §11-4</td></tr>
+</tbody></table></div>
+<p><b><code>법무 검토 선행 필수</code>는 요구사항이 아니라 소망이었다.</b> 통과/실패를 판정할 수 없기 때문이다. <b>산출물 4종 승인 = 배포 게이트</b>로 바꾸면 CI가 판정할 수 있다. <span class="tag sky">초안</span></p>
+  </div>
+  <div class="block">
+    <h3>5-4. 비용</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>내용</th></tr></thead>
+<tbody>
+<tr><th><b>GPU 원가</b></th><td>처리 물량 <b>연 12만 편</b>(1만 명 × 월 1편)에 <b>직접 비례</b> <span class="tag mint">확정</span> — 북극성 KPI가 곧 원가 동인이다. <b>v2.0 — 유료 등급 물량에만 비례한다</b>(무료는 GPU 0초)</td></tr>
+<tr><th>편당 처리 원가 상한</th><td>🔴 <b><code>[TBD]</code></b> — <b>매출 상한은 확정됐다: 구독 편당 3,300원.</b> 그 아래 어디에 앉는지가 ADR-05의 결정 대상이며, §11-5에 구성요소별 상한 추정을 적었다</td></tr>
+<tr><th>저장 원가</th><td>원본 보관은 <b>결과물 확보까지만</b>이 기본. <b>v2.0 — 유료 등급만 7일 연장</b>(F29), 무료는 렌더 직후 파기</td></tr>
+<tr><th><b>외부 추론 원가</b> 🆕</th><td><b>Gemini 토큰 + Haiku 4.5 토큰 + Suno 생성 단가.</b> GPU와 달리 <b>초 단위가 아니라 호출 단위</b>라 상한을 코드로 걸 수 있다 — Suno 편당 3회 상한이 그 예다</td></tr>
+<tr><th><b>무료 등급 원가</b> 🆕</th><td>🔴 <b>설계 목표 = 저장·전송만.</b> GPU 0초 · 외부 추론 0호출. 이 가정이 깨지면 Q4 무제한 확보 전략이 무너진다 → NFR 신뢰성 표의 <em>"무료 등급 GPU 초 = 0"</em> 알림이 감시 장치다</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>5-5. 모니터링</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>구분</th><th>항목</th><th>알림 기준 <span class="tag sky">초안</span></th><th><b>수신자</b> <span class="tag sky">초안</span></th><th><b>1차 대응 SLA</b> <span class="tag sky">초안</span></th></tr></thead>
+<tbody>
+<tr><th><b>게이트</b></th><td>탐지율(O9)</td><td>일간 <b>&lt; 80%</b></td><td>AI 리드</td><td><b>2시간</b> — Gate A 회귀</td></tr>
+<tr><th><b>저장</b></th><td>F7 저장 성공률</td><td><b>&lt; 99.9%</b></td><td>백엔드 온콜</td><td><b>15분</b> — 최우선</td></tr>
+<tr><th><b>보안</b></th><td>공개 범위 위반 접근</td><td><b>1건</b></td><td>보안 담당 + 제품 리드</td><td><b>30분</b></td></tr>
+<tr><th>파이프라인</th><td>큐 대기 p95</td><td><b>&gt; 15분</b></td><td>백엔드 온콜</td><td>4시간</td></tr>
+<tr><th>파이프라인</th><td>완주율(S10)</td><td>주간 <b>&lt; 95%</b></td><td>백엔드 리드</td><td>1일</td></tr>
+<tr><th>북극성 선행</th><td>D30 3편 도달률</td><td>주간 <b>&lt; 20%</b></td><td>제품 리드</td><td>주간 리뷰</td></tr>
+<tr><th>비용</th><td>일간 GPU 예산</td><td><b>80% 초과</b></td><td>백엔드 리드 + 제품 리드</td><td>4시간</td></tr>
+<tr><th><b>과금</b> 🆕</th><td><b>결제·적립 불일치</b></td><td>🔴 <b>1건</b></td><td>백엔드 온콜 + 제품 리드</td><td>🔴 <b>15분</b> — 돈을 받고 못 준 상태다</td></tr>
+<tr><th><b>과금</b> 🆕</th><td><b>편수 중복 차감</b></td><td>🔴 <b>1건</b></td><td>백엔드 온콜</td><td><b>30분</b></td></tr>
+<tr><th><b>원가</b> 🆕</th><td><b>무료 등급 GPU 초 발생</b></td><td>🔴 <b>1건</b></td><td>백엔드 리드</td><td>🔴 <b>2시간</b> — 무료 원가 가정이 깨졌다</td></tr>
+<tr><th><b>원가</b> 🆕</th><td>편당 실처리 원가(S11)</td><td><b>구독 편당 매출 3,300원의 50% 초과</b> <span class="tag sky">초안</span></td><td>백엔드 리드 + 경영</td><td>1일</td></tr>
+<tr><th><b>외부 API</b> 🆕</th><td>Gemini · Haiku · Suno 실패율</td><td>각 <b>&gt; 5%</b>(15분 창)</td><td>백엔드 온콜</td><td><b>1시간</b> — 대체 경로 전환 확인</td></tr>
+<tr><th><b>무료 등급</b> 🆕</th><td>무료 완주율(S12)</td><td>주간 <b>&lt; 25%</b> <span class="tag sky">초안</span></td><td>제품 리드</td><td>주간 리뷰 — <b>X3 조기 경보</b></td></tr>
+<tr><th>로그</th><td>업로드·탐지·선택·렌더·저장·공개변경 · <b>결제·차감·환원</b> 🆕</td><td>—</td><td>—</td><td>선택 로그는 <b>F14 학습 데이터</b>로도 사용</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<!-- ================= 06 · Data & Interface ================= -->
+<section class="sec" id="s6">
+  <div class="sec-head"><p class="sec-num">06 · Data &amp; Interface</p><h2>데이터·인터페이스 개요</h2></div>
+  <div class="block">
+<p><span class="tag sky">초안</span> <b>전 항목 초안.</b> VPS에 데이터 모델이 없어 기능 정의에서 역산했다.</p>
+  </div>
+  <div class="block">
+    <h3>6-1. 핵심 엔터티</h3>
+<figure class="fig"><pre class="mermaid">erDiagram
+    USER ||--o{ SOURCE_VIDEO : uploads
+    USER ||--o{ RECORD : owns
+    USER ||--o{ FOLLOW : follows
+    USER ||--o| SUBSCRIPTION : has
+    USER ||--o| CREDIT_WALLET : has
+    USER ||--o{ USAGE_LEDGER : accrues
+    SOURCE_VIDEO ||--o{ EDIT_PROJECT : edited_in
+    SOURCE_VIDEO ||--o| RETENTION : retained_by
+    SOURCE_VIDEO ||--o{ DETECTION : has
+    DETECTION ||--o{ CANDIDATE : yields
+    DETECTION ||--o| CUT_ANALYSIS : analyzed_by
+    CUT_ANALYSIS ||--o{ CUT_JUDGMENT : judged_as
+    CANDIDATE ||--o{ SELECTION : chosen_as
+    EDIT_PROJECT ||--o{ MANUAL_EDIT : contains
+    EDIT_PROJECT ||--o{ SUBTITLE : contains
+    EDIT_PROJECT ||--|| RECORD : renders_to
+    SELECTION ||--|| RECORD : renders_to
+    USER ||--o{ MUSIC_GENERATION : requests
+    MUSIC_GENERATION ||--o{ MUSIC_TRACK : yields
+    RECORD ||--o{ REACTION : receives
+    RECORD }o--o| MUSIC_TRACK : uses
+
+    USER { uuid id PK "핸들·표시이름·프로필·plan_tier" }
+    SOURCE_VIDEO { uuid id PK "길이초·바이트·해상도·촬영일시·삭제여부" }
+    DETECTION { uuid id PK "subject_ref · 구간배열 · 탐지율 · 모델버전 · 제외건수" }
+    CANDIDATE { uuid id PK "시작초·종료초·점수·온전도" }
+    SELECTION { uuid id PK "사용자선택여부 · 선택순서 · 학습동의" }
+    RECORD { uuid id PK "길이초 · visibility · music_track_id · 생성일시 · 생성경로 manual_ai" }
+    REACTION { uuid id PK "종류 like_comment · 신고여부" }
+    FOLLOW { uuid id PK "follower·followee" }
+    SUBSCRIPTION { uuid id PK "plan · 상태 · 갱신일 · pg_token · 월편수 · 사용편수" }
+    CREDIT_WALLET { uuid id PK "잔여편수 · 만료일시 · 최종충전일시" }
+    USAGE_LEDGER { uuid id PK "종류 grant_consume_refund_expire · 수량 · 사유 · record_id · 발생시각" }
+    EDIT_PROJECT { uuid id PK "편집상태 스냅샷 · 마지막저장 · 등급 free_paid" }
+    MANUAL_EDIT { uuid id PK "종류 flip_cut_track · 파라미터 · 키프레임배열" }
+    SUBTITLE { uuid id PK "시작초·종료초·텍스트·font_key·스타일" }
+    CUT_ANALYSIS { uuid id PK "gemini_model · 투입구간합초 · 메타데이터 · 생성시각" }
+    CUT_JUDGMENT { uuid id PK "프롬프트 · 선택구간 · 근거문장 · 판정모델 · 회차" }
+    MUSIC_GENERATION { uuid id PK "record_id · 회차 1_3 · 상태 · suno_job_id · 원가" }
+    MUSIC_TRACK { uuid id PK "출처 library_suno · 길이초 · 라이선스 · storage_path" }
+    RETENTION { uuid id PK "만료일시 · 사전알림발송 · 파기완료" }</pre></figure>
+<p><b>v2.0 스키마 변경</b></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>변경</th><th>내용</th></tr></thead>
+<tbody>
+<tr><th>🗑 <b>삭제</b></th><td><code>GROUP</code> 엔터티 · <code>USER }o--o{ GROUP</code> 관계 · <code>RECORD.group_id</code> 필드 · `RECORD }o--o</td><td>GROUP` 관계</td></tr>
+<tr><th>✏️ <b>변경</b></th><td><b><code>RECORD.visibility ∈ {private, public}</code></b> — 🔴 <b>DB <code>DEFAULT 'private'</code>로 강제</b>(<b>SRS</b> ADR-4 · 본 문서 ADR-07a). <code>group</code> 값 제거. <code>RECORD.music_id</code> → <code>music_track_id</code>. <code>RECORD.생성경로</code> 신설(무료 수동 / AI)</td></tr>
+<tr><th>🆕 <b>과금 4</b></th><td><code>SUBSCRIPTION</code> · <code>CREDIT_WALLET</code> · <code>USAGE_LEDGER</code> · <code>RETENTION</code></td></tr>
+<tr><th>🆕 <b>무료 편집 3</b></th><td><code>EDIT_PROJECT</code> · <code>MANUAL_EDIT</code> · <code>SUBTITLE</code></td></tr>
+<tr><th>🆕 <b>AI 편집 4</b></th><td><code>CUT_ANALYSIS</code> · <code>CUT_JUDGMENT</code> · <code>MUSIC_GENERATION</code> · <code>MUSIC_TRACK</code></td></tr>
+</tbody></table></div>
+<p><b>공개 범위 필드</b> — <code>RECORD.visibility ∈ {private, public}</code>. <b>서버가 모든 조회 경로에서 강제</b>하고, 🔴 <b>RLS 정책에 팔로우 조건을 넣지 않는다</b>(CLAUDE.md 규칙 5). 타인 프로필에서 비공개 기록은 <b>개수에도 잡히지 않는다</b>(AC4-3).</p>
+<p><b>설계 판단 3건</b> <span class="tag sky">초안</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>판단</th><th>근거</th></tr></thead>
+<tbody>
+<tr><th>①</th><td><b><code>CUT_ANALYSIS</code>와 <code>CUT_JUDGMENT</code>를 분리한다</b></td><td>Gemini 산출물(비싸고 재사용 가능)과 Haiku 판정(싸고 프롬프트마다 다름)의 <b>수명이 다르다.</b> 분리해야 AC7-3(재판정 시 Gemini 재호출 0건)이 스키마로 보장된다. <code>CUT_JUDGMENT.회차</code>가 재판정 이력이다</td></tr>
+<tr><th>②</th><td><b><code>USAGE_LEDGER</code>를 잔액과 별도로 둔다</b></td><td><code>CREDIT_WALLET.잔여편수</code>만 있으면 <em>"왜 줄었는가"</em> 를 답할 수 없다. <b>차감·환원·소멸이 전부 원장에 append-only로 남아야</b> AC8-F2(결제·적립 불일치 자동 보정)와 AC1-F4(실패 시 환원)가 검증 가능해진다</td></tr>
+<tr><th>③</th><td><b><code>EDIT_PROJECT</code>가 두 경로를 함께 받는다</b></td><td>무료(수동)와 유료(AI)가 <b>같은 프로젝트 테이블을 쓰고 같은 <code>RECORD</code>로 렌더된다.</b> 등급별로 테이블을 나누면 §4-5의 <em>"출력 규격 등급화 금지"</em> 가 코드에서 깨지기 쉬워진다</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>6-2. 주요 API 개요</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>API</th><th>입력</th><th>출력</th><th>제약</th></tr></thead>
+<tbody>
+<tr><th><code>POST /uploads</code></th><td>원본 메타(길이·크기·해상도)</td><td>업로드 세션 + 이어올리기 토큰</td><td>최대 <b>60분 / 6GB</b> <span class="tag sky">초안</span> · 재개 필수</td></tr>
+<tr><th><code>POST /detections</code></th><td><code>source_video_id</code>, <code>subject_ref</code>(사용자 지정 1회)</td><td><code>detection_id</code>(비동기)</td><td><b>Gate A 지표 기록 필수</b> · 모델 버전 태깅</td></tr>
+<tr><th><code>GET /detections/{id}</code></th><td>—</td><td>상태 · 구간 배열 · 탐지율</td><td>폴링/웹소켓 <span class="tag sky">초안</span></td></tr>
+<tr><th><code>GET /candidates</code></th><td><code>detection_id</code></td><td>후보 ≤ <b>30개</b>(초안) <span class="tag amber">가설</span></td><td>온전히 잡힌 구간 우선 <span class="tag mint">확정</span></td></tr>
+<tr><th><code>POST /records</code></th><td>선택 후보 배열 · 음악 track id</td><td><code>record_id</code>(렌더 비동기)</td><td><b>렌더 전에 기록 행 선생성</b>(F7 보장)</td></tr>
+<tr><th><code>PATCH /records/{id}/visibility</code></th><td><code>private|public</code></td><td>변경 결과</td><td><b>v2.0 — 2종만.</b> 공개→비공개 전환 시 <b>기록 유지</b> <span class="tag mint">확정</span> · 회수 반영 지연 <b>≤ 60초</b></td></tr>
+<tr><th><code>GET /feed</code></th><td><code>tab ∈ {following, recommend}</code></td><td>영상 목록</td><td><b>v2.0 — <code>group</code> 탭 제거.</b> 진입 기본 <b>following</b> <span class="tag mint">확정</span> · 공개 범위 서버 강제 · 🔴 조회 조건에 팔로우를 넣지 않고 <code>visibility='public'</code>으로 거른다</td></tr>
+<tr><th><code>GET /users/{id}/profile</code></th><td>—</td><td>공개 기록만</td><td><b>비공개 기록은 개수에도 미포함</b> <span class="tag mint">확정</span></td></tr>
+<tr><th><s><code>POST /groups</code></s> · <s><code>/invite-link</code></s> · <s><code>DELETE /members/me</code></s></th><td>—</td><td>—</td><td>🗑 <b>v2.0 삭제</b> — 그룹 기능 제외(C2)</td></tr>
+</tbody></table></div>
+<p><b>v2.0 신설 API</b> <span class="tag sky">초안</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>API</th><th>입력</th><th>출력</th><th>제약</th></tr></thead>
+<tbody>
+<tr><th><code>GET /entitlements</code></th><td>—</td><td><code>{ plan, remaining_units, expires_at, music_gen_used }</code></td><td>🔴 <b>RSC 직접 조회</b> — Server Action으로 만들지 않는다(CLAUDE.md 조회·변경 배분) · Mock은 무제한 반환</td></tr>
+<tr><th><code>POST /edit-projects</code></th><td><code>source_video_id</code></td><td><code>edit_project_id</code></td><td><b>무료·유료 공통.</b> 잔여 0이면 <b>422 · Storage 쓰기 0바이트</b>(AC5-F1)</td></tr>
+<tr><th><code>PATCH /edit-projects/{id}</code></th><td>편집 상태 스냅샷(컷·키프레임·자막)</td><td>저장 결과</td><td><b>자동 저장.</b> 🔴 편집 상태 유실 0건(AC5-F2) · 클라이언트 연산이므로 서버는 상태만 보관</td></tr>
+<tr><th><code>POST /cut-analyses</code></th><td><code>detection_id</code>, <code>prompt</code></td><td><code>cut_analysis_id</code>(비동기)</td><td>🔴 <b>등장 구간 밖 프레임 투입 0건</b>(AC7-1) · <b>A-T1 — 동기 대기 불가</b>, webhook/폴링 · Gemini 모델 버전 태깅 필수</td></tr>
+<tr><th><code>POST /cut-judgments</code></th><td><code>cut_analysis_id</code>, <code>prompt</code></td><td>선택 구간 + <b>근거 문장</b></td><td>🔴 <b>근거 없는 선택 0건</b>(AC7-2) · <b>재판정 시 Gemini 재호출 0건</b>(AC7-3) · 판정 모델 버전 태깅</td></tr>
+<tr><th><code>POST /music-generations</code></th><td><code>record_id</code>, 분위기·길이</td><td><code>generation_id</code>(비동기 · 2곡)</td><td>🔴 <b>편당 3회 상한</b> — 4회째 <b>429</b> · 🔴 <b>사용자 선택 없이 <span class="tag mint">확정</span> 0건</b>(AC7-5)</td></tr>
+<tr><th><code>POST /checkout</code></th><td><code>plan ∈ {subscription, credit_pack, credit_addon}</code></td><td>PG 결제 세션</td><td>🔴 <b>카드 정보 자체 저장 0건</b> · PG사 토큰만 · <b>PG사 <code>[TBD]</code></b>(ADR-17)</td></tr>
+<tr><th><code>POST /webhooks/payment</code></th><td>PG 결제 결과</td><td>200</td><td><b>Route Handler</b>(외부가 일으키는 사건) · 🔴 <b>결제·적립 불일치 잔존 0건</b>(AC8-F2) · 멱등 처리 필수</td></tr>
+<tr><th><code>GET /usage-ledger</code></th><td>기간</td><td>차감·환원·소멸 이력</td><td><b>RSC 직접 조회</b> · append-only · <em>"왜 줄었는가"</em> 를 사용자에게 보인다</td></tr>
+<tr><th><code>POST /cron/retention-sweep</code></th><td>—</td><td>파기 건수</td><td><b>Vercel Cron</b>(정리 배치) · 🔴 <b>만료 24시간 전 사전 알림</b>(AC8-4) · 만료 정확도 <b>±1시간</b></td></tr>
+<tr><th><code>POST /cron/credit-expiry</code></th><td>—</td><td>소멸 건수</td><td><b>Vercel Cron</b> · 충전 편수 <b>1개월 소멸</b> · 🔴 <b>소멸이 <code>RECORD</code> 접근을 막지 않는다</b>(AC8-F1)</td></tr>
+</tbody></table></div>
+<p><b>외부 의존 5건</b> — v1.0의 2건에서 늘었다. 🔺 <b>의존이 늘수록 결합 가용성이 곱해진다</b>(§5-2).</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>대상</th><th>용도</th><th>상태</th></tr></thead>
+<tbody>
+<tr><th><b>추적 API</b>(D1)</th><td>F2a·F2b — <em>"내가 나온 구간"</em></td><td>🔴 <b>미선정</b>(SP-1) · PoC는 자체 구현으로 실측 — §11-1</td></tr>
+<tr><th><b>Gemini</b>(Vercel AI SDK)</th><td>F27 1단 — <em>"무엇을 했는가"</em> 구간 메타데이터</td><td>🔴 <b>인물 식별에 쓰지 않는다</b>(CLAUDE.md 규칙 2) · 단가 <code>[TBD]</code></td></tr>
+<tr><th><b>Claude Haiku 4.5</b>(<code>claude-haiku-4-5</code>)</th><td>F27 2단 — 프롬프트 대조 판정</td><td>200K 컨텍스트 · <b>$1.00 / $5.00 per MTok</b> · §11-2</td></tr>
+<tr><th><b>Suno</b></th><td>F28 — AI 음악 생성(2곡/회)</td><td><b>편당 75원</b>(사용자 제시) · 🔺 <b>1회 단가인지 편당 총액인지 확인 필요</b> · 🔴 <code>MUSIC_LICENSE</code> 게이트 — §11-3</td></tr>
+<tr><th><b>PG사</b></th><td>결제</td><td>🔴 <b><code>[TBD]</code></b> — ADR-17</td></tr>
+<tr><th>음악 라이브러리(F18a)</th><td>무료 곡</td><td>CC0 전환 검토 중(NF-016) · <b>곡 확보 경로 미정</b> <span class="tag mint">확정</span></td></tr>
+<tr><th>공유(F21)</th><td>카카오톡·문자 링크</td><td><b>앱 안 DM 없음(후순위)</b> <span class="tag mint">확정</span></td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<!-- ================= 07 · Scope · Risks · ADR ================= -->
+<section class="sec" id="s7">
+  <div class="sec-head"><p class="sec-num">07 · Scope · Risks · ADR</p><h2>범위(In/Out), 리스크·가정·의존성</h2></div>
+  <div class="block">
+    <h3>7-1. In / Out</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>In (MVP)</th><th>Out (이번 범위 밖)</th></tr></thead>
+<tbody>
+<tr><th>이미 찍어둔 원본 <b>불러오기</b> <span class="tag mint">확정</span></th><td><b>앱 내 촬영</b> — 촬영은 이미 습관이다 <span class="tag mint">확정</span></td></tr>
+<tr><th><b>게시 이전의 실행 문제</b> — 찾기·구도·완성·반복 노동 <span class="tag mint">확정</span></th><td><b>게시 이후의 결과 문제</b> — 팔로워 성장·조회수·수익화 <span class="tag mint">확정</span></td></tr>
+<tr><th>첫 카테고리 <b>농구·구기</b> <span class="tag mint">확정</span></th><td>클라이밍·필라테스 등 확장 — <b>시점 미정</b> <span class="tag mint">확정</span></td></tr>
+<tr><th><b>기록 단위 공개 범위 2종</b>(<code>private</code>/<code>public</code>) 🆕</th><td>🗑 <b>그룹 — v2.0에서 제외</b>(C2) · <b>앱 안 DM</b> — 후순위 <span class="tag mint">확정</span></td></tr>
+<tr><th>좋아요·댓글·신고 <b>접수</b> <span class="tag mint">확정</span> · <b>SNS 형식 유지</b> 🆕</th><td>신고 <b>처리 기준·운영</b> — 미정 <span class="tag mint">확정</span></td></tr>
+<tr><th>팀원이 <b>각자 자기 원본</b>을 올림 <span class="tag mint">확정</span></th><td><b>F16 한 원본 다중 사용자</b> — P3 <span class="tag mint">확정</span></td></tr>
+<tr><th><b>요금제 3종</b>(무료·구독·충전형) 🆕 <span class="tag mint">확정</span></th><td>🔴 <b>팀·조직 단위 결제</b> — 오세진(12명)·박서연(8명)의 실제 형태이나 v2.0 범위 밖 <span class="tag sky">초안</span></td></tr>
+<tr><th><b>무료 기본 편집도구 4종</b>(좌우반전·수동컷·수동트래킹·자막) 🆕 <span class="tag mint">확정</span></th><td><b>원본 자르기·회전 · 후보 구간 직접 조정 · 수동 구도 조정</b> — 규칙 4 유지 <span class="tag mint">확정</span></td></tr>
+<tr><th><b>프롬프트 컷 · AI 음악 · 7일 임시 보관</b> 🆕 <span class="tag mint">확정</span></th><td><b>환불·구독 해지 유예·가족 계정</b> — 🔴 <b><code>[TBD]</code></b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>Entitlement Resolver Mock</b>(전부 무제한) <span class="tag mint">확정</span></th><td><b>실제 Entitlement 연결</b> — Gate B 통과 후(PRD ADR-04) <span class="tag mint">확정</span></td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>7-2. 리스크</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>리스크</th><th>영향</th><th>완화</th></tr></thead>
+<tbody>
+<tr><th><b>R1</b></th><td><b>탐지율이 85%에 못 미친다</b> — Gate A 실패</td><td><b>치명.</b> D1이 무너지면 D2·D3·D4는 기록 앱 하나가 된다 <span class="tag mint">확정</span></td><td>다른 무엇보다 F2b를 <b>먼저</b> 검증. 농구 한 종목으로 좁혀 데이터 밀도를 올린다. 실패 시 <b>범위를 더 좁히거나 제품 가설을 재검토</b></td></tr>
+<tr><th><b>R2</b></th><td><b>GPU 원가가 수익 없이 선행한다</b></td><td>처리량이 북극성과 함께 늘어 <b>원가가 성장에 비례</b>한다 <span class="tag mint">확정</span></td><td>편당 처리 원가 상한을 먼저 정하고, <span class="tag mint">확정</span> 전 무제한 업로드를 열지 않는다 <span class="tag sky">초안</span></td></tr>
+<tr><th><b>R3</b></th><td><b>D1이 복제된다</b> — Veo·Pixellot의 B2C 하향</td><td>우위 소멸 <span class="tag mint">확정</span></td><td>방어선을 <b>선택 데이터 축적(F14)</b>으로 옮긴다. 다만 F14는 사용자가 있어야 시작된다 → <b>속도가 방어다</b></td></tr>
+<tr><th><b>R4</b></th><td><b>얼굴 정보 동의 절차 미정</b></td><td>법적 위험 · F16 착수 불가 <span class="tag mint">확정</span></td><td>착수 전 법무 검토. MVP는 <b>본인 지정 1회</b> 범위로 한정 <span class="tag sky">초안</span></td></tr>
+<tr><th><b>R5</b></th><td><b>Q4가 돈을 내지 않는다</b></td><td>시장 9배지만 매출 0 <span class="tag mint">확정</span></td><td>값을 편집이 아니라 <b>기록 축적</b>에서 받기로 이미 결정. 다만 <b>가격·시점 미정</b>이라 검증 불가</td></tr>
+<tr><th><b>R6</b></th><td><b>근거가 전부 대리 지표다</b></td><td>마케터·해외·미국 데이터뿐, 국내 직접 조사 없음 <span class="tag mint">확정</span></td><td>국내 미게시 비율 조사 <b>실시 여부 미정</b> <span class="tag mint">확정</span> → 베타에서 자체 로그로 대체 수집 <span class="tag sky">초안</span></td></tr>
+<tr><th><b>R7</b> 🆕</th><td><b>중간 공개 범위가 사라졌다</b> — 그룹 제외(C2)</td><td>공개 선택지가 <em>전부에게</em> 아니면 <em>아무에게도</em> 둘뿐이다. <b>김도현의 원래 Pain이 "계정을 쪼개지 않고 대여섯 명에게만"</b> 이었으므로, 이 사용자는 <b>다시 부계정으로 돌아갈 수 있다</b> <span class="tag sky">초안</span></td><td><b>E7을 재정의</b>해 2종 공개 범위의 전환율 기준선을 먼저 잰다. 🔺 <b>전환율이 낮으면 그룹을 P1으로 되살리는 것이 첫 후보</b> — 제외는 v2.0 범위 결정이지 영구 폐기가 아니다</td></tr>
+<tr><th><b>R8</b> 🆕</th><td>🔴 <b>무료 등급이 이탈 지점을 판다</b> — X3</td><td><em>"30분 초과 시 포기"</em> 는 v1.0이 편집 도구를 뺀 이유였다. <b>v2.0은 그 도구를 무료 등급에 넣었다.</b> 지친 사용자는 구독하는 게 아니라 앱을 지운다 <span class="tag sky">초안</span></td><td><b>S12(무료 완주율 · 이탈 도구 분해)</b> 로 조기 경보 · <b>AC5-F2(편집 상태 복원)</b> 로 한 번에 끝내야 한다는 압박 제거 · <b>E12가 판정 실험</b>이고 실패 시 무료 등급 설계를 되돌린다</td></tr>
+<tr><th><b>R9</b> 🆕</th><td><b>외부 추론 의존이 3곳으로 늘었다</b></td><td>Gemini · Haiku · Suno. 각 99.0% 가정 시 결합 가용성 <b>약 97%</b> <code>[산출]</code> — <b>유료 사용자가 돈을 내고 실패를 만나는 빈도</b>가 v1.0보다 높아진다 <span class="tag sky">초안</span></td><td><b>AC7-F2 대체 경로 필수</b>(F3 수동 선택으로 되돌림) · <b>실패 시 편수 차감 0건</b>(AC1-F4) · 외부 API 실패율 알림 <b>&gt; 5% / 1시간 SLA</b></td></tr>
+<tr><th><b>R10</b> 🆕</th><td>🔴 <b>편당 원가 합계가 아직 닫히지 않는다</b></td><td>매출 상한은 확정(편당 3,300원)인데 <b>Gemini 단가와 저장·전송 원가가 <code>[TBD]</code></b> 다. 원가가 3,300원을 넘으면 <b>팔수록 손해</b>다 <span class="tag sky">초안</span></td><td><b>ADR-05를 Gate A 착수 전 결정으로 유지</b> · §11-5의 구성요소별 상한 추정을 <b>실측으로 교체</b> · S11이 매출의 50%를 넘으면 알림</td></tr>
+<tr><th><b>R11</b> 🆕</th><td><b>Suno 생성물의 배포 권리가 확인되지 않았다</b></td><td>사용자가 만든 곡을 <b>전체공개 기록에 실어 배포</b>할 권리가 없으면 F28은 <em>"만들 수는 있으나 올릴 수는 없는"</em> 기능이 된다 <span class="tag sky">초안</span></td><td>🔴 <b><code>MUSIC_LICENSE</code> 법무 게이트 확장</b> — API 약관 확인 전 F28 배포 0건. 확인 실패 시 <b>F28을 비공개 기록 전용으로 축소</b>하는 것이 대안</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>7-3. 가정·의존성 (ADR 후보)</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>상태</th><th>결정 필요 시점</th></tr></thead>
+<tbody>
+<tr><th><s><b>ADR-01</b> 편집으로 과금하지 않는다</s></th><td>⚠️ <b>v2.0에서 폐기 → ADR-13으로 대체</b>(X2)</td><td>대체 완료</td></tr>
+<tr><th><b>ADR-02</b> 관계는 팔로워·팔로잉</th><td>✏️ <b>v2.0 개정</b> — <em>"비공개 공유는 그룹"</em> 부분을 삭제했다. 그룹 제외로 <b>비공개 공유 수단이 없어졌다</b>(R7)</td><td>결정 완료</td></tr>
+<tr><th><b>ADR-03</b> 첫 검증은 농구 한 카테고리</th><td><span class="tag mint">확정</span> <span class="tag mint">확정</span></td><td>—</td></tr>
+<tr><th><b>ADR-04</b> 수익 모델·가격·구독 시점</th><td>✏️ <b>v2.0 개정 — 모델·가격은 확정</b>(§4-4), <b>적용 시점은 여전히 Gate B 통과 후.</b> 지금 만드는 것은 <b>Entitlement Resolver Mock</b>뿐이다</td><td>적용은 Gate B 후</td></tr>
+<tr><th><b>ADR-05</b> GPU 원가 구조·편당 상한</th><td><span class="tag mint">확정</span> 🔴 <b>미정 — 긴급도 상승.</b> 매출 상한(편당 3,300원)이 정해져 <b>원가가 그 아래인지가 사업 성립 조건</b>이 됐다(R10)</td><td><b>Gate A 착수 전</b> <span class="tag sky">초안</span></td></tr>
+<tr><th>~~<b>ADR-06a~d</b> 그룹 4건~~</th><td>🗑 <b>v2.0에서 삭제</b> — 그룹 기능 제외(C2)</td><td>해당 없음</td></tr>
+<tr><th><b>ADR-07a</b> 저장 직후 기본 공개 범위</th><td><span class="tag mint">확정</span> <b>확정 — 나만 보기(<code>private</code>)</b> · <b>DB <code>DEFAULT</code>로 강제</b></td><td>결정 완료</td></tr>
+<tr><th><b>ADR-07b</b> 공개 범위 표시 방식</th><td>✏️ <b>v2.0 개정 — 글자 배지 3종 → 2종</b>(<code>공개</code>/<code>나만</code>) · <b>영상 가독성 침해 금지 조건 유지</b></td><td>결정 완료</td></tr>
+<tr><th><b>ADR-08</b> 후보 30개 — <span class="tag sky">초안</span> 수치</th><td><span class="tag mint">확정</span> <b>미정</b></td><td>베타 A/B로 결정</td></tr>
+<tr><th><b>ADR-09</b> 팔로우 승인제 / 자동</th><td><span class="tag mint">확정</span> <b>미정</b></td><td>소비 루프 착수 전</td></tr>
+<tr><th><b>ADR-10</b> 랭킹(F15) 도입 여부</th><td><span class="tag mint">확정</span> <b>미정</b> (시점만 P1 확정)</td><td>MVP 이후</td></tr>
+<tr><th><b>ADR-11</b> 얼굴 정보 동의·보관·파기</th><td><span class="tag mint">확정</span> 🔴 <b>미정</b> · <b>v2.0 — 위탁 대상에 Gemini·Haiku·Suno 3곳 추가</b></td><td><b>법무 — 최우선</b></td></tr>
+<tr><th><b>ADR-12</b> 음악 곡 확보 경로·라이선스 비용</th><td><span class="tag mint">확정</span> <b>미정</b> · CC0 전환 검토 중(NF-016)</td><td>F18a 착수 전</td></tr>
+</tbody></table></div>
+<p><b>v2.0 신설 ADR 8건</b> 🆕</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>상태</th><th>결정 필요 시점</th></tr></thead>
+<tbody>
+<tr><th><b>ADR-13</b> 🔴 <b>과금 경계 — 무료는 사람이 손으로, 유료는 AI가 대신 판단</b></th><td>✅ <b>확정</b>(사용자 결정 2026-09-01) · <b>SRS ADR-8을 개정한다</b>(X1). 🔴 <b>Gate A 판정 대상 = 구독 등급</b> · 🔴 <b>Gate B 판정 대상 = 무료 등급</b> · <b>금지 5건 중 품질 등급화·<code>τ</code> 차등·기록 저장 3건은 유지</b> — 유료 등급 내부에서 다시 나누지 않는다</td><td>🔺 <b>SRS v1.8 ADR-8 개정이 뒤따라야</b> 문서 간 정합이 완성된다</td></tr>
+<tr><th><b>ADR-14</b> 무료 등급에 수동 편집 도구를 넣는다</th><td>✅ <b>확정</b> · <b>CLAUDE.md 규칙 4를 "유료 등급에 한정"으로 좁힌다</b>(X3). 🔴 <b>위험은 남는다</b> — E12가 판정 실험</td><td>🔺 <b>CLAUDE.md 규칙 4 개정 필요</b></td></tr>
+<tr><th><b>ADR-15</b> 🔺 <b>충전 추가 1편 단가 9,900원</b></th><td>🔺 <b>확인 필요</b> — 충전 팩 편당 6,600원보다 <b>50% 비싸다.</b> 의도된 구독 유도인지, 6,600원으로 맞출지, 3편 단위 재충전만 허용할지(§4-4)</td><td><b>베타 결제 오픈 전</b></td></tr>
+<tr><th><b>ADR-16</b> 🔴 <b>쿼터 갱신 주기</b></th><td>🔴 <b><code>[TBD]</code> 전부</b> — ①무료 업로드 2회가 <b>월 2회인가 계정당 2회인가</b> ②구독 3편의 <b>이월 여부</b> ③구독 해지 시 잔여 편수 처리</td><td><b>베타 결제 오픈 전</b> · <b>ADR-05 선행</b></td></tr>
+<tr><th><b>ADR-17</b> PG사 선정</th><td>🔴 <b><code>[TBD]</code></b> — 구독(정기결제)과 단건 충전을 <b>한 사업자로 처리할 수 있는지</b>가 선정 조건</td><td><b>베타 결제 오픈 전</b></td></tr>
+<tr><th><b>ADR-18</b> 프롬프트 컷 2단 분리</th><td>✅ <b>확정 — Gemini(구간 메타데이터) → Haiku 4.5(대조 판정).</b> 근거 3건은 §4-6-1. 🔴 <b>Gemini를 인물 식별에 쓰지 않는다</b></td><td>결정 완료</td></tr>
+<tr><th><b>ADR-19</b> 🔴 <b>Suno 생성물의 배포 권리</b></th><td>🔴 <b><code>[TBD]</code></b> — 사용자가 전체공개 기록에 실어 배포할 권리가 API 약관상 있는가(R11)</td><td><b><code>MUSIC_LICENSE</code> 게이트 · F28 착수 전</b></td></tr>
+<tr><th><b>ADR-20</b> 원본 임시 보관 7일</th><td>✅ <b>확정 — 유료 등급만 7일</b> · 무료는 렌더 직후 파기 · 만료 <b>24시간 전 사전 알림</b>(AC8-4)</td><td>결정 완료</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<!-- ================= 08 · Experiment · Rollout ================= -->
+<section class="sec" id="s8">
+  <div class="sec-head"><p class="sec-num">08 · Experiment · Rollout</p><h2>실험·롤아웃·측정</h2></div>
+  <div class="block">
+    <h3>8-1. 게이트 순서 — 바꿀 수 없다</h3>
+<figure class="fig"><pre class="mermaid">flowchart LR
+    G1["1. 트래킹 검증&lt;br/&gt;F1 · F2a · F2b"] --&gt; GA{"Gate A&lt;br/&gt;탐지율 ≥ 85%?"}
+    GA --&gt;|실패| STOP["이후 전부 무의미&lt;br/&gt;가설 재검토"]
+    GA --&gt;|통과| G2["2. 흐름 완성&lt;br/&gt;F3 · F4 · F5a · F18a · F6"]
+    G2 --&gt; Q1{"잘 잡혔다 ≥ 80%?&lt;br/&gt;앱 밖으로 안 나가는가?"}
+    Q1 --&gt; G3["3. 기록 구조&lt;br/&gt;F7 · F8 · F22"]
+    G3 --&gt; GB{"Gate B&lt;br/&gt;부계정을 대체할 만큼 편한가?"}
+    GB --&gt;|통과| G4["4. 소비 루프&lt;br/&gt;F11 · F13 · F19 · F20 · F21"]
+    G4 --&gt; Q2{"O7 기록 3편 축적&lt;br/&gt;1만 명까지 가는가?"}
+    Q2 --&gt; G5["5. 재방문 심화&lt;br/&gt;F9 · F10 · F12 · F15 · F5b"]
+    G5 --&gt; G6["6. 확산과 방어&lt;br/&gt;F14 선택 데이터 학습"]
+
+    G0["0. 무료 편집 완주&lt;br/&gt;F24 · F25 · F26 · F18b"] -.Gate B 판정 입력.-&gt; G3
+    G0 --&gt; QF{"E12&lt;br/&gt;무료 완주율 ≥ 40%?&lt;br/&gt;세션 p90 ≤ 30분?"}
+    QF --&gt;|실패| BACK["무료 등급 설계 되돌림&lt;br/&gt;도구 축소 또는 AI 체험 1편"]
+
+    style GA fill:#FBEDE4,stroke:#C2673F,stroke-width:3px
+    style GB fill:#FFF3C4,stroke:#8A6A22,stroke-width:3px
+    style STOP fill:#fff,stroke:#C2673F,stroke-dasharray:5
+    style QF fill:#FBEDE4,stroke:#C2673F,stroke-width:2px
+    style BACK fill:#fff,stroke:#C2673F,stroke-dasharray:5
+    style G0 fill:#E6F8F3,stroke:#33A992,stroke-width:2px</pre></figure>
+<p class="lead">🔴 <b>v2.0에서 게이트 판정 대상이 등급으로 갈렸다</b>(ADR-13).</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>게이트</th><th>판정 지표</th><th>🔴 판정 대상 등급</th><th>왜 그 등급인가</th></tr></thead>
+<tbody>
+<tr><th><b>Gate A</b></th><td>탐지율 ≥ 85% (제외 후)</td><td><b>구독 등급</b></td><td>AI 탐지가 구독 전용이 됐으므로 <b>무료 등급에는 잴 대상 자체가 없다.</b> 🔴 유료 등급 내부(구독 vs 충전)는 같은 모델·같은 <code>τ</code>를 쓰므로 <b>어느 쪽으로 재도 같은 값</b>이어야 한다 — 다르면 품질 등급화가 코드에 들어간 것이다</td></tr>
+<tr><th><b>Gate B</b></th><td>기록 공간 수용성</td><td><b>무료 등급</b></td><td>기록 저장·공개 범위는 <b>전 등급 무료</b>로 남았으므로 판정이 성립한다. 🔴 <b>무료 등급으로 재야 결제 의사와 섞이지 않는다</b> — 유료 사용자는 이미 돈을 냈으므로 <em>"부계정을 대체할 만큼 편한가"</em> 에 편향이 들어간다</td></tr>
+<tr><th><b>E12</b>(신규 관문)</th><td>무료 완주율 ≥ 40% · 세션 p90 ≤ 30분</td><td>무료 등급</td><td><b>X3·R8의 판정 장치.</b> Gate가 아니라 <b>되돌림 조건</b>이다 — 실패해도 개발이 멈추지 않고 무료 등급 설계만 되돌린다</td></tr>
+</tbody></table></div>
+<p class="lead">🔴 <b>순서는 그대로 바꿀 수 없다.</b> Gate A 실패 시 이후 단계에 착수하지 않는다.</p>
+  </div>
+  <div class="block">
+    <h3>8-2. 실험 설계 — 주장마다 검증 방법을 붙인다</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>주장</th><th>실험 설계(Design)</th><th>측정 도구(Metrics)</th><th>성공 기준</th></tr></thead>
+<tbody>
+<tr><th><b>E1</b></th><td><b>D1 — 말하지 않고 움직이는 사람을 추적한다</b></td><td><b>정답 라벨 벤치마크.</b> 농구 원본 <b>n=100편</b>(40분급)에 사람이 등장 구간을 수작업 표시한 정답셋 구축 → 모델 출력과 IoU 비교. 🆕 <b>같은 문제 클립에 Cutie와 SAM 2.1을 나란히 돌려 복구 성공률을 비교한다</b></td><td>구간 IoU · <b>탐지율(%)</b> · 재식별 정확도 · 오인식률 · 편당 처리 시간(초) · 🆕 <b>복구 성공률(Cutie vs SAM 2.1)</b> · 🆕 <b>회당 GPU 초·원가</b></td><td><b>탐지율 ≥ 85%</b> <span class="tag mint">확정</span> · 오인식 ≤ 2% <span class="tag sky">초안</span> → <b>Gate A</b> · 🆕 <b>복구 모델은 성공률·GPU 원가 둘을 함께 보고 채택</b>(§11-1)</td></tr>
+<tr><th><b>E2</b></th><td><b>경쟁 대안 대비 우위</b></td><td><b>동일 원본 벤치마크.</b> 같은 100편을 AlphaCut·Filmora(화자 추적)와 <b>사람 수작업</b>에 각각 투입</td><td>탐지율 · 탐색 소요 시간(분) · 결과물 도달률</td><td>HILiT 탐지율이 화자추적군 대비 <b>≥ 2배</b>, 수작업 대비 탐색시간 <b>≤ 1/12</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>E3</b></th><td><b>V2 — 구석의 나를 주인공으로 잡는다</b></td><td><b>주관 평가.</b> 리프레이밍 전/후 쌍을 <b>n=200쌍</b>, 참가자 <b>n=50명</b>에게 블라인드 제시</td><td><b>"잘 잡혔다" 5점 척도</b> · 4점 이상 비율 · 재촬영 의향</td><td><b>≥ 80%</b> <span class="tag mint">확정</span> · 재촬영 의향 ≤ 10% <span class="tag sky">초안</span></td></tr>
+<tr><th><b>E4</b></th><td><b>O1 — 탐색 시간 60분 → 5분</b></td><td><b>전후 비교(within-subject).</b> 베타 사용자 <b>n=30명</b>이 자기 원본 3편을 ①기존 방식 ②HILiT으로 처리</td><td>스톱워치 실측(분) · 앱 내 단계별 체류 로그</td><td><b>중앙값 ≤ 5분</b> <span class="tag mint">확정</span> · 기존 대비 <b>≥ 12배 단축</b></td></tr>
+<tr><th><b>E5</b></th><td><b>O2 — 전환율 4% → 60%</b></td><td><b>코호트 추적.</b> 베타 30일 코호트의 업로드 원본 대비 완성 결과물</td><td>원본 수 · 완성 수 · 중도 이탈 단계</td><td><b>≥ 60%</b> <span class="tag mint">확정</span> · 이탈이 특정 단계에 몰리지 않을 것</td></tr>
+<tr><th><b>E6</b></th><td><b>D4 — 올리지 않아도 남는다 (Gate B)</b></td><td><b>A/B 테스트 (n=500).</b> A: 공개 범위를 저장 <b>후</b> 선택 / B: 저장 <b>전</b> 선택</td><td><b>비공개 기록 비율(%)</b> · 기록 생성 편수 · 마이페이지 재방문율</td><td>비공개 <b>≥ 30%</b> <span class="tag mint">확정</span> · A안이 B안 대비 기록 편수 <b>≥ 1.3배</b> <span class="tag sky">초안</span></td></tr>
+<tr><th><b>E7</b> ✏️</th><td><b>2종 공개 범위로 충분한가 (R7)</b> <em>(v1.0 "그룹이 맞팔로우를 대체한다"에서 재정의)</em></td><td><b>기준선 측정 (n=500).</b> 그룹 없이 <code>private</code>/<code>public</code> 2종만 제공하고 공개 전환율을 잰다</td><td>공개 전환율 · 비공개 고착률 · <b>부계정 사용 여부 설문</b></td><td>🔴 <b>Target: TBD</b> — 3종 대조군이 없어 배수 비교가 불가능하다. <b>기준선을 먼저 만들고</b>, 전환율이 낮으면 그룹을 P1으로 되살리는 것이 첫 후보</td></tr>
+<tr><th><b>E8</b></th><td><b>O7 — 재방문·축적 (북극성)</b></td><td><b>코호트 리텐션.</b> 주간 코호트의 D7·D30 기록 축적</td><td>기록 3편 도달률 · D30 재방문율</td><td><b>D30 3편 도달 ≥ 30%</b> <span class="tag sky">초안</span> → 1만 명 경로 검증</td></tr>
+<tr><th><b>E9</b></th><td><b>후보 30개가 적정한가 (ADR-08)</b></td><td><b>A/B/n 테스트.</b> 후보 15 / 30 / 50개</td><td>선택 완료율 · 선택 소요 시간 · 선택 개수</td><td>선택 완료율 최대 구간 채택</td></tr>
+<tr><th><b>E10</b> 🆕</th><td><b>O12 — 무료가 유료로 넘어온다</b></td><td><b>코호트 추적.</b> 무료 등급 활성 사용자의 30·60·90일 최초 결제 도달. <b>가격 A/B는 하지 않는다</b> — 표본이 부족한 상태의 가격 실험은 노이즈다</td><td>최초 결제 도달률 · <b>결제 직전 마지막 행동</b>(무엇이 지불을 유발했는가) · 등급별 편당 원가(S11)</td><td>🔴 <b>Target: TBD</b> — 기준선을 먼저 만든다. <b>대조군은 CapCut 약 0.44%(추정치)뿐</b></td></tr>
+<tr><th><b>E11</b> 🆕</th><td><b>프롬프트 컷이 사람 선택과 일치하는가 (F27)</b></td><td><b>일치도 벤치마크.</b> E1의 정답셋 <b>n=100편</b>에 사람이 <em>"3점 슛"</em> 등 <b>기준 프롬프트 10종</b>을 적용해 정답 구간을 표시 → Gemini+Haiku 출력과 비교</td><td>구간 일치율(IoU ≥ 0.5) · <b>근거 문장 타당성</b>(사람 평가 5점) · 편당 토큰·원가 · 재판정 원가 비율</td><td>🔴 <b>Target: TBD</b> — 기준선 없음. <b>다만 하한은 있다</b>: <code>[직접 고르기]</code> 대비 <b>선택 완료 시간이 짧지 않으면 지불 근거가 없다</b></td></tr>
+<tr><th><b>E12</b> 🆕</th><td>🔴 <b>무료 등급이 이탈을 만들지 않는가 (X3 · R8)</b></td><td><b>완주율 + 이탈 구조 분석.</b> 무료 등급 30일 코호트의 편집 세션을 <b>도구 단위로 분해</b> — 컷·트래킹·자막 중 어디서 멈추는가. <b>v1.0의 "30분 초과 시 포기"가 재현되는지</b>를 본다</td><td>무료 완주율(S12) · <b>도구별 이탈률</b> · 편집 세션 길이 중앙값·p90 · 완주자의 D30 잔존율</td><td><b>완주율 ≥ 40%</b> <span class="tag sky">초안</span> · 🔴 <b>세션 길이 p90 ≤ 30분</b> <span class="tag sky">초안</span> — <b>초과하면 무료 등급 설계를 되돌린다</b>(도구 축소 또는 AI 무료 체험 1편으로 전환)</td></tr>
+</tbody></table></div>
+  </div>
+  <div class="block">
+    <h3>8-3. 롤아웃</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>단계</th><th>대상</th><th>규모 <span class="tag sky">초안</span></th><th><b>판정 지표</b></th><th><b>판정 주체</b> <span class="tag sky">초안</span></th><th><b>판정 시점</b> <span class="tag sky">초안</span></th><th><b>실패 시 행동</b> <span class="tag sky">초안</span></th></tr></thead>
+<tbody>
+<tr><th><b>α 내부</b></th><td>팀 + 농구 동호회 1곳</td><td>20명 · 원본 100편</td><td><b>E1 탐지율 ≥ 85%</b> (Gate A · <b>구독 등급으로 판정</b>) · 🆕 <b>Cutie vs SAM 2.1 복구 성공률·GPU 원가</b></td><td>AI 리드 + 제품 리드 <b>공동</b></td><td>정답셋 100편 처리 완료 시</td><td><b>다음 단계 진입 금지.</b> 모델 재학습 또는 <b>제품 <span class="tag amber">가설</span> 재검토</b></td></tr>
+<tr><th><b>β 비공개</b></th><td>Q1 농구 사용자</td><td>200명</td><td>E3 ≥80% · E4 ≤5분 · E5 ≥60% · 🆕 <b>E11 프롬프트 컷 기준선</b> · 🆕 <b>E12 무료 완주율 ≥40%</b></td><td>제품 리드</td><td>코호트 30일 경과 시</td><td>미달 지표만 개선 후 <b>재판정</b>, 공개 베타 보류. 🔴 <b>E12 실패 시 무료 등급 설계를 먼저 되돌린다</b></td></tr>
+<tr><th><b>β 공개</b></th><td>농구 카테고리</td><td>2,000명</td><td><b>E6 비공개 ≥30%</b> (Gate B · <b>무료 등급으로 판정</b>) · 🆕 <b>E7 2종 공개 범위 기준선</b></td><td>제품 리드</td><td>A/B n=500 도달 시</td><td>Gate B 미달 시 <b>기록 공간 UX 재설계</b> — 소비 루프 확장 중단</td></tr>
+<tr><th><b>β 결제</b> 🆕</th><td>β 공개 완주자</td><td>🔴 <b><code>[TBD]</code></b> — ADR-05·ADR-16 <span class="tag mint">확정</span> 후 산정</td><td>🆕 <b>E10 전환율 기준선</b> · 🆕 <b>S11 편당 실처리 원가 &lt; 편당 매출 3,300원</b></td><td>제품 리드 + 경영</td><td>최초 결제 100건 도달 시</td><td>🔴 <b>S11이 매출을 넘으면 요금제를 먼저 고친다</b> — 사용자를 늘리면 손실이 커진다</td></tr>
+<tr><th><b>정식</b></th><td>농구 → 구기 확장</td><td>—</td><td>E8 D30 3편 ≥30%</td><td>제품 리드 + 경영</td><td>월말 판정</td><td>확장 시점 연기 — <em>확장 기준 자체가 <b>미정</b></em> <span class="tag mint">확정</span></td></tr>
+</tbody></table></div>
+<p>🔴 <b>β 결제 단계를 β 공개 뒤에 둔 이유</b> — CLAUDE.md 절대 규칙 6: <em>"페이월을 첫 완주 이전에 노출하지 않는다 — Gate B 판정이 오염된다."</em> 결제를 먼저 열면 Gate B의 <em>"기록 공간이 부계정을 대체하는가"</em> 가 <em>"돈을 낼 만한가"</em> 와 섞여 판정이 무의미해진다.</p>
+  </div>
+</section>
+
+<!-- ================= 09 · Proof ================= -->
+<section class="sec" id="s9">
+  <div class="sec-head"><p class="sec-num">09 · Proof</p><h2>근거(Proof)</h2></div>
+  <div class="block">
+    <h3>9-1. 직접 근거 — 조사 9건</h3>
+<p><b>불리한 데이터를 지우지 않았고, 출처를 대지 못하는 수치는 유리하더라도 지웠다.</b> <span class="tag mint">확정</span></p>
+<p>이전 판이 최우선 근거로 쓰던 홈비디오 연구의 19%·89%는 <b>원 출처를 찾지 못해 폐기</b>했다. <span class="tag mint">확정</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>근거</th><th>핵심 수치</th><th>증명하는 것</th><th>한계</th></tr></thead>
+<tbody>
+<tr><th>Pew Research 2023</th><td>틱톡 이용자 2,745명 중 성인 약 <b>절반이 한 번도 게시 안 함</b></td><td><b>Q4가 최대 시장</b></td><td>미국 데이터</td></tr>
+<tr><th>Adobe 2024</th><td>경험 부족 59% · 교육 56% · <b>시간 52%</b></td><td>문제는 "프로그램이 어렵다"가 아니라 <b>촬영 이후 반복 노동</b></td><td>크리에이티브 직군</td></tr>
+<tr><th>Wyzowl 2024·2025</th><td>미사용 마케터 <b>33% 시간 부족 1위</b> · 68% 내년 시작 계획</td><td>비용·ROI보다 <b>시간이 최대 장벽</b></td><td>마케터 대상</td></tr>
+<tr><th>OpusClip·Wyzowl 2026</th><td><b>72.9%가 팔로워 1만 미만</b> · Talking-head 56.89% · AI 도구 51%→63%</td><td>작은 크리에이터 중심 · <b>AI 트래킹 적합성</b></td><td>자사 데이터 — 편향</td></tr>
+<tr><th>Podia 지불의사</th><td>추가 자금 시 <b>43%가 외부 인력 고용</b></td><td>지불의사 대리 지표</td><td>가정 질문 — 실제 결제 아님</td></tr>
+<tr><th>MBO Partners 2024</th><td>독립 크리에이터 <b>46% 성공 어려움 · 41% 번아웃</b></td><td><b>"영상 1개 × 매주 반복"</b>이 실제 문제</td><td>편집을 원인으로 특정 안 함</td></tr>
+<tr><th>2023 CHI 학술연구</th><td>틱톡 내부 편집조차 UI·학습곡선이 장벽</td><td>숏폼은 <b>짧은 시간에 많은 판단</b></td><td>정성 연구</td></tr>
+<tr><th>홈비디오 편집 선행연구 2편</th><td><em>수치 폐기</em> — 정성 근거로만 유지</td><td>편집 의도의 존재</td><td>비율 수치 없음</td></tr>
+<tr><th><b>Podia 조사(900명+)</b> <code>불리한 근거</code></th><td><b>오디언스 성장 32.9%</b> · 시간 21.6% · 수익화 14.4%</td><td>1위 고민은 편집이 아니다 → <b>범위를 좁히는 것이 더 강한 논증</b></td><td>해외 크리에이터</td></tr>
+</tbody></table></div>
+<p><span class="tag amber">가설</span> <b>남은 정량 근거 9건은 모두 마케터·해외 크리에이터·미국 이용자 대상의 대리 지표다.</b> 국내 직접 조사는 없다(R6). <span class="tag mint">확정</span></p>
+  </div>
+  <div class="block">
+    <h3>9-2. 대안 커버리지 — Core Job 7조건</h3>
+<p><code>● 제공 · ◐ 부분·제약 · — 가능하나 목적 아님 · ○ 미제공</code> <span class="tag mint">확정</span></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>대안</th><th>긴 원본</th><th>인물 자동탐색</th><th>사람 선택</th><th>구도 보정</th><th>개인 보관</th><th>공개범위 분리</th><th>HW 불필요</th></tr></thead>
+<tbody>
+<tr><th><b>HILiT</b></th><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td></tr>
+<tr><th>Instagram</th><td>—</td><td>○</td><td>●</td><td>○</td><td>◐</td><td>◐</td><td>●</td></tr>
+<tr><th>TikTok</th><td>—</td><td>○</td><td>●</td><td>○</td><td>○</td><td>◐</td><td>●</td></tr>
+<tr><th>CapCut</th><td>●</td><td>○</td><td>●</td><td>◐</td><td>○</td><td>○</td><td>●</td></tr>
+<tr><th>VLLO</th><td>●</td><td>○</td><td>●</td><td>○</td><td>○</td><td>○</td><td>●</td></tr>
+<tr><th>setlog</th><td>○</td><td>○</td><td>○</td><td>○</td><td>●</td><td>●</td><td>●</td></tr>
+<tr><th>Veo</th><td>●</td><td>●</td><td>◐</td><td>●</td><td>◐</td><td>○</td><td>○</td></tr>
+<tr><th>Pixellot</th><td>●</td><td>●</td><td>○</td><td>●</td><td>◐</td><td>○</td><td>○</td></tr>
+<tr><th>Hudl</th><td>●</td><td>●</td><td>●</td><td>●</td><td>◐</td><td>○</td><td>○</td></tr>
+<tr><th>AlphaCut·Filmora</th><td>●</td><td>◐ 화자만</td><td>●</td><td>◐</td><td>○</td><td>○</td><td>●</td></tr>
+<tr><th>아무것도 안 함</th><td>—</td><td>○</td><td>—</td><td>○</td><td>○</td><td>—</td><td>●</td></tr>
+</tbody></table></div>
+<p><b>HILiT만 일곱 칸이 전부 채워진다. 다만 이것은 계획이지 실적이 아니다.</b> 인물 자동 탐색의 정확도가 검증되지 않으면 첫 칸부터 무너진다. <span class="tag mint">확정</span></p>
+  </div>
+  <div class="block">
+    <h3>9-3. 내부 참조 문서</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>문서</th><th>역할</th></tr></thead>
+<tbody>
+<tr><th><a href="../VPS/VPS_v0_3.html"><code>docs/VPS/VPS_v0_3.html</code></a> · <a href="../VPS/VPS_v0_3.md"><code>.md</code></a></th><td><b>본 PRD의 원천.</b> 페르소나·Pain·JTBD·Outcome·차별점·Proof·기능 원장</td></tr>
+<tr><th><a href="../prototype/prototype_v0_6.html"><code>docs/prototype/prototype_v0_6.html</code></a></th><td><b>화면↔기능(F번호) 매핑의 기준.</b> 관계 모델·공개 범위·탭 구성</td></tr>
+<tr><th><a href="../4-TAM-SAM-SOM-Market-Segment/tam-sam-som-segment-sns-shortform.md"><code>docs/4-TAM-SAM-SOM-Market-Segment/tam-sam-som-segment-sns-shortform.md</code></a></th><td>세그먼트 Q1~Q4 정의 · SAM/SOM · 근거 데이터 10건</td></tr>
+<tr><th><a href="../5-Persona/CW-personas.html"><code>docs/5-Persona/CW-personas.html</code></a></th><td>페르소나 9명 · CJM Pain · JTBD 선언</td></tr>
+<tr><th><a href="../3-KSFs/"><code>docs/3-KSFs/</code></a> · <a href="../2-Value-Chain/"><code>docs/2-Value-Chain/</code></a> · <a href="../1-Five-Forces/"><code>docs/1-Five-Forces/</code></a></th><td>KSF 5번(선택 데이터 순환) · GPU 원가 · 경쟁 구조</td></tr>
+<tr><th><a href="./HILIT_추적PoC_기술기획서.md"><code>HILIT_추적PoC_기술기획서.md</code></a> 🆕</th><td>🔴 <b>§11 기술 검토의 유일한 실측 근거.</b> 기준 커밋 <code>eecb1ce</code> · 2026-09-01 · Python 12,357줄. 모델 4종·Mobile-First Hybrid·4단계 복구·N-Level·GPU 원가 실측</td></tr>
+<tr><th><a href="./SRS/[SRS]hilit-SRSv1.8.md"><code>SRS/[SRS]hilit-SRSv1.8.md</code></a> 🆕</th><td><b>요구사항 단일 진실 원천</b>(REQ-FUNC 27 · REQ-NF 19). 🔺 <b>ADR-8이 이 문서의 ADR-13과 충돌한다</b>(X1) — 개정 필요</td></tr>
+<tr><th><a href="./docs/grill/GRILL_LEDGER.md"><code>docs/grill/GRILL_LEDGER.md</code></a> 🆕</th><td>미해소 결정 토픽 원장 — 🔴 <b>ADR-15·16·17·19의 결정 경로</b></td></tr>
+<tr><th><code>hilit-prd-v1_0.md</code></th><td><b>직전 판</b> — MVP <b>17개</b> · 그룹 포함 · 과금 미정. 본 문서가 <b>23개 · 그룹 제외 · 과금 3종</b>으로 대체</td></tr>
+<tr><th><code>hilit-prd-v0.1.html</code></th><td>선행 판 — MVP <b>12개</b> 기준</td></tr>
+</tbody></table></div>
+  </div>
+</section>
+
+<!-- ================= 10 · Appendix & Decision Log ================= -->
+<section class="sec" id="s10">
+  <div class="sec-head"><p class="sec-num">10 · Appendix &amp; Decision Log</p><h2>부록 · 이 PRD가 새로 제안한 것( <span class="tag sky">초안</span> ) 요약</h2></div>
+  <div class="block">
+<p>VPS 0.3에 근거가 없어 이 문서가 초안으로 제시한 항목이다. <b>착수 전 합의가 필요하다.</b></p>
+<ol><li><b>NFR 전 항목</b>(5장) — p95 응답·가용성·오류율·재시도 정책</li><li><b>데이터 모델과 API 계약</b>(6장) — 엔터티·필드·엔드포인트·상한</li><li><b>AC의 시스템 임계치</b> — 재식별 정확도 90% · 오인식 2% · 렌더 90초 등</li><li><b>실험 표본 수와 성공 기준</b> — n=100편 / n=50명 / n=500 A/B</li><li><b>롤아웃 규모</b> — α 20명 → β 200명 → 2,000명</li><li><b>원가 가드레일</b> — 편당 처리 원가 상한 <span class="tag mint">확정</span> 전 무제한 업로드 금지</li><li><b>이벤트 계측 스키마 8종</b> — <code>detection_started</code> · <code>selection_opened</code> · <code>selection_confirmed</code> · <code>render_started</code> · <code>render_succeeded</code> · <code>source_deleted</code> · <code>reframe_rating</code> · <code>upload_completed</code> → §1-4·§1-5의 <b>측정 경로가 전부 이 8종에 의존</b>한다. <b>데이터팀 <span class="tag mint">확정</span> 필요</b> — 이름·페이로드·전송 시점이 정해지지 않으면 지표 산식은 있으나 데이터가 쌓이지 않아 대시보드가 빈 화면이 된다</li><li><b>S10 파이프라인 완주율 신설</b> — <code>render_succeeded ÷ detection_started</code>, 목표 <b>≥ 95%</b>, 주간, 백엔드 리드 판정 → <b>실패 AC 14종(<code>AC*-F*</code>)의 상위 지표.</b> 개별 AC는 통과/실패만 알려주고 "실제로 몇 명이 어디서 이탈했는가"는 알려주지 않는다. 이 한 지표가 그 누수를 잡는다</li></ol>
+<p><b>v2.0이 새로 제안한 것 6건</b> 🆕</p>
+<ol start="9"><li><b>요금제 3종의 구조</b>(§4-4) — 가격·편수·유효기간은 사용자 확정값이나, <b>갱신 주기·이월·해지 처리</b>(ADR-16)와 <b>추가 1편 단가 역전</b>(ADR-15)은 이 문서가 제기한 미결이다</li><li><b>무료/유료 경계의 원가 근거</b>(§1-1 · §4-5) — <em>"무료 = 원가 ≈ 0"</em> 은 이 문서의 설계 주장이다. <b>AC5-2(GPU 0회)·NFR(무료 GPU 초 = 0 알림)</b> 이 그 주장을 코드로 검증 가능하게 만든 장치다</li><li><b>프롬프트 컷의 2단 분리</b>(§4-6-1 · ADR-18) — 사용자는 <em>"Gemini가 메타데이터, Haiku가 판정"</em> 까지 지정했고, <b>왜 나누는가(재판정 원가·근거 표시·인물 식별 차단)</b> 와 <b>추적 → Gemini 순서 강제</b>는 이 문서가 붙인 설계다</li><li><b>엔터티 11종 신설</b>(§6-1) — 과금 4 · 무료 편집 3 · AI 편집 4. <b><code>CUT_ANALYSIS</code>/<code>CUT_JUDGMENT</code> 분리</b>와 <b><code>USAGE_LEDGER</code> append-only</b>가 핵심 판단</li><li><b>게이트 판정 대상의 등급 분리</b>(§8-1 · ADR-13) — Gate A = 구독 · Gate B = 무료. <b>SRS ADR-8 개정을 요구하는 변경</b>이다</li><li><b>E10·E11·E12 실험 3종</b>(§8-2) — 특히 <b>E12가 무료 등급 설계의 되돌림 조건</b>을 명시적 임계로 만든 것</li></ol>
+<p><b>가장 급한 것 4건 — 순서가 있다</b> 🆕</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>순위</th><th>항목</th><th>왜 급한가</th><th>선행</th></tr></thead>
+<tbody>
+<tr><th><b>1</b></th><td><b>ADR-11</b> 얼굴 정보 동의·보관·파기</td><td>법무 게이트. <b>v2.0에서 위탁 대상이 Gemini·Haiku·Suno 3곳 늘었다</b> — 체크리스트를 다시 짜야 한다</td><td>—</td></tr>
+<tr><th><b>2</b></th><td><b>ADR-05</b> 편당 처리 원가 상한</td><td>🔴 <b>매출 상한이 확정됐다(편당 3,300원).</b> 원가가 그 위면 <b>팔수록 손해</b>다(R10). Gate A 착수 전 필수</td><td>—</td></tr>
+<tr><th><b>3</b></th><td><b>ADR-16</b> 쿼터 갱신 주기</td><td>무료 2회·구독 3편의 <b>주기가 없으면 Entitlement Resolver를 구현할 수 없다</b></td><td><b>ADR-05</b></td></tr>
+<tr><th><b>4</b></th><td><b>ADR-19</b> Suno 배포 권리</td><td>확인 실패 시 F28이 <em>"만들 수는 있으나 올릴 수는 없는"</em> 기능이 된다(R11)</td><td>—</td></tr>
+</tbody></table></div>
+<div class="note"><p>🔺 <b>ADR-15(추가 1편 단가 역전)는 급하지 않으나 잊기 쉽다.</b> 베타 결제 오픈 전에 결정하면 되지만, 결정하지 않으면 <b>9,900원이 그대로 출시된다.</b></p></div>
+<p><b>리뷰 반영 이력</b> — v0.2 단계, 2026-08-29 <a href="./hilit-prd-v0.2-review.md"><code>hilit-prd-v0.2-review.md</code></a>의 측정·검증 가능성 리뷰를 반영해 §1-4·§1-5·§1-6·§3·§5-3·§5-5·§8-3을 교체했다. 전 지표에 측정 경로와 판정 주체를 부여하고, 실패 AC를 1건에서 8건으로 늘렸다.</p>
+<p><b>2026-08-29 결정 6건</b> — v1.0 단계에서 확정한 6건 중 <b>그룹 관련 4건(ADR-06a~d)은 v2.0에서 기능과 함께 삭제</b>됐다. 남은 2건은 유효하다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>결정</th><th>값</th><th>채워진 곳</th><th>v2.0 상태</th></tr></thead>
+<tbody>
+<tr><th><s><b>ADR-06a</b> 그룹 인원 상한</s></th><td><s>20명</s></td><td>—</td><td>🗑 <b>삭제</b></td></tr>
+<tr><th><s><b>ADR-06b</b> 나갔을 때 기록 처리</s></th><td><s>그룹에서 함께 회수</s></td><td>—</td><td>🗑 <b>삭제</b></td></tr>
+<tr><th><s><b>ADR-06c</b> 초대 방식</s></th><td><s>링크 초대 · 가입자만</s></td><td>—</td><td>🗑 <b>삭제</b></td></tr>
+<tr><th><s><b>ADR-06d</b> 그룹 이름 중복</s></th><td><s>허용</s></td><td>—</td><td>🗑 <b>삭제</b></td></tr>
+<tr><th><b>ADR-07a</b> 기본 공개 범위</th><td><b>나만 보기(<code>private</code>)</b> · <b>DB <code>DEFAULT</code> 강제</b></td><td>AC4-1 · §4-3 상태도</td><td>✅ <b>유효</b></td></tr>
+<tr><th><b>ADR-07b</b> 공개 범위 표시</th><td><b>글자 배지</b> · <b>영상 가독성 침해 금지</b></td><td>AC4-2b</td><td>✏️ <b>개정 — 3종 → 2종</b>(<code>공개</code>/<code>나만</code>)</td></tr>
+</tbody></table></div>
+<p><b>ADR-07b가 왜 여전히 유효한가</b> — 공개 범위를 기록마다 정하는 것이 이 제품의 핵심 주장이므로 <b>표시하지 않는 선택지는 없다.</b> 아이콘은 뜻을 배워야 하지만 글자는 즉시 읽힌다. 배지가 2종으로 줄어 <b>가독성 조건(대비 4.5:1 · 면적 8% · 중앙 안전영역)은 오히려 지키기 쉬워졌다.</b></p>
+  </div>
+  <div class="block">
+    <h3>10-1. 판본 이력</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>판</th><th>날짜</th><th>변경</th></tr></thead>
+<tbody>
+<tr><th>v0.1</th><td>—</td><td>초판 — MVP 12개</td></tr>
+<tr><th>v0.2</th><td>2026-08-29</td><td>측정·검증 가능성 리뷰 반영. 전 지표에 측정 경로·판정 주체 부여, 실패 AC 1건 → 8건</td></tr>
+<tr><th>v1.0</th><td>2026-08-29</td><td>v0.2를 확정판으로 승격. 내용 변경 없음. MVP 17개 · 그룹 포함 · <b>과금 전부 미정</b></td></tr>
+<tr><th><b>v2.0</b></th><td><b>2026-09-01</b></td><td>🔴 <b>편집 서비스 과금 모델 신설</b>(무료·구독·충전형) · <b>그룹 전면 제외</b> · <b>공개 범위 3종 → 2종</b> · <b>무료 기본 편집도구 4종</b> · <b>프롬프트 컷(Gemini→Haiku 4.5)</b> · <b>AI 음악(Suno)</b> · <b>원본 임시 보관 7일</b> · <b>§11 기술 검토 신설</b>. MVP 17개 → <b>23개</b> · AC 33개 → <b>44개</b> · ADR 신설 8건 · 실험 신설 3건</td></tr>
+</tbody></table></div>
+<p><b>v2.0 확정</b> — 2026-09-01. 🔺 <b>상위 문서 3건의 개정이 뒤따라야 정합이 완성된다</b> — SRS v1.8 ADR-8(X1) · PRD ADR-01 폐기(X2) · CLAUDE.md 규칙 4(X3). 개정 전까지 이 문서는 <b>PRD 단독 판정</b>이다. 남은 미정은 <b>ADR-04·05·08·09·10·11·12·15·16·17·19 열한 건</b>이고, 그중 <b>ADR-11 · ADR-05 · ADR-16 · ADR-19 네 건</b>이 착수 전에 답이 필요하다. <b>공수·스프린트 추정은 개발팀 합류 시점에 채운다.</b></p>
+  </div>
+</section>
+
+<!-- ================= 11 · Technical Review ================= -->
+<section class="sec" id="s11">
+  <div class="sec-head"><p class="sec-num">11 · Technical Review</p><h2>기술 검토 🆕 v2.0</h2></div>
+  <div class="block">
+<p>이 장은 <b>§4의 기능이 실제로 만들어지는가</b>를 판정한다. 근거는 두 곳이다 — <b>추적은 자체 PoC 실측</b>(<code>HILIT_추적PoC_기술기획서.md</code> · 커밋 <code>eecb1ce</code>), <b>프롬프트 컷·음악은 공개 사양과 산출</b>이다. 🔴 <b>실측이 아닌 값에는 전부 표시를 달았다.</b></p>
+  </div>
+  <div class="block">
+    <h3>11-1. 트래킹 — PoC가 답한 것과 답하지 못한 것</h3>
+<h4>채택 구조 — Mobile-First Hybrid (PoC V3)</h4>
+<p><b>Cutie를 주 추적기에서 내리고 복구 전문 모델로 격하한 것</b>이 이 구조의 핵심이다. Cutie는 프레임마다 메모리 뱅크를 갱신하므로 20분 영상이면 GPU를 20분 넘게 점유한다 — <b>원가에서 무너진다.</b></p>
+<figure class="fig"><pre class="mermaid">sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant MOB as 모바일 (온디바이스)
+    participant GPU as GPU 서버
+
+    U-&gt;&gt;MOB: 첫 화면에서 자기를 1회 지정
+    Note over MOB: 앵커 임베딩 저장&lt;br/&gt;confirmed_by_user=True
+
+    loop 매 프레임
+        MOB-&gt;&gt;MOB: NanoTrack 추적 (1.8MB · 실측 131fps)
+        MOB-&gt;&gt;MOB: 카메라 모션 보정 (실측 4.4ms/frame)
+        MOB-&gt;&gt;MOB: Tracking Health 7신호 · 20프레임 창
+    end
+
+    alt 정상 20프레임 / 위험 5프레임
+        MOB-&gt;&gt;MOB: OSNet Re-ID 확인 (0.9MB · 실측 96ms/call)
+    end
+
+    alt 위험 판정
+        MOB-&gt;&gt;MOB: Lv1 모션 예측 (비용 0)
+        MOB-&gt;&gt;MOB: Lv2 NanoDet 재획득 (비용 0 · 3.8MB)
+        MOB-&gt;&gt;GPU: Lv3 문제 구간 ±4초 클립만
+        Note over GPU: 🔴 전체 영상을 절대 보내지 않는다&lt;br/&gt;클립 길이가 원가를 직접 결정한다
+        GPU--&gt;&gt;MOB: Cutie 정밀 복구 (350MB + 백본 143MB)
+        MOB-&gt;&gt;U: Lv4 사용자 확인 요청
+    end
+
+    Note over MOB,GPU: 안전판 2개&lt;br/&gt;RECOVERY_COOLDOWN 5.0초&lt;br/&gt;MAX_RECOVERIES_PER_VIDEO 40회</pre></figure>
+<h4>실측값 — 조건을 붙인 것만 적는다</h4>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>실측</th><th>측정 조건</th></tr></thead>
+<tbody>
+<tr><th>NanoTrack</th><td><b>131 fps</b> · 7.6 ms/frame</td><td><b>개발 PC의 CPU</b> · 720p 프록시</td></tr>
+<tr><th>OSNet (ONNX)</th><td><b>96 ms/call</b></td><td>같은 조건 · 20/5프레임 주기</td></tr>
+<tr><th>NanoDet</th><td><b>40 ms/call</b></td><td>같은 조건 · 필요할 때만</td></tr>
+<tr><th>카메라 모션 보정</th><td><b>4.4 ms/frame</b></td><td>0.35배 축소 · sparse Lucas-Kanade</td></tr>
+<tr><th>peak working memory</th><td><b>161 MB</b></td><td>같은 조건</td></tr>
+<tr><th>서버 복구 1회</th><td><b>GPU 35~60초 · 약 10~17원</b></td><td><b>MX250</b> · ±4초 클립(160프레임) · <code>GPU_COST_PER_HOUR_KRW = 1012.45</code>(RTX 4090 기준 단가)</td></tr>
+<tr><th>실제 영상 추적</th><td><b>coverage 평균 72.2%</b>(최저 62.4 · 최고 81.9)</td><td>720×334 · 23.72fps · <b>7.08초</b> · 5명 동시 추적</td></tr>
+</tbody></table></div>
+<p class="lead">🔴 <b>모바일 수치는 전부 개발 PC의 CPU에서 잰 것이다.</b> 안드로이드 실기 온도·배터리는 <b>미측정</b>(PoC §5.4 · §7.7). 무료 등급의 수동 트래킹이 온디바이스로 도는 이상 <b>실기 측정이 무료 등급 성립의 전제</b>다.</p>
+<h4>🔴 Gate A 착수 전에 알아야 할 미검증 4건</h4>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>미검증 항목</th><th>PoC 근거</th><th>v2.0에 미치는 영향</th></tr></thead>
+<tbody>
+<tr><th><b>①</b></th><td><b>모바일 재획득(Lv2)이 한 번도 성공하지 못했다</b> — 합성 0/42 · 실제 0/17</td><td>§7.3 · 실패 원인이 서로 다르다(합성=테스트 데이터, 실제=임베딩 품질)</td><td>Lv2가 안 되면 <b>모든 복구가 Lv3(GPU 서버)로 몰린다</b> → 편당 원가가 상한(§11-5)에 붙는다</td></tr>
+<tr><th><b>②</b></th><td><b>잘못 추적하는데 감지하지 못한다</b> — H_similar에서 <b>ID Switch 10회 동안 서버 호출 0회</b></td><td>§5.2 · <em>"Coverage 수치보다 이게 급한 문제"</em></td><td>🔴 <b>Gate A의 탐지율이 통과해도 "엉뚱한 사람"일 수 있다.</b> IoU 채점은 <em>"사람 위에 있다"</em> 를 정탐으로 세기 때문</td></tr>
+<tr><th><b>③</b></th><td><b>사람이 작으면 Re-ID가 무력하다</b> — 프레임 높이의 <b>21~25%</b>(69~85px)에서 OSNet 입력 256×128로 <b>3배 이상 업스케일</b></td><td>§7.2</td><td>농구 코트 전경 촬영이 정확히 이 조건이다. <b>원본 해상도 하한</b>을 요구사항으로 정해야 한다 — 🔴 <code>[TBD]</code></td></tr>
+<tr><th><b>④</b></th><td><b>N-Level 원가 절감 효과 미측정</b> — Critical 우회(<code>CRITICAL_ID_THRESHOLD = 0.35</code>)가 N-Level을 건너뛰어 6개 구성이 사실상 동일했다</td><td>§5.2 · §7.6</td><td><b>N-Level이 원가 손잡이로 설계됐는데 그 효과를 모른다.</b> ADR-05(편당 원가 상한)의 입력이 비어 있다</td></tr>
+</tbody></table></div>
+<h4>🆕 Gate A 실측에 추가할 것 — 복구 모델 비교</h4>
+<div class="note"><p>🆕 <b>같은 문제 클립에 Cutie와 SAM 2.1을 나란히 돌려 복구 성공률을 비교한다.</b></p></div>
+<p><b>왜 필요한가</b> — Lv3(서버 복구)는 <b>편당 원가를 결정하는 단일 지점</b>이다(§11-5). PoC는 Cutie 하나만 썼고 <em>"복구 3회, 정상 복구"</em> 로 동작만 확인했을 뿐 <b>다른 선택지와 비교한 적이 없다.</b> 복구 성공률이 높으면 호출 횟수가 줄어 원가가 내려가고, 낮으면 Lv4(사용자 확인)로 넘어가 <b>사용자 시간을 쓴다.</b></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>측정 항목</th><th>왜 재는가</th></tr></thead>
+<tbody>
+<tr><th><b>복구 성공률</b> — 같은 문제 클립에서 대상을 되찾은 비율</th><td>두 모델을 가르는 1차 기준. <b>동일 클립·동일 정답 궤적</b>에 나란히 투입한다</td></tr>
+<tr><th><b>회당 GPU 초 · 원가</b></th><td>성공률이 같다면 <b>싼 쪽이 이긴다.</b> Cutie 실측은 회당 35~60초(MX250)</td></tr>
+<tr><th><b>peak VRAM</b></th><td>배포 가능한 GPU 등급을 정한다. Cutie 실측 <b>423MB</b>(MX250 2GB에서 동작)</td></tr>
+<tr><th><b>ID Switch 재발률</b> — 복구 직후 다시 갈아타는가</th><td>미검증 항목 ②와 직결. <b>복구했다가 다시 잃으면 성공이 아니다</b></td></tr>
+<tr><th><b>라이선스</b></th><td>Cutie는 <b>MIT</b>(PoC §9). SAM 2.1은 <b>Apache-2.0</b>으로 알려져 있으나 🔺 <b>배포 조건 원문 확인 필요</b> — GPL·AGPL·Non-Commercial 의존성이 없어야 한다는 PoC의 기준을 유지한다</td></tr>
+</tbody></table></div>
+<p class="lead">🔴 <b>비교 조건을 고정한다</b> — ①같은 문제 클립(±4초 · 160프레임) ②같은 정답 궤적 ③<b>IoU ≥ 0.30 채점</b>(PoC가 자기보고를 버리고 채택한 기준) ④같은 GPU. 조건이 다르면 두 숫자를 나란히 놓을 수 없다.</p>
+<p class="lead">🔺 <b>채택 기준은 성공률 단독이 아니다.</b> 성공률이 높아도 GPU 초가 2배면 편당 원가가 매출 상한(3,300원)을 밀어올린다. <b>성공률과 원가를 함께 보고 판정</b>하며, 판정 주체는 <b>AI 리드 + 백엔드 리드 공동</b>이다.</p>
+  </div>
+  <div class="block">
+    <h3>11-2. 프롬프트 컷 — Gemini + Claude Haiku 4.5</h3>
+<h4>파이프라인 사양</h4>
+<div class="tw"><table class="wide">
+<thead><tr><th>단계</th><th>모델</th><th>입력</th><th>출력</th><th>근거</th></tr></thead>
+<tbody>
+<tr><th><b>1단</b></th><td><b>Gemini</b>(Vercel AI SDK · C-TEC-005·006)</td><td>🔴 <b>추적이 좁힌 등장 구간 영상만</b></td><td>구간 메타데이터 <code>[{start, end, 행동서술}]</code></td><td><em>"무엇을 했는가"</em> 만 판단. 🔴 <b>인물 식별에 쓰지 않는다</b></td></tr>
+<tr><th><b>2단</b></th><td><b>Claude Haiku 4.5</b> (<code>claude-haiku-4-5</code>)</td><td>메타데이터(텍스트) + 사용자 프롬프트</td><td>선택 구간 + <b>근거 문장</b></td><td><b>200K 컨텍스트 · $1.00 / $5.00 per MTok</b></td></tr>
+</tbody></table></div>
+<h4>컨텍스트가 들어가는가 — 산출</h4>
+<p>20분(1,200초) 원본 중 <b>등장 구간이 6분(360초)</b> 인 경우를 기준으로 잡는다. 🔺 <em>등장 구간 비율은 실측이 없어 가정이다.</em></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>구간 밀도</th><th>구간 수</th><th>구간당 토큰</th><th>합계</th><th>200K 대비</th></tr></thead>
+<tbody>
+<tr><th>5초 단위</th><td>72</td><td>~80</td><td><b>약 5,800 토큰</b></td><td>3%</td></tr>
+<tr><th>3초 단위</th><td>120</td><td>~80</td><td><b>약 9,600 토큰</b></td><td>5%</td></tr>
+<tr><th>1초 단위</th><td>360</td><td>~80</td><td><b>약 28,800 토큰</b></td><td>14%</td></tr>
+</tbody></table></div>
+<p class="lead">🟢 <b>1초 단위로 잘라도 200K의 14%다 — 컨텍스트는 병목이 아니다.</b> 프롬프트·시스템·출력을 다 더해도 여유가 크다.</p>
+<p>🔺 <b>다만 상한을 코드로 걸어야 한다.</b> 등장 구간이 20분 전체에 가까운 원본(대상이 계속 화면에 있는 경우)에서 1초 단위 서술이면 <b>약 96,000 토큰</b>까지 오른다. <b>구간 서술 밀도 상한</b>과 <b>200K 초과 시 청킹</b>을 요구사항으로 둔다 — 🔴 <code>[TBD]</code>.</p>
+<h4>판정 원가 — 산출</h4>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>값</th><th>산출</th></tr></thead>
+<tbody>
+<tr><th>Haiku 입력</th><td>~20,000 토큰</td><td>$1.00/1M × 0.02M = <b>$0.02</b></td></tr>
+<tr><th>Haiku 출력</th><td>~2,000 토큰</td><td>$5.00/1M × 0.002M = <b>$0.01</b></td></tr>
+<tr><th><b>Haiku 편당 소계</b></th><td><b>약 $0.03</b> <code>[산출]</code></td><td>🟢 편당 매출($ 환산 전 3,300원) 대비 무시 가능</td></tr>
+<tr><th><b>재판정 1회</b></th><td><b>약 $0.03</b> <code>[산출]</code></td><td>🔴 <b>Gemini 재호출이 없으므로 재판정도 같은 금액</b> — 이것이 2단 분리의 경제적 근거다</td></tr>
+<tr><th><b>Gemini 1단</b></th><td>🔴 <b><code>[TBD]</code></b></td><td>영상 토큰 단가·해상도 옵션을 <b>실측으로 채운다</b>. 🔺 공개 사양상 영상은 <b>초당 고정 토큰</b>으로 계산되며 저해상도 옵션이 있다고 알려져 있으나 <b>원문 확인 전까지 숫자를 적지 않는다</b></td></tr>
+</tbody></table></div>
+<div class="note"><p>🔴 <b>원화 환산을 적지 않았다.</b> 환율을 가정하면 그 가정이 이후 모든 원가표에 복제된다. <b>달러로 두고, ADR-05에서 환율과 함께 확정한다.</b></p></div>
+<h4>기술 리스크 4건</h4>
+<div class="tw"><table class="wide">
+<thead><tr><th>#</th><th>리스크</th><th>완화</th></tr></thead>
+<tbody>
+<tr><th><b>①</b></th><td>🔴 <b>A-T1 — Vercel 함수 실행 시간 상한.</b> 20분 영상의 Gemini 처리는 <b>동기로 기다릴 수 없다</b></td><td><b>Route Handler에서 동기 대기 금지.</b> Gemini 비동기 제출 → <code>cut_analysis_id</code> 반환 → <b>webhook 또는 사용자 재진입이 재개 트리거</b>(A-T3 — 상주 데몬 없음)</td></tr>
+<tr><th><b>②</b></th><td>🔺 <b>행동 서술의 어휘가 프롬프트와 안 맞는다.</b> Gemini가 <em>"슛"</em> 이라 쓰고 사용자가 <em>"3점"</em> 이라 적으면 Haiku가 못 맞춘다</td><td><b>1단 프롬프트에 서술 어휘 규격을 고정</b>한다(동작·위치·결과 3요소). E11이 일치율을 잰다</td></tr>
+<tr><th><b>③</b></th><td>🔺 <b>모델 버전이 바뀌면 메타데이터 의미가 바뀐다</b></td><td><code>CUT_ANALYSIS.gemini_model</code> · <code>CUT_JUDGMENT.판정모델</code> <b>버전 태깅 필수</b>(§6-2). 추적 PoC가 모델 버전 태깅을 요구한 것과 같은 이유</td></tr>
+<tr><th><b>④</b></th><td>🔺 <b>외부 2곳 의존 — 가용성이 곱해진다</b></td><td>AC7-F2 대체 경로(F3 수동 선택) · 🔴 <b>실패 시 편수 차감 0건</b></td></tr>
+</tbody></table></div>
+<h4>🟢 이 설계가 지키는 것</h4>
+<ul><li>🔴 <b>Gemini를 인물 식별에 쓰지 않는다</b> — 입력이 이미 <em>"내 구간"</em> 이라 인물을 판단할 여지가 없다. <b>문서가 아니라 파이프라인이 규칙을 강제한다</b></li><li>🔴 <b>AI가 무엇을 골랐는지 표시한다</b> — <code>CUT_JUDGMENT.근거문장</code>이 그 표시의 원천</li><li>🔴 <b><code>[직접 고르기]</code> 병존</b> — 프롬프트 컷은 F3·F4를 <b>대체하지 않고 앞에 붙는다</b></li></ul>
+  </div>
+  <div class="block">
+    <h3>11-3. AI 음악 — Suno</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>항목</th><th>값</th><th>상태</th></tr></thead>
+<tbody>
+<tr><th>생성 단가</th><td><b>편당 75원</b></td><td>사용자 제시 · 🔺 <b>1회(2곡) 단가인지 편당 총액인지 확인 필요</b></td></tr>
+<tr><th>1회 산출</th><td><b>2곡</b></td><td><span class="tag mint">확정</span></td></tr>
+<tr><th>편당 상한</th><td><b>3회</b></td><td><span class="tag mint">확정</span> → 🔺 <em>"1회 = 75원"</em> 해석 시 <b>편당 최대 225원</b></td></tr>
+<tr><th>선택</th><td>🔴 <b>2곡 중 사용자가 고른다</b></td><td>확정(D2) — 자동 <span class="tag mint">확정</span> 금지</td></tr>
+</tbody></table></div>
+<p><b>원가 판정</b> <span class="tag sky">초안</span> — <em>"1회 = 75원"</em> 의 최악 해석(편당 3회 전부 소진)에서도 <b>편당 225원</b>으로, 편당 매출 3,300원의 <b>약 7%</b> 다. 🟢 <b>음악은 원가 위험이 아니다.</b></p>
+<p>🔴 <b>권리가 원가보다 위험하다</b>(R11 · ADR-19). 사용자가 만든 곡을 <b>전체공개 기록에 실어 배포</b>할 권리가 API 약관상 사용자에게 있는지 확인해야 한다. <b><code>MUSIC_LICENSE</code> 법무 게이트를 F28로 확장</b>하며, 확인 실패 시 대안은 <b>F28을 <code>visibility='private'</code> 기록 전용으로 축소</b>하는 것이다.</p>
+<p class="lead">🔺 <b>종량제의 음악 추가 과금은 <code>[TBD]</code></b>(사용자 미정). 하한은 원가(75원)이며, 상한은 <em>"라이브러리 무료 곡이 있는데 굳이 살 만한가"</em> 가 정한다.</p>
+  </div>
+  <div class="block">
+    <h3>11-4. 자막 폰트 — OFL 4종</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>폰트</th><th>라이선스</th><th>상태</th></tr></thead>
+<tbody>
+<tr><th><b>Pretendard</b></th><td>SIL OFL 1.1</td><td>🟢 확인 가능</td></tr>
+<tr><th><b>본고딕</b>(Noto Sans KR / Source Han Sans)</th><td>SIL OFL 1.1</td><td>🟢 확인 가능</td></tr>
+<tr><th><b>나눔글꼴</b></th><td>SIL OFL 1.1</td><td>🟢 확인 가능</td></tr>
+<tr><th><b>Freesentation</b></th><td>🔺 <b><code>[확인 필요]</code></b></td><td>배포처·라이선스 원문을 확인하기 전에는 OFL로 단정하지 않는다</td></tr>
+</tbody></table></div>
+<p><b>OFL이 요구하는 것 2건</b> — 지키면 상업적 이용·번들·임베드가 전부 가능하다.</p>
+<div class="tw"><table class="wide">
+<thead><tr><th>조항</th><th>이 제품에서의 의미</th></tr></thead>
+<tbody>
+<tr><th><b>라이선스 사본 동봉</b></th><td>🔴 앱 내 라이선스 고지 화면에 <b>OFL 전문 포함</b>(AC5-3)</td></tr>
+<tr><th><b>Reserved Font Name</b></th><td>🔴 <b>폰트를 수정해 원래 이름으로 배포하지 않는다.</b> 서브셋팅(한글 자주 쓰는 글자만 추리기)은 흔한 최적화인데, <b>파일명·패밀리명을 유지한 채 수정하면 위반</b>이다</td></tr>
+</tbody></table></div>
+<p class="lead">🟢 <b>자막을 영상에 굽는 것(래스터화)은 폰트 배포가 아니다</b> — 출력 영상에 라이선스가 전이되지 않는다. <b>웹폰트로 서빙할 때만</b> 사본 동봉 의무가 발생한다.</p>
+  </div>
+  <div class="block">
+    <h3>11-5. 편당 원가 — 합계가 아직 닫히지 않는다</h3>
+<p><b>매출 상한은 확정됐다.</b> 구독 9,900원 ÷ 3편 = <b>편당 3,300원.</b></p>
+<div class="tw"><table class="wide">
+<thead><tr><th>구성요소</th><th>상한 추정</th><th>산출 근거</th><th>상태</th></tr></thead>
+<tbody>
+<tr><th><b>트래킹 GPU</b></th><td><b>약 400~680원</b></td><td>PoC <code>MAX_RECOVERIES_PER_VIDEO = 40</code> × 회당 10~17원(MX250 실측)</td><td>🔺 <b>상한이지 기댓값이 아니다.</b> Lv2 재획득이 0/17이라(§11-1 ①) <b>실제로 상한에 붙을 위험이 있다</b></td></tr>
+<tr><th><b>Gemini 1단</b></th><td>🔴 <b><code>[TBD]</code></b></td><td>영상 토큰 단가 미확인</td><td>🔴 <b>합계를 막는 유일한 큰 구멍</b></td></tr>
+<tr><th><b>Haiku 2단</b></th><td>약 <b>$0.03</b></td><td>§11-2 산출</td><td>🟢 무시 가능</td></tr>
+<tr><th><b>AI 음악</b></th><td><b>최대 225원</b></td><td>75원 × 3회</td><td>🔺 단가 해석 확인 필요</td></tr>
+<tr><th><b>저장·전송</b></th><td>🔴 <b><code>[TBD]</code></b></td><td>20분 원본 + 7일 보관 + 결과물 영구 보관</td><td>🔴 <b>F29(7일)가 이 항목을 키운다</b></td></tr>
+<tr><th><b>합계</b></th><td>🔴 <b>닫히지 않음</b></td><td>—</td><td><b>ADR-05의 결정 대상</b></td></tr>
+</tbody></table></div>
+<p><b>지금 말할 수 있는 것 3가지</b> <span class="tag sky">초안</span></p>
+<ol><li>🟢 <b>무료 등급은 원가가 없다.</b> GPU 0초 · 외부 추론 0호출 · 원본 즉시 파기. 남는 것은 <b>결과물 영구 보관의 저장 원가</b>뿐이며, 이는 15초 결과물이라 원본 대비 자릿수가 다르다</li><li>🔺 <b>알려진 항목만 더해도 편당 약 900원</b>(GPU 상한 680 + 음악 225)으로 <b>매출의 27%</b> 다. Gemini와 저장·전송이 나머지 73%를 넘지 않아야 한다</li><li>🔴 <b>트래킹 GPU가 가장 큰 단일 항목이고, 가장 줄일 여지도 크다.</b> PoC가 명시한 세 손잡이 — <b>클립 길이</b>(±4초 → ±10초면 원가 2.5배) · <b>N-Level</b> · <b>MAX_RECOVERIES</b> — 가 전부 원가에 직결한다. 🔴 <b>셋 다 효과가 미측정</b>이다(§11-1 ④)</li></ol>
+<p>🔴 <b><code>MAX_RECOVERIES_PER_VIDEO = 40</code>이 20분 영상에도 유효한지 확인하지 않았다.</b> PoC의 검증 영상은 <b>7초·1.5분</b>이었다. 20분이면 40회 상한이 <b>조기 소진</b>돼 이후 구간이 복구 없이 진행될 수 있다 — 원가는 지켜지지만 <b>탐지율이 떨어진다.</b> Gate A 실측에서 <b>영상 길이별 복구 호출 분포</b>를 함께 봐야 한다.</p>
+  </div>
+  <div class="block">
+    <h3>11-6. Vercel 제약과의 정합 — A-T1·A-T2·A-T3</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>제약</th><th>무엇이 걸리는가</th><th>v2.0의 처리</th></tr></thead>
+<tbody>
+<tr><th><b>A-T1</b> 함수 실행 시간 상한</th><td>탐지(p95 8분) · Gemini 메타데이터(p95 4분) · Suno 생성(p95 3분) · 렌더(p95 90초) — <b>전부 상한을 넘거나 근접</b></td><td>🔴 <b>동기 대기 0건.</b> 제출 → id 반환 → <b>webhook(Route Handler)</b> 수신. 사용자에게는 진행 표시</td></tr>
+<tr><th><b>A-T2</b> 요청 본문 크기 상한</th><td>20분 원본 업로드</td><td><b>Supabase Storage 직접 전송</b>(§4-6-4) · Server Action을 거치지 않는다</td></tr>
+<tr><th><b>A-T3</b> 장시간 워커 불가</th><td>상주 데몬 없음 — <b>폴링 루프를 서버에 둘 수 없다</b></td><td>재개 트리거는 <b>①webhook ②사용자 재진입</b> 둘뿐. 정리 배치(보관 만료·크레딧 소멸)는 <b>Vercel Cron</b></td></tr>
+<tr><th><b>조회·변경 배분</b></th><td><code>GET /entitlements</code> · <code>GET /usage-ledger</code></td><td>🔴 <b>RSC 직접 조회</b> — Server Action으로 만들지 않는다</td></tr>
+<tr><th>—</th><td>결제 결과 · Suno 완료 · 탐지 완료</td><td><b>Route Handler</b>(외부가 일으키는 사건) · 🔴 <b>멱등 처리 필수</b> — webhook은 중복 도착한다</td></tr>
+</tbody></table></div>
+<p class="lead">🔺 <b>A-T3가 F29(7일 보관)와 만나는 지점을 확인해야 한다.</b> 만료 파기는 Vercel Cron이 돌리는데, <b>Cron 실행 주기가 "만료 정확도 ±1시간"(AC8-3)을 만족하는가</b>가 미확인이다 — 🔴 <code>[TBD]</code>.</p>
+  </div>
+  <div class="block">
+    <h3>11-7. 기술 검토 결론</h3>
+<div class="tw"><table class="wide">
+<thead><tr><th>판정</th><th>항목</th></tr></thead>
+<tbody>
+<tr><th>🟢 <b>만들 수 있다</b></th><td>무료 편집 4종(클라이언트 연산) · 프롬프트 컷 2단 구조(컨텍스트·판정 원가 모두 여유) · AI 음악(원가 무시 가능) · 공개 범위 2종 · 과금 스키마</td></tr>
+<tr><th>🔺 <b>조건부</b></th><td>트래킹 — <b>PoC가 동작을 보였으나 실제 영상 coverage 72.2%(7초 영상)</b> 로 Gate A의 85%에 미달한다. 🔴 <b>미검증 4건(§11-1)을 먼저 해소하지 않으면 Gate A 판정 자체가 신뢰할 수 없다</b></td></tr>
+<tr><th>🔴 <b>막혀 있다</b></th><td><b>편당 원가 합계</b>(Gemini 단가·저장 원가 <code>[TBD]</code>) · <b>Suno 배포 권리</b>(ADR-19) · <b>쿼터 갱신 주기</b>(ADR-16) · <b>PG사</b>(ADR-17)</td></tr>
+</tbody></table></div>
+<p>🔴 <b>가장 먼저 할 일은 기능 개발이 아니라 측정이다.</b> PoC가 §10에서 1순위로 꼽은 것과 같다 — <b>실제 농구 영상 10~20개</b>와 <b>프레임 단위 정답 라벨 1~2개.</b> 그것 없이는 Gate A의 85%도, 편당 원가도, 복구 모델 비교(Cutie vs SAM 2.1)도 <b>잴 대상이 없다.</b></p>
+  </div>
+</section>
+
+</div>
+</main>
+<button class="top" id="topBtn" type="button" aria-label="문서 맨 위로 이동">↑ 맨 위로</button>
+
+<script>
+(function () {
+  var nav = document.getElementById('railNav');
+  var links = Array.prototype.slice.call(nav ? nav.querySelectorAll('a') : []);
+  var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+  var current = 0;
+
+  function mark(i) {
+    if (i < 0 || i >= links.length) return;
+    current = i;
+    links.forEach(function (a, n) { a.classList.toggle('is-current', n === i); });
+  }
+
+  if ('IntersectionObserver' in window && sections.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var i = sections.indexOf(e.target);
+        if (i > -1) mark(i);
+      });
+    }, { rootMargin: '-12% 0px -70% 0px', threshold: 0 });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+  mark(0);
+
+  function go(i) {
+    if (i < 0) i = 0;
+    if (i > sections.length - 1) i = sections.length - 1;
+    sections[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    mark(i);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(sections.length - 1); }
+  });
+
+  var btn = document.getElementById('topBtn');
+  if (btn) btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+
+  if (window.mermaid) { mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' }); }
+</script>
+</body>
+</html>
