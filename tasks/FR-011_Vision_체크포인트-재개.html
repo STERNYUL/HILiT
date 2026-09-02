@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-011 체크포인트 재개</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command] FR-011: 처리 단계 체크포인트 저장 및 재개" labels: 'backend, command, vision, priority:high, step-2' assignees: ''</p>
+<hr>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-011] 앱을 닫았다 열어도 처리가 처음부터 다시 시작되지 않는다</strong></li><li>목적: <strong>40분 원본의 처리 도중 이탈이 비용과 시간의 전손으로 이어지지 않게 한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 태스크의 근거는 사용자 여정에 있다.</strong></p>
+<p>v1.8 §3의 이탈 지점 분석은 <strong>④ 편집 단계에서 30분을 넘기면 사용자가 포기</strong>한다고 기록했다. 탐지는 p95 8분이 목표지만(REQ-NF-003) <strong>사용자가 그 8분을 앱 안에서 기다리지 않는다.</strong> 앱을 닫는 것이 정상 경로다.</p>
+<p><strong>체크포인트가 없으면 정상 경로가 실패 경로가 된다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>시나리오</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-1.F4</strong> 🆕 — 🔴 <strong>처리 중 앱 종료 → 마지막 완료 단계에서 재개</strong></li><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-008</strong> — 🔴 <strong>원본·중간 산출물을 보존한 채 재시도 3회 이상</strong></li><li><strong>상태 기계</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §7.2 — 편집 파이프라인 6단계</li><li><strong>엔티티</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2 <code>ProcessingJob.stage</code></li><li><strong>이탈 분석</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §3 — ④ 편집 2차 이탈</li><li><strong>완주율</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-014</strong> — 파이프라인 완주율 ≥ 95%</li><li>실시간 전달: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §5.1 — Realtime 구독(FR-036)</li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] <code>processing_jobs.stage</code> <strong>전이 시점마다 커밋</strong> — 단계 완료를 즉시 영속화</li><li>[ ] 🔴 <strong>단계별 중간 산출물 보존</strong> — 재개 시 이전 단계를 다시 하지 않도록</li><li>[ ] <strong>재진입 시 상태 조회</strong> — 어느 단계까지 끝났는지 반환</li><li>[ ] 🔴 <strong>재시도 3회</strong> 구현 — REQ-NF-008</li><li>[ ] <strong>재시도 대상 오류 분류</strong> — 일시 오류만 재시도, 영구 오류는 즉시 실패</li><li>[ ] <code>failure_class</code> 기록 — <code>CAPTURE</code> / <code>INFRA</code> 구분</li><li>[ ] 🔺 <strong>재시도 소진 후 처리</strong> — 실패 상태와 사용자 안내 경로</li><li>[ ] 계측 — <code>job_resumed</code> · <code>job_retried</code> · <strong>완주율 집계 입력</strong></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 앱을 닫아도 처리가 이어진다</strong> <em>(SC-1.F4)</em></p>
+<ul><li><strong>Given</strong>: 탐지 진행 중 앱을 종료함</li><li><strong>When</strong>: 나중에 앱을 다시 엶</li><li><strong>Then</strong>: 🔴 <strong>마지막 완료 단계에서 재개</strong>된다. 처음부터 다시 시작하지 않는다</li></ul>
+<p><strong>Scenario 2: 재개가 아니라 계속이다</strong></p>
+<ul><li><strong>Given</strong>: 탐지는 외부 서비스에서 진행 중(FR-005)</li><li><strong>When</strong>: 앱을 닫음</li><li><strong>Then</strong>: 🔴 <strong>추론 자체는 중단되지 않는다.</strong> 앱은 결과 수신처가 아니라 <strong>조회자</strong>이며, 결과는 webhook(FR-005)으로 들어온다. <strong>"재개"의 실체는 화면 복원이다</strong></li></ul>
+<p><strong>Scenario 3: 실패해도 중간 산출물이 남는다</strong> <em>(REQ-NF-008)</em></p>
+<ul><li><strong>Given</strong>: 리프레이밍 단계에서 실패</li><li><strong>When</strong>: 재시도를 수행함</li><li><strong>Then</strong>: 🔴 <strong>탐지 결과를 다시 만들지 않는다.</strong> 원본과 이전 단계 산출물이 보존되어 있다</li></ul>
+<p><strong>Scenario 4: 재시도가 3회 수행된다</strong> <em>(REQ-NF-008)</em></p>
+<ul><li><strong>Given</strong>: 일시적 오류</li><li><strong>When</strong>: 처리가 실패함</li><li><strong>Then</strong>: <strong>최대 3회 재시도</strong>되고 각 시도가 <code>job_retried</code> 로 계측된다</li></ul>
+<p><strong>Scenario 5: 촬영 실패를 재시도하지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 등장 구간 0건(<code>failure_class = CAPTURE</code>)</li><li><strong>When</strong>: 재시도 판정을 함</li><li><strong>Then</strong>: 🔴 <strong>재시도하지 않는다.</strong> 같은 원본에 같은 anchor로 다시 돌려도 결과가 같다. <strong>비용만 3배가 된다</strong> — 사용자에게 재지정(FR-005)을 안내해야 한다</li></ul>
+<p><strong>Scenario 6: 완주율이 산출된다</strong> <em>(REQ-NF-014)</em></p>
+<ul><li><strong>Given</strong>: 단계 전이 이벤트</li><li><strong>When</strong>: 집계함</li><li><strong>Then</strong>: <strong>업로드 시작 대비 기록 생성 완료 비율</strong>이 산출된다. 🔺 <strong>95%는 목표값이며 이 태스크는 측정 가능성까지 책임진다</strong></li></ul>
+<p><strong>Scenario 7 (실패): 재시도 소진이 조용히 끝나지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 3회 재시도 후에도 실패</li><li><strong>When</strong>: 상태를 확인함</li><li><strong>Then</strong>: 🔴 <strong><code>FAILED</code> 로 확정되고 사용자에게 안내가 도달</strong>한다. 무한 대기 화면이 남지 않는다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>A-T3(장시간 워커 불가)가 설계를 규정한다</strong> — 서버에 상주하는 재개 데몬을 둘 수 없다. <strong>재개는 사용자 재진입 또는 webhook 도착이 트리거한다</strong></li><li>🔴 <strong><code>CAPTURE</code> 는 재시도 대상이 아니다</strong> — 인프라 실패와 촬영 실패를 같은 재시도 정책으로 다루면 원가가 새고 실패 통계가 오염된다</li><li>🔺 <strong>재시도 간격이 <code>[TBD]</code></strong> — 즉시 / 지수 백오프 중 선택. 외부 API의 속도 제한과 함께 정한다</li><li>단계 전이는 <strong>원자적으로</strong> — 부분 전이 상태가 남으면 재개 지점을 알 수 없다</li><li>진행 상태의 사용자 전달은 <strong>FR-036(Realtime)</strong> 소관이다. 이 태스크는 <strong>상태를 정확히 남기는 것</strong>까지</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>앱 종료 후 재진입 시 마지막 완료 단계에서 이어지는가?</strong></li><li>[ ] 🔴 <strong>실패해도 중간 산출물이 보존되는가?</strong></li><li>[ ] 🔴 <strong><code>CAPTURE</code> 가 재시도 대상에서 제외되는가?</strong></li><li>[ ] 재시도 3회가 동작하고 계측되는가?</li><li>[ ] 재시도 소진 시 <code>FAILED</code> 로 확정되고 안내되는가?</li><li>[ ] 완주율 집계의 입력 이벤트가 발행되는가?</li><li>[ ] 상주 워커에 의존하지 않는가? <em>(A-T3)</em></li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-001</strong>(<code>processing_jobs</code>) · <strong>FR-005</strong>(Job 등록)</li><li><strong>Blocks</strong>: <strong>FR-036</strong>(Realtime 구독) · <strong>NF-003</strong>(완주율 집계) · <strong>TS-007</strong></li><li><strong>연관</strong>: <strong>FR-016</strong>(렌더 · 이탈 대응)이 클라이언트 측의 같은 문제를 다룬다 — 🔴 <strong>렌더는 브라우저에서 돌므로 탭 종료 시 실제로 소실된다</strong>(v2.2 §6.5.3). <strong>이 태스크와 대칭이 아니다</strong></li></ul>
+<p class="meta">FR-011 체크포인트 재개 · 원본 FR-011_Vision_체크포인트-재개.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-024 정보주체삭제이행</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command] FR-024: 정보주체 삭제 요구 이행 (원본·파생물 전량 물리 삭제)" labels: 'backend, command, record, legal, priority:critical, step-2' assignees: ''</p>
+<hr>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-024] 지워달라고 하면 전부 지운다</strong></li><li>목적: <strong>법적 의무인 정보주체의 삭제 요구를 실제로 이행한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>논리 삭제는 이 요구를 만족하지 않는다.</strong> REQ-NF-019의 명시적 문구다.</p>
+<p>🔴 <strong>그리고 지울 것이 6종이다</strong> — <em>"원본 · 추적 궤적 · 등장 구간 · 후보 · 완성 영상 · 기록"</em> 과 <strong>객체 스토리지의 모든 파생물</strong>. <strong>하나만 남아도 이행이 아니다.</strong></p>
+<p>🔺 <strong>이 요구는 한 번 유실된 적이 있다</strong> — v1.1 통합 과정에서 사라졌다가 v1.8에서 복원됐다(§요구사항 표 주석). <strong>다시 잃지 않도록 이 태스크가 존재를 고정한다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-019</strong> — 🔴 <strong>전량 삭제 · 논리 삭제 불가 · 계측은 비식별화 후 유지 · 처리 시한 <code>[TBD]</code></strong></li><li><strong>규제 준수</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §4.4 — 개인정보 · 정보주체 권리</li><li><strong>보존 정책</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2.3 · <code>DS/[DS]hilit-DSv1.1.md</code> §4.4</li><li><strong>파기 절차 문서</strong>: <code>tasks/NF-017_Legal_얼굴정보처리.md</code> ③ — 🔴 <strong>이 태스크와 문서가 일치해야 승인된다</strong></li><li><strong>엔티티 전체</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2 — 16 엔티티</li><li><strong>API</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §5.4 — <code>DELETE /videos/{id}</code> · <strong>REQ-NF-019</strong></li><li>🔴 <strong>구분 대상</strong>: <code>tasks/FR-004_Ingest_원본삭제-회수안내.md</code> — <strong>용량 회수이지 삭제 요구가 아니다</strong></li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] <strong>삭제 대상 목록 확정</strong> — 🔴 <strong>6종 + 객체 스토리지 파생물</strong>(§대상 표)</li><li>[ ] Server Action <strong><code>eraseSubjectData({ scope })</code></strong> — 기록 단위 / 계정 단위</li><li>[ ] 🔴 <strong>물리 삭제 구현</strong> — <code>deleted_at</code> 방식 금지</li><li>[ ] <strong>객체 스토리지 파생물 삭제</strong> — 원본 · 중간 산출물 · 완성물 · 썸네일</li><li>[ ] 🔴 <strong>계측 이벤트 비식별화</strong> — 삭제하지 않고 식별자만 제거해 <strong>집계는 유지</strong></li><li>[ ] <strong>잔존 스캔</strong> — 삭제 후 남은 것이 없는지 검증</li><li>[ ] 🔺 <strong>처리 시한 결정</strong> — 요청 접수 후 며칠 <code>[TBD]</code></li><li>[ ] 계측 — <code>erasure_requested</code> · <code>erasure_completed</code>(<strong>비식별 집계</strong>)</li></ul>
+<h3 id="h3">🔴 삭제 대상 — 하나라도 빠지면 이행이 아니다</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>대상</th><th>저장 위치</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td><strong>원본</strong> <code>SourceVideo</code></td><td>DB + 객체 스토리지</td></tr><tr><td style="text-align:center">2</td><td><strong>추적 궤적</strong> <code>bbox_timeline</code></td><td>DB</td></tr><tr><td style="text-align:center">3</td><td><strong>등장 구간</strong> <code>appearance_intervals</code></td><td>DB</td></tr><tr><td style="text-align:center">4</td><td><strong>후보</strong> <code>Candidate</code></td><td>DB (+ 썸네일)</td></tr><tr><td style="text-align:center">5</td><td><strong>완성 영상</strong> <code>GeneratedVideo</code></td><td>DB + 객체 스토리지</td></tr><tr><td style="text-align:center">6</td><td><strong>기록</strong> <code>Record</code></td><td>DB</td></tr><tr><td style="text-align:center">—</td><td>🔴 <strong>객체 스토리지의 모든 파생물</strong></td><td>스토리지</td></tr></tbody></table></div>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 6종이 전부 사라진다</strong> <em>(REQ-NF-019)</em></p>
+<ul><li><strong>Given</strong>: 파이프라인을 완주한 기록 하나</li><li><strong>When</strong>: 삭제 요구를 이행함</li><li><strong>Then</strong>: 🔴 <strong>DB와 객체 스토리지 양쪽에서 6종이 전부 없다.</strong> 잔존 스캔이 0건을 보고한다</li></ul>
+<p><strong>Scenario 2: 논리 삭제가 아니다</strong> <em>(REQ-NF-019)</em></p>
+<ul><li><strong>Given</strong>: 삭제 완료 상태</li><li><strong>When</strong>: DB를 직접 조회함</li><li><strong>Then</strong>: 🔴 <strong>행이 없다.</strong> <code>deleted_at</code> 이 채워진 행이 남아 있으면 <strong>이 요구는 미이행이다</strong></li></ul>
+<p><strong>Scenario 3: 객체 스토리지에도 남지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 삭제 완료 상태</li><li><strong>When</strong>: 스토리지를 직접 조회함</li><li><strong>Then</strong>: 🔴 <strong>원본 · 중간 산출물 · 완성물 · 썸네일이 전부 없다.</strong> <strong>DB만 지우면 4GB 영상이 스토리지에 그대로 남는다</strong></li></ul>
+<p><strong>Scenario 4: 집계는 유지된다</strong> <em>(REQ-NF-019)</em></p>
+<ul><li><strong>Given</strong>: 삭제된 사용자의 계측 이벤트</li><li><strong>When</strong>: 지표를 확인함</li><li><strong>Then</strong>: 🔴 <strong>식별자가 제거된 채 집계는 유지</strong>된다. <strong>이벤트를 통째로 지우면 과거 지표가 소급 변경되어 Gate 판정 근거가 사라진다</strong></li></ul>
+<p><strong>Scenario 5: FR-004와 결과가 다르다</strong></p>
+<ul><li><strong>Given</strong>: 같은 기록에 대해 FR-004(원본 삭제)만 실행한 경우</li><li><strong>When</strong>: 잔존을 확인함</li><li><strong>Then</strong>: 🔴 <strong>궤적·구간·후보·완성물·기록이 남아 있다.</strong> <strong>두 기능은 대체 관계가 아니다</strong></li></ul>
+<p><strong>Scenario 6: 파기 절차 문서와 일치한다</strong> <em>(NF-017 ③)</em></p>
+<ul><li><strong>Given</strong>: 승인된 파기 절차 문서</li><li><strong>When</strong>: 구현과 대조함</li><li><strong>Then</strong>: <strong>삭제 대상과 방법이 일치</strong>한다. 🔴 <strong>문서와 구현이 다르면 NF-017의 승인이 무효다</strong></li></ul>
+<p><strong>Scenario 7 (실패): 부분 실패가 성공으로 보고되지 않는다</strong></p>
+<ul><li><strong>Given</strong>: DB는 지워졌으나 스토리지 삭제가 실패</li><li><strong>When</strong>: 결과를 확인함</li><li><strong>Then</strong>: 🔴 <strong>미완료로 기록되고 재시도된다.</strong> <em>"거의 다 지웠다"</em> 는 법적 이행이 아니다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>CASCADE 삭제가 대부분을 처리하되 <code>SET NULL</code> 예외를 주의</strong> — <code>GeneratedVideo.source_video_id</code> 는 FR-004를 위한 예외이며, <strong>이 태스크에서는 완성물도 함께 지워야 한다</strong></li><li>🔴 <strong>계측 비식별화와 이벤트 삭제는 다르다</strong> — 요구 문구가 비식별화를 명시했다</li><li>🔺 <strong>처리 시한이 <code>[TBD]</code></strong> — 즉시인지 N일 이내인지. <strong>NF-017의 파기 절차 문서가 이 값을 정한다</strong></li><li>🔺 <strong>백업에서의 삭제가 <code>[TBD]</code></strong> — 요구사항이 다루지 않는다. <strong>법무 판단이 필요한 항목으로 표면화한다</strong></li><li>되돌릴 수 없으므로 <strong>확인 절차와 감사 로그</strong>가 필요하다(NF-009)</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>6종 + 스토리지 파생물이 전부 삭제되는가?</strong> <em>(잔존 스캔 0건)</em></li><li>[ ] 🔴 <strong>논리 삭제가 아닌가?</strong></li><li>[ ] 🔴 <strong>계측이 비식별화되고 집계가 유지되는가?</strong></li><li>[ ] 🔴 <strong>FR-004와 별도 함수인가?</strong></li><li>[ ] 부분 실패가 미완료로 기록되고 재시도되는가?</li><li>[ ] NF-017의 파기 절차 문서와 일치하는가?</li><li>[ ] 감사 로그가 남는가?</li><li>[ ] 🔺 <strong>처리 시한과 백업 처리가 결정되었는가?</strong></li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-001</strong>(스키마 · CASCADE 관계)</li><li><strong>Blocks</strong>: <strong>NF-017</strong>(파기 절차 승인의 검증 대상)</li><li>🔴 <strong>혼동 주의</strong>: <strong>FR-004</strong>(용량 회수)와 목적·범위·결과가 전부 다르다</li><li><strong>연관</strong>: <strong>NF-009</strong>(감사 로그) · <code>SRS §6.2.3</code>(보존 정책)</li></ul>
+<p class="meta">FR-024 정보주체삭제이행 · 원본 FR-024_Record_정보주체삭제이행.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

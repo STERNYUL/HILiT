@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-028 공유링크</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command/Infra] FR-028: 공유 링크 발급 · 범위 승계 · 만료 배치" labels: 'backend, command, infra, engagement, priority:medium, step-2' assignees: ''</p>
+<hr>
+<blockquote><p>🔀 <strong>FR-030(Cron 만료 배치)을 흡수했다</strong> <em>(축약 2026-08-30)</em> — <strong>링크 생명주기 하나</strong>다. <code>FR-030</code> 은 폐번이며 이 문서를 가리킨다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-028] 링크로 공유해도 공개 범위가 따라간다</strong></li><li>목적: <strong>앱 밖으로 나가는 유일한 경로에서 공개 범위가 새지 않게 한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>공유 링크는 공개 범위 강제(REQ-NF-009)의 가장 약한 고리다.</strong></p>
+<p>다른 모든 경로는 로그인한 사용자가 앱 안에서 접근하므로 RLS가 신원을 안다. <strong>공유 링크는 신원 없이 접근하는 경로</strong>다. 여기서 <em>"링크가 있으면 볼 수 있다"</em> 로 구현하면 <strong>비공개 기록이 카카오톡으로 유통된다.</strong></p>
+<p>요구 문구: <em>"공유 링크도 <strong>기록의 공개 범위를 따라야 한다.</strong> 비공개 기록의 링크는 <strong>발급되지 않거나 접근이 거부</strong>되어야 한다."</em></p>
+<p>🔺 <strong>배치는 "없어도 동작하는" 종류다.</strong> 접근 시점 판정이 만료를 확인하므로 배치가 없어도 <strong>만료 후 접근 성공은 0건</strong>이다. 배치의 역할은 <strong>만료 토큰이 무한히 쌓이는 것을 막는 정리</strong>다. 🔴 <strong>그러므로 배치 실패가 보안 사고가 되면 안 된다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-017</strong> — 🔴 <strong>공개 범위 승계</strong> · 경로 3종 한정(링크 복사 · 카카오톡 · 문자) · <strong>앱 안 DM은 범위 밖</strong></li><li><strong>보안</strong>: <strong>REQ-NF-012</strong> — 🔴 <strong>기본 만료 30일 · 만료 후 접근 0건 · 회수 반영 ≤ 60초</strong> <code>[PROPOSED]</code> · <strong>REQ-NF-009</strong></li><li><strong>배분 원칙</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §5.1 — 🔴 <strong>Vercel Cron</strong>(Server Action도 Route Handler도 아닌 세 번째 경로)</li><li><strong>파생 전제</strong>: §1.5.2 <strong>A-T1 · A-T3</strong></li><li><strong>그룹 이탈 회수</strong>: <code>tasks/FR-021_Social_그룹.md</code> §C</li><li>🔴 <strong>혼동 주의</strong>: 그룹 초대 링크는 <strong>7일</strong> — <code>tasks/FR-021_Social_그룹.md</code> §B</li><li>보관 정책: §6.2.3 · 화면: REF-13 화면 05</li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<h3 id="h3">A. 발급 및 접근</h3>
+<ul><li>[ ] Server Action <strong><code>createShareLink(recordId)</code></strong></li><li>[ ] 🔴 <strong>비공개 기록은 발급 자체를 거부</strong></li><li>[ ] 🔴 <strong>접근 시 현재 공개 범위 재확인</strong> — 발급 시점이 아니라 <strong>접근 시점</strong> 기준(§제약)</li><li>[ ] <strong>만료 30일</strong> 설정 · 토큰은 추측 불가능하게</li><li>[ ] 회수(revoke) 경로 — 🔴 <strong>반영 지연 ≤ 60초</strong></li><li>[ ] 공유 경로 3종만 제공 — 링크 복사 · 카카오톡 · 문자</li><li>[ ] 계측 — <code>share_link_created</code> · <code>share_link_accessed</code> · <code>share_link_revoked</code></li></ul>
+<h3 id="h3">B. 만료 배치 <em>(← FR-030)</em></h3>
+<ul><li>[ ] <strong>Vercel Cron 엔드포인트</strong> — Route Handler + <code>vercel.json</code> 스케줄</li><li>[ ] 만료 토큰 상태 전이 · 정리</li><li>[ ] 🔴 <strong>A-T1 준수 — 배치를 청크로 나눈다</strong>(§제약)</li><li>[ ] <strong>실행 인증</strong> — 외부에서 임의 호출되지 않게</li><li>[ ] 멱등 — 같은 시각에 두 번 돌아도 안전하게 · 실패 시 다음 주기에 이어서</li><li>[ ] 계측 — <code>cron_expiry_run</code>(<strong>처리 건수 · 소요 시간</strong>)</li><li>[ ] 🔺 <strong>미완료 업로드 세션 정리(FR-001) · 보관 기간 경과 데이터(§6.2.3)와 통합 검토</strong></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 비공개 기록의 링크는 발급되지 않는다</strong> <em>(REQ-FUNC-017)</em></p>
+<ul><li><strong>Given</strong>: <code>visibility = private</code> 인 기록</li><li><strong>When</strong>: 공유 링크 발급을 시도함</li><li><strong>Then</strong>: 🔴 <strong>거부된다.</strong> 발급 후 접근 거부가 아니라 <strong>발급 자체가 안 된다</strong></li></ul>
+<p><strong>Scenario 2: 발급 후 비공개로 바뀌면 링크가 죽는다</strong> <em>(범위 승계)</em></p>
+<ul><li><strong>Given</strong>: 전체공개 기록의 유효한 공유 링크</li><li><strong>When</strong>: 소유자가 나만 보기로 전환함(FR-020)</li><li><strong>Then</strong>: 🔴 <strong>접근이 거부된다.</strong> <strong>발급 시점의 범위를 토큰에 굳혀두면 여기서 새어나간다</strong> — 접근할 때마다 현재 범위를 본다</li></ul>
+<p><strong>Scenario 3: 그룹 기록의 링크는 구성원에게만 유효하다</strong></p>
+<ul><li><strong>Given</strong>: <code>visibility = GROUP</code> 인 기록의 공유 링크</li><li><strong>When</strong>: 비구성원이 링크를 엶</li><li><strong>Then</strong>: 🔴 <strong>거부된다.</strong> 링크 소지가 그룹 멤버십을 대체하지 않는다</li></ul>
+<p><strong>Scenario 4: 30일이 지나면 무효다</strong> <em>(REQ-NF-012)</em></p>
+<ul><li><strong>Given</strong>: 발급 후 31일이 지난 링크</li><li><strong>When</strong>: 접근함</li><li><strong>Then</strong>: 🔴 <strong>만료 후 접근 성공 0건</strong></li></ul>
+<p><strong>Scenario 5: 회수가 60초 안에 반영된다</strong> <em>(REQ-NF-012)</em></p>
+<ul><li><strong>Given</strong>: 유통 중인 링크</li><li><strong>When</strong>: 회수함</li><li><strong>Then</strong>: 🔴 <strong>60초 안에 접근이 거부</strong>된다. CDN·캐시가 있으면 무효화 경로가 필요하다. <strong>Cron 주기(시간 단위)로는 이 요구를 만족할 수 없다 — 회수는 동기 경로다</strong></li></ul>
+<p><strong>Scenario 6: 그룹 이탈이 링크를 회수한다</strong> <em>(FR-021 §C)</em></p>
+<ul><li><strong>Given</strong>: 그룹 기록의 공유 링크</li><li><strong>When</strong>: 소유자가 그룹을 나감</li><li><strong>Then</strong>: 🔴 <strong>링크가 함께 회수</strong>된다. <strong>그룹에서는 내려갔는데 링크로는 보이는 상태가 남으면 회수가 무의미하다</strong></li></ul>
+<p><strong>Scenario 7: 배치가 멈춰도 보안이 유지된다</strong> <em>(REQ-NF-012)</em></p>
+<ul><li><strong>Given</strong>: Cron이 며칠간 실행되지 않음</li><li><strong>When</strong>: 만료된 링크로 접근함</li><li><strong>Then</strong>: 🔴 <strong>여전히 거부된다.</strong> <strong>접근 시점 판정이 1차 방어이고 배치는 정리일 뿐</strong>이다</li></ul>
+<p><strong>Scenario 8: 배치가 실행 시간 상한을 넘지 않는다</strong> <em>(A-T1)</em></p>
+<ul><li><strong>Given</strong>: 정리 대상이 매우 많은 상황</li><li><strong>When</strong>: 배치가 실행됨</li><li><strong>Then</strong>: 🔴 <strong>청크 단위로 처리하고 상한 안에 끝난다.</strong> 남은 것은 <strong>다음 주기가 이어서</strong> 처리한다</li></ul>
+<p><strong>Scenario 9: Cron이 외부에서 임의로 호출되지 않는다</strong></p>
+<ul><li><strong>Given</strong>: Cron 엔드포인트 URL</li><li><strong>When</strong>: 인증 없이 호출함</li><li><strong>Then</strong>: <strong>거부된다.</strong> 공개 엔드포인트로 두면 누구나 배치를 유발할 수 있다</li></ul>
+<p><strong>Scenario 10 (실패): 공유 경로를 늘리지 않는다</strong> <em>(REQ-FUNC-017)</em></p>
+<ul><li><strong>Given</strong>: 앱 안 DM 같은 추가 경로 제안</li><li><strong>When</strong>: 범위를 검토함</li><li><strong>Then</strong>: 🔴 <strong>명시적으로 범위 밖이다.</strong> 링크 복사 · 카카오톡 · 문자 <strong>셋으로 한정</strong>한다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>접근 시점 판정</strong> — 토큰에 공개 범위를 담지 않는다. 담는 순간 Scenario 2가 실패한다</li><li>🔴 <strong>30일(공유)과 7일(그룹 초대)을 분리</strong> — 상수·경로를 공유하지 않는다. 공유하면 한쪽이 조용히 틀린다</li><li>🔴 <strong>REQ-NF-012의 두 지표(접근 0건 · 회수 ≤ 60초)는 둘 다 A가 책임진다</strong> — 배치는 보조 수단이다</li><li>🔴 <strong>A-T3(장시간 워커 불가)</strong> — Cron은 짧은 실행이 전제다. 전량 처리를 한 번에 시도하지 않는다</li><li>🔺 <strong><code>[PROPOSED]</code> 값들</strong> — 30일 · 60초는 확정치가 아니다. <strong>설정값으로 분리</strong>한다</li><li>🔺 <strong>미로그인 접근 허용 여부가 <code>[TBD]</code></strong> — <strong>REQ-FUNC-017은 카카오톡 전달을 전제하므로 허용이 자연스럽지만 명시가 없다</strong></li><li>🔺 <strong>Cron 실행 주기 <code>[TBD]</code></strong> · <strong>다른 정리 작업과의 통합 여부 <code>[TBD]</code></strong> — Cron 엔드포인트를 여러 개 두는 것보다 하나에 모으는 편이 A-T1 관리에 유리하다</li><li>토큰은 추측 불가능 — 기록 ID나 순번 노출 금지</li><li>Vercel Cron의 플랜별 제약 확인 필요</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>비공개 기록의 링크가 발급되지 않는가?</strong></li><li>[ ] 🔴 <strong>접근 시점에 현재 공개 범위를 확인하는가?</strong> <em>(토큰에 굳어 있지 않은가)</em></li><li>[ ] 🔴 <strong>회수가 60초 안에 반영되는가?</strong></li><li>[ ] 🔴 <strong>배치가 멈춰도 만료 링크 접근이 거부되는가?</strong></li><li>[ ] 🔴 <strong>청크 처리로 실행 시간 상한을 지키는가?</strong></li><li>[ ] 30일 만료가 동작하고 그룹 초대(7일)와 상수가 분리되어 있는가?</li><li>[ ] 그룹 이탈 시 함께 회수되는가?</li><li>[ ] 공유 경로가 3종으로 한정되는가?</li><li>[ ] Cron에 실행 인증이 있고 멱등한가?</li><li>[ ] 🔺 <strong>미로그인 접근 허용 여부 · 정리 작업 통합이 결정되었는가?</strong></li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-003</strong>(RLS) · <strong>FR-019</strong>(기록) · <strong>FR-020</strong>(공개 범위)</li><li><strong>Blocks</strong>: <strong>FR-021 §C</strong>(이탈 회수) · <strong>FE-008</strong> · <strong>TS-007</strong></li><li>🔴 <strong>혼동 주의</strong>: 그룹 초대 링크(7일)는 별개다</li><li><strong>연관</strong>: <strong>FR-001</strong>(미완료 세션 정리) · <strong>§6.2.3</strong>(보관 기간)이 같은 배치에 들어갈 후보다</li></ul>
+<p class="meta">FR-028 공유링크 · 원본 FR-028_Engagement_공유링크.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

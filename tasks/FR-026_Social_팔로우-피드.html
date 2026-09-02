@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-026 팔로우 피드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command/Query] FR-026: 팔로우 · 언팔로우 및 탭별 피드 (빈 피드 대체 노출)" labels: 'backend, command, query, social, feed, priority:high, step-2' assignees: ''</p>
+<hr>
+<blockquote><p>🔀 <strong>FR-035(탭별 피드 조회)를 흡수했다</strong> <em>(축약 2026-08-30)</em> — <strong>팔로우가 피드의 유일한 입력</strong>이고 둘이 같은 가시성 경계를 공유한다. <code>FR-035</code> 는 폐번이며 이 문서를 가리킨다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-026] 단방향 팔로우와, 앱을 열면 볼 것이 있는 피드</strong></li><li>목적: <strong>관계와 공개 범위를 분리한 채 피드를 구성하고, 팔로잉 0명에게도 빈 화면을 보여주지 않는다.</strong></li></ul>
+<blockquote><p>🔴 <strong>팔로우는 권한이 아니다.</strong></p>
+<p>§6.3 규칙 8: <em>"팔로우 관계는 <strong>공개 기록만</strong> 정한다. <strong>비공개 공유는 그룹이 맡는다</strong>."</em></p>
+<p>흔한 소셜 설계에서는 팔로우가 곧 접근 권한이지만, 여기서는 <strong>팔로우해도 그룹·비공개 기록에 절대 접근할 수 없다</strong>(SC-5.5). 이 경계가 무너지면 D3(개인 소유)와 시나리오 5가 함께 무너진다.</p>
+<p>🔴 <strong>그리고 피드는 ADR-4가 만든 위험을 흡수하는 자리다.</strong></p>
+<p>공개 범위 기본값이 <code>private</code> 이므로 <strong>공개 콘텐츠가 늘지 않아 피드에 볼 것이 부족해질 수 있다.</strong> SRS가 이를 <strong>RISK-05</strong>로 명시하고 완화 수단으로 <strong>SC-6.F1(빈 피드 대체 노출)</strong> 을 지정했다. <strong>즉 빈 피드 대체는 UX 편의가 아니라 제품 결정의 필수 짝</strong>이며, 이것이 없으면 ADR-4를 확정으로 둘 근거가 약해진다.</p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-012</strong>(🔴 <strong>공개 기록만 · 단방향</strong>) · <strong>REQ-FUNC-014</strong>(🔴 <strong>팔로잉·인기 기준 · 취향 설문은 범위 밖</strong>)</li><li><strong>비즈니스 규칙</strong>: §6.3 <strong>8</strong></li><li><strong>시나리오</strong>: <strong>SC-5.5</strong>(팔로우로 그룹 접근 불가) · <strong>SC-6.1</strong>(로그인 화면 없이 팔로잉 탭 재생) · <strong>SC-6.F1</strong>(🔴 <strong>팔로잉 0명 → 추천 노출</strong>)</li><li><strong>성능</strong>: <strong>REQ-NF-001</strong>(첫 프레임 <strong>p95 ≤ 1.5초</strong> · <strong>빈 피드 노출률 &lt; 5%</strong>) · <strong>REQ-NF-005</strong>(목록 p95 ≤ 400ms)</li><li><strong>리스크</strong>: §1.5.3 <strong>RISK-05</strong> · §1.5.2 <strong>ADR-4 감수사항</strong></li><li><strong>구성요소</strong>: §5.1 <strong>FeedRanker</strong> → <strong>VisibilityEnforcer</strong> 의존</li><li><strong>RLS</strong>: <code>tasks/CT-003_DB_RLS정책.md</code> — 🔴 <strong>팔로우가 정책 조건에 들어가지 않는다</strong></li><li>화면: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §6 — 3탭</li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<h3 id="h3">A. 팔로우 관계</h3>
+<ul><li>[ ] Server Action <strong><code>follow(userId)</code></strong> · <strong><code>unfollow(userId)</code></strong> — 🔴 <strong>단방향, 승인 없음</strong></li><li>[ ] 자기 자신 팔로우 방지 · 중복 방지 — DB CHECK · UNIQUE</li><li>[ ] 🔴 <strong>RLS 정책에 팔로우를 넣지 않는다</strong> — 가시성 판정 조건이 아니다(§제약)</li><li>[ ] 팔로워·팔로잉 수 집계</li><li>[ ] 계측 — <code>follow_created</code> · <code>follow_removed</code></li></ul>
+<h3 id="h3">B. 피드 조회 <em>(← FR-035)</em></h3>
+<ul><li>[ ] <strong><code>getFeed({ tab, cursor })</code></strong> — 팔로잉 / 추천 / 그룹 3탭</li><li>[ ] <strong>팔로잉 탭</strong> — 팔로우 대상의 <strong>전체공개 기록만</strong></li><li>[ ] <strong>추천 탭</strong> — 🔴 <strong>인기 기준</strong> · 취향 설문 반영 안 함</li><li>[ ] <strong>그룹 탭</strong> — 소속 그룹의 그룹 공개 기록</li><li>[ ] 🔴 <strong>SC-6.F1 — 팔로잉 0명일 때 추천으로 대체</strong></li><li>[ ] 🔴 <strong>빈 피드 노출률 계측</strong> — REQ-NF-001의 <code>&lt; 5%</code></li><li>[ ] 커서 페이지네이션 — 오프셋은 RLS 하에서 불안정하다</li><li>[ ] 계측 — <code>feed_opened</code> · <code>feed_empty_fallback</code></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 승인 없이 팔로우된다</strong> <em>(REQ-FUNC-012)</em></p>
+<ul><li><strong>Given</strong>: 다른 사용자</li><li><strong>When</strong>: 팔로우함</li><li><strong>Then</strong>: <strong>즉시 성립</strong>한다. 상대의 승인 절차가 없다</li></ul>
+<p><strong>Scenario 2: 팔로우해도 비공개는 안 보인다</strong> <em>(SC-5.5 · 규칙 8)</em></p>
+<ul><li><strong>Given</strong>: A가 B를 팔로우함</li><li><strong>When</strong>: A가 B의 비공개·그룹 기록에 접근을 시도함</li><li><strong>Then</strong>: 🔴 <strong>차단된다.</strong> <strong>RLS 정책 조건에 팔로우가 아예 없기 때문에 구조적으로 불가능하다</strong></li></ul>
+<p><strong>Scenario 3: 비공개는 개수에도 안 잡힌다</strong> <em>(SC-4.4)</em></p>
+<ul><li><strong>Given</strong>: A가 B의 프로필을 봄</li><li><strong>When</strong>: 기록 수를 확인함</li><li><strong>Then</strong>: 🔴 <strong>B의 전체공개 기록만 센다.</strong> 팔로우 관계가 이 숫자를 바꾸지 않는다</li></ul>
+<p><strong>Scenario 4: 언팔로우가 즉시 반영된다</strong></p>
+<ul><li><strong>Given</strong>: 팔로우 중인 관계</li><li><strong>When</strong>: 언팔로우함</li><li><strong>Then</strong>: <strong>피드에서 즉시 사라진다.</strong> 다만 🔴 <strong>이미 보이던 전체공개 기록은 여전히 접근 가능</strong>하다 — 팔로우는 권한이 아니라 <strong>피드 구성 기준</strong>이기 때문이다</li></ul>
+<p><strong>Scenario 5: 앱을 열면 바로 재생된다</strong> <em>(SC-6.1 · REQ-NF-001)</em></p>
+<ul><li><strong>Given</strong>: 앱 진입</li><li><strong>When</strong>: 팔로잉 탭이 뜸</li><li><strong>Then</strong>: 🔴 <strong>로그인 화면 없이</strong> 영상이 재생되고 <strong>첫 프레임까지 p95 ≤ 1.5초</strong></li></ul>
+<p><strong>Scenario 6: 팔로잉 0명이면 추천이 나온다</strong> <em>(SC-6.F1)</em></p>
+<ul><li><strong>Given</strong>: 아무도 팔로우하지 않은 신규 사용자</li><li><strong>When</strong>: 팔로잉 탭을 엶</li><li><strong>Then</strong>: 🔴 <strong>빈 화면이 아니라 추천 콘텐츠</strong>가 나오고 <code>feed_empty_fallback</code> 이 계측된다</li></ul>
+<p><strong>Scenario 7: 비공개·타 그룹 기록이 피드에 없다</strong> <em>(REQ-NF-009 · SC-5.2)</em></p>
+<ul><li><strong>Given</strong>: 팔로우 대상의 <code>private</code> 기록 / 소속되지 않은 그룹의 기록</li><li><strong>When</strong>: 각 탭을 봄</li><li><strong>Then</strong>: 🔴 <strong>없다.</strong> RLS가 걸러내고, 다른 그룹은 <strong>존재도 드러나지 않는다</strong></li></ul>
+<p><strong>Scenario 8: 빈 피드 노출률이 5% 미만이다</strong> <em>(REQ-NF-001)</em></p>
+<ul><li><strong>Given</strong>: 전체 피드 조회 세션</li><li><strong>When</strong>: 집계함</li><li><strong>Then</strong>: 🔴 <strong>대체 노출 후에도 빈 화면이 뜬 비율이 5% 미만.</strong> <strong>대체가 동작해도 추천할 콘텐츠 자체가 없으면 이 지표가 무너진다</strong> — RISK-05가 실현되는 신호다</li></ul>
+<p><strong>Scenario 9: 취향 설문을 반영하지 않는다</strong> <em>(REQ-FUNC-014)</em></p>
+<ul><li><strong>Given</strong>: 추천 탭 구현</li><li><strong>When</strong>: 랭킹 기준을 확인함</li><li><strong>Then</strong>: 🔴 <strong>팔로잉·인기 기준만이다.</strong> 개인화 추천은 <strong>명시적으로 MVP 범위 밖</strong>이다</li></ul>
+<p><strong>Scenario 10 (실패): 팔로우를 권한으로 확장하지 않는다</strong></p>
+<ul><li><strong>Given</strong>: <em>"맞팔이면 비공개도 보여주자"</em> 같은 제안</li><li><strong>When</strong>: 요구 정합성을 검토함</li><li><strong>Then</strong>: 🔴 <strong>규칙 8 위반이다.</strong> <strong>비공개 공유의 유일한 수단은 그룹이며 이 경계가 D3를 지킨다</strong></li></ul>
+<p><strong>Scenario 11 (실패): 대체 노출이 무한 반복되지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 추천할 공개 기록이 매우 적은 초기 상태</li><li><strong>When</strong>: 스크롤을 계속함</li><li><strong>Then</strong>: 🔺 <strong>같은 콘텐츠가 무한 반복되지 않고 끝이 드러난다.</strong> 반복 노출은 빈 화면보다 나쁠 수 있다 <code>[TBD]</code></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>RLS 정책이 팔로우를 참조하지 않는다</strong> — 참조하는 순간 규칙 8이 코드 수준에서 무너지고, 이후 어떤 리팩터링에서도 되살아날 수 있다</li><li>🔴 <strong>단방향</strong> — 맞팔 개념을 도입하지 않는다. 요구사항에 없다</li><li>🔴 <strong>개인화 추천을 만들지 않는다</strong> — 요구사항이 명시적으로 제외했다</li><li>🔺 <strong>인기 기준의 정의가 <code>[TBD]</code></strong> — 좋아요 수인지 최신성 가중인지. <strong>요구 문구는 "인기 기준"까지만이다</strong></li><li>🔺 <strong>빈 피드 노출률 &lt; 5%는 <code>[PROPOSED]</code></strong> — 콘텐츠 총량에 종속되며 개발로 달성할 수 없는 부분이 있다</li><li>🔺 <strong>차단(block) · 팔로워 수 상한은 요구사항에 없다</strong> — 임의로 추가하지 않는다</li><li>커서 기반 페이지네이션 — 오프셋은 RLS 하에서 불안정하다</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>RLS 정책 어디에도 팔로우 조건이 없는가?</strong></li><li>[ ] 🔴 <strong>팔로우로 비공개·그룹 기록이 열리지 않는가?</strong> <em>(SC-5.5)</em></li><li>[ ] 🔴 <strong>팔로잉 0명일 때 추천으로 대체되는가?</strong> <em>(SC-6.F1)</em></li><li>[ ] 🔴 <strong>빈 피드 노출률이 계측되는가?</strong></li><li>[ ] 로그인 화면 없이 첫 프레임 p95 ≤ 1.5초인가?</li><li>[ ] 🔴 <strong>개인화 추천이 구현되지 않았는가?</strong> <em>(범위 준수)</em></li><li>[ ] 중복·자기 팔로우가 DB 제약으로 막히는가?</li><li>[ ] 🔺 <strong>인기 기준의 정의가 결정되었는가?</strong></li><li>[ ] 대체 노출이 무한 반복되지 않는가?</li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-001</strong>(스키마) · <strong>CT-003</strong>(RLS) · <strong>FR-020</strong>(공개 범위)</li><li><strong>Blocks</strong>: <strong>FE-001</strong> · <strong>FE-010</strong> · <strong>TS-002</strong> · <strong>TS-002</strong> · <strong>TS-007</strong></li><li>🔴 <strong>RISK-05 완화 수단</strong>: 이 태스크가 ADR-4의 감수사항을 흡수한다</li><li>🔴 <strong>경계 태스크</strong>: <strong>FR-021</strong>(그룹)이 비공개 공유를 맡는다. 두 태스크의 역할이 겹치면 규칙 8이 무너진다</li></ul>
+<p class="meta">FR-026 팔로우 피드 · 원본 FR-026_Social_팔로우-피드.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

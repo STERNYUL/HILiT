@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-009 ConfidenceGate제외</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (수렴 판정)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Convergence Task about: 임계 도달로 판정하는 수렴형 태스크 (구현 완료가 종료 조건이 아님) title: "[Command] FR-009: ConfidenceGate — 저신뢰 후보 제외 및 제외율 계측" labels: 'backend, command, vision, convergence, priority:critical, step-2' assignees: ''</p>
+<hr>
+<blockquote><h3 class="bq-h">⚠️ 이것은 수렴형 태스크다</h3>
+<p>제외 로직 자체는 단순하다. <strong>어려운 것은 임계 <code>τ</code> 를 정하는 일이고, 그 값은 FR-008의 실측 오인식률이 나와야 정해진다.</strong> 코드가 동작하는 것과 τ가 옳은 것은 다르다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-009] 확신이 없으면 보여주지 않는다</strong></li><li>목적: <strong>타인의 장면이 사용자의 후보 목록에 섞이는 일을 0건으로 만든다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 요구는 "표시"가 아니라 "제외"다.</strong></p>
+<p>REQ-FUNC-027은 명시적으로 <em>"저신뢰 표시로 사용자에게 판단을 넘기지 않는다"</em> 고 못박았다. <strong>저신뢰 배지를 달아 목록에 남기는 구현은 요구 위반</strong>이다.</p>
+<p>🔴 <strong>그리고 이 결정에는 대가가 있다</strong> — 제외는 <strong>Gate A의 탐지율을 깎는다</strong>. REQ-FUNC-003이 <strong>제외 후</strong> 값으로 판정하는 이유가 여기에 있다. <strong>정확도와 재현율을 맞바꾸는 손잡이가 τ 하나이며, 이 태스크가 그 손잡이를 쥔다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-027</strong> — 🔴 <strong>무표시 혼입 0건</strong> · 제외율 계측 · 사유 안내</li><li><strong>임계 근거</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-002</strong> — 🔴 <strong><code>오인식 ≤ 2%</code> 가 τ의 기준</strong></li><li><strong>게이트 정합</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-003</strong> — 제외 후로 판정 · 제외 전은 진단</li><li><strong>시나리오</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-1.F5</strong>(제외·계측) · <strong>SC-1.F6</strong>(후보 부족 사유 안내)</li><li><strong>신뢰도 구분</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §7.3 — 🔴 <strong>구간 점수를 τ에 쓰지 않는다</strong></li><li><strong>리스크</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §1.5.3 <strong>RISK-02</strong></li><li><strong>테스트 픽스처</strong>: <code>tasks/CT-007_Mock_픽스처.md</code> — <strong>M2</strong>(저신뢰 혼재) · <strong>M3</strong>(<code>null</code>) · <strong>M5</strong>(제외 후 1개)</li><li>검증: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §5.3 <strong>TC-ADR-02</strong></li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] <strong>ConfidenceGate</strong> 구현 — <code>reidConfidence &lt; τ</code> 인 구간을 후보에서 제외</li><li>[ ] 🔴 <strong>τ 를 설정값으로 분리</strong> — 코드 상수로 박지 않는다(§제약)</li><li>[ ] <code>excluded_reason</code> 기록 — 제외 사유를 행에 남긴다</li><li>[ ] 🔴 <strong>제외 건수·제외율 계측</strong> — <code>candidates_excluded</code></li><li>[ ] 🔴 <strong><code>reidConfidence === null</code> 처리</strong> — 제외를 수행하지 않고 <strong>그 사실을 명시적으로 표면화</strong>(B3 실패 경로)</li><li>[ ] <strong>제외 후 후보 부족 판정</strong> — 부족 기준과 안내 트리거</li><li>[ ] 제외 전/후 탐지율 <strong>분리 집계</strong> — Gate A 판정과 진단을 나눈다</li><li>[ ] τ 조정 이력 기록 — 언제 무슨 근거로 바꿨는지</li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 임계 미만이 목록에서 사라진다</strong> <em>(SC-1.F5)</em></p>
+<ul><li><strong>Given</strong>: CT-007 픽스처 <strong>M2</strong>(12구간 중 4개가 임계 미만)</li><li><strong>When</strong>: ConfidenceGate를 통과시킴</li><li><strong>Then</strong>: 🔴 <strong>4건이 후보 목록에 없다.</strong> <code>excluded_reason</code> 이 기록되고 제외 건수가 계측된다</li></ul>
+<p><strong>Scenario 2: 저신뢰 표시로 대체하지 않는다</strong> <em>(REQ-FUNC-027)</em></p>
+<ul><li><strong>Given</strong>: 임계 미만 구간</li><li><strong>When</strong>: 후보 목록 응답을 확인함</li><li><strong>Then</strong>: 🔴 <strong><code>confidenceFlag: LOW</code> 인 항목이 목록에 없다.</strong> 판단을 사용자에게 넘기는 구현은 요구 위반이다</li></ul>
+<p><strong>Scenario 3: 무표시 혼입이 0건이다</strong> <em>(REQ-FUNC-027)</em></p>
+<ul><li><strong>Given</strong>: 정답셋에서 타인이 등장하는 구간</li><li><strong>When</strong>: 후보 목록을 검사함</li><li><strong>Then</strong>: 🔴 <strong>타인의 장면이 표시 없이 섞인 사례가 0건.</strong> <em>"거의 없다"</em> 는 통과가 아니다</li></ul>
+<p><strong>Scenario 4: 제외가 사유 안내로 이어진다</strong> <em>(SC-1.F6)</em></p>
+<ul><li><strong>Given</strong>: 픽스처 <strong>M5</strong>(제외 후 구간 1개)</li><li><strong>When</strong>: 후보 화면을 엶</li><li><strong>Then</strong>: 🔴 <strong>빈 목록만 보여주지 않는다.</strong> <em>"왜 후보가 적은지"</em> 가 <code>excludedCount</code> 와 함께 전달된다</li></ul>
+<p><strong>Scenario 5: 신뢰도가 없으면 조용히 통과시키지 않는다</strong> <em>(M3 · B3)</em></p>
+<ul><li><strong>Given</strong>: <code>reidConfidence === null</code></li><li><strong>When</strong>: 게이트를 실행함</li><li><strong>Then</strong>: 🔴 <strong>제외를 수행하지 않고 그 사실이 명시적으로 드러난다.</strong> 🔴 <strong><code>null</code> 을 0으로 보면 전량 제외되고, 1로 보면 전량 통과된다 — 둘 다 틀리다</strong></li></ul>
+<p><strong>Scenario 6: τ 를 코드 배포 없이 조정할 수 있다</strong></p>
+<ul><li><strong>Given</strong>: FR-008의 실측 오인식률</li><li><strong>When</strong>: τ 를 조정함</li><li><strong>Then</strong>: 🔴 <strong>코드 변경 없이 반영된다.</strong> Gate A와 오인식률의 균형점은 <strong>한 번에 맞지 않으므로</strong> 반복 조정이 전제다</li></ul>
+<p><strong>Scenario 7 (실패): τ 를 올려 Gate A를 통과시키지 않는다</strong></p>
+<ul><li><strong>Given</strong>: Gate A 미달 상황</li><li><strong>When</strong>: τ 조정을 검토함</li><li><strong>Then</strong>: 🔴 <strong>τ 를 올리면 제외가 늘어 제외 후 탐지율이 더 떨어진다.</strong> 게이트가 이 방향의 조작에 저항하도록 설계되어 있다. <strong>τ 하향은 오인식률 실측이 여유를 보일 때만 정당하다</strong></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>τ 는 <code>[TBD]</code></strong> — 초기값은 FR-008이 측정한 <strong>오인식률 ≤ 2%를 만족하는 최소 임계</strong>로 정한다. 그 실측 전에는 어떤 숫자도 근거가 없다</li><li>🔴 <strong>구간 점수(Gemini <code>confidence</code>)를 τ 에 쓰지 않는다</strong> — v2.2 §7.3. <em>"볼 만한가"</em> 로 <em>"당신인가"</em> 를 판정하면 요구가 조용히 바뀐다</li><li>🔺 <strong>"후보가 현저히 줄면"의 기준이 <code>[TBD]</code></strong> — 절대 개수인지 제외율인지 정해야 안내 트리거가 결정된다</li><li>제외된 구간은 <strong>삭제하지 않고 표시만 한다</strong> — 재판정이 가능해야 τ 조정 실험이 성립한다</li><li>계측: 제외 건수 · 제외율 · <strong>τ 값</strong>을 함께 남긴다. τ 없이 제외율만 보면 나중에 해석할 수 없다</li></ul>
+<h2 id="h5">🏁 Definition of Done (수렴 판정)</h2>
+<ul><li>[ ] 🔴 <strong>무표시 혼입 0건인가?</strong> — 정답셋 검증으로 확인</li><li>[ ] 🔴 <strong><code>LOW</code> 플래그 항목이 목록에 없는가?</strong> <em>(표시가 아니라 제외인가)</em></li><li>[ ] 🔴 <strong><code>null</code> 처리가 0/1 어느 쪽으로도 치환되지 않는가?</strong></li><li>[ ] 🔴 <strong>τ 가 설정값으로 분리되었는가?</strong></li><li>[ ] 제외 건수 · 제외율 · τ 가 함께 계측되는가?</li><li>[ ] 제외 전/후 탐지율이 <strong>분리 집계</strong>되는가?</li><li>[ ] SC-1.F6 사유 안내가 동작하는가?</li><li>[ ] CT-007 픽스처 <strong>M2 · M3 · M5</strong> 로 검증했는가?</li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>FR-005</strong>(정규화된 결과) · <strong>CT-007</strong>(픽스처)</li><li>🔺 <strong>τ 확정만 차단</strong>: <strong>FR-008</strong>의 실측 오인식률. <strong>구현은 Mock으로 지금 완성 가능</strong>하다</li><li><strong>Blocks</strong>: <strong>FR-012</strong>(후보 산출·조회) · <strong>TS-007</strong> · <strong>TS-002</strong></li><li><strong>연관</strong>: <strong>REQ-FUNC-003</strong>의 Gate A 판정이 이 게이트의 출력을 입력으로 쓴다</li></ul>
+<p class="meta">FR-009 ConfidenceGate제외 · 원본 FR-009_Vision_ConfidenceGate제외.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>
