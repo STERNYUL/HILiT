@@ -85,7 +85,9 @@
     .hero { position: relative; margin-block-start: var(--nav-height); overflow: clip; background: var(--color-dark); color: var(--color-light); isolation: isolate; }
     .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(120% 90% at 12% 8%, oklch(90% 0.069 166 / 0.16), transparent 62%); }
     .hero-inner { min-height: clamp(38rem, 84dvh, 54rem); display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-8); padding-block: var(--space-hero-top) var(--space-hero-bottom); }
-    .hero h1 { min-width: 0; max-width: 16ch; margin: 0; font-family: var(--font-display); font-size: var(--text-hero); font-weight: 800; line-height: .92; letter-spacing: -.06em; animation: rise var(--dur-long) var(--ease-out) both; }
+    /* [v3.1] 히어로 행간 .92 → .98 — 72px 글자에 행간 66px 이라 한글 글립이 겹쳤다.
+       .h-slab 이 이미 쓰는 값이라 새 숫자를 만들지 않고 디자인 시스템에 맞췄다. */
+    .hero h1 { min-width: 0; max-width: 16ch; margin: 0; font-family: var(--font-display); font-size: var(--text-hero); font-weight: 800; line-height: .98; letter-spacing: -.06em; animation: rise var(--dur-long) var(--ease-out) both; }
     .hero p { max-width: 40rem; margin: var(--space-5) 0 0; color: var(--color-light-muted); font-size: var(--text-lg); font-weight: 500; }
     /* [v3] 서브가 두 줄로 줄었다. <br> 이 정한 줄바꿈만 지키면 되고, 폭·행간 규칙은 그대로 둔다. */
     .hero-sub { max-width: 46rem; line-height: 1.5; }
