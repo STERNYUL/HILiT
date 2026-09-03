@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="여러 사람이 함께 나온 영상에서 당신만 골라내 짧은 한 편으로 만듭니다. 가려졌다 다시 나타나도 같은 사람으로 따라가고, 올릴지는 나중에 정하시면 됩니다.">
+  <title>HILIT — 당신이 주인공인 숏폼을 완성하고, 당신의 공간에 기록하세요</title>
+  <link rel="icon" href="assets/hilit-app-icon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    /* LP v2 — docs/LP/HILiT_랜딩페이지_제작계획서_v1_0.md (v1.12) 구조 위에
+       사용자 카피 개정을 얹은 판이다. v1 대비 바뀐 곳은 히어로 서브·데모 안내문·
+       고객 시나리오 섹션·작동 방식 4단계이며, 각 자리에 [v2] 주석을 달아 두었다.
+       S0~S11 전 구간.
+       T5 로 가입이 열려 CTA 는 전부 회원가입(#start)이다. 대기자 등록 단계는 두지 않는다.
+       T3 으로 대기·처리 시간에 관한 서술은 페이지 어디에도 두지 않는다.
+       T15 인칭 — 페이지가 말을 거는 문장은 "당신", 방문자가 누르는 버튼은 "나". */
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; overflow-x: clip; }
+    html { scroll-behavior: smooth; background: var(--color-paper); }
+    /* word-break: keep-all — 한국어는 기본값이면 음절 아무 데서나 끊긴다. 어절 단위로 묶어야 헤드라인이 읽힌다. */
+    body { min-width: 320px; background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); line-height: 1.58; word-break: keep-all; overflow-wrap: break-word; text-rendering: optimizeLegibility; }
+    img, video, canvas { display: block; max-width: 100%; }
+    button, input, select, a { font: inherit; }
+    button, input[type="range"] { cursor: pointer; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+    ::selection { background: var(--color-accent); color: var(--color-accent-ink); }
+    .skip-link { position: fixed; inset-block-start: var(--space-3); inset-inline-start: var(--space-3); z-index: var(--z-overlay); transform: translateY(-180%); padding: var(--space-3) var(--space-4); background: var(--color-accent); color: var(--color-accent-ink); font-weight: 700; }
+    .skip-link:focus { transform: none; }
+    .shell { width: min(100%, var(--content-max)); margin-inline: auto; padding-inline: var(--page-gutter); }
+
+    /* 공통 타이포 — 슬랩 헤드라인 한 규칙만 쓰고 섹션마다 재정의하지 않는다. */
+    .h-slab { min-width: 0; margin: 0; font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; line-height: .98; letter-spacing: -.045em; }
+    .lede { max-width: 40rem; margin: var(--space-5) 0 0; color: var(--color-muted); font-size: var(--text-lg); }
+    .on-dark .lede { color: var(--color-light-muted); }
+    .kicker { display: inline-flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-4); color: var(--color-muted); font-size: var(--text-xs); font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+    .kicker::before { content: ""; width: 1.75rem; height: var(--rule); background: currentColor; }
+    .on-dark .kicker { color: var(--color-accent); }
+    .section { padding-block: var(--space-section); }
+    .section--compact { padding-block: var(--space-section-compact); }
+    .on-dark { background: var(--color-dark); color: var(--color-light); }
+    .on-paper-2 { background: var(--color-paper-2); }
+    .section-head { display: grid; gap: var(--space-4); margin-block-end: var(--space-7); }
+    /* 섹션 헤드는 2단 안에 들어가므로 히어로보다 한 단 작게 잡는다. 안 그러면 <br> 이 정한 줄바꿈이 무시되고 낱말이 잘린다. */
+    .section-head .h-slab { max-width: 20ch; font-size: clamp(2rem, 3.4vw, 3.9rem); }
+    /* [v2] 리드 문장이 없는 섹션 헤드는 제목만 서므로 아래 간격을 조금 줄인다. */
+    .section-head:not(:has(p)) { margin-block-end: var(--space-6); }
+    .section-head p { max-width: 36rem; margin: 0; color: var(--color-muted); font-size: var(--text-lg); }
+    .on-dark .section-head p { color: var(--color-light-muted); }
+    .note { max-width: 44rem; margin: var(--space-6) 0 0; padding-block-start: var(--space-4); border-block-start: var(--rule) solid var(--color-rule); color: var(--color-muted); font-size: var(--text-sm); }
+    .on-dark .note { border-block-start-color: var(--color-ink-2); color: var(--color-light-muted); }
+
+    /* S0 내비 — 로고 카드 그대로. 민트 바탕에 크림 땡땡이. */
+    .site-nav { position: fixed; inset: 0 0 auto; z-index: var(--z-nav); background: var(--color-accent); color: var(--color-accent-ink); border-block-end: var(--rule) solid var(--color-accent-rule); }
+    .site-nav::before { content: ""; position: absolute; inset: 0; z-index: 0; background: var(--color-dot); -webkit-mask: url("assets/dot-pattern.svg") 0 0 / 320px 80px repeat; mask: url("assets/dot-pattern.svg") 0 0 / 320px 80px repeat; pointer-events: none; }
+    .nav-inner { position: relative; z-index: 1; min-height: var(--nav-height); display: grid; grid-template-columns: auto 1fr; align-items: center; gap: var(--space-4); }
+    .brand { display: inline-flex; align-items: center; min-width: 0; min-height: 2.5rem; text-decoration: none; }
+    .brand img { width: var(--brand-size); height: auto; }
+    .nav-links { display: none; justify-self: center; align-items: center; gap: var(--space-6); }
+    .nav-links a { display: inline-flex; align-items: center; min-height: 2.5rem; color: var(--color-accent-ink); font-size: var(--text-sm); font-weight: 700; line-height: 1; text-decoration: none; white-space: nowrap; }
+
+    .nav-action, .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding-inline: var(--space-5); border: var(--rule) solid var(--color-ink); border-radius: var(--radius-sm); background: var(--color-ink); color: var(--color-light); font-weight: 700; line-height: 1; text-decoration: none; white-space: nowrap; transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out); }
+    .btn-mint { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-accent-ink); }
+    .btn-ghost { border-color: var(--color-rule); background: var(--color-clear); color: var(--color-ink); }
+    .btn-dark-ghost { border-color: var(--color-ink-2); background: var(--color-clear); color: var(--color-light); }
+    .nav-action { justify-self: end; min-height: 2.5rem; padding-inline: var(--space-4); border-color: var(--color-accent-ink); background: var(--color-dot); color: var(--color-accent-ink); font-size: var(--text-sm); }
+    .btn:active, .nav-action:active { transform: translateY(1px); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    /* 주 CTA 와 보조 행동의 위계를 눈으로 갈라 둔다 — 계획서 §2.2. */
+    .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-block-start: var(--space-6); }
+    .cta-tail { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); margin-block-start: var(--space-7); padding-block-start: var(--space-5); border-block-start: var(--rule) solid var(--color-rule); }
+    .on-dark .cta-tail { border-block-start-color: var(--color-ink-2); }
+    .cta-tail p { margin: 0; max-width: 34rem; color: var(--color-muted); font-size: var(--text-sm); }
+    .on-dark .cta-tail p { color: var(--color-light-muted); }
+
+    /* S1 히어로 — 실증 미디어(§1.4 B안 편집본)가 아직 없다.
+       사진 대신 "긴 원본에서 남는 것은 짧은 한 편"을 띠로 그려 세운다.
+       🔴 띠의 폭은 특정 초 수를 약속하지 않는다. 수치는 §5 가 금지한다. */
+    .hero { position: relative; margin-block-start: var(--nav-height); overflow: clip; background: var(--color-dark); color: var(--color-light); isolation: isolate; }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(120% 90% at 12% 8%, oklch(90% 0.069 166 / 0.16), transparent 62%); }
+    .hero-inner { min-height: clamp(38rem, 84dvh, 54rem); display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-8); padding-block: var(--space-hero-top) var(--space-hero-bottom); }
+    .hero h1 { min-width: 0; max-width: 16ch; margin: 0; font-family: var(--font-display); font-size: var(--text-hero); font-weight: 800; line-height: .92; letter-spacing: -.06em; animation: rise var(--dur-long) var(--ease-out) both; }
+    .hero p { max-width: 40rem; margin: var(--space-5) 0 0; color: var(--color-light-muted); font-size: var(--text-lg); font-weight: 500; }
+    /* [v3] 서브가 두 줄로 줄었다. <br> 이 정한 줄바꿈만 지키면 되고, 폭·행간 규칙은 그대로 둔다. */
+    .hero-sub { max-width: 46rem; line-height: 1.5; }
+    @media (max-width: 34rem) { .hero-sub br { display: none; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    .ribbon { margin: 0; }
+    .ribbon-track { position: relative; display: block; height: 3.25rem; border: var(--rule) solid var(--color-ink-2); border-radius: var(--radius-sm); background: linear-gradient(90deg, oklch(21% 0.022 165), oklch(18% 0.02 165)); overflow: hidden; }
+    .ribbon-track::before { content: ""; position: absolute; inset: 0; background-image: repeating-linear-gradient(90deg, var(--color-ink-2) 0 1px, transparent 1px 5%); opacity: .8; }
+    .ribbon-keep { position: absolute; inset-block: -1px; inset-inline-start: 58%; width: 4.2%; min-width: 6px; background: var(--color-accent); box-shadow: 0 0 0 1px var(--color-accent), 0 0 2.5rem var(--color-accent-soft); animation: keep-in 900ms var(--ease-out) both 240ms; }
+    @keyframes keep-in { from { inset-inline-start: 0; width: 100%; } to { inset-inline-start: 58%; width: 4.2%; } }
+    .ribbon figcaption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-block-start: var(--space-3); color: var(--color-light-muted); font-size: var(--text-sm); font-weight: 600; }
+    .ribbon figcaption strong { color: var(--color-accent); font-family: var(--font-display); font-size: var(--text-lg); letter-spacing: -.02em; }
+    /* 히어로 실사 미디어 자리. §1.4 A안(성인 참가자 · 촬영·공개 동의 확보) 촬영 전까지 비워 둔다.
+       experience.js 가 데이터 절약 모드에서 .hero-video / .hero-poster 를 찾으므로 요소만 남긴다. */
+    .hero-video, .hero-poster { display: none; }
+
+    /* S2 문제 정의 */
+    .pain-grid { display: grid; gap: var(--space-5); margin-block-start: var(--space-7); }
+    .pain { display: grid; gap: var(--space-3); padding-block-start: var(--space-4); border-block-start: 2px solid var(--color-accent); }
+    .pain-no { color: var(--color-accent); font-family: var(--font-display); font-size: var(--text-sm); font-weight: 800; letter-spacing: .12em; }
+    .pain h3 { margin: 0; max-width: 18ch; font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; line-height: 1.08; letter-spacing: -.035em; }
+    /* [v2] 시나리오 제목은 한 문장이라 xl 이면 카드 하나를 다 먹는다. */
+    .pain-grid--walls h3 { max-width: 24ch; font-size: clamp(1.25rem, 1.9vw, 1.75rem); line-height: 1.18; }
+    .pain p { margin: 0; color: var(--color-light-muted); font-size: var(--text-base); }
+    .pain h3 + p { margin-block-start: var(--space-1); }
+    /* [v2] 시나리오 안에서 사용자가 스스로에게 하는 말. 본문과 목소리가 다르므로 눈으로도 갈라 둔다. */
+    .scenario-quote { padding-inline-start: var(--space-4); border-inline-start: 2px solid var(--color-accent); color: var(--color-light) !important; font-size: var(--text-lg) !important; font-weight: 600; }
+    /* S5-b · 상황 카드 — .pain 을 밝은 배경용으로 옮긴 것. 골격은 같고 색만 다르다. */
+    .who-grid { display: grid; gap: var(--space-6); margin-block-start: var(--space-7); }
+    .who { display: grid; gap: var(--space-3); padding-block-start: var(--space-4); border-block-start: 2px solid var(--color-accent-strong); }
+    .who-no { color: var(--color-muted); font-family: var(--font-display); font-size: var(--text-sm); font-weight: 800; letter-spacing: .12em; }
+    .who h3 { margin: 0; max-width: 24ch; font-family: var(--font-display); font-size: clamp(1.15rem, 1.7vw, 1.5rem); font-weight: 800; line-height: 1.18; letter-spacing: -.03em; }
+    .who p { margin: 0; color: var(--color-muted); font-size: var(--text-base); }
+    .who h3 + p { margin-block-start: var(--space-1); }
+    .who-job { padding-inline-start: var(--space-4); border-inline-start: 2px solid var(--color-accent-strong); color: var(--color-ink) !important; font-size: var(--text-lg) !important; font-weight: 600; }
+
+    /* S3 데모 — 현행 #try 를 그대로 살리고 STEP 표시만 보강한다(계획서 §4 "살릴 것 1개"). */
+    .demo-wrap { display: grid; gap: var(--space-5); min-width: 0; }
+    .demo-stage { position: relative; aspect-ratio: 16 / 9; min-width: 0; overflow: hidden; background: var(--color-dark); border-radius: var(--radius-md); }
+    .demo-stage canvas, .demo-stage video, .demo-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--color-dark); }
+    #trackingCanvas { cursor: crosshair; touch-action: none; }
+    #candidateLayer { position: absolute; inset: 0; z-index: var(--z-content); pointer-events: none; }
+    .candidate-btn { position: absolute; min-width: 44px; min-height: 44px; padding: 0; pointer-events: auto; border: 3px solid var(--color-accent); background: var(--color-clear); color: var(--color-accent-ink); transition: background-color var(--dur-short) var(--ease-out); }
+    .candidate-btn::after { content: attr(data-label); position: absolute; inset-block-start: -3px; inset-inline-start: -3px; padding: var(--space-1) var(--space-2); background: var(--color-accent); color: var(--color-accent-ink); font-size: var(--text-xs); font-weight: 800; line-height: 1; }
+    .candidate-btn[aria-pressed="true"] { background: var(--color-accent-soft); }
+    .candidate-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .stage-badge { position: absolute; inset-block-start: var(--space-3); inset-inline-start: var(--space-3); z-index: var(--z-content); padding: var(--space-2) var(--space-3); background: var(--color-accent); color: var(--color-accent-ink); font-size: var(--text-xs); font-weight: 800; letter-spacing: .06em; pointer-events: none; }
+    .stage-note { position: absolute; inset-block-end: var(--space-3); inset-inline-start: var(--space-3); z-index: var(--z-content); margin: 0; padding: var(--space-2) var(--space-3); background: var(--color-overlay-heavy); color: var(--color-light); font-size: var(--text-xs); font-weight: 700; pointer-events: none; }
+    .reticle { position: absolute; z-index: var(--z-content); border: 3px solid var(--color-accent); pointer-events: none; }
+    .demo-console { display: grid; gap: var(--space-4); align-content: start; }
+    .scrub-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-3); }
+    .scrubber { width: 100%; min-height: 44px; accent-color: var(--color-focus); }
+    .timecode { min-width: 5.5rem; text-align: end; color: var(--color-muted); font-variant-numeric: tabular-nums; }
+    .status { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-3); min-height: 4.5rem; padding-block: var(--space-4); border-block: var(--rule) solid var(--color-rule); }
+    .status-mark { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; background: var(--color-ink); color: var(--color-light); font-family: var(--font-display); font-size: var(--text-sm); font-weight: 800; }
+    .status-text strong, .status-text span { display: block; }
+    .status-text strong { font-family: var(--font-display); font-size: var(--text-lg); line-height: 1.2; }
+    .status-text span { margin-block-start: var(--space-1); color: var(--color-muted); font-size: var(--text-sm); }
+    .progress { height: .35rem; background: var(--color-paper-3); overflow: hidden; }
+    .progress span { display: block; width: 100%; height: 100%; background: var(--color-accent-strong); transform: scaleX(0); transform-origin: left center; }
+    .demo-actions, .playback-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .mode-switch { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border: var(--rule) solid var(--color-rule); }
+    .mode-switch button { min-height: 3rem; border: 0; background: var(--color-clear); color: var(--color-muted); font-weight: 700; white-space: nowrap; }
+    .mode-switch button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-light); }
+    .mode-switch button:disabled { opacity: .5; cursor: not-allowed; }
+    .result-line { margin: 0; color: var(--color-muted); font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
+    .error-box { margin: 0; padding: var(--space-3); background: var(--color-error-light); color: var(--color-error); font-size: var(--text-sm); font-weight: 700; }
+
+    /* S4 가치 제안 — 기능이 아니라 결과 문장을 크게 세운다. */
+    .result-list { display: grid; gap: 0; margin: var(--space-7) 0 0; padding: 0; list-style: none; }
+    .result-list li { display: grid; gap: var(--space-2); padding-block: var(--space-5); border-block-start: var(--rule) solid var(--color-rule); }
+    .result-list li:last-child { border-block-end: var(--rule) solid var(--color-rule); }
+    .result-list strong { max-width: 24ch; font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; line-height: 1.08; letter-spacing: -.035em; }
+    .result-list span { color: var(--color-muted); font-size: var(--text-sm); }
+
+    /* S5 작동 방식 */
+    .steps { display: grid; gap: var(--space-5); margin-block-start: var(--space-7); counter-reset: step; padding: 0; list-style: none; }
+    .steps li { counter-increment: step; display: grid; gap: var(--space-3); padding-block-start: var(--space-4); border-block-start: var(--rule) solid var(--color-rule); }
+    .steps li::before { content: "0" counter(step); color: var(--color-accent-strong); font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; line-height: 1; letter-spacing: -.03em; }
+    .steps h3 { margin: 0; font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; letter-spacing: -.02em; }
+    /* [v2] 단계 제목이 낱말에서 문장이 되었다. 4열 안에서도 읽히도록 한 단 줄이고 행간을 연다. */
+    .steps--sentence h3 { font-size: clamp(1.02rem, 1.15vw, 1.2rem); line-height: 1.35; letter-spacing: -.015em; }
+    .steps--sentence p { font-size: var(--text-sm); }
+    .steps p { margin: 0; color: var(--color-muted); font-size: var(--text-base); }
+
+    /* S6 완성한 다음 — 세 블록이 사용자가 겪는 순서 그대로다. */
+    .after { display: grid; gap: var(--space-8); margin-block-start: var(--space-7); }
+    .after-block { display: grid; gap: var(--space-5); align-items: start; padding-block-start: var(--space-5); border-block-start: 2px solid var(--color-accent); }
+    .after-copy h3 { margin: 0 0 var(--space-3); max-width: 20ch; font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; line-height: 1.06; letter-spacing: -.035em; }
+    .after-copy p { margin: 0 0 var(--space-3); color: var(--color-light-muted); }
+    .after-copy p:last-child { margin-block-end: 0; }
+    .after-copy em { color: var(--color-accent); font-style: normal; font-weight: 700; }
+
+    .mock { display: grid; gap: var(--space-3); padding: var(--space-5); border: var(--rule) solid var(--color-ink-2); border-radius: var(--radius-md); background: var(--color-dark-2); }
+    .mock-cap { margin: 0; color: var(--color-light-muted); font-size: var(--text-xs); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .scope-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-2); }
+    .scope-opt { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; border: var(--rule) solid var(--color-ink-2); border-radius: var(--radius-sm); color: var(--color-light-muted); font-size: var(--text-sm); font-weight: 700; }
+    .scope-opt.is-on { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-accent-ink); }
+    .tabs-row { display: flex; gap: var(--space-4); padding-block-end: var(--space-3); border-block-end: var(--rule) solid var(--color-ink-2); font-size: var(--text-sm); font-weight: 700; color: var(--color-light-muted); }
+    .tabs-row .is-on { color: var(--color-accent); box-shadow: 0 var(--space-3) 0 -.65rem var(--color-accent); }
+    .feed-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
+    .feed-tile { position: relative; aspect-ratio: 3 / 4; overflow: hidden; border: var(--rule) solid var(--color-ink-2); border-radius: var(--radius-sm); background: oklch(26% 0.024 165); }
+    .feed-tile::after { content: ""; position: absolute; inset: 0; background: var(--color-accent); opacity: .22; -webkit-mask: url("assets/dot-pattern.svg") 0 0 / 96px 24px repeat; mask: url("assets/dot-pattern.svg") 0 0 / 96px 24px repeat; }
+    .tabbar-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--space-3); padding-block-start: var(--space-3); border-block-start: var(--rule) solid var(--color-ink-2); }
+    .tabbar-row i { display: block; height: .4rem; border-radius: var(--radius-sm); background: var(--color-ink-2); }
+    .tabbar-plus { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: var(--radius-sm); background: var(--color-accent); color: var(--color-accent-ink); font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; }
+    /* T7 — 실물 카드 한 장과 아직 비어 있는 카드를 눈으로 구분한다.
+       흐림이 말하는 것은 "아직 여기까지"이지 "뒤에 더 있다"가 아니다. */
+    .feed-tile--dim { opacity: .38; }
+    .feed-tile--dim::after { opacity: .1; }
+    .feed-tile--live { border-color: var(--color-accent); }
+
+    /* S5 블록3 — 한 계정 안에서 기록마다 범위가 갈리는 모습 */
+    .scope-list { display: grid; gap: var(--space-2); }
+    .scope-item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); border: var(--rule) solid var(--color-accent-rule); border-radius: var(--radius-sm); background: var(--color-dark); font-size: var(--text-sm); }
+    .scope-item i { flex: none; width: 1.6rem; height: 1.6rem; border-radius: var(--radius-sm); background: var(--color-accent); }
+    .scope-item b { margin-inline-start: auto; color: var(--color-accent); font-size: var(--text-xs); font-weight: 800; letter-spacing: .06em; white-space: nowrap; }
+    .scope-item--priv i { background: var(--color-ink-2); }
+    /* [v2] 쌓인 기록을 눌러서 본다는 것을 보이려면 재생 표시가 필요하다. */
+    .scope-item--play i { position: relative; }
+    .scope-item--play i::after { content: ""; position: absolute; inset-block-start: 50%; inset-inline-start: 54%; translate: -50% -50%; border-inline-start: .42rem solid var(--color-accent); border-block: .28rem solid transparent; }
+    .scope-item--priv b { color: var(--color-light-muted); }
+
+    /* S7 신뢰의 증거 */
+    .evidence { display: grid; gap: var(--space-6); margin-block-start: var(--space-7); }
+    .evi { display: grid; gap: var(--space-3); padding-block-start: var(--space-4); border-block-start: var(--rule) solid var(--color-rule); }
+    .evi h3 { margin: 0; font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; letter-spacing: -.02em; }
+    .evi p { margin: 0; color: var(--color-muted); }
+    .lic { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+    .lic caption { margin-block-end: var(--space-2); color: var(--color-muted); font-size: var(--text-xs); text-align: start; }
+    .lic th, .lic td { padding: var(--space-3) var(--space-2); border-block-end: var(--rule) solid var(--color-rule); text-align: start; }
+    .lic th { color: var(--color-muted); font-size: var(--text-xs); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .lic td:first-child { font-weight: 700; }
+    .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: var(--space-3); }
+    .flow-node { flex: 1 1 12rem; padding: var(--space-4); border: var(--rule) solid var(--color-rule); border-radius: var(--radius-sm); }
+    .flow-node strong { display: block; font-family: var(--font-display); font-size: var(--text-base); }
+    .flow-node span { display: block; margin-block-start: var(--space-2); color: var(--color-muted); font-size: var(--text-sm); }
+    .flow-node--near { border-color: var(--color-accent-strong); background: var(--color-accent-soft); }
+
+    /* S8 요금 */
+    .plans { display: grid; gap: var(--space-5); margin-block-start: var(--space-7); }
+    .plan { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-6); border: var(--rule) solid var(--color-rule); border-radius: var(--radius-md); background: var(--color-paper); }
+    .plan--paid { border-color: var(--color-ink); }
+    .plan-name { margin: 0; font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; }
+    .plan-price { margin: 0; font-family: var(--font-display); font-size: var(--text-xl); font-weight: 800; letter-spacing: -.04em; }
+    .plan-price small { display: block; margin-block-start: var(--space-2); color: var(--color-muted); font-family: var(--font-body); font-size: var(--text-sm); font-weight: 600; letter-spacing: normal; }
+    .plan ul { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; font-size: var(--text-sm); }
+    .plan li { padding-inline-start: var(--space-5); position: relative; }
+    .plan li::before { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: .55em; width: .6rem; height: .6rem; background: var(--color-accent-strong); }
+    .plan li[data-shared]::before { background: var(--color-rule); }
+
+    /* S9 FAQ */
+    .faq { display: grid; gap: 0; margin-block-start: var(--space-7); }
+    .faq details { border-block-start: var(--rule) solid var(--color-rule); }
+    .faq details:last-of-type { border-block-end: var(--rule) solid var(--color-rule); }
+    .faq summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 4rem; padding-block: var(--space-4); cursor: pointer; font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; letter-spacing: -.02em; list-style: none; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; flex: none; color: var(--color-accent-strong); font-size: var(--text-xl); line-height: 1; }
+    .faq details[open] summary::after { content: "–"; }
+    .faq p { margin: 0 0 var(--space-5); max-width: 46rem; color: var(--color-muted); }
+
+    /* S10 최종 CTA — 가입의 입구만 놓는다. 폼은 제품 가입 플로우가 담당한다(T5). */
+    .final { position: relative; overflow: clip; }
+    .final::before { content: ""; position: absolute; inset: 0; z-index: 0; background: radial-gradient(90% 70% at 82% 12%, oklch(90% 0.069 166 / 0.14), transparent 60%); }
+    .final .shell { position: relative; z-index: 1; }
+    .final h2 { max-width: 15ch; font-size: var(--text-2xl); }
+    .form-note { margin: var(--space-5) 0 0; color: var(--color-light-muted); font-size: var(--text-xs); }
+    /* S11 푸터 */
+    .footer { padding-block: var(--space-8) var(--space-5); background: var(--color-paper); }
+    .footer-line { max-width: 20ch; margin: 0; font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; line-height: .98; letter-spacing: -.045em; }
+    .footer-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); margin-block-start: var(--space-7); padding-block-start: var(--space-4); border-block-start: var(--rule) solid var(--color-rule); color: var(--color-muted); font-size: var(--text-sm); }
+    .footer-meta img { width: 7rem; height: auto; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+    .footer-links a { text-underline-offset: .25em; }
+    .draft-flag { margin: var(--space-5) 0 0; color: var(--color-muted); font-size: var(--text-xs); }
+
+    @media (hover: hover) and (pointer: fine) {
+      .nav-links a:hover { color: var(--color-focus); }
+      .nav-action:hover, .btn:hover { transform: translateY(-1px); }
+      .btn-mint:hover { background: var(--color-accent-strong); }
+      .btn-ghost:hover { background: var(--color-paper-3); }
+      .btn-dark-ghost:hover { background: var(--color-dark-2); }
+      .candidate-btn:hover { background: var(--color-accent-soft); }
+      .mode-switch button:hover { background: var(--color-paper-3); color: var(--color-ink); }
+      .faq summary:hover { color: var(--color-focus); }
+    }
+    @media (min-width: 40rem) {
+      .section-head { grid-template-columns: minmax(0, 1.35fr) minmax(17rem, .65fr); align-items: end; }
+      .pain-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      /* 벽은 둘뿐이라 3열 규칙을 그대로 쓰면 한 칸이 빈다. */
+      .pain-grid--walls { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-7); }
+      /* 상황 카드는 넷이라 2열. 3열이면 마지막 줄에 한 칸이 빈다. */
+      .who-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-7); }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .flow-node { flex-basis: 0; }
+    }
+    @media (min-width: 60rem) {
+      .nav-inner { grid-template-columns: auto 1fr auto; }
+      .nav-links { display: flex; }
+      .demo-wrap { grid-template-columns: minmax(0, 1.55fr) minmax(18rem, .45fr); align-items: start; }
+      .demo-console { position: sticky; top: calc(var(--nav-height) + var(--space-5)); }
+      .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .after-block { grid-template-columns: minmax(0, 1.1fr) minmax(16rem, .9fr); gap: var(--space-7); }
+      .after-block--flip .after-copy { order: 2; }
+      .after-block--flip .mock { order: 1; }
+      .evidence { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+      .result-list li { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: baseline; gap: var(--space-6); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 이동</a>
+
+  <!-- S0 · 고정 내비 — 스크롤 내내 주 CTA 노출 -->
+  <header class="site-nav">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="하일릿 홈"><img src="assets/hilit-wordmark.png" width="720" height="228" alt="HILIT"></a>
+      <nav class="nav-links" aria-label="주요 메뉴"><a href="#scenario">고객 시나리오</a><a href="#try">직접 체험</a><a href="#how">작동 방식</a><a href="#pricing">요금</a></nav>
+      <a class="nav-action" href="#start">무료로 시작하기</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- S1 · 히어로 -->
+    <section class="hero" id="top">
+      <!-- T6 확정 — §1.4 B안. 새로 촬영하지 않고 기존 영상에서 미성년자 미등장 구간만 쓰고
+           제3자 얼굴은 블러 처리한다. 그 편집본이 나오기 전까지 실사 미디어를 걸지 않는다.
+           선행 조건 둘: ① 쓸 만한 미등장 구간이 실제로 있는가 ② NF-017 방침 확정.
+           블러는 편집 처리이지 제품 기능이 아니므로 페이지가 기능으로 소개하지 않는다(§5).
+           요소만 남겨 두는 이유는 experience.js 의 데이터 절약 분기가 이 둘을 참조하기 때문이다. -->
+      <video class="hero-video" muted playsinline preload="none" hidden aria-hidden="true"></video>
+      <img class="hero-poster" alt="" width="1284" height="720" hidden aria-hidden="true">
+      <div class="shell hero-inner">
+        <div class="hero-copy">
+          <!-- T2 확정 헤드라인. 문구를 바꾸려면 계획서 §2.1 을 먼저 본다 — D3 권고를 넘어선 자리다. -->
+          <h1>당신이 주인공인<br>숏폼을 완성하고,<br>당신의 공간에 기록하세요</h1>
+          <!-- [v3] 서브를 2줄로 압축. 1줄=축①(찾아 따라간다), 2줄=축② 예고(나만의 공간에 남고, 공개는 나중에).
+               🔴 "공유하세요" 종결을 뺐다 — H1("당신의 공간에 기록")과 방향이 반대였고,
+                  축②가 주 pain 인 방문자에겐 경계심을 건드린다. N2(절대성 금지)도 유지 — "끝까지"류를 더 세게 만들지 않는다. -->
+          <p class="hero-sub">수많은 사람 속에서도 하일릿은 당신을 찾아 따라갑니다.<br>완성한 순간은 당신만의 공간에 남고, 공개할지는 나중에 정하면 됩니다.</p>
+          <div class="cta-row">
+            <a class="btn btn-mint" href="#start">무료로 시작하기</a>
+            <a class="btn btn-dark-ghost" href="#try">먼저 체험해보기</a>
+          </div>
+        </div>
+        <figure class="ribbon">
+          <span class="ribbon-track" aria-hidden="true"><span class="ribbon-keep"></span></span>
+          <figcaption><span>20분짜리 원본 — 대부분은 당신이 없는 시간입니다</span><strong>남기는 것은 짧은 한 편</strong></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- S2 · 고객 시나리오 — 방문자가 "내 얘기다"를 인정하는 자리(계획서 §3.4)
+         [v2] 섹션 이름을 "두 개의 벽"에서 "고객 시나리오"로 바꾸고, 두 벽을 각각
+         1인칭 장면으로 다시 썼다. 다루는 벽 둘(편집 부담 · 올릴 자신)은 그대로다.
+         T10 확정 — Pain 은 수치가 아니라 행동으로 적는다. 소요 시간 추정치는 쓰지 않는다(§5).
+         T9 확정 — "부계정"을 직접 쓴다. 플랫폼명 결합과 판단어("몰래"·"숨겨온")는 금지(§5).
+         [v3] 헤드를 두 축 모두 받는 질문으로 바꾸고, 시나리오 02 를 01 과 대칭인 장면+따옴표 구조로 재작성했다. -->
+    <section class="section section--compact on-dark" id="scenario" aria-labelledby="scenario-title">
+      <div class="shell">
+        <div class="section-head">
+<!-- [v3] 헤드 교체. 구 "편집 예정인 영상만 쌓이지 않나요?"는 축①(편집 부담)만 프레이밍해
+               섹션 안의 시나리오 02(올리기 부담)를 받지 못했다. 두 시나리오를 다 받는 중립 질문으로 바꾼다.
+               "영상은 있는데"는 S10("영상은 이미 있습니다")과 호응한다. 물음표 훅 형식은 유지. -->
+          <h2 class="h-slab" id="scenario-title">영상은 있는데,<br>거기서 멈추지 않나요?</h2>
+        </div>
+        <div class="pain-grid pain-grid--walls">
+          <article class="pain">
+            <span class="pain-no">시나리오 01</span>
+            <h3>내가 나온 순간을 찾고 싶지만 찾는 것부터 어렵습니다.</h3>
+            <p>20분짜리 영상을 처음부터 끝까지 넘겨봅니다.<br>내가 나온 장면을 찾고, 다시 찾고, 또 찾아봅니다.<br>그러다 문득 생각합니다.</p>
+            <p class="scenario-quote">&ldquo;이걸 언제 다 찾고, 언제 편집하지?&rdquo;</p>
+            <p>결국 편집 앱을 닫습니다.</p>
+          </article>
+          <!-- [v3] 시나리오 02 재작성. 구판은 설명문 두 줄이라 01(장면 3비트+따옴표+수렴)보다 약했다.
+               감정 클라이맥스(S5)로 갚을 pain 인데 세팅이 01 보다 약하면 안 된다. 01 과 같은 골격으로 맞춘다.
+               🔴 "부계정" pain 은 유지(T9), 판단어("몰래"·"숨겨온")·플랫폼명 결합은 금지(§5). -->
+          <article class="pain">
+            <span class="pain-no">시나리오 02</span>
+            <h3>올리고는 싶은데, 남들이 보는 건 부담입니다.</h3>
+            <p>드디어 한 편을 완성했습니다.<br>올릴까 하다가, 볼 사람들 얼굴이 먼저 떠오릅니다.<br>그러다 문득 생각합니다.</p>
+            <p class="scenario-quote">&ldquo;그냥 나만 두고 보면 안 되나?&rdquo;</p>
+            <p>결국 부계정을 파 보지만, 그마저도 번거롭습니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- S3 · 직접 체험 데모 — 지금 가진 증거 중 가장 강한 것(E-1) -->
+    <section class="section" id="try" aria-labelledby="try-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="try-title">한 사람을 골라 주세요.<br>영상이 끝날 때까지 따라갑니다.</h2>
+        </div>
+        <div class="demo-wrap">
+          <div class="demo-stage" id="demoStage" aria-label="영상에서 추적할 사람을 직접 지정하는 화면">
+            <canvas id="trackingCanvas" width="1284" height="720" aria-label="왼쪽 버튼을 누른 채 드래그해 따라갈 사람을 지정하세요"></canvas>
+            <video id="playbackVideo" src="assets/hilit-demo.mp4" muted playsinline preload="auto" hidden aria-label="추적 결과 재생 영상"></video>
+            <img id="candidateFrame" src="assets/video-frames/frame-005.png" width="1284" height="720" alt="사람을 선택할 영상 장면" hidden>
+            <div id="candidateLayer" aria-label="자동으로 찾은 사람 선택 영역"></div>
+            <div class="reticle" id="trackingReticle" hidden aria-hidden="true"></div>
+            <span class="stage-badge" id="stageBadge">STEP 1 · 장면 고르기</span>
+            <p class="stage-note" id="stageNote">타임라인 이동 · 왼쪽 드래그로 지정</p>
+          </div>
+          <aside class="demo-console" aria-label="추적 체험 조작">
+            <div class="scrub-row">
+              <input class="scrubber" id="scrubber" type="range" min="0" max="17" step="0.05" value="0" aria-label="영상 장면 이동">
+              <span class="timecode" id="timecode">00:00 / 00:17</span>
+            </div>
+            <div class="status">
+              <span class="status-mark" id="statusMark" aria-hidden="true">1</span>
+              <div class="status-text">
+                <strong id="statusTitle">영상에서 나를 찾아서 드래그 해주세요.</strong>
+                <!-- [v2] 부가 설명 줄 삭제. 요소는 남긴다 — experience.js 가 진행 상태를 여기에 쓴다. -->
+                <span id="statusDetail" role="status" aria-live="polite"></span>
+              </div>
+            </div>
+            <div class="progress" id="progress" hidden aria-label="분석 진행률"><span id="progressBar"></span></div>
+            <div class="demo-actions" id="setupActions">
+              <button class="btn btn-ghost" id="findPeople" type="button">사람 찾기</button>
+              <button class="btn btn-mint" id="startTracking" type="button" disabled>이 사람 따라가기</button>
+            </div>
+            <div id="playbackControls" hidden>
+              <div class="mode-switch" aria-label="결과 보기 방식"><button id="wideMode" type="button" aria-pressed="true">전체 보기</button><button id="focusMode" type="button" aria-pressed="false">나에게 집중</button></div>
+              <div class="playback-actions"><button class="btn btn-mint" id="togglePlayback" type="button">재생</button><button class="btn btn-ghost" id="fullscreenDemo" type="button">전체 화면</button><button class="btn btn-ghost" id="chooseAgain" type="button">다른 사람 고르기</button></div>
+              <p class="result-line" id="resultLine"></p>
+            </div>
+            <p class="error-box" id="errorBox" role="alert" hidden></p>
+          </aside>
+        </div>
+        <div class="cta-tail">
+          <a class="btn" href="#start">내 영상으로 해보기</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- S4 · 방법 ① 자르고, 따라갑니다 (계획서 §3.4)
+         T3 확정 — 컷·추적이 도는 동안의 대기에 관해서는 한 줄도 쓰지 않는다.
+         "진행 상태만 남습니다" · "기다리는 동안" 류의 문구를 여기에 넣지 않는다(§5). -->
+    <section class="section section--compact" id="how" aria-labelledby="how-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="how-title">내가 원하는 순간만 남기고,<br>나를 기억하고 따라갑니다.</h2>
+        </div>
+        <!-- [v2] 네 단계의 제목을 문장으로 바꿨다. 제목이 길어져 .steps h3 를 한 단 줄였다.
+             🔴 2단계 "놓치지 않고"는 계획서 §5 의 N2(절대성 주장 금지) 경계에 있다.
+                "절대" 같은 말을 더 붙이지 않는다. -->
+        <ol class="steps steps--sentence">
+<!-- [v3] 지시3 — 구판 "장면을 말하면 찾아내서 자릅니다"는 의미 기반 검색을 단정했으나
+                 S3 데모는 수동 지정+추적이고 FAQ 는 범위를 넓게 말하지 않는다. 데모가 실증하는 '사람 지정'으로 하향.
+                 (가정) semantic 장면 검색이 실제 MVP 라면 이 하향 대신 원문을 살리고 데모에서도 보여야 함 — 확인 필요. -->
+          <li><h3>따라갈 사람을 한 번만 지정합니다.</h3><p>영상 속 나를 한 번 짚어 주면 됩니다. 20분을 앞뒤로 넘겨 가며 찾지 않아도 됩니다.</p></li>
+          <li><h3>당신을 놓치지 않고 따라갑니다.</h3><p>한 번 지정하면 사람이 앞을 지나가거나 화면 밖으로 나갔다 들어와도 같은 사람으로 다시 이어 붙입니다.</p></li>
+          <li><h3>제안한 영상에서 가장 마음에 들고 특별한 순간을 고릅니다.</h3><p>어느 순간이 특별했는지는 당신이 압니다. 무엇을 남길지는 직접 정하십니다.</p></li>
+          <li><h3>고른 영상을 합치고, 잘 어울리는 음악과 함께 완성합니다.</h3><p>따라간 위치를 기준으로 구도를 다시 잡고, 자막과 저작권이 정리된 곡을 앱 안에서 얹습니다.</p></li>
+        </ol>
+        <div class="cta-tail">
+          <a class="btn" href="#start">가장 먼저 써보기</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5 · 방법 ② 내 기록에 먼저 남기고, 올릴지 선택합니다 (계획서 §3.5)
+         벽2가 풀리는 자리이자 이 페이지의 감정적 클라이맥스. 주 CTA 를 붙인다.
+         [v2] 블록3 의 축이 "부계정 대체"에서 "나만의 기록 보관·재생"으로 바뀌었다. -->
+    <section class="section on-dark" id="after" aria-labelledby="after-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="after-title">내 기록에 먼저 남기고,<br>올릴지 선택합니다.</h2>
+        </div>
+        <div class="after">
+          <!-- [v3] 블록 순서를 1→3→2 로 바꿨다. 축②(남에게 보이기 싫다)의 안심을
+               블록1·블록3 으로 끝까지 준 뒤, 소셜(블록2)을 맨 뒤에서 "원하면" 선택지로 초대한다.
+               지그재그(copy-left / mock-left / copy-left)를 지키려고 --flip 을 가운데(구 블록3)로 옮겼다. -->
+          <article class="after-block">
+            <div class="after-copy">
+              <h3>남습니다 — 올리지 않아도</h3>
+              <p>완성하면 공개 여부와 상관없이 당신의 자리에 쌓입니다. <em>공개 범위는 공개와 나만 보기 두 가지이고, 기본값은 나만 보기</em>입니다.</p>
+              <!-- [v3] 지시5 — 기술 증거 한 줄 프리뷰. S7·FAQ 와 같은 사실("기본은 기기 처리")을 여기서 미리 건다.
+                   🔴 "서버에 전혀 안 올린다"는 절대성은 금지 — S7 이 명시적으로 거부한다(§5). "기본은"으로 hedge 한다. -->
+              <p>처리도 기본은 당신의 기기에서 이뤄지고, 원본은 거기 머뭅니다. 올리지 않은 기록은 그대로 당신 곁에 남습니다.</p>
+              <p>좋아요도, 보낸 공유 링크도 그 기록에 걸어 둔 공개 범위를 그대로 따릅니다. 한 곳에서 바꾸면 전부 같이 바뀝니다.</p>
+            </div>
+            <div class="mock">
+              <p class="mock-cap">공개 범위</p>
+              <div class="scope-row" aria-hidden="true"><span class="scope-opt">공개</span><span class="scope-opt is-on">나만 보기</span></div>
+              <p class="mock-cap">기본값 · 언제든 바꿀 수 있습니다</p>
+            </div>
+          </article>
+
+          <!-- [v3] 구 블록3 을 가운데로 올리고 --flip 을 부여했다(지그재그 유지). 카피는 v2 그대로다.
+               "나만을 위해 쌓이고, 언제든 숏폼으로 본다" — 시나리오 02 의 "나만을 위한 공간이 없었다"를 받는다.
+               🔴 "부계정"은 시나리오 02 에 남아 있다 — T9(양쪽에 등장)에서 한쪽만 남는 형태다. -->
+          <article class="after-block after-block--flip">
+            <div class="after-copy">
+              <h3>나만을 위한 공간에 쌓입니다</h3>
+              <p>나만 보기로 둔 기록도 하나하나 그대로 쌓입니다. <em>아무에게도 보이지 않지만, 사라지지도 않습니다.</em></p>
+              <p>쌓인 기록은 언제든 숏폼으로 다시 봅니다. 내 기록만 이어서 재생되는, 나만을 위한 피드입니다.</p>
+            </div>
+            <div class="mock">
+              <p class="mock-cap">나만 보기로 쌓인 기록</p>
+              <div class="scope-list" aria-hidden="true">
+                <span class="scope-item scope-item--priv scope-item--play"><i></i>지난주 경기<b>나만 보기</b></span>
+                <span class="scope-item scope-item--priv scope-item--play"><i></i>연습 영상<b>나만 보기</b></span>
+                <span class="scope-item scope-item--priv scope-item--play"><i></i>처음 배우던 날<b>나만 보기</b></span>
+              </div>
+              <p class="mock-cap">눌러서 숏폼으로 이어 봅니다</p>
+            </div>
+          </article>
+
+          <!-- [v3] 구 블록2 를 맨 뒤로 내리고 --flip 을 뗐다. 안심을 끝까지 준 뒤 소셜을 여는 선택지로 둔다.
+               카피 본문은 v2 유지, 제목만 "돌아옵니다"→"그리고, 원하면"으로 다듬어 마지막 블록이 선택지임을 신호한다. -->
+          <article class="after-block">
+            <div class="after-copy">
+              <h3>그리고, 원하면 — 앱을 열면 볼 것이 있습니다</h3>
+              <p>팔로잉과 추천 두 탭, 가운데 <em>+</em>가 편집입니다. 앱을 열면 팔로잉 탭이 바로 재생됩니다.</p>
+              <p>가까운 사람들이 서로의 장면을 봅니다. 팔로우하고, 좋아요를 누르고, 댓글을 답니다.</p>
+              <p>링크·카카오톡·문자로 보낼 수도 있습니다. <em>밖으로 나가는 것은 링크뿐이고 기록은 하일릿에 남습니다</em> — 받은 분은 하일릿에 가입한 뒤 그 기록을 봅니다.</p>
+            </div>
+            <div class="mock">
+              <p class="mock-cap">앱 화면</p>
+              <div class="tabs-row" aria-hidden="true"><span class="is-on">팔로잉</span><span>추천</span></div>
+              <!-- T7 확정 — 카드 한 장만 실물(T6 편집본)로 채우고 주변은 흐리게 둔다.
+                   흐림은 연출이 아니라 사실이다. 아직 공개된 기록이 많지 않은 것이 현재 상태다.
+                   🔴 흐린 카드를 여러 장 깔아 "뒤에 더 있다"로 읽히게 배치하지 않는다(§5).
+                   편집본이 나오면 아래 .feed-tile--live 안에 <img> 를 넣는다. -->
+              <div class="feed-row" aria-hidden="true"><span class="feed-tile feed-tile--live"></span><span class="feed-tile feed-tile--dim"></span><span class="feed-tile feed-tile--dim"></span></div>
+              <p class="mock-cap">한 편은 실제 기록 · 나머지는 아직입니다</p>
+              <div class="tabbar-row" aria-hidden="true"><i></i><span class="tabbar-plus">+</span><i></i></div>
+            </div>
+          </article>
+        </div>
+        <div class="cta-tail">
+          <a class="btn btn-mint" href="#start">내 기록부터 만들기</a>
+          <p>한 번 쓰고 마는 것이 아니라 쌓이는 쪽으로 만들고 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5-b · 이런 상황이면 맞습니다 — 페르소나 JTBD (JTBD/02_JobStatement_니치축-가설 3절)
+         🔴 왜 S5 뒤인가 — 상황 04(초상권)의 Job 이 "안 올리고 남기기만 해도 괜찮다"라서
+         S5(내 기록에 먼저 남기고, 올릴지 선택합니다)가 설명된 뒤에야 성립한다. 앞에 두면 빈 말이 된다.
+         🔴 Job Statement 를 내부 표기(When…I want to…so I can…)로 쓰지 않는다. 방문자 언어로 옮긴다.
+         🔴 기능을 넣지 않는다(방법론 6-3절) — "추적"·"AI"가 h3·본문·따옴표에 없어야 한다.
+         표기 제약 — ① 수치 금지(T10) ② 나이·팔로워 수 금지(전부 가설이다) ③ 플랫폼명 금지(§5).
+         🔺 A-5 문혜정(자녀 기록 대리자)은 여기 넣지 않았다 — 피촬영자가 13세 미만이라
+         MINOR_SUBJECT·MINOR_POLICY 승인 전에는 공개 지면에 올리지 않는다(CLAUDE.md 법무 게이트). -->
+    <section class="section section--compact" id="who" aria-labelledby="who-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="who-title">이런 상황이면<br>맞습니다.</h2>
+          <p>하일릿이 처음 만나려는 분들입니다. 농구를 찍는 분부터 시작합니다.</p>
+        </div>
+        <div class="who-grid">
+          <article class="who">
+            <span class="who-no">상황 01</span>
+            <h3>주에 두 번 뛰고, 농구 계정을 따로 두고 있습니다.</h3>
+            <p>경기가 끝나면 그날 장면을 올리고 싶습니다. 그런데 원본에서 내가 나온 데를 찾는 것부터 시간이 갑니다. 그러다 한 주가 지나갑니다.</p>
+            <p class="who-job">&ldquo;그날이 공백으로 남지 않으면 좋겠습니다.&rdquo;</p>
+          </article>
+          <article class="who">
+            <span class="who-no">상황 02</span>
+            <h3>편집 앱을 깔았다 지운 적이 있습니다.</h3>
+            <p>열어서 한참 붙잡고 있다가 닫습니다. 다음 주에도 찍기는 하는데, 남는 것은 원본 폴더뿐입니다.</p>
+            <p class="who-job">&ldquo;잘 만들지 않아도 됩니다. 끝나기만 하면 됩니다.&rdquo;</p>
+          </article>
+          <article class="who">
+            <span class="who-no">상황 03</span>
+            <h3>올리지는 않지만, 계속 찍고 있습니다.</h3>
+            <p>잘한 날도 못한 날도 찍어 둡니다. 석 달 전과 지금이 다른지 궁금한데, 갤러리에서는 그것을 볼 방법이 없습니다.</p>
+            <p class="who-job">&ldquo;계속하고 있다는 게 눈에 보이면 좋겠습니다.&rdquo;</p>
+          </article>
+          <article class="who">
+            <span class="who-no">상황 04</span>
+            <h3>같이 뛴 사람들이 같이 찍혔습니다.</h3>
+            <p>내 장면만 쓰고 싶은데 옆에 다른 사람이 있습니다. 물어보기도 번거롭고, 그래서 올리지 않습니다. 올리지 않으니 만들지도 않게 됩니다.</p>
+            <p class="who-job">&ldquo;올리지 않고 남기기만 해도 괜찮습니다.&rdquo;</p>
+          </article>
+        </div>
+        <div class="cta-tail">
+          <a class="btn" href="#start">내 상황으로 해보기</a>
+          <p>네 가지 중 하나라도 겹치면, 지금 있는 영상으로 바로 확인해 보실 수 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S6 · 결과 회수 — 그래서 달라지는 것 (계획서 §3.6)
+         🔴 새 정보를 주지 않는다. 이미 말한 것을 사용자 언어로 되짚는 자리다.
+         T3 으로 효과는 3가지다(구 효과④ "안 지루함"은 F29 와 함께 빠졌다).
+         표기 제약 — ① 수치 금지(T10) ② 비율 약속 금지(§3.2 ②) ③ "인스타로 바로" 금지(§3.2 ①). -->
+    <section class="section section--compact on-paper-2" id="effects" aria-labelledby="effects-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="effects-title">그래서<br>달라지는 것.</h2>
+          <p>새로 말씀드리는 것은 없습니다. 여기까지 보신 것을 세 줄로 정리했습니다.</p>
+        </div>
+        <ul class="result-list">
+          <li><strong>찾고 자르던 시간이 사라집니다.</strong><span>20분짜리 원본을 처음부터 넘겨 가며 찾던 일을 하지 않으셔도 됩니다.</span></li>
+          <li><strong>구석에 작게 잡힌 당신이 화면 가운데로.</strong><span>따라간 위치를 기준으로 구도를 다시 잡습니다.</span></li>
+          <li><strong>만들자마자 하일릿의 내 개인 공간에 올라갑니다.</strong><span>공개 범위는 직접 정하시고, 기본값은 나만 보기입니다.</span></li>
+        </ul>
+        <div class="cta-tail">
+          <a class="btn" href="#start">가장 먼저 써보기</a>
+          <p>전용 카메라나 팀 계약이 필요 없습니다. 이미 찍어 둔 영상과 쓰던 휴대폰이면 됩니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S7 · 신뢰의 증거 -->
+    <section class="section section--compact" id="evidence" aria-labelledby="evidence-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="evidence-title">지금 보여드릴 수 있는<br>것만 적었습니다.</h2>
+          <p>사용자 수도, 별점도, 처리 속도 수치도 아직 없습니다. 없는 숫자를 그럴듯하게 채우는 대신 비워 두었습니다. 대신 지금 직접 확인하실 수 있는 것을 놓았습니다.</p>
+        </div>
+        <div class="evidence">
+          <article class="evi">
+            <h3>직접 돌려 보실 수 있습니다</h3>
+            <p>위의 체험은 시연 영상이 아니라 실제 추적입니다. 이 페이지에서 브라우저가 직접 돌립니다.</p>
+            <p><a href="#try">체험으로 돌아가기</a></p>
+          </article>
+          <article class="evi">
+            <h3>무엇을 쓰는지 밝힙니다</h3>
+            <table class="lic">
+              <caption>추적에 쓰는 공개 모델과 라이선스</caption>
+              <thead><tr><th scope="col">모델</th><th scope="col">라이선스</th></tr></thead>
+              <tbody>
+                <tr><td>NanoTrack v2</td><td>Apache-2.0</td></tr>
+                <tr><td>NanoDet</td><td>Apache-2.0</td></tr>
+                <tr><td>OSNet</td><td>MIT</td></tr>
+                <!-- Cutie 라이선스는 저장소 README 에 근거가 없어 단정하지 않는다. 확인되면 채운다. -->
+                <tr><td>Cutie</td><td>확인 중</td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="evi">
+            <h3>영상이 어디에서 처리되는지 밝힙니다</h3>
+            <div class="flow">
+              <div class="flow-node flow-node--near"><strong>당신의 기기</strong><span>기본 처리. 원본은 여기 머뭅니다.</span></div>
+              <div class="flow-node"><strong>서버</strong><span>추적이 흔들린 구간만 보냅니다.</span></div>
+            </div>
+            <p>&ldquo;서버에 전혀 올리지 않는다&rdquo;고는 말씀드리지 않겠습니다. 사실이 아니기 때문입니다.</p>
+          </article>
+        </div>
+        <!-- T11 확정 — 가입자 수 카운터(E-5)를 폐기했다. 증거는 위 3종이다.
+             사람 수를 세어 보여주지 않고, 하한을 정해 그 위에서만 보이게 하는 방식도 쓰지 않는다.
+             "곧 100명 돌파" 같은 임박 표현도 금지다(§5). 신뢰는 위의 데모(E-1)가 진다. -->
+      </div>
+    </section>
+
+    <!-- S8 · 요금 -->
+    <section class="section section--compact on-paper-2" id="pricing" aria-labelledby="pricing-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="pricing-title">무료로도<br>한 편이 완성됩니다.</h2>
+          <p>요금제가 가르는 것은 직접 하는 시간뿐입니다. 기록도, 피드도, 관계도 무료에서 전부 씁니다.</p>
+        </div>
+        <div class="plans">
+          <article class="plan">
+            <h3 class="plan-name">무료 · 수동 편집기</h3>
+            <p class="plan-price">0원<small>체험판이 아니라, 여기서 영상이 끝까지 완성됩니다</small></p>
+            <ul>
+              <li>가입 첫 달 5편, 이후 매달 2편</li>
+              <li>1편당 20분까지</li>
+              <li>자동 추적은 월 1회</li>
+              <li data-shared>기록 저장 · 공개 범위 설정</li>
+              <li data-shared>피드 · 팔로우 · 좋아요 · 댓글 · 공유</li>
+            </ul>
+          </article>
+          <article class="plan plan--paid">
+            <h3 class="plan-name">구독</h3>
+            <p class="plan-price">월 9,900원<small>손이 더 가는 일을 대신 맡기는 값입니다</small></p>
+            <ul>
+              <li>매달 3편</li>
+              <li>1편당 20분까지</li>
+              <li data-shared>기록 저장 · 공개 범위 설정</li>
+              <li data-shared>피드 · 팔로우 · 좋아요 · 댓글 · 공유</li>
+            </ul>
+          </article>
+        </div>
+        <p class="note">한도를 넘겨 쓰는 몫의 값은 아직 정하지 않았습니다. 정해지면 이 자리에 적겠습니다.</p>
+        <div class="cta-tail">
+          <a class="btn" href="#start">무료로 시작하기</a>
+          <p>무료로도 영상 한 편이 끝까지 완성됩니다. 체험판이 아닙니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- S9 · FAQ -->
+    <section class="section section--compact" id="faq" aria-labelledby="faq-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="h-slab" id="faq-title">먼저 물어보실<br>것 같은 것들.</h2>
+        </div>
+        <!-- 계획서 §3.8 — 답할 수 있는 질문은 답하고, 답할 수 없는 질문은 화제로 세우지 않는다.
+             🔴 그래서 "얼마나 걸리나요?" 항목을 두지 않는다. 답할 실측치가 없고(N3),
+                답하는 순간 대기를 화제로 세우게 된다(T3). 새 항목을 넣기 전에 §5 를 본다. -->
+        <div class="faq">
+          <details>
+            <summary>제 영상이 서버로 올라가나요?</summary>
+            <p>기본은 당신의 기기에서 처리합니다. 다만 추적이 흔들려 스스로 회복하지 못하는 구간이 생기면 그 구간만 서버로 보내 다시 잡습니다. 전부 올리지도, 전혀 안 올리지도 않습니다. 어느 쪽인지 흐리게 말하지 않으려고 이렇게 적습니다.</p>
+          </details>
+          <details>
+            <summary>만든 영상은 어디에 올라가나요?</summary>
+            <p>하일릿에 올라갑니다. 공개 범위는 공개와 나만 보기 두 가지이고 <strong>기본값이 나만 보기</strong>입니다. 완성하면 공개 여부와 상관없이 당신의 자리에 저장되고, 꼭 공개하지 않으셔도 됩니다.</p>
+          </details>
+          <details>
+            <summary>친구에게 보낼 수 있나요?</summary>
+            <p>링크·카카오톡·문자로 보낼 수 있습니다. 받은 분은 하일릿에 가입한 뒤 그 기록을 보시게 됩니다. 밖으로 나가는 것은 링크이고 영상 자체는 하일릿에 남습니다. 좋아요와 공유 링크 모두 그 기록의 공개 범위를 따르기 때문에, 나만 보기로 둔 기록은 링크가 아예 만들어지지 않습니다.</p>
+          </details>
+          <details>
+            <summary>인스타그램이나 틱톡으로 내보낼 수 있나요?</summary>
+            <p>지금은 제공하지 않습니다. 하일릿 안에서 게시되고, 밖으로 나가는 것은 링크입니다.</p>
+          </details>
+          <details>
+            <summary>어떤 영상에서 되나요?</summary>
+            <p>여러 사람이 함께 나온 영상에서 당신만 골라내는 것이 하는 일입니다. 고정된 자리에서 찍은 20분 안팎의 원본을 가장 먼저 맞추고 있고, 어디까지 넓힐지는 첫 사용자분들의 영상을 보면서 정하려 합니다. 지금 되는 범위를 실제보다 넓게 말씀드리지 않겠습니다.</p>
+            <!-- 🔴 후속 — PRD §7.1 은 MVP 범위를 농구 단독으로 두고 확장을 Gate A 에 연동한다(G8).
+                 T5 로 가입이 열려 이 고지가 LP v1 부터 필요해졌다. 문안이 확정되면 이 답변에 넣는다.
+                 종목을 홍보 문구로 쓰지는 않되(T1), 지금 실제로 무엇이 되는지는 밝힌다. -->
+          </details>
+          <details>
+            <summary>영상에 다른 사람이 같이 나오는데 괜찮나요?</summary>
+            <p>여기가 저희가 가장 조심하는 지점입니다. 얼굴이 담긴 영상을 어떻게 다룰지, 특히 미성년자가 담긴 영상을 공개 경로에 올릴 때 무엇을 먼저 확인해야 하는지 정리하는 중입니다. 정리가 끝나기 전에는 공개 발행 기능을 열지 않습니다.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- S10 · 최종 CTA — T5 로 가입이 열려 대기자 등록 단계를 두지 않는다.
+         🔴 랜딩페이지는 가입의 입구만 놓는다. 폼 항목은 제품 가입 플로우가 정한다(계획서 §2.2).
+         아래 href 는 실제 가입 경로가 정해지면 그 주소로 바꾼다. -->
+    <section class="section on-dark final" id="start" aria-labelledby="start-title">
+      <div class="shell">
+        <p class="kicker">지금 시작하기</p>
+        <h2 class="h-slab" id="start-title">영상은 이미 있습니다.<br>이제, 나의 순간만 남기면 됩니다.</h2>
+        <p class="lede">여러 사람이 함께 나온 영상에서 당신만 골라내 짧은 한 편으로 만듭니다. 올릴지는 나중에 정하시면 됩니다.</p>
+        <div class="cta-row">
+          <!-- [v2] 최종 CTA 만 혜택을 문구에 담는다. 내비·히어로·요금의 버튼은 짧게 둔다 — 고정 내비에 들어가지 않는 길이다. -->
+          <a class="btn btn-mint" href="#top" data-signup>첫 달 5편 무료로 시작하기</a>
+          <a class="btn btn-dark-ghost" href="#try">먼저 체험해보기</a>
+        </div>
+        <p class="form-note">카드 정보는 받지 않습니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- S11 · 푸터 -->
+  <footer class="footer" id="footer">
+    <div class="shell">
+      <p class="footer-line">Highlight,<br>made personal.</p>
+      <div class="footer-meta">
+        <img src="assets/hilit-wordmark.png" width="720" height="228" alt="HILIT">
+        <nav class="footer-links" aria-label="법적 고지"><a href="#faq">개인정보 처리방침 (준비 중)</a><a href="#faq">이용약관 (준비 중)</a><a href="#start">문의</a></nav>
+      </div>
+      <p class="draft-flag">LP v2 초안 · 2026 — 여기 적힌 요금과 기능 범위는 확정 전입니다. 히어로 영상과 피드 예시는 소재 준비 중이라 비어 있습니다.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="experience.js"></script>
+</body>
+</html>
