@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="80" viewBox="0 0 320 80">
+  <!-- 내비 배경 도트 — mask 로 쓰이므로 흰색이 찍히는 자리다. 브랜드 자산이 아니라 생성 패턴. -->
+  <g fill="#fff">
+    <circle cx="8" cy="8" r="1.6"/><circle cx="48" cy="8" r="1.6"/><circle cx="88" cy="8" r="1.6"/>
+    <circle cx="128" cy="8" r="1.6"/><circle cx="168" cy="8" r="1.6"/><circle cx="208" cy="8" r="1.6"/>
+    <circle cx="248" cy="8" r="1.6"/><circle cx="288" cy="8" r="1.6"/>
+    <circle cx="28" cy="28" r="1.6"/><circle cx="68" cy="28" r="1.6"/><circle cx="108" cy="28" r="1.6"/>
+    <circle cx="148" cy="28" r="1.6"/><circle cx="188" cy="28" r="1.6"/><circle cx="228" cy="28" r="1.6"/>
+    <circle cx="268" cy="28" r="1.6"/><circle cx="308" cy="28" r="1.6"/>
+    <circle cx="8" cy="48" r="1.6"/><circle cx="48" cy="48" r="1.6"/><circle cx="88" cy="48" r="1.6"/>
+    <circle cx="128" cy="48" r="1.6"/><circle cx="168" cy="48" r="1.6"/><circle cx="208" cy="48" r="1.6"/>
+    <circle cx="248" cy="48" r="1.6"/><circle cx="288" cy="48" r="1.6"/>
+    <circle cx="28" cy="68" r="1.6"/><circle cx="68" cy="68" r="1.6"/><circle cx="108" cy="68" r="1.6"/>
+    <circle cx="148" cy="68" r="1.6"/><circle cx="188" cy="68" r="1.6"/><circle cx="228" cy="68" r="1.6"/>
+    <circle cx="268" cy="68" r="1.6"/><circle cx="308" cy="68" r="1.6"/>
+  </g>
+</svg>
