@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HILiT 요금제 v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+:root{
+  --surface:#f4f6f8; --card:#ffffff; --card2:#eef1f4;
+  --ink:#141a20; --ink2:#5c6773; --ink3:#8b95a1;
+  --line:#dde2e7; --line2:#c9d1d9;
+  --panel:#151a20; --onpanel:#f4f6f8;
+  --accent:#ff7d21; --accent-soft:#fff1e6;
+  --good:#1c7550; --warn:#a97600; --crit:#bb372a;
+  --good-bg:#e6f2ec; --warn-bg:#f8f0dd; --crit-bg:#f9e8e5;
+  --disp:'Archivo','Archivo Fallback',sans-serif;
+  --body:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --surface:#0f1418; --card:#171d23; --card2:#1e252c;
+    --ink:#e8edf2; --ink2:#a2adb8; --ink3:#7a848f;
+    --line:#2a323a; --line2:#3a444e;
+    --panel:#e8edf2; --onpanel:#12171c;
+    --accent:#ff8f42; --accent-soft:#33241a;
+    --good:#5fc596; --warn:#e0b055; --crit:#f08d80;
+    --good-bg:#16302a; --warn-bg:#332a14; --crit-bg:#3a2220;
+  }
+}
+:root[data-theme="dark"]{
+  --surface:#0f1418; --card:#171d23; --card2:#1e252c;
+  --ink:#e8edf2; --ink2:#a2adb8; --ink3:#7a848f;
+  --line:#2a323a; --line2:#3a444e;
+  --panel:#e8edf2; --onpanel:#12171c;
+  --accent:#ff8f42; --accent-soft:#33241a;
+  --good:#5fc596; --warn:#e0b055; --crit:#f08d80;
+  --good-bg:#16302a; --warn-bg:#332a14; --crit-bg:#3a2220;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:56px 24px 88px}
+
+.head{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:38px}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(2.1rem,5vw,3rem);letter-spacing:-.02em;
+  margin:0;text-wrap:balance}
+.dek{margin:0;color:var(--ink2);max-width:60ch;font-size:.95rem}
+.stamp{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.7rem;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.stamp b{color:var(--accent);font-weight:600}
+
+.seg{display:inline-flex;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:4px;gap:2px}
+.seg button{font:inherit;font-size:.85rem;color:var(--ink2);background:none;border:0;cursor:pointer;
+  padding:7px 18px;border-radius:999px;transition:background .15s,color .15s}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);font-weight:600;
+  box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg.mini{padding:3px;background:var(--card2)}
+.seg.mini button{padding:5px 12px;font-size:.78rem}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:stretch}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card2);border:1px solid transparent;border-radius:16px;padding:26px 22px 22px;
+  display:flex;flex-direction:column;gap:16px;position:relative}
+.card.rec{background:var(--card);border-color:var(--line2);box-shadow:0 2px 14px rgba(20,26,32,.07)}
+.badge{position:absolute;top:-10px;left:22px;background:var(--accent);color:#fff;font-family:var(--mono);
+  font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:5px;font-weight:600}
+.tier{display:flex;flex-direction:column;gap:2px}
+.tier h2{font-family:var(--disp);font-size:1.25rem;font-weight:600;margin:0;letter-spacing:-.01em}
+.price{font-family:var(--mono);font-size:1.65rem;font-weight:500;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;line-height:1.3}
+.price small{font-size:.8rem;color:var(--ink2);font-weight:400;letter-spacing:0}
+.cond{font-size:.78rem;color:var(--ink3);min-height:1.2em}
+.inc{font-size:.78rem;color:var(--ink2);border-top:1px solid var(--line);padding-top:14px;margin:0}
+ul.feat{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:.85rem;flex:1}
+ul.feat li{display:flex;gap:9px;align-items:flex-start;line-height:1.45}
+ul.feat li::before{content:"✓";color:var(--accent);font-weight:600;flex:none;font-size:.85rem;line-height:1.45}
+ul.feat li.off{color:var(--ink3)}
+ul.feat li.off::before{content:"·";color:var(--ink3)}
+ul.feat li.new::before{content:"＋";color:var(--good)}
+.metrics{border-top:1px dashed var(--line2);padding-top:11px;display:flex;flex-wrap:wrap;gap:4px 14px;
+  font-family:var(--mono);font-size:.7rem;color:var(--ink3);font-variant-numeric:tabular-nums}
+.metrics b{color:var(--ink2);font-weight:500}
+.cta{display:block;width:100%;text-align:center;font:inherit;font-size:.88rem;font-weight:500;
+  padding:11px 16px;border-radius:9px;border:1px solid var(--line2);background:var(--card);
+  color:var(--ink);cursor:pointer;transition:transform .12s}
+.cta:hover{transform:translateY(-1px)}
+.cta.dark{background:var(--panel);color:var(--onpanel);border-color:var(--panel)}
+.cta:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+section{margin-top:64px}
+h3{font-family:var(--disp);font-size:1.25rem;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+.lede{margin:0 0 18px;color:var(--ink2);font-size:.9rem;max-width:74ch}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:520px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink3);font-weight:500;background:var(--card2)}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hl td{background:var(--accent-soft)}
+tr.dead td{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--ink3)}
+tr.dead td:last-child{text-decoration:none}
+code{font-family:var(--mono);font-size:.85em;background:var(--card2);padding:1px 5px;border-radius:4px}
+.who{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+
+.calls{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+@media(max-width:820px){.calls{grid-template-columns:1fr}}
+.call{border-radius:12px;padding:16px 18px;font-size:.85rem;line-height:1.55;border:1px solid var(--line)}
+.call h4{margin:0 0 6px;font-size:.88rem;font-weight:600;display:flex;gap:7px;align-items:baseline}
+.call.c{background:var(--crit-bg);border-color:transparent}
+.call.w{background:var(--warn-bg);border-color:transparent}
+.call.g{background:var(--good-bg);border-color:transparent}
+.call.c h4{color:var(--crit)} .call.w h4{color:var(--warn)} .call.g h4{color:var(--good)}
+
+.tag{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;
+  text-transform:uppercase;padding:2px 6px;border-radius:4px;vertical-align:middle;font-weight:500}
+.tag.prop{background:var(--accent-soft);color:var(--accent)}
+.tag.src{background:var(--good-bg);color:var(--good)}
+.tag.hyp{background:var(--warn-bg);color:var(--warn)}
+.tag.chg{background:var(--good-bg);color:var(--good)}
+
+.costbar{display:flex;border-radius:8px;overflow:hidden;height:34px;font-family:var(--mono);font-size:.66rem;
+  border:1px solid var(--line);margin:6px 0 10px}
+.costbar div{display:flex;align-items:center;justify-content:center;color:#fff;white-space:nowrap;overflow:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--mono);font-size:.7rem;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+footer{margin-top:64px;border-top:1px solid var(--line);padding-top:20px;font-size:.78rem;color:var(--ink3);
+  display:flex;flex-direction:column;gap:6px}
+footer b{color:var(--ink2);font-weight:500}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <div class="stamp">HILiT · <b>요금 구조안 v3</b> · 2026-09 · 추적 PoC 실측(<code>eecb1ce</code>) 반영</div>
+    <h1>요금제</h1>
+    <p class="dek">개인은 시즌으로, 클럽은 규모로 나눕니다. 등급을 가르는 축은 <b>처리 분량 · 출력 규격 · 복구 상한</b> 셋이고, 기능을 잠그는 축은 없습니다. 재작업은 서버 원가가 발생하지 않으므로 <b>축에서 제외</b>했습니다.</p>
+    <div class="seg" role="group" aria-label="결제 주기">
+      <button type="button" data-cycle="commit" aria-pressed="true">시즌 · 다년 약정</button>
+      <button type="button" data-cycle="month" aria-pressed="false">월 결제</button>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- 무료 -->
+    <article class="card">
+      <div class="tier">
+        <h2>무료</h2>
+        <div class="price">0원</div>
+        <div class="cond">신용카드 없이 시작</div>
+      </div>
+      <p class="inc">포함 사항:</p>
+      <ul class="feat">
+        <li>가입 첫 60일 3편 <span class="tag chg">변경</span></li>
+        <li>이후 월 2편 (유지)</li>
+        <li>1편당 원본 20분 · 전 구간 분석</li>
+        <li>컷 · 트래킹 편집 전 과정 완주</li>
+        <li>라이브러리 음원</li>
+        <li class="off">출력 720p · 워터마크 <span class="tag chg">신규</span></li>
+        <li class="off">서버 정밀 복구 10회/편 상한</li>
+        <li class="off">AI 음악 생성은 충전으로 구매</li>
+        <li>보관 3일</li>
+      </ul>
+      <div class="metrics"><span><b>월 원가</b> 28원</span><span><b>첫 60일</b> 292원 (소멸형)</span></div>
+      <button class="cta" type="button">웹에서 바로 시작</button>
+    </article>
+
+    <!-- 개인 -->
+    <article class="card rec">
+      <span class="badge">권고</span>
+      <div class="tier">
+        <h2>개인</h2>
+        <div class="price" data-cycle-show="commit">39,000원 <small>/시즌</small></div>
+        <div class="price" data-cycle-show="month" hidden>9,900원 <small>/월</small></div>
+        <div class="cond" data-cycle-show="commit">4개월 선불 · 월 환산 9,750원 · 월 3편</div>
+        <div class="cond" data-cycle-show="month" hidden>월 3편 · 언제든 해지</div>
+      </div>
+      <p class="inc">무료의 모든 기능에 추가로:</p>
+      <ul class="feat">
+        <li>월 3편 · 1편당 원본 20분</li>
+        <li>출력 1080p · 워터마크 없음</li>
+        <li class="new">재작업 무제한 <span class="tag chg">변경</span></li>
+        <li class="new">서버 정밀 복구 40회/편 (Lv3) <span class="tag chg">상향</span></li>
+        <li class="new">보관 12개월 <span class="tag chg">변경</span></li>
+        <li data-cycle-show="commit">AI 음악 생성 5회 / 시즌</li>
+        <li data-cycle-show="month" hidden>AI 음악 생성 3회 / 월</li>
+        <li class="new" data-cycle-show="commit">시즌 리캡 자동 생성 <span class="tag chg">신규</span></li>
+        <li>추가 1편 후불 2,900원</li>
+        <li data-cycle-show="commit">시즌 중 이탈해도 매출 확정</li>
+      </ul>
+      <div class="metrics" data-cycle-show="commit">
+        <span><b>변동원가</b> 2,456~8,936원</span><span><b>기여율</b> 74~91%</span><span><b>복구 상한</b> 40회/편</span>
+      </div>
+      <div class="metrics" data-cycle-show="month" hidden>
+        <span><b>편당</b> 3,300원</span><span><b>변동원가</b> 614~2,234원</span><span><b>기여율</b> 74.4~90.8%</span>
+      </div>
+      <button class="cta dark" type="button">시즌권 구매하기</button>
+    </article>
+
+    <!-- 클럽 -->
+    <article class="card">
+      <div class="tier">
+        <h2>클럽</h2>
+        <div class="price"><span id="clubPrice">144만원</span> <small>/년</small></div>
+        <div class="cond" id="clubCond">아동 16~30명 · 촬영 무제한 · 3년 약정</div>
+      </div>
+      <div class="seg mini" role="group" aria-label="클럽 규모">
+        <button type="button" data-club="s" aria-pressed="false">스타터</button>
+        <button type="button" data-club="m" aria-pressed="true">스탠다드</button>
+        <button type="button" data-club="l" aria-pressed="false">프로</button>
+      </div>
+      <p class="inc">개인의 모든 기능 포함, 추가로:</p>
+      <ul class="feat">
+        <li>선수별 자동 분류 · 보호자 개별 배포</li>
+        <li>시즌 리캡 자동 생성</li>
+        <li>온보딩 세팅 · 코치 교육</li>
+        <li>원본 장기 보관</li>
+        <li>우선 지원 · 전담 계정 관리</li>
+        <li class="new">세금계산서 결제 · 수수료 0% <span class="tag chg">신규</span></li>
+        <li class="new">촬영 횟수 무제한 <span class="tag chg">변경</span></li>
+        <li class="new">연 단위 선청구 (3년 3회 분할)</li>
+      </ul>
+      <div class="metrics"><span><b>연평균 원가</b> <span id="clubCost">23.5만원</span></span><span><b>마진</b> <span id="clubMargin">83.7%</span></span></div>
+      <button class="cta" type="button">도입 문의</button>
+    </article>
+
+    <!-- 기업 -->
+    <article class="card">
+      <div class="tier">
+        <h2>리그 · 협회</h2>
+        <div class="price" style="font-size:1.35rem">맞춤형</div>
+        <div class="cond"><span class="tag prop">단가 근거 미확보</span></div>
+      </div>
+      <p class="inc">클럽의 모든 기능에 추가로:</p>
+      <ul class="feat">
+        <li>리그 · 협회 · 미디어 단위 계약</li>
+        <li>대량 처리 단가 협의</li>
+        <li>소속 클럽 통합 관리</li>
+        <li>보관 · 반출 정책 협의</li>
+        <li>전용 온보딩 · SLA</li>
+      </ul>
+      <div class="metrics"><span>지불 주체 · 계약 단가 조사 전</span></div>
+      <button class="cta" type="button">영업팀에 문의하기</button>
+    </article>
+
+  </div>
+
+  <!-- COST STRUCTURE -->
+  <section>
+    <h3>편당 원가 130~670원 — 서버 복구가 원가를 지배합니다</h3>
+    <p class="lede">추적 PoC 실측을 반영하면 편당 원가가 <b>고정값이 아니라 대역</b>입니다. Gemini·Haiku 등 고정 항목 129.7원 위에, 영상 난이도에 따라 <b>서버 Cutie 정밀 복구</b>가 0~540원 얹힙니다. 기존 표의 129.7원은 <b>복구가 한 번도 안 걸린 경우</b>의 값이었습니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>항목</th><th class="n">원가</th><th>근거</th></tr></thead>
+        <tbody>
+          <tr><td>전처리 · 프록시 생성 (720p / 20fps / CRF 24)</td><td class="n">31원</td><td>기존</td></tr>
+          <tr><td>콜드스타트</td><td class="n">4원</td><td>기존</td></tr>
+          <tr><td>Gemini 컷 구간 탐색 (20분 = 1,200초)</td><td class="n">43.3원</td><td>Flash-Lite $0.10/1M 역산</td></tr>
+          <tr><td>Haiku</td><td class="n">43원</td><td>기존</td></tr>
+          <tr><td>보관 + 완성본</td><td class="n">8.4원</td><td>기존 · 표기 확인 필요</td></tr>
+          <tr><td>모바일 추적 (NanoTrack · OSNet · NanoDet)</td><td class="n">0원</td><td>사용자 기기</td></tr>
+          <tr class="hl"><td><b>서버 Cutie 정밀 복구 (Lv3)</b> <span class="tag chg">누락 항목</span></td><td class="n">0~540원</td><td>PoC §5.5 · 회당 10~17원 × 최대 40회</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lede" style="margin-top:18px">복구 호출 횟수별 편당 원가와 개인 등급 기여율입니다. 실제 농구 영상 실측은 <b>7.08초에 서버 2회</b>였고, 그 비율이면 20분 영상은 코드 상한 <code>MAX_RECOVERIES_PER_VIDEO=40</code>에 걸립니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>복구 호출</th><th class="n">편당 원가</th><th class="n">기여율 (웹 3%)</th><th class="n">기여율 (인앱 15%)</th><th class="n">원가 감내 배수</th></tr></thead>
+        <tbody>
+          <tr><td>0회 <span class="who">P0·P3·P4형 · 쉬운 영상</span></td><td class="n">130원</td><td class="n">90.8%</td><td class="n">78.8%</td><td class="n">15.6배</td></tr>
+          <tr><td>10회</td><td class="n">265원</td><td class="n">86.7%</td><td class="n">74.7%</td><td class="n">9.4배</td></tr>
+          <tr class="hl"><td>20회 <span class="who">계획 기준선 권장</span></td><td class="n">400원</td><td class="n">82.6%</td><td class="n">70.6%</td><td class="n">6.7배</td></tr>
+          <tr><td>40회 <span class="who">코드 상한</span></td><td class="n">670원</td><td class="n">74.4%</td><td class="n">62.4%</td><td class="n">4.3배</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="calls">
+      <div class="call c">
+        <h4>🔴 GPU 단가에 단위 불일치가 있다</h4>
+        <code>GPU_COST_PER_HOUR_KRW=1012.45</code>는 <b>RTX 4090 요율</b>인데, 곱해진 35~60초는 <b>MX250 실행 시간</b>입니다. 4090이 20배 빠르면 회당 0.67원이라 캡 40회가 27원입니다. 회당 13.5원과 <b>20배</b> 차이입니다.
+      </div>
+      <div class="call g">
+        <h4>🟢 원가 상한이 코드로 강제돼 있다</h4>
+        <code>MAX_RECOVERIES_PER_VIDEO=40</code>과 <code>RECOVERY_COOLDOWN_SECONDS=5.0</code>이 있어 최악의 영상에서도 편당 670원을 넘지 않습니다. <b>결정론적 원가 상한</b>이라 요금 설계에 그대로 쓸 수 있습니다.
+      </div>
+      <div class="call w">
+        <h4>🔺 클립 길이가 두 번째 손잡이</h4>
+        <code>RECOVERY_PRE/POST_SECONDS_FAST=4.0</code>. ±4초를 ±10초로 늘리면 원가가 2.5배, ±3초로 줄이면 0.75배입니다. 복구 품질과의 교환비는 아직 미측정입니다(PoC §10 ⑦).
+      </div>
+    </div>
+
+  <!-- COMPLETION RATE -->
+  <section>
+    <h3>복구 상한 — 세 번째 축은 신설이 아니라 이미 있습니다</h3>
+    <p class="lede">v2에서 「서버 폴백을 신설하자」고 적었는데, <b>이미 구현돼 있습니다.</b> PoC의 4단계 복구가 정확히 그 구조입니다. Lv1 모션 예측과 Lv2 모바일 재획득은 원가 0, Lv3 서버 Cutie만 GPU 초당 과금, Lv4는 사용자 확인입니다. 남은 일은 신설이 아니라 <b>어떤 손잡이를 요금 등급에 연결할지</b> 고르는 것입니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>후보 손잡이</th><th>동작</th><th>등급 축으로 쓸 수 있나</th></tr></thead>
+        <tbody>
+          <tr><td><code>N_LEVEL</code> (2 / 3 / 4)</td><td>LOST 판정 기준선을 올려 서버 호출을 줄임. 문서상 "초대 코드 등급별 원가 차등"이 원래 목적</td><td><b>지금은 불가</b> — N을 올려도 호출이 안 줄었습니다. 우회 사유가 7개, 정상 경로가 1개라 어려운 장면에서는 Critical이 먼저 걸립니다 (PoC §5.2 · §7.6)</td></tr>
+          <tr class="hl"><td><code>MAX_RECOVERIES_PER_VIDEO</code></td><td>영상당 서버 호출 하드 캡</td><td><b>가능</b> — 우회와 무관하게 무조건 듣습니다. 원가 상한이 결정론적으로 정해집니다</td></tr>
+          <tr><td><code>RECOVERY_PRE/POST_SECONDS</code></td><td>복구 클립 길이 (±4초)</td><td><b>보류</b> — 원가에 정비례하지만 품질 교환비 미측정</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lede" style="margin-top:18px">그래서 등급 축은 <b>복구 상한</b>으로 잡습니다. 무료 10회 / 개인 40회 / 클럽 60회입니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>등급</th><th class="n">복구 상한</th><th class="n">편당 원가 최악</th><th>의미</th></tr></thead>
+        <tbody>
+          <tr><td>무료</td><td class="n">10회</td><td class="n">265원</td><td>어려운 영상은 Lv4 사용자 확인으로 넘어감</td></tr>
+          <tr class="hl"><td>개인 · 클럽</td><td class="n">40회</td><td class="n">670원</td><td>코드 기본값. 어려운 영상도 끝까지 복구 시도</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-top:44px">완주율 — 이제 추정이 아니라 실측이 있습니다</h3>
+    <p class="lede">v2에서 브라우저 처리 부담을 추정으로 얘기했는데, PoC §5.4에 실측이 있습니다. 20분 영상을 20fps 프록시로 처리하면 프레임 24,000개입니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>구성요소</th><th class="n">단위 실측</th><th class="n">20분 영상 누적</th></tr></thead>
+        <tbody>
+          <tr><td>NanoTrack (매 프레임)</td><td class="n">7.6 ms</td><td class="n">182초</td></tr>
+          <tr><td>Camera Motion Compensation (매 프레임)</td><td class="n">4.4 ms</td><td class="n">106초</td></tr>
+          <tr><td>OSNet Re-ID (20프레임마다)</td><td class="n">96 ms</td><td class="n">115초</td></tr>
+          <tr class="hl"><td><b>합계 (개발 PC CPU 기준)</b></td><td class="n">—</td><td class="n"><b>403초 = 6.7분</b></td></tr>
+          <tr><td>모바일이 2배 느릴 때</td><td class="n">—</td><td class="n">13분</td></tr>
+          <tr><td>모바일이 3배 느릴 때</td><td class="n">—</td><td class="n">20분 · 실시간 배율 1.0</td></tr>
+          <tr><td>모바일이 5배 느릴 때</td><td class="n">—</td><td class="n">34분 · 실시간 배율 1.7</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="calls">
+      <div class="call c">
+        <h4>🔴 20분 영상에 20~34분이 걸린다</h4>
+        학부모가 브라우저 탭을 열어두고 기다려야 하는 시간입니다. 이 상태로는 완주율이 요금제의 어떤 항목보다 큰 변수입니다. <b>「1편당 원본 20분」이라는 상품 표기 자체를 재검토해야 할 수도 있습니다.</b>
+      </div>
+      <div class="call w">
+        <h4>🔺 메모리는 문제가 아니다</h4>
+        peak working memory 161MB로 모바일 브라우저 한도 안입니다. 병목은 메모리가 아니라 <b>시간</b>입니다. 백그라운드 처리와 이어하기 설계가 필요합니다.
+      </div>
+      <div class="call g">
+        <h4>🟢 재작업 무제한의 근거가 강해졌다</h4>
+        v2에서는 "원가 0이니 풀자"였는데, 실제 이유는 다릅니다. <b>Coverage 평균 72.2%</b>(PoC §5.3)라 대상별 편차가 20%p입니다. 품질이 이 수준이면 재작업은 혜택이 아니라 <b>필수 보정 장치</b>입니다.
+      </div>
+    </div>
+
+  <!-- ADD-ONS -->
+  <section>
+    <h3>애드온 — 기준선은 구독 편당가 3,300원</h3>
+    <p class="lede">무료 충전을 구독 편당가보다 <b>비싸게</b>, 구독자 후불을 그보다 <b>싸게</b> 둡니다. 3편권은 편당 3,500원으로 구독과 200원 차이라 낱개 반복 구매를 고착시키므로 폐지하고, <b>2편권</b>으로 대체합니다. 3편이 필요한 순간 구독이 유일한 경로가 됩니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>대상</th><th>상품</th><th class="n">가격</th><th class="n">편당</th><th class="n">원가</th><th class="n">마진</th></tr></thead>
+        <tbody>
+          <tr><td class="who">무료 · 선불충전</td><td>1편권</td><td class="n">3,900원</td><td class="n">3,900원</td><td class="n">130원</td><td class="n">93.7%</td></tr>
+          <tr><td class="who">무료 · 선불충전</td><td>2편권 <span class="tag chg">신규</span></td><td class="n">7,400원</td><td class="n">3,700원</td><td class="n">259원</td><td class="n">93.5%</td></tr>
+          <tr class="dead"><td class="who">무료 · 선불충전</td><td>3편권</td><td class="n">10,500원</td><td class="n">3,500원</td><td class="n">389원</td><td class="n">폐지</td></tr>
+          <tr><td class="who">무료 · 선불충전</td><td>AI 음악 1회 (2곡)</td><td class="n">900원</td><td class="n">—</td><td class="n">75원</td><td class="n">88.7%</td></tr>
+          <tr class="hl"><td class="who">구독자 · 후불</td><td>추가 1편</td><td class="n">2,900원</td><td class="n">2,900원</td><td class="n">130원</td><td class="n">92.5%</td></tr>
+          <tr class="hl"><td class="who">구독자 · 후불</td><td>추가 업로드 1회</td><td class="n">2,900원</td><td class="n">2,900원</td><td class="n">130원</td><td class="n">92.5%</td></tr>
+          <tr class="hl"><td class="who">구독자 · 월정액</td><td>가족 공유 (조부모·친척) <span class="tag chg">신규</span></td><td class="n">1,900원</td><td class="n">—</td><td class="n">20원</td><td class="n">95.9%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="calls">
+      <div class="call g">
+        <h4>🟢 가족 공유는 한계원가가 0에 가깝다</h4>
+        같은 결과물을 배포하는 데 추가 추론이 없습니다. 전송·보관만 붙습니다. <b>원가를 깎는 대신 원가가 안 붙는 매출을 얹는</b> 방향입니다.
+      </div>
+      <div class="call c">
+        <h4>🔴 종량제 19,800원(3편)은 폐지 유지</h4>
+        구독 9,900원과 같은 3편에 2배입니다. 「추가 편수」 애드온으로 재배치합니다.
+      </div>
+      <div class="call w">
+        <h4>🔺 무료 축소는 보류</h4>
+        월 2편 → 1편의 절감은 1인당 연 1,838원인데, <b>무료 100명당 유료 2.06명</b>만 추천으로 들어와도 손해입니다. 추천율 실측 전까지 편수는 유지하고 첫 달 부스트만 줄입니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- UTILITY LEVERS -->
+  <section>
+    <h3>효용 레버 — 원가 절감보다 회수율이 높은 항목</h3>
+    <p class="lede">기여율 90%대 구조에서는 원가 1원을 깎는 것보다 잔존율 0.1%p를 올리는 쪽이 훨씬 큽니다. 아래는 같은 기준(월 기여 8,989원, 웹 결제)으로 환산한 비교입니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>레버</th><th>추가 원가</th><th class="n">효과</th><th>확신도</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td><b>보관 30일 → 12개월</b><br><span class="who">누적 아카이브가 전환비용을 만든다</span></td><td>월 20~120원<br><span class="who">프록시 저장 시 하한</span></td><td class="n">잔존 +0.14%p면 본전<br>+1.5%p면 LTV +16%</td><td>높음</td></tr>
+          <tr class="hl"><td><b>시즌 리캡 개인 개방</b><br><span class="who">효용의 정점을 시즌 말에 배치</span></td><td>130원 / 시즌<br><span class="who">시즌 기여의 0.37%</span></td><td class="n">시즌 중 이탈 억제</td><td>중간</td></tr>
+          <tr><td><b>재작업 무제한</b><br><span class="who">카운터를 없애면 실제로 쓴다</span></td><td>0원</td><td class="n">체감 자유도</td><td>중간</td></tr>
+          <tr><td><b>결제 경로 웹 우선</b><br><span class="who">인앱 15% → PG 3%</span></td><td>0원</td><td class="n">월 +1,188원<br>허용 CAC +15%</td><td>높음</td></tr>
+          <tr><td>Gemini 저해상도 설정</td><td>0원</td><td class="n">월 −96원</td><td>낮음<br><span class="who">정확도 검증 필요</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SEASON VS MONTHLY -->
+  <section>
+    <h3>시즌권을 기본 결제 단위로</h3>
+    <p class="lede">유소년 스포츠는 시즌제입니다. 비시즌에 월 구독을 유지할 이유가 없어 월 결제는 구조적으로 잔존율이 낮습니다. 학부모의 지불 인지 단위도 클럽 회비·대회·유니폼과 같은 시즌입니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>월 구독 잔존율</th><th class="n">4개월 기대 기여</th><th class="n">시즌권 39,000원</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td>95%</td><td class="n">33,349원</td><td class="n">35,374원</td><td>시즌권 우위 (+2,025)</td></tr>
+          <tr class="hl"><td>90%</td><td class="n">30,913원</td><td class="n">35,374원</td><td>시즌권 우위 (+4,461)</td></tr>
+          <tr><td>85%</td><td class="n">28,645원</td><td class="n">35,374원</td><td>시즌권 우위 (+6,729)</td></tr>
+          <tr><td>80%</td><td class="n">26,535원</td><td class="n">35,374원</td><td>시즌권 우위 (+8,839)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="calls">
+      <div class="call g">
+        <h4>🟢 모든 잔존율 구간에서 시즌권이 이긴다</h4>
+        분기점 잔존율 74.6%는 유소년 시장에서 넘기 쉬운 수치가 아닙니다. 선불이라 매출이 확정되고 결제 수수료도 1회입니다.
+      </div>
+      <div class="call w">
+        <h4>🔺 가격 상향 여력은 미검증</h4>
+        11,900원이면 이탈 17.8%까지 감내합니다. 다만 신규 유입 감소는 이 계산에 없으므로 <b>신규 코호트 A/B로만</b> 확인해야 합니다.
+      </div>
+      <div class="call w">
+        <h4>🔺 시즌 정의가 필요하다</h4>
+        4개월이 국내 유소년 리그 일정과 맞는지 확인이 필요합니다. 어긋나면 시즌권의 인지적 이점이 사라집니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- CLUB DETAIL -->
+  <section>
+    <h3>클럽 3단 · 다년 약정</h3>
+    <p class="lede"><b>Gemini 호출은 촬영 1회당 1건으로 확정</b>됐습니다. 다만 서버 복구가 얹히면 스탠다드 처리 원가가 연 9,338원에서 최악 48,218원까지 오릅니다. 그래도 마진은 83.7% → <b>81.0%</b>로 2.7%p만 움직입니다. 클럽은 촬영 횟수가 적어 복구 노출이 개인보다 작습니다. 여기에 CAC 16만 · 온보딩 4만을 계약 연수로 상각하면(기존 표는 매년 반복 계상) 3년 마진은 아래와 같습니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>등급 · 계약</th><th class="n">연 가격</th><th class="n">처리 원가</th><th class="n">연평균 총원가</th><th class="n">마진 (확정)</th><th class="n">v1 표기</th></tr></thead>
+        <tbody>
+          <tr><td>스타터 · 1년</td><td class="n">120만원</td><td class="n">6,226원</td><td class="n">34.4만원</td><td class="n">71.4%</td><td class="n">71.9%</td></tr>
+          <tr><td>스타터 · 2년 −12%</td><td class="n">106만원</td><td class="n">6,226원</td><td class="n">24.4만원</td><td class="n">76.9%</td><td class="n">—</td></tr>
+          <tr><td>스타터 · 3년 −20%</td><td class="n">96만원</td><td class="n">6,226원</td><td class="n">21.0만원</td><td class="n">78.1%</td><td class="n">64.9%</td></tr>
+          <tr><td>스탠다드 · 1년</td><td class="n">180만원</td><td class="n">9,338원</td><td class="n">36.8만원</td><td class="n">79.5%</td><td class="n">80.0%</td></tr>
+          <tr><td>스탠다드 · 2년 −12%</td><td class="n">158만원</td><td class="n">9,338원</td><td class="n">26.8만원</td><td class="n">83.1%</td><td class="n">—</td></tr>
+          <tr class="hl"><td>스탠다드 · 3년 −20%</td><td class="n">144만원</td><td class="n">9,338원</td><td class="n">23.5만원</td><td class="n">83.7%</td><td class="n">75.1%</td></tr>
+          <tr><td class="who">↳ 복구 캡 40회 최악</td><td class="n">144만원</td><td class="n">48,218원</td><td class="n">27.4만원</td><td class="n">81.0%</td><td class="n">—</td></tr>
+          <tr><td>프로 · 1년</td><td class="n">260만원</td><td class="n">15,564원</td><td class="n">44.0만원</td><td class="n">83.1%</td><td class="n">83.7%</td></tr>
+          <tr><td>프로 · 2년 −12%</td><td class="n">229만원</td><td class="n">15,564원</td><td class="n">34.0만원</td><td class="n">85.1%</td><td class="n">—</td></tr>
+          <tr><td>프로 · 3년 −20%</td><td class="n">208만원</td><td class="n">15,564원</td><td class="n">30.7만원</td><td class="n">85.3%</td><td class="n">79.6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lede" style="margin-top:18px">원가 구성을 보면 <b>처리는 최하위 항목이고 CS가 절반</b>입니다. 스탠다드 3년 기준입니다.</p>
+    <div class="costbar">
+      <div style="width:51.0%;background:#bb372a">CS 12만 · 51.0%</div>
+      <div style="width:28.4%;background:#a97600">취득 상각 28.4%</div>
+      <div style="width:16.6%;background:#5b6b7a">클라우드 16.6%</div>
+      <div style="width:4.0%;background:#1c7550"></div>
+    </div>
+    <div class="legend">
+      <span><i style="background:#bb372a"></i>CS 120,000원 (매년)</span>
+      <span><i style="background:#a97600"></i>CAC+온보딩 상각 66,667원</span>
+      <span><i style="background:#5b6b7a"></i>클라우드 39,150원</span>
+      <span><i style="background:#1c7550"></i>Gemini·Haiku 처리 9,338원 (4.0%)</span>
+    </div>
+    <div class="tblwrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>약정 (스탠다드 기준)</th><th class="n">연 가격</th><th class="n">약정 총액</th><th class="n">같은 기간 Veo</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td>1년</td><td class="n">180만원</td><td class="n">180만원</td><td class="n">273만원</td><td>우위</td></tr>
+          <tr><td>2년 −12%</td><td class="n">158만원</td><td class="n">317만원</td><td class="n">383만원</td><td>우위</td></tr>
+          <tr class="hl"><td>3년 −20%</td><td class="n">144만원</td><td class="n">432만원</td><td class="n">492만원</td><td>우위</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="calls">
+      <div class="call g">
+        <h4>🟢 촬영 횟수 제한은 풀어야 한다</h4>
+        처리 원가가 <b>130배</b>가 돼야 스탠다드 3년 마진이 0이 됩니다. 월 20회로 늘려도 가격의 2.2%입니다. 원가가 안 붙는 것을 제한하면 효용만 깎습니다. 재작업 축을 푼 것과 같은 논리입니다.
+      </div>
+      <div class="call c">
+        <h4>🔴 등급을 가르는 건 아동 수다</h4>
+        촬영 횟수는 원가와 사실상 무관하다는 게 확인됐습니다. 원가를 움직이는 건 CS(51%)이고 CS는 아동 수·보호자 수에 비례합니다. <b>등급 조건에서 촬영 횟수를 빼고 아동 수만 남기십시오.</b>
+      </div>
+      <div class="call g">
+        <h4>🟢 할인율 차등 불필요 · 해지는 선청구로</h4>
+        스타터도 3년 −20%에서 78.1%입니다. 취득비 20만원 회수는 스타터 2.9개월 · 프로 1.3개월이라 위약금 대신 <b>연 단위 3회 분할 선청구</b>로 충분합니다.
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFETY MARGIN -->
+  <section>
+    <h3>안전마진 — 가정이 얼마나 틀려도 버티는가</h3>
+    <p class="lede">기존 표의 「마진」은 전부 매출총이익률이었습니다. 손익분기 대비 여유를 나타내는 지표가 없어 아래를 추가합니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>등급</th><th class="n">기여율 (웹 3%)</th><th class="n">기여율 (인앱 15%)</th><th class="n">변동원가 감내 한계</th></tr></thead>
+        <tbody>
+          <tr><td>개인 월 · 복구 0회</td><td class="n">90.8%</td><td class="n">78.8%</td><td class="n">15.6배</td></tr>
+          <tr class="hl"><td>개인 월 · 복구 20회 <span class="who">기준선</span></td><td class="n">82.6%</td><td class="n">70.6%</td><td class="n">6.7배</td></tr>
+          <tr><td>개인 월 · 복구 40회 <span class="who">코드 상한</span></td><td class="n">74.4%</td><td class="n">62.4%</td><td class="n">4.3배</td></tr>
+          <tr><td>1편권 3,900원 · 복구 40회</td><td class="n">79.8%</td><td class="n">67.8%</td><td class="n">5.7배</td></tr>
+          <tr><td>클럽 스탠다드 3년 · 복구 40회</td><td class="n">81.0%</td><td class="n">해당 없음<br><span class="who">세금계산서</span></td><td class="n">5.3배</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lede" style="margin-top:14px">v2의 「15.6배」는 복구가 한 번도 안 걸린 경우였습니다. 실측 난이도를 반영하면 <b>4.3~6.7배</b>가 실제 여유입니다. 아직 넉넉하지만 v2에서 본 그림과는 다릅니다. 인앱 15%와 복구 캡 40회가 겹치면 기여율이 <b>62.4%</b>까지 내려가므로, 웹 결제 우선은 선택이 아니라 전제가 됩니다. 클럽 쪽은 복구를 넣어도 81.0%로 견디지만 총원가의 절반이 CS라, <b>클럽의 안전마진은 서버가 아니라 사람에 걸려 있습니다.</b></p>
+  </section>
+
+  <!-- OPEN DECISIONS -->
+  <section>
+    <h3>확정 전 남은 결정 7건</h3>
+    <p class="lede">아래가 정해지지 않으면 위 표의 일부 칸은 값이 바뀝니다.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>항목</th><th>쟁점</th><th>영향받는 칸</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>RTX 4090 GPU 원가 재측정 <span class="tag chg">1순위</span></td>
+            <td><code>GPU_COST_PER_HOUR_KRW=1012.45</code>는 4090 요율인데 곱해진 35~60초는 MX250 실행 시간입니다. 4090에서 다시 재면 회당 원가가 <b>13.5원에서 0.7원까지</b> 내려갈 수 있습니다. 편당 원가가 670원인지 154원인지가 여기서 갈립니다. 4090 1시간 대여로 끝나는 측정입니다.</td>
+            <td>원가 표 전체 · 안전마진 · 복구 상한 정책</td>
+          </tr>
+          <tr>
+            <td>20분 브라우저 처리 시간 <span class="tag chg">1순위</span></td>
+            <td>개발 PC CPU에서 403초입니다. 실기 안드로이드에서 20~34분이면 <b>「1편당 원본 20분」이라는 상품 정의 자체가 성립하지 않습니다.</b> 백그라운드 처리·이어하기가 없으면 완주율이 무너집니다. PoC §10 ⑨와 같은 항목입니다.</td>
+            <td>무료·개인 카드의 처리 분량 조건</td>
+          </tr>
+          <tr>
+            <td>클럽 CS 원가 12만원의 확장성</td>
+            <td>클럽 총원가의 <b>51%</b>가 CS입니다. 클럽 수에 선형으로 붙는 비용이라, 100개 클럽이면 연 1,200만원입니다. 문의 유형을 분류해 얼마가 온보딩 미비에서 오는지 확인해야 합니다. 개인 등급에는 CS 원가가 아예 계상돼 있지 않습니다.</td>
+            <td>클럽 3단 표 · 안전마진 · 리그 단가</td>
+          </tr>
+          <tr>
+            <td>촬영 1회의 평균 길이 <span class="tag chg">신규</span></td>
+            <td>처리 원가는 촬영 <b>길이</b>에 선형입니다. 20분 가정인데 유소년 경기가 전후반 구조라 40분 이상이면 처리 원가가 2배입니다. 다만 그래도 스탠다드 3년 마진은 83.7% → 83.0%로 <b>0.7%p</b>만 움직입니다. 확인은 필요하나 우선순위는 낮습니다.</td>
+            <td>클럽 처리 원가 열</td>
+          </tr>
+          <tr>
+            <td>무료 추천율 실측 <span class="tag chg">신규</span></td>
+            <td>무료 월 2편 축소의 절감은 1인당 연 1,838원. <b>무료 100명당 유료 2.06명</b>이 문턱입니다. 워터마크 공유 유입을 측정하기 전에는 편수를 줄이면 안 됩니다.</td>
+            <td>무료 카드 · 손익분기 전환율</td>
+          </tr>
+          <tr>
+            <td>「원본 보관」 표기 정확성 <span class="tag chg">신규</span></td>
+            <td>20분 원본을 30일 보관하면 40~50원대인데 표기는 8원입니다. 실제 저장 대상이 720p 프록시라면 표기를 고쳐야 하고, 동시에 <b>12개월 연장 원가가 예상보다 훨씬 낮아집니다.</b></td>
+            <td>보관 원가 8원 · 효용 레버 1행</td>
+          </tr>
+          <tr>
+            <td>충전 1개월 소멸</td>
+            <td>발행잔액 30억 · 연 500억 미만이라 전자금융거래법 등록 의무는 없습니다 <span class="tag src">source</span>. 다만 소멸 기간과 사전 고지는 표준약관 확인이 필요합니다.</td>
+            <td>선불충전 3개 상품</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CHANGELOG -->
+  <section>
+    <h3>v1 대비 변경 요약</h3>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>항목</th><th>v1</th><th>v2</th><th>사유</th></tr></thead>
+        <tbody>
+          <tr><td>분석 기준</td><td>8분 (표기는 20분)</td><td><b>원본 20분 전 구간</b></td><td>표기·구현 정합</td></tr>
+          <tr><td>편당 원가</td><td>102.4원</td><td><b>129.7원</b></td><td>Gemini 16 → 43원</td></tr>
+          <tr><td>재작업</td><td>재발행 3회</td><td><b>무제한</b></td><td>클라이언트 처리라 서버 원가 0</td></tr>
+          <tr><td>3축 세 번째</td><td>재작업</td><td><b>처리 경로</b></td><td>재작업이 원가 근거 상실</td></tr>
+          <tr><td>결제 기본값</td><td>월 결제</td><td><b>시즌권</b></td><td>모든 잔존율 구간에서 우위</td></tr>
+          <tr><td>결제 경로</td><td>앱 다운로드</td><td><b>웹 우선</b></td><td>인앱 15% → PG 3%, 월 1,188원</td></tr>
+          <tr><td>개인 보관</td><td>30일</td><td><b>12개월</b></td><td>잔존 +0.14%p면 본전</td></tr>
+          <tr><td>서버 복구 원가</td><td><b>미계상</b></td><td><b>0~540원/편</b></td><td>PoC §5.5 · 회당 10~17원 × 캡 40</td></tr>
+          <tr><td>편당 원가</td><td>129.7원 (고정)</td><td><b>130~670원 (대역)</b></td><td>복구 호출 횟수에 비례</td></tr>
+          <tr><td>3축 세 번째</td><td>처리 경로 (신설 제안)</td><td><b>복구 상한</b> (기존 코드)</td><td>N-Level은 우회 7:1로 효과 미측정</td></tr>
+          <tr><td>브라우저 처리 시간</td><td>정성 추정</td><td><b>20분 영상에 20~34분</b></td><td>PoC §5.4 실측 환산</td></tr>
+          <tr><td>3편권</td><td>10,500원</td><td><b>폐지 → 2편권 7,400원</b></td><td>구독과 편당 200원 차</td></tr>
+          <tr><td>가족 공유</td><td>없음</td><td><b>1,900원/월 신설</b></td><td>한계원가 0에 가까움</td></tr>
+          <tr><td>클럽 3년 마진</td><td>64.9 / 75.1 / 79.6%</td><td><b>78.1 / 83.7 / 85.3%</b></td><td>CAC·온보딩 상각 + 처리원가 계상</td></tr>
+          <tr><td>클럽 처리 원가</td><td>미계상</td><td><b>촬영 1회당 129.7원</b></td><td>호출 단위 확정 (총원가의 4.0%)</td></tr>
+          <tr><td>클럽 등급 조건</td><td>아동 수 + 월 촬영 횟수</td><td><b>아동 수만</b></td><td>촬영 횟수는 원가와 무관</td></tr>
+          <tr><td>무료 편수</td><td>첫 달 5편 + 월 2편</td><td><b>첫 60일 3편 + 월 2편</b></td><td>부스트만 축소, 월 편수 유지</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>표기</b> — 이 페이지의 모든 가격은 <span class="tag prop">proposed</span> 제안값입니다. 확정 요금이 아니며, 전환율·잔존율 가정이 바뀌면 마진과 손익분기 값도 함께 바뀝니다.</div>
+    <div><b>원가 근거</b> — 유료 1편 <b>130~670원</b>: 고정 129.7원 (전처리 31 + 콜드스타트 4 + Gemini 43.3 + Haiku 43 + 보관 8 + 완성본 0.4) + 서버 Cutie 복구 0~540원 (회당 10~17원 × <code>MAX_RECOVERIES_PER_VIDEO=40</code>). AI 음악 75원/회. 클럽 클라우드 소형 17,320 · 중형 39,150 · 대형 104,640원/년.</div>
+    <div><b>추적 PoC 인용</b> — 커밋 <code>eecb1ce</code> 기준. 서버 복구 회당 10~17원(§5.5) · 실제 영상 7.08초에 서버 2회 14.09원(§5.3) · Coverage 평균 72.2%(§5.3) · NanoTrack 7.6ms·OSNet 96ms·카메라보정 4.4ms(§5.4) · N-Level 효과 미측정(§7.6). GPU 초는 MX250 실측, 단가는 RTX 4090 요율이라 <b>단위가 섞여 있습니다.</b></div>
+    <div><b>Gemini 43.3원 산출</b> — 20분 = 1,200초 × 약 258 tok/s = 309,600 토큰, Flash-Lite $0.10/1M 기준 $0.031, 환율 1,400원. 초당 토큰 계수는 추정치이므로 실측 청구서 대조가 필요합니다.</div>
+    <div><b>미실측 항목</b> — RTX 4090 실제 GPU 초, 실기 안드로이드 처리 시간·발열·배터리, N-Level 원가 절감 효과, 무료 추천율, 월 잔존율, 클럽 CS 원가 구성. PoC §7의 미검증 항목(모바일 재획득 Lv2 0/42 성공, Candidate Ranking·Jersey Color·ID Switch Hysteresis 미검증)이 그대로 요금 가정의 불확실성입니다.</div>
+    <div><b>상위 문서</b> — 손익분기 모델 · ADR-8 과금 허용 3축(개정 필요) · 4단계 TAM-SAM-SOM v1.2.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var CLUB={
+    s:{price:'120만원',price3:'96만원',cond:'아동 15명 이하 · 촬영 무제한',cost:'34.4만원',cost3:'21.0만원',margin:'71.4%',margin3:'78.1%'},
+    m:{price:'180만원',price3:'144만원',cond:'아동 16~30명 · 촬영 무제한',cost:'36.8만원',cost3:'23.5만원',margin:'79.5%',margin3:'83.7%'},
+    l:{price:'260만원',price3:'208만원',cond:'아동 31명 이상 · 촬영 무제한',cost:'44.0만원',cost3:'30.7만원',margin:'83.1%',margin3:'85.3%'}
+  };
+  var cycle='commit', club='m';
+
+  function paintCycle(){
+    document.querySelectorAll('[data-cycle-show]').forEach(function(el){
+      el.hidden = el.getAttribute('data-cycle-show')!==cycle;
+    });
+    document.querySelectorAll('.seg button[data-cycle]').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-cycle')===cycle));
+    });
+    paintClub();
+  }
+  function paintClub(){
+    var c=CLUB[club], commit=(cycle==='commit');
+    document.getElementById('clubPrice').textContent = commit? c.price3 : c.price;
+    document.getElementById('clubCond').textContent = c.cond + (commit ? ' · 3년 약정' : '');
+    document.getElementById('clubCost').textContent = commit? c.cost3 : c.cost;
+    document.getElementById('clubMargin').textContent = commit? c.margin3 : c.margin;
+    document.querySelectorAll('.seg button[data-club]').forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-club')===club));
+    });
+  }
+  document.querySelectorAll('.seg button[data-cycle]').forEach(function(b){
+    b.addEventListener('click',function(){ cycle=b.getAttribute('data-cycle'); paintCycle(); });
+  });
+  document.querySelectorAll('.seg button[data-club]').forEach(function(b){
+    b.addEventListener('click',function(){ club=b.getAttribute('data-club'); paintClub(); });
+  });
+  paintCycle();
+})();
+</script>
+</body>
+</html>
