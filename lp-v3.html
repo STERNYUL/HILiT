@@ -641,37 +641,47 @@
       </div>
     </section>
 
-    <!-- S8 · 요금 -->
+    <!-- S8 · 요금 — 요금제 v3 (추적 PoC eecb1ce 반영) 기준으로 갱신
+         🔴 v3 변경 반영 — ① 무료 부스트 첫 달 5편 → 첫 60일 3편 ② 무료 출력 720p·워터마크 신설
+         ③ 기본 결제 단위를 월 → 시즌권(4개월) ④ 개인 보관 30일 → 12개월 ⑤ 재작업 무제한
+         🔴 표기 금지 — 마진·원가·기여율·CAC·복구 상한 회수는 내부 값이다. 공개 지면에 옮기지 않는다.
+         🔺 클럽·리그 등급은 넣지 않았다 — 피촬영자가 13세 미만이라 MINOR_POLICY 승인 전에는
+         유소년 상품을 공개 지면에 올리지 않는다(CLAUDE.md 법무 게이트). 승인 후 3번째 카드로 추가한다.
+         🔺 "1편당 20분"은 v3 남은 결정 2번(1순위)에서 상품 정의 자체가 재검토 대상이다.
+         실기 처리 시간이 30분을 넘으면 이 줄부터 고쳐야 한다(T10). -->
     <section class="section section--compact on-paper-2" id="pricing" aria-labelledby="pricing-title">
       <div class="shell">
         <div class="section-head">
           <h2 class="h-slab" id="pricing-title">무료로도<br>한 편이 완성됩니다.</h2>
-          <p>요금제가 가르는 것은 직접 하는 시간뿐입니다. 기록도, 피드도, 관계도 무료에서 전부 씁니다.</p>
+          <p>요금제가 가르는 것은 직접 하는 시간과 출력 규격뿐입니다. 기록도, 피드도, 관계도 무료에서 전부 씁니다.</p>
         </div>
         <div class="plans">
           <article class="plan">
             <h3 class="plan-name">무료 · 수동 편집기</h3>
             <p class="plan-price">0원<small>체험판이 아니라, 여기서 영상이 끝까지 완성됩니다</small></p>
             <ul>
-              <li>가입 첫 달 5편, 이후 매달 2편</li>
-              <li>1편당 20분까지</li>
-              <li>자동 추적은 월 1회</li>
+              <li>가입 첫 60일 3편, 이후 매달 2편</li>
+              <li>1편당 20분까지 · 전 구간 분석</li>
+              <li>컷 · 트래킹 편집 전 과정 완주</li>
+              <li>출력 720p · 하일릿 표시가 남습니다</li>
               <li data-shared>기록 저장 · 공개 범위 설정</li>
               <li data-shared>피드 · 팔로우 · 좋아요 · 댓글 · 공유</li>
             </ul>
           </article>
           <article class="plan plan--paid">
-            <h3 class="plan-name">구독</h3>
-            <p class="plan-price">월 9,900원<small>손이 더 가는 일을 대신 맡기는 값입니다</small></p>
+            <h3 class="plan-name">개인 · 시즌권</h3>
+            <p class="plan-price">39,000원<small>4개월 · 월 3편 · 월로 나누면 9,750원입니다</small></p>
             <ul>
-              <li>매달 3편</li>
-              <li>1편당 20분까지</li>
+              <li>매달 3편 · 1편당 20분까지</li>
+              <li>출력 1080p · 표시 없음</li>
+              <li>다시 만들기 횟수 제한 없음</li>
+              <li>원본 12개월 보관 · 시즌 끝에 한 편으로 묶어 드립니다</li>
               <li data-shared>기록 저장 · 공개 범위 설정</li>
               <li data-shared>피드 · 팔로우 · 좋아요 · 댓글 · 공유</li>
             </ul>
           </article>
         </div>
-        <p class="note">한도를 넘겨 쓰는 몫의 값은 아직 정하지 않았습니다. 정해지면 이 자리에 적겠습니다.</p>
+        <p class="note">시즌 단위가 맞지 않으시면 월 9,900원으로도 쓰실 수 있습니다. 한도를 넘겨 쓰는 몫과 가족에게 함께 보내는 몫의 값은 아직 정하지 않았습니다. 정해지면 이 자리에 적겠습니다.</p>
         <div class="cta-tail">
           <a class="btn" href="#start">무료로 시작하기</a>
           <p>무료로도 영상 한 편이 끝까지 완성됩니다. 체험판이 아닙니다.</p>
@@ -730,7 +740,7 @@
         <p class="lede">여러 사람이 함께 나온 영상에서 당신만 골라내 짧은 한 편으로 만듭니다. 올릴지는 나중에 정하시면 됩니다.</p>
         <div class="cta-row">
           <!-- [v2] 최종 CTA 만 혜택을 문구에 담는다. 내비·히어로·요금의 버튼은 짧게 둔다 — 고정 내비에 들어가지 않는 길이다. -->
-          <a class="btn btn-mint" href="#top" data-signup>첫 달 5편 무료로 시작하기</a>
+          <a class="btn btn-mint" href="#top" data-signup>첫 60일 3편 무료로 시작하기</a>
           <a class="btn btn-dark-ghost" href="#try">먼저 체험해보기</a>
         </div>
         <p class="form-note">카드 정보는 받지 않습니다.</p>
