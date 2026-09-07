@@ -269,11 +269,19 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 | `codec` | TEXT(20) | NOT NULL | 검증 통과분만 저장 |
 | `storage_uri` | TEXT | NOT NULL | |
 | `status` | ENUM | NOT NULL | `UPLOADING`·`UPLOADED`·`PROCESSING`·`READY`·`FAILED` |
+| `fps` | NUMERIC(6,3) | `CHECK (fps > 0)` | 🆕 라벨 시각 정규화 기준 |
+| `width` / `height` | INTEGER | `CHECK (> 0)` | 🆕 |
+| `orientation` | ENUM | NOT NULL | 🆕 `PORTRAIT`·`LANDSCAPE` |
+| `camera_type` | ENUM | NOT NULL · 기본 `UNKNOWN` | 🆕 `HANDHELD`·`FIXED`·`UNKNOWN` |
+| `training_consent_at` | TIMESTAMPTZ | NULL | 🔴 🆕 **학습 이용 동의**(ADR-9 ②) — NULL이면 학습에 쓰지 않는다 |
+| `training_retention_until` | TIMESTAMPTZ | NULL | 🔴 🆕 **동의자 원본 보관 만료** · 철회 시 즉시 파기 |
 | `created_at` | TIMESTAMPTZ | | |
 
 **인덱스** `INDEX(owner_id, created_at DESC)`
 **보존** 🔴 **결과물 확보 후 사용자 삭제 유도**(REQ-FUNC-019). 자동 삭제 정책 `[TBD]`
 **개인정보** 🔴 **영상 자체가 개인정보** — 저장 시 암호화(REQ-NF-011)
+🆕 **학습 이용은 별개 목적이다**(ADR-9 ②) — `training_consent_at`이 NULL인 원본은 **렌더 직후 파기**한다. 동의 없이 `training_retention_until`을 채울 수 없도록 **CHECK로 강제**한다(CT-001 제약 14).
+🔺 **운동 종류는 이 엔티티에 두지 않는다** — `Record.sport`가 이미 보유하며 `SourceVideo → GeneratedVideo → Record`로 조인된다. 중복 저장하지 않는다.
 
 ### PersonTrack
 
@@ -327,8 +335,88 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 | `is_reselection` | BOOLEAN | 기본 `false` |
 
 **인덱스** `INDEX(user_id, selected_at)` · `UNIQUE(candidate_id, user_id)`
-**보존** 🔴 **원본 삭제 후에도 유지** — 향후 학습 원천(REQ-FUNC-023). 단 **사용자 삭제 요청 시 물리 삭제**
+**보존** 🔄 **정정** — 이 엔티티는 **원본과 함께 `CASCADE` 소멸한다.** 종전 문면(*"원본 삭제 후에도 유지"*)은 `Selection → Candidate → AppearanceInterval → SourceVideo` 가 전부 `CASCADE`라 **FK가 뒷받침한 적이 없었다.** 🔴 **DD-8의 이행은 `TrainingLabel` 승격이 맡는다**(DD-10) — 렌더 완료 시 `POSITIVE·SELECTION` · `NEGATIVE·SELECTION` 으로 승격되고, 승격분은 무기한 남으며 **사용자 삭제 요청 시 물리 삭제**된다
 **설계 주** `is_reselection`이 **ADR-3의 판정 지표**(`reselection_started`) 근거다.
+🔺 **비정규화 복사를 택하지 않은 이유** — `Selection`에 구간 값을 복사해 두고 `candidate_id`만 `SET NULL`로 살리는 안도 있었다. 그러면 **원본이 있는 동안 같은 구간이 두 벌**이 된다. 승격은 **렌더 완료라는 한 시점에만** 복사가 일어나 중복 구간이 생기지 않는다.
+
+### ManualCut · ManualCutEdit 🆕 `ADR-9 ①`
+
+> 🔴 **`Selection`으로 대신할 수 없다.** `Selection`은 `candidate_id`를 요구하는데 **무료 등급에는 AI 후보가 없다.** 두 엔티티는 답하는 질문이 다르다 — `Selection`은 *"AI가 낸 것 중 무엇이 맞았나"*(**순위**), `ManualCut`은 *"어디가 하이라이트인가"*(**탐지**)다.
+
+**ManualCut** — 무료 등급 수동 컷(F25)의 **편집 상태**
+
+| 컬럼 | 타입 | 제약 | 비고 |
+| --- | --- | --- | --- |
+| `id` | uuid | **PK** | |
+| `video_id` | uuid | **FK → SourceVideo** · `CASCADE` | 편집 상태이므로 원본과 생명주기를 같이한다 |
+| `start_tc_ms` / `end_tc_ms` | INTEGER | `CHECK (start < end)` | 🔴 **ms 정수** — DS 전역 표기를 따른다 |
+| `cut_order` | SMALLINT | `CHECK (>= 1)` | 지정 순서 = 중요도 신호 |
+| `removed_at` | TIMESTAMPTZ | NULL | 🔴 **제거 상태의 단일 진실 원천** |
+| `created_at` / `updated_at` | TIMESTAMPTZ | | |
+
+**인덱스** `INDEX(video_id)` · 🔴 **부분 UNIQUE** `(video_id, cut_order) WHERE removed_at IS NULL`
+**설계 주** 🔴 **전체 UNIQUE로 걸면 안 된다** — 제거분이 행으로 남으므로 *2번을 지우고 새로 고르는* 순간 삽입이 실패한다.
+**보존** 렌더 완료 시 `TrainingLabel`로 **승격**되며, 승격 후에는 원본과 함께 파기해도 라벨이 남는다
+🔺 **`removed_at`은 §4.1의 논리 삭제가 아니다** — *편집 중 뺐다*는 **상태**이며, 엔티티 자체는 원본과 함께 `CASCADE` **물리 삭제**된다.
+
+**ManualCutEdit** — 경계 미세조정 이력
+
+| 컬럼 | 타입 | 제약 | 비고 |
+| --- | --- | --- | --- |
+| `cut_id` | uuid | **PK(복합)** · FK → ManualCut · `CASCADE` | |
+| `seq` | SMALLINT | **PK(복합)** · `CHECK (>= 1)` | |
+| `edit_type` | ENUM | NOT NULL | `INITIAL`·`TRIM_START`·`TRIM_END`·`EXTEND`·`MOVE` |
+| `start_tc_ms` / `end_tc_ms` | INTEGER | **수정 후 값** · `CHECK (start < end)` | |
+| `edited_at` | TIMESTAMPTZ | NOT NULL | |
+
+**불변식** 🔴 `seq = 1`은 **항상 `INITIAL`**이고 그 값이 최초 지정값이다. `ManualCut.start_tc_ms`는 **현재값**이다 — 둘을 혼동하면 최초값이 복원되지 않는다.
+**설계 주** 🔴 **`edit_type`에 제거(`REMOVE`)를 두지 않는다.** 제거는 `ManualCut.removed_at`이 말한다 — 같은 사실을 두 곳에 적으면 어긋난다.
+
+### WatchSession 🆕 `ADR-9 · negative 원천`
+
+| 컬럼 | 타입 | 제약 | 비고 |
+| --- | --- | --- | --- |
+| `id` | uuid | **PK** | |
+| `video_id` | uuid | **FK → SourceVideo** · `CASCADE` | |
+| `segments` | 🔴 **`int4multirange`** | NOT NULL · 기본 `{}` | 실제 재생된 구간(ms) |
+| `started_at` / `ended_at` | TIMESTAMPTZ | `CHECK (ended_at IS NULL OR ended_at >= started_at)` | |
+
+**인덱스** `INDEX(video_id, started_at)`
+**보존** 🔴 **계측 이벤트 — 90일**(§4.4). 파생 negative만 `TrainingLabel`로 승격해 무기한 보관한다(ADR-9)
+**설계 주** 🔴 **`numrange[]`(배열)로 두지 않는다.** 배열의 `&&`는 *원소 겹침*이지 **구간 겹침이 아니다** — `segments @> numrange(5,10)`은 완전히 같은 range 원소가 있을 때만 참이라, negative 추출식이 성립하지 않는다. **PostgreSQL 14의 multirange**는 `segments - range_agg(...)`를 직접 지원한다.
+🔺 **Prisma는 multirange를 네이티브 지원하지 않는다** — `Unsupported("int4multirange")`로 선언하고 읽기·쓰기는 raw 쿼리로 한다(CT-001 §3).
+
+### TrainingLabel 🆕 `REQ-FUNC-023 학습 파이프라인의 유일한 입력`
+
+| 컬럼 | 타입 | 제약 | 비고 |
+| --- | --- | --- | --- |
+| `id` | uuid | **PK** | |
+| `video_id` | uuid | **FK → SourceVideo** · 🔴 `ON DELETE SET NULL` · NULL 허용 | 🔴 **원본을 지워도 라벨은 남는다**(DD-6과 같은 패턴) |
+| `start_tc_ms` / `end_tc_ms` | INTEGER | `CHECK (start < end)` | |
+| `polarity` | ENUM | NOT NULL | `POSITIVE` · `NEGATIVE` |
+| `source` | ENUM | NOT NULL | `MANUAL_CUT` · `SELECTION` · `WATCH_DERIVED` |
+| `presented_rank` | SMALLINT | NULL | 🆕 승격 시점의 AI 후보 순위(`Candidate.rank`) — 🔴 **순위 학습의 핵심 신호** · `source = SELECTION` 에만 채운다 |
+| `initial_start_tc_ms` / `initial_end_tc_ms` | INTEGER | NULL | 🆕 **최초 지정값** — 경계 미세조정 신호를 이력 없이 보존 |
+| `edit_count` | SMALLINT | 기본 `0` | 🆕 몇 번 다듬었는가 |
+| `derived_at` | TIMESTAMPTZ | NOT NULL | |
+
+**인덱스** `INDEX(video_id, polarity)` · `INDEX(source, derived_at)`
+**보존** **무기한** · 🔴 **삭제 요청 시 물리 삭제**(§4.1 · REQ-NF-019)
+**설계 주** 🔴 **이 엔티티의 존재 이유는 수명 경계를 물리적으로 만드는 것**이다 — 원시 입력(`WatchSession` 90일)과 라벨(무기한)이 한 테이블에 있으면 ADR-9의 수명 분리를 집행할 수 없다.
+🔴 **사용자 식별자를 두지 않는다** — 소유는 `video_id`로만 추적한다(REQ-NF-010 적용 범위 축소). `video_id`가 NULL이 된 라벨은 **집계·재현성용**이며 학습 입력이 아니다.
+🔴 **관절·자세 좌표 컬럼을 두지 않는다** — ADR-9 ③ · DD-5.
+
+**승격 규칙** — 렌더 완료 시 아래 **4종**이 생성된다. 🔴 **이것이 DD-8의 실제 이행 수단이다**(DD-10)
+
+| `polarity` | `source` | 무엇이 승격되는가 | 학습 용도 |
+| --- | --- | --- | --- |
+| `POSITIVE` | `MANUAL_CUT` | 사람이 직접 그린 구간(`ManualCut`) | 🔴 **탐지** — AI가 놓친 구간을 담는 유일한 입력 |
+| `POSITIVE` | `SELECTION` | AI 후보 중 고른 것(`Selection`) | **순위** |
+| `NEGATIVE` | `SELECTION` | 🔴 **제시됐으나 고르지 않은 후보** | **순위** |
+| `NEGATIVE` | `WATCH_DERIVED` | `WatchSession.segments − 고른 구간` | **탐지** |
+
+🔴 **`NEGATIVE·SELECTION` 은 `confidence_flag = NORMAL` 인 후보만 승격한다** — REQ-FUNC-027로 **제외된 후보는 사용자가 본 적이 없어서**, *"거절했다"* 로 라벨링하면 거짓 라벨이 된다.
+🔺 **순위 라벨(`SELECTION` 2종)은 유료 등급에서만 생긴다** — ADR-8 「감수하는 것 4」의 잔여분이다.
 
 ### GeneratedVideo · Record · VisibilitySetting
 
@@ -391,10 +479,14 @@ SRS v1.5의 요구사항 45건을 구현하기 위한 **인터페이스 · 데�
 | --- | --- | --- |
 | 원본 영상 · 추적 궤적 | 사용자 삭제까지 | **물리 삭제** |
 | 완성 영상 · 기록 | 사용자 삭제까지 | **물리 삭제** |
-| 선택 이력 | 무기한 | **물리 삭제** |
+| 선택 이력 (`Selection`) | 🔄 **원본과 함께 소멸** — 무기한 보존은 `TrainingLabel` 승격분이 맡는다(DD-10) | **물리 삭제** |
+| 🆕 **학습 라벨** (수동 컷 구간 · 편집 이력) | **무기한** — 선택 이력과 동일(DD-8 · ADR-9 ①) | **물리 삭제** |
+| 🆕 **학습용 원본** | 🔴 **동의자 한정**(ADR-9 ②) · 동의 철회 시 즉시 파기 · **미동의분은 렌더 직후 파기** | **물리 삭제** |
 | 계측 이벤트 | **90일** | 사용자 식별자 **비식별화** · 집계는 유지 |
 | 감사 로그(REQ-NF-009) | **1년** | 유지 — 보안 기록 |
 | 그룹 이탈 이력 | 그룹 존속 기간 | 물리 삭제 |
+
+🔺 **negative 라벨의 수명 분리(ADR-9)** — 원시 시청 로그는 위 **계측 이벤트 90일**을 따르고, 그로부터 **파생된 negative 구간만 학습 라벨로 승격**해 무기한 보관한다. 🔴 **원시 로그를 무기한 보관하지 않는다.**
 
 🔺 **보존 기간은 SRS에서 `[TBD]`였다.** 위 값은 이 문서의 제안이며 법무 확정이 필요하다(§9-4).
 
@@ -555,7 +647,9 @@ stateDiagram-v2
 | **DD-5** | 얼굴 **특징 벡터 미저장** | 저장해 재사용 | REQ-NF-010의 적용 범위 축소 · 원본 삭제로 재식별 불가 |
 | **DD-6** | `GeneratedVideo.source_video_id` `ON DELETE SET NULL` | `CASCADE` | 원본을 지워도 결과물이 남아야 한다(REQ-FUNC-019 · O4) |
 | **DD-7** | 그룹 정원을 **원자 증가 + CHECK** | 조회 후 삽입 | 동시 초대 시 정원 초과 방지(SC-5.F1) |
-| **DD-8** | 선택 이력을 원본 삭제 후에도 유지 | 함께 삭제 | REQ-FUNC-023 학습 원천 · 단 삭제 요청 시 물리 삭제 |
+| **DD-8** 🔄 **정정** | 선택 이력의 무기한 보존을 **`TrainingLabel` 승격**으로 이행 | `Selection` 엔티티 자체를 존치 | 🔴 `Selection → Candidate → AppearanceInterval → SourceVideo` 가 전부 `CASCADE`라 **존치 방식은 FK가 뒷받침하지 않았다** — 종전 문면은 이행 수단 없는 선언이었다 |
+| **DD-9** 🆕 | 학습용 원본을 **동의자 한정 보관** | ① 전량 보관 ② **관절 시퀀스로 변환 후 원본 파기** | ②는 추출이 **GPU 추론**이라 ADR-8 검증 ④(*무료 편당 GPU 초 = 0*)를 깨고, **원본보다 오래 사는 인체 데이터**라 **DD-5를 뒤집는다** (ADR-9 ③) |
+| **DD-10** 🆕 | **승격 패턴** — 렌더 완료 시 라벨을 `TrainingLabel`로 복사 | 각 엔티티를 `SET NULL`로 존치 | 복사가 **한 시점에만** 일어나 중복 구간이 없고, 원시 입력(90일)과 라벨(무기한)의 **수명 분리**가 물리적으로 성립한다(ADR-9) |
 
 ---
 

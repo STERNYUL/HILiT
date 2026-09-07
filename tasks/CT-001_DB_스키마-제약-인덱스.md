@@ -1,7 +1,7 @@
 ---
 name: Feature Task
 about: SRS 기반의 구체적인 개발 태스크 명세
-title: "[DB] CT-001: Prisma 스키마 16 엔티티 · 열거형 10종 · SQL 제약 11건 · 인덱스"
+title: "[DB] CT-001: Prisma 스키마 20 엔티티 · 열거형 15종 · SQL 제약 18건 · 트리거 2건 · 인덱스"
 labels: 'database, contract, priority:critical, step-1, wave-1'
 assignees: ''
 ---
@@ -9,6 +9,8 @@ assignees: ''
 > 🔀 **CT-002를 흡수했다** *(축약 2026-08-30)* — 같은 마이그레이션 파일을 만진다. `CT-002` 는 폐번이며 이 문서를 가리킨다.
 >
 > 🔧 **v2 개정 (2026-08-30)** — 실행 명세로 구체화. **열거형이 4종이 아니라 10종임을 정정**(§열거형 참조).
+>
+> 🆕 **v3 개정 (2026-09-07 · SRS ADR-9 · T16)** — **학습 라벨 회수**를 반영. 엔티티 **16 → 20**(`ManualCut`·`ManualCutEdit`·`WatchSession`·`TrainingLabel`) · 열거형 **10 → 15** · 제약 **11 → 18** · 🆕 **트리거 2건**(함수 1) · AC **9 → 15**. 🔄 **DD-8 정정 동반** — *"선택 이력을 원본 삭제 후에도 유지"* 는 `Selection` 존치가 아니라 **`TrainingLabel` 승격**으로 이행한다(DD-10 · Scenario 14). 🔴 **관절·자세 시퀀스 테이블은 추가하지 않는다**(ADR-9 ③ · DD-5) — Scenario 12가 스키마 전역에서 그 부재를 검사한다.
 
 ## 🎯 Summary
 - 기능명: **[CT-001] 데이터베이스 스키마 · 제약 · 인덱스 확정**
@@ -29,6 +31,8 @@ assignees: ''
 | `SRS/[SRS]hilit-SRSv1.8.md` | §6.3 | 비즈니스 규칙 10건 |
 | `DS/[DS]hilit-DSv1.1.md` | **§4.2** | 🔴 **엔티티별 컬럼·타입·인덱스·보존 — 이 태스크의 주 입력** |
 | `DS/[DS]hilit-DSv1.1.md` | §4.3 | PRD ↔ SRS ↔ DS 명칭 매핑 |
+| `SRS/[SRS]hilit-SRSv1.8.md` | 🆕 **ADR-9** | 🔴 **학습 라벨 회수 3단 제한** — ① 라벨 무기한 ② 원본은 동의자 한정 ③ 생체 파생 금지 |
+| `docs/grill/GRILL_LEDGER.md` | **T16** | 결정 경위 |
 | `SRS/[SRS]hilit-SRSv2.0-nextjs.md` | §4.1 | Prisma 사상 · 표현 불가 항목표 |
 | `SRS/[SRS]hilit-SRSv2.0-nextjs.md` | §4.2 | RLS 전제 *(정책 자체는 CT-003)* |
 
@@ -48,6 +52,10 @@ assignees: ''
 - [ ] `GeneratedVideo` · `Record` · `VisibilitySetting`
 - [ ] `Group` · `GroupMember` · `FollowRelation`
 - [ ] `MusicTrack` · `Reaction` · `ShareLink` · `ProcessingJob`
+- [ ] 🆕 `ManualCut` · `ManualCutEdit` · `WatchSession` · `TrainingLabel` *(ADR-9)*
+- [ ] 🆕 `SourceVideo` 컬럼 6종 추가 — `fps` · `width` · `height` · `orientation` · `cameraType` · 🔴 `trainingConsentAt` · `trainingRetentionUntil`
+- [ ] 🔴 `TrainingLabel.videoId` 도 `onDelete: SetNull` — 원본을 지워도 라벨이 남아야 한다(DD-6과 같은 패턴)
+- [ ] 🔺 `WatchSession.segments` 는 `Unsupported("int4multirange")` — **Prisma 네이티브 미지원**이라 읽기·쓰기는 raw 쿼리다
 - [ ] 🔴 **`GeneratedVideo.sourceVideoId` 만 `onDelete: SetNull`** — 나머지 FK는 `Cascade`
 
 ### 4. 인덱스 — DS §4.2 전량
@@ -62,6 +70,10 @@ assignees: ''
 - [ ] `FollowRelation`: `@@id([followerId, followeeId])` · `@@index([followeeId])`
 - [ ] `ShareLink`: `@@unique([token])` · `@@index([recordId, revokedAt])`
 - [ ] `ProcessingJob`: `@@index([status, createdAt])` · `@@index([videoId])`
+- [ ] 🆕 `ManualCut`: `@@index([videoId])` · 🔴 **부분 UNIQUE는 Prisma로 표현 불가** → `constraints.sql`
+- [ ] 🆕 `WatchSession`: `@@index([videoId, startedAt])`
+- [ ] 🆕 `TrainingLabel`: `@@index([videoId, polarity])` · `@@index([source, derivedAt])`
+- [ ] 🆕 **승격 로직** — 렌더 완료 시 `ManualCut`/`Selection` → `TrainingLabel` 4종 생성(DS §4.2 승격 규칙). 🔴 `NEGATIVE·SELECTION` 은 `confidenceFlag = NORMAL` 인 후보만
 
 ### 5. 초기 마이그레이션 생성
 - [ ] `npx prisma migrate dev --name init --create-only` *(적용 전 SQL 편집을 위해 `--create-only`)*
@@ -80,7 +92,7 @@ assignees: ''
 - [ ] `npx prisma migrate reset` 으로 클린 재현 확인
 - [ ] 검증 스크립트 `scripts/verify-schema.ts` 작성 — §AC의 Scenario 1·3·7을 자동 검사
 
-### 🔴 열거형 10종 — 기존 명세의 "4종"은 오류였다
+### 🔴 열거형 15종 *(v2에서 10종 확정 · 🆕 v3에서 5종 추가)*
 
 | # | 열거형 | 값 | 근거 |
 | :--: | --- | --- | --- |
@@ -94,10 +106,15 @@ assignees: ''
 | 8 | `ProcessingStage` | `UPLOADING` · `SUBJECT_ANCHORED` · `DETECTING` · `SELECTION_READY` · `RENDERING` · `COMPLETED` · `FAILED` | DS §4.2 ProcessingJob |
 | 9 | `JobStatus` | `QUEUED` · `RUNNING` · `SUCCEEDED` · `FAILED` | 동일 |
 | 10 | `FailureClass` | `CAPTURE` · `MODEL` · `UX` · `INFRA` · `POLICY` | 동일 |
+| 11 | `VideoOrientation` 🆕 | `PORTRAIT` · `LANDSCAPE` | DS §4.2 SourceVideo · ADR-9 |
+| 12 | `CameraType` 🆕 | `HANDHELD` · `FIXED` · `UNKNOWN` | DS §4.2 SourceVideo · ADR-9 |
+| 13 | `ManualCutEditType` 🆕 | `INITIAL` · `TRIM_START` · `TRIM_END` · `EXTEND` · `MOVE` | DS §4.2 ManualCutEdit · 🔴 `REMOVE` 없음 |
+| 14 | `LabelPolarity` 🆕 | `POSITIVE` · `NEGATIVE` | DS §4.2 TrainingLabel |
+| 15 | `LabelSource` 🆕 | `MANUAL_CUT` · `SELECTION` · `WATCH_DERIVED` | DS §4.2 TrainingLabel |
 
 > 🔺 **정정 사유** — 이전 명세는 `VisibilityScope · ProcessingStage · FailureClass · ConfidenceFlag` 4종만 적었으나, **DS §4.2를 전수 대조하니 10종**이다. 6종이 누락돼 있었다. **REQ-NF-015(열거형 확장 패턴)가 이 10종 전부에 적용된다.**
 
-### 🔴 SQL 제약 11건 — 마이그레이션에 append
+### 🔴 SQL 제약 18건 — 마이그레이션에 append
 
 ```sql
 -- prisma/constraints.sql
@@ -147,6 +164,54 @@ CREATE UNIQUE INDEX uq_rx_like_once
 -- 🔴 ADR-4 — 애플리케이션이 아니라 DDL에 기본값이 있어야 한다
 ALTER TABLE visibility_settings
   ALTER COLUMN scope SET DEFAULT 'private';
+
+-- ══════ 🆕 ADR-9 (v1.10) — 학습 라벨 회수 ══════
+
+-- 12·13. 🔴 ManualCut — 구간 유효성 + 제거분이 순서를 막지 않게 하는 부분 UNIQUE
+ALTER TABLE manual_cuts
+  ADD CONSTRAINT chk_mc_range CHECK (start_tc_ms < end_tc_ms);
+CREATE UNIQUE INDEX uq_mc_order
+  ON manual_cuts (video_id, cut_order) WHERE removed_at IS NULL;
+
+-- 14. ManualCutEdit — 구간 유효성
+ALTER TABLE manual_cut_edits
+  ADD CONSTRAINT chk_mce_range CHECK (start_tc_ms < end_tc_ms);
+
+-- 15. SourceVideo — orientation 이 해상도와 어긋나지 않게
+ALTER TABLE source_videos
+  ADD CONSTRAINT chk_sv_orientation
+  CHECK ((orientation = 'PORTRAIT') = (height >= width));
+
+-- 16. 🔴 SourceVideo — ADR-9 ②. 동의 없이 학습용 원본을 보관할 수 없다
+ALTER TABLE source_videos
+  ADD CONSTRAINT chk_sv_training_consent
+  CHECK (training_retention_until IS NULL OR training_consent_at IS NOT NULL);
+
+-- 17. WatchSession — 세션 시각 순서
+ALTER TABLE watch_sessions
+  ADD CONSTRAINT chk_ws_time
+  CHECK (ended_at IS NULL OR ended_at >= started_at);
+
+-- 18. TrainingLabel — 구간 유효성
+ALTER TABLE training_labels
+  ADD CONSTRAINT chk_tl_range CHECK (start_tc_ms < end_tc_ms);
+
+-- 19. 🔴 구간이 원본 길이를 넘지 않게 — CHECK 는 타 테이블을 볼 수 없어 트리거로 강제한다
+CREATE OR REPLACE FUNCTION assert_tc_within_source() RETURNS trigger AS $BODY$
+DECLARE dur_ms INTEGER;
+BEGIN
+  IF NEW.video_id IS NULL THEN RETURN NEW; END IF;
+  SELECT duration_sec * 1000 INTO dur_ms FROM source_videos WHERE id = NEW.video_id;
+  IF dur_ms IS NULL OR NEW.end_tc_ms > dur_ms THEN
+    RAISE EXCEPTION 'end_tc_ms(%) exceeds source duration(% ms)', NEW.end_tc_ms, dur_ms;
+  END IF;
+  RETURN NEW;
+END; $BODY$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_mc_within_source BEFORE INSERT OR UPDATE ON manual_cuts
+  FOR EACH ROW EXECUTE FUNCTION assert_tc_within_source();
+CREATE TRIGGER trg_tl_within_source BEFORE INSERT OR UPDATE ON training_labels
+  FOR EACH ROW EXECUTE FUNCTION assert_tc_within_source();
 ```
 
 ## 🧪 Acceptance Criteria (BDD/GWT)
@@ -188,7 +253,7 @@ ALTER TABLE visibility_settings
 **Scenario 7 (예외): 제약이 마이그레이션 재생성에서 살아남는다**
 - **Given**: 스키마를 변경하고 `npx prisma migrate dev` 를 다시 실행함
 - **When**: `SELECT conname FROM pg_constraint WHERE conname LIKE 'chk_%'` 를 실행함
-- **Then**: 🔴 **10건이 전부 남아 있고 `uq_rx_like_once` 인덱스도 존재한다** *(주석 병기와 `constraints.sql` 분리가 이를 위한 것이다)*
+- **Then**: 🔴 **16건이 전부 남아 있고 `uq_rx_like_once` · 🆕 `uq_mc_order` 인덱스 2건과 트리거 2건도 존재한다** *(주석 병기와 `constraints.sql` 분리가 이를 위한 것이다)*
 
 **Scenario 8 (예외): 잘못된 구간과 범위 밖 신뢰도가 거부된다**
 - **Given**: `start_tc_ms >= end_tc_ms` 인 행 / `confidence = 1.5` 인 행
@@ -199,6 +264,40 @@ ALTER TABLE visibility_settings
 - **Given**: 빈 데이터베이스
 - **When**: `npx prisma migrate reset --force` 를 실행함
 - **Then**: 오류 없이 완주하고 시드가 적용된다
+
+**Scenario 10 (예외): 컷을 지우고 다시 고를 수 있다** *(ADR-9 ① · 부분 UNIQUE)*
+- **Given**: `cut_order` 가 1·2·3 인 `manual_cuts` 3건
+- **When**: 2번에 `removed_at` 을 채우고 **같은 `cut_order = 2`** 로 새 행을 삽입함
+- **Then**: 🔴 **삽입이 성공한다.** 전체 UNIQUE였다면 제거분이 행으로 남아 실패했을 것이다
+
+**Scenario 11 (예외): 동의 없이 학습용 원본을 보관할 수 없다** *(🔴 ADR-9 ②)*
+- **Given**: `training_consent_at IS NULL` 인 `source_videos` 행
+- **When**: `training_retention_until` 에 미래 시각을 넣어 `UPDATE` 함
+- **Then**: 🔴 **`chk_sv_training_consent` 위반으로 거부**된다. 동의는 애플리케이션 분기가 아니라 **DDL이 강제**한다
+
+**Scenario 12 (예외): 관절·생체 시퀀스를 저장할 자리가 없다** *(🔴 ADR-9 ③ · DD-5)*
+- **Given**: 마이그레이션이 적용된 DB **전체**
+- **When**: 아래를 실행함
+  ```sql
+  SELECT table_name, column_name FROM information_schema.columns
+   WHERE column_name ~* '(pose|keypoint|skeleton|joint|embedding|landmark)';
+  ```
+- **Then**: 🔴 **0행이 반환된다.** Scenario 5가 `person_tracks` 한 테이블만 봤다면 이 검사는 **스키마 전역**을 본다 — 추출에 GPU가 들어 *"무료 편당 GPU 초 = 0"* 을 깨고, 원본보다 오래 사는 인체 데이터가 남기 때문이다
+
+**Scenario 13 (정상): negative 추출식이 DB에서 성립한다** *(ADR-9 · multirange)*
+- **Given**: `watch_sessions.segments` 와 같은 영상의 `manual_cuts` 구간들
+- **When**: `SELECT segments - range_agg(int4range(start_tc_ms, end_tc_ms)) ...` 를 실행함
+- **Then**: **본 구간에서 고른 구간을 뺀 나머지**가 반환된다. 🔴 `numrange[]`(배열)였다면 `&&`·`@>` 가 *원소 겹침*으로 동작해 이 식이 성립하지 않는다
+
+**Scenario 14 (정상): 원본을 지워도 학습 라벨이 남는다** *(🔴 DD-8 · DD-10 이행)*
+- **Given**: `selections` · `manual_cuts` 가 달린 `source_videos` 행 1건과, 렌더 완료로 승격된 `training_labels` 행들
+- **When**: `source_videos` 행을 `DELETE` 함
+- **Then**: `selections` · `manual_cuts` 는 `CASCADE` 로 **함께 사라지고**, 🔴 **`training_labels` 는 남으며 `video_id IS NULL` 이 된다.** 종전 DS 문면 *"선택 이력을 원본 삭제 후에도 유지"* 는 **`Selection` 이 아니라 이 승격분이 이행한다**
+
+**Scenario 15 (예외): 구간이 원본 길이를 넘을 수 없다**
+- **Given**: `duration_sec = 600` 인 `source_videos` 행
+- **When**: 같은 영상에 `end_tc_ms = 600001` 인 `manual_cuts` 를 삽입함
+- **Then**: `trg_mc_within_source` 가 예외를 던져 거부된다. 🔺 **CHECK 로는 타 테이블을 참조할 수 없어 트리거가 유일한 수단**이다
 
 ## ⚙️ Technical & Non-Functional Constraints
 
