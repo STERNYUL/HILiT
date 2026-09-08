@@ -1,0 +1,13 @@
+{
+  "name": "hilit-tracking-core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hilit 사용자 추적 코어 — appearance · motion · association (PoC 기획서 전사)",
+  "main": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"test/*.test.ts\"",
+    "verify": "npm run typecheck && npm test"
+  }
+}
