@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NF-015 미성년이용자정책</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (승인 절차)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (게이트 판정)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (게이트 통과)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Gate Task about: 산출물 승인으로 판정하는 배포 게이트 (개발 태스크 아님) title: "[Legal] NF-015: 미성년 이용자 정책 산출물 4종 승인" labels: 'legal, gate, blocker, priority:critical, step-4' assignees: ''</p>
+<hr>
+<blockquote><h3 class="bq-h">⚠️ 이것은 개발 태스크가 아니다</h3>
+<p><strong>코드가 아니라 승인</strong>이다. Task Breakdown은 문서 작성 절차이고, DoD는 테스트 통과가 아니라 <strong>산출물 승인 상태</strong>다. 완료 판정은 <code>gates/minor-policy.gate.json</code> 의 <code>status</code> 가 <code>APPROVED</code> 가 되고 <strong>빌드 검증(NF-011)이 통과</strong>하는 것이다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[NF-015] 미성년 이용자 보호 정책 확정</strong></li><li>목적: <strong>만 14세 미만 이용자의 가입을 법적 요건에 맞게 처리한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 게이트는 가입 플로우 전체를 막는다.</strong> 승인 전에는 <strong>서비스 자체가 열리지 않는다</strong> — 다른 세 게이트가 특정 기능만 막는 것과 다르다.</p>
+<p>🔴 <strong>베타 초대 경로에도 적용된다. 초대도 가입이다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-016</strong> — 산출물 4종과 차단 대상</li><li><strong>시나리오</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-0.1</strong> — 만 14세 미만 가입 시도</li><li><strong>규제 준수 표</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §4.4</li><li><strong>게이트 운영</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §8.1 — 빌드 타임 검증 방식</li><li><strong>게이트 매핑</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §8.1.6 — <code>MINOR_POLICY</code></li><li>데이터: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.2 — <code>User.birth_year</code> · <code>guardian_consent_at</code></li><li>미해결: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.8 <strong>Q10</strong></li></ul>
+<h2 id="h2">✅ Task Breakdown (승인 절차)</h2>
+<ul><li>[ ] <strong>① 최소 연령 정책</strong> 문서 — 서비스 대상 연령 하한과 근거</li><li>[ ] <strong>② 연령 확인 방식</strong> 명세 — 자기신고 / 본인확인 중 무엇을 쓰는가와 그 한계</li><li>[ ] <strong>③ 법정대리인 동의 경로</strong> 명세 — 동의 획득·보관·확인 절차</li><li>[ ] <strong>④ 철회·삭제 절차</strong> — 법정대리인의 열람·삭제·동의 철회 요구 처리</li><li>[ ] 법무 검토 및 승인</li><li>[ ] <code>gates/minor-policy.gate.json</code> 에 산출물 4건 등재 (<code>ref</code> · <code>sha256</code> · <code>approvedBy</code> · <code>approvedAt</code>)</li><li>[ ] <code>status: APPROVED</code> 전환 — 🔴 <strong>CODEOWNERS 승인 PR로만</strong>(NF-011)</li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (게이트 판정)</h2>
+<p><strong>Scenario 1: 산출물 4종이 전부 승인되어야 가입이 열린다</strong></p>
+<ul><li><strong>Given</strong>: 산출물 중 하나라도 미승인 상태</li><li><strong>When</strong>: 빌드를 실행함</li><li><strong>Then</strong>: <code>MINOR_POLICY</code> 가 차단 목록에 들어가고 <strong>가입 플로우가 빌드 산출물에서 제외</strong>된다</li></ul>
+<p><strong>Scenario 2: 만 14세 미만은 동의 없이 가입이 완료되지 않는다</strong> <em>(SC-0.1)</em></p>
+<ul><li><strong>Given</strong>: 생년이 만 14세 미만인 가입 시도</li><li><strong>When</strong>: 가입을 진행함</li><li><strong>Then</strong>: <strong>법정대리인 동의 없이는 완료되지 않는다.</strong> 동의 없는 계정 생성 <strong>0건</strong> · 연령 미수집 가입 <strong>0건</strong></li></ul>
+<p><strong>Scenario 3: 미성년 이용자의 공개 범위 기본값이 유지된다</strong> <em>(REQ-NF-016 ②)</em></p>
+<ul><li><strong>Given</strong>: 미성년으로 확인된 이용자</li><li><strong>When</strong>: 기록을 저장함</li><li><strong>Then</strong>: 공개 범위가 <strong>나만 보기</strong>로 시작하고, <strong>전체공개 전환 시 추가 확인</strong>을 거친다</li></ul>
+<p><strong>Scenario 4: 법정대리인이 열람·삭제·철회를 할 수 있다</strong> <em>(REQ-NF-016 ③)</em></p>
+<ul><li><strong>Given</strong>: 동의를 제공한 법정대리인</li><li><strong>When</strong>: 열람·삭제·동의 철회를 요구함</li><li><strong>Then</strong>: 각 경로가 문서화된 절차대로 처리된다</li></ul>
+<p><strong>Scenario 5 (실패): 베타 초대가 게이트를 우회하지 못한다</strong></p>
+<ul><li><strong>Given</strong>: <code>MINOR_POLICY</code> 미승인 상태</li><li><strong>When</strong>: 베타 초대 링크로 가입을 시도함</li><li><strong>Then</strong>: 🔴 <strong>동일하게 차단된다.</strong> 초대는 가입의 예외가 아니다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li><strong>차단 대상</strong>: <code>SIGNUP_FLOW</code> — 가입 플로우 전체 · 베타 초대 포함</li><li><strong>판정 방식</strong>: 산출물 존재 + <code>sha256</code> 일치 + 만료 미도래 <em>(v2.2 §8.1.3)</em></li><li>🔺 <strong>적용 범위는 법무 확정 사항</strong> — 만 14세 기준은 개인정보보호법 제22조의2를 근거로 한 제안이며 이 서비스에 대한 정확한 적용은 법무가 정한다 <code>[TBD]</code></li><li>데이터: <code>User.birth_year</code> 는 🔴 <strong>개인정보</strong>이며 NULL 허용</li></ul>
+<h2 id="h5">🏁 Definition of Done (게이트 통과)</h2>
+<ul><li>[ ] 산출물 <strong>4종이 전부 존재하고 승인</strong>되었는가?</li><li>[ ] <code>gates/minor-policy.gate.json</code> 의 <code>status</code> 가 <code>APPROVED</code> 인가?</li><li>[ ] 🔴 <strong>CODEOWNERS 승인을 거친 PR로 전환되었는가?</strong> <em>(개발자 단독 변경 불가)</em></li><li>[ ] 빌드 검증(NF-011)이 <code>MINOR_POLICY</code> 를 차단하지 않는가?</li><li>[ ] 만료일(<code>expiresAt</code>)이 설정되었는가?</li><li>[ ] SC-0.1 테스트(TS-007)가 통과하는가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: 없음 — 🟢 <strong>지금 착수 가능</strong> · 개발과 완전 병렬</li><li><strong>Blocks</strong>: 🔴 <strong>가입 플로우 전체</strong> · 서비스 오픈 · TS-007</li><li><strong>관련</strong>: NF-011(빌드 검증 · CODEOWNERS)이 이 게이트의 집행 수단이다</li><li>🔺 <strong>리드타임이 길다</strong> — 법무 검토는 개발이 앞당길 수 없으므로 <strong>가장 먼저 띄운다</strong></li></ul>
+<p class="meta">NF-015 미성년이용자정책 · 원본 NF-015_Legal_미성년이용자정책.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

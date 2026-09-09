@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CT-001 스키마 제약 인덱스</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[DB] CT-001: Prisma 스키마 16 엔티티 · 열거형 10종 · SQL 제약 11건 · 인덱스" labels: 'database, contract, priority:critical, step-1, wave-1' assignees: ''</p>
+<hr>
+<blockquote><p>🔀 <strong>CT-002를 흡수했다</strong> <em>(축약 2026-08-30)</em> — 같은 마이그레이션 파일을 만진다. <code>CT-002</code> 는 폐번이며 이 문서를 가리킨다.</p>
+<p>🔧 <strong>v2 개정 (2026-08-30)</strong> — 실행 명세로 구체화. <strong>열거형이 4종이 아니라 10종임을 정정</strong>(§열거형 참조).</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[CT-001] 데이터베이스 스키마 · 제약 · 인덱스 확정</strong></li><li>목적: <strong>나머지 42개 태스크가 참조할 엔티티 이름·타입·불변식을 코드로 확정한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 태스크가 Wave 1의 첫 번째인 이유</strong> — <code>SourceVideo</code>인지 <code>source_videos</code>인지, <code>visibility</code>인지 <code>privacy</code>인지가 여기서 확정된다. 이것 없이 다른 태스크를 쓰면 나중에 전부 고쳐야 한다.</p>
+<p>🔴 <strong>그리고 제약은 장식이 아니다.</strong> <code>member_count &lt;= 20</code> 하나가 없으면 <strong>동시 초대에서 정원이 넘고</strong>(SC-5.F1), <code>scope DEFAULT private</code> 이 없으면 <strong>삽입 경로가 늘 때마다 ADR-4가 깨진다.</strong> 애플리케이션 코드로는 보장되지 않는다.</p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<div class="tw"><table><thead><tr><th>문서</th><th>절</th><th>내용</th></tr></thead><tbody><tr><td><code>SRS/[SRS]hilit-SRSv1.8.md</code></td><td><strong>§6.2</strong></td><td>ERD — 16 엔티티 관계</td></tr><tr><td><code>SRS/[SRS]hilit-SRSv1.8.md</code></td><td><strong>§6.2.1</strong></td><td>🔴 <strong>요구사항이 정한 제약 5건 — 바꾸려면 요구사항을 먼저 바꿔야 한다</strong></td></tr><tr><td><code>SRS/[SRS]hilit-SRSv1.8.md</code></td><td>§6.2.3</td><td>보존 정책</td></tr><tr><td><code>SRS/[SRS]hilit-SRSv1.8.md</code></td><td>§6.3</td><td>비즈니스 규칙 10건</td></tr><tr><td><code>DS/[DS]hilit-DSv1.1.md</code></td><td><strong>§4.2</strong></td><td>🔴 <strong>엔티티별 컬럼·타입·인덱스·보존 — 이 태스크의 주 입력</strong></td></tr><tr><td><code>DS/[DS]hilit-DSv1.1.md</code></td><td>§4.3</td><td>PRD ↔ SRS ↔ DS 명칭 매핑</td></tr><tr><td><code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code></td><td>§4.1</td><td>Prisma 사상 · 표현 불가 항목표</td></tr><tr><td><code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code></td><td>§4.2</td><td>RLS 전제 <em>(정책 자체는 CT-003)</em></td></tr></tbody></table></div>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<h3 id="h3">1. 환경 준비</h3>
+<ul><li>[ ] <code>npx supabase init</code> · <code>npx supabase start</code> — 로컬 스택 기동</li><li>[ ] <code>npx prisma init --datasource-provider postgresql</code></li><li>[ ] <code>.env</code> 에 <code>DATABASE_URL</code>(마이그레이션용 직결) · <code>DIRECT_URL</code> 설정</li><li>[ ] <code>npx prisma db execute --stdin &lt;&lt;&lt; "SELECT 1"</code> 로 연결 확인</li></ul>
+<h3 id="h3">2. 열거형 10종 정의 — <code>prisma/schema.prisma</code></h3>
+<ul><li>[ ] <code>UserRole</code> · <code>SourceVideoStatus</code> · <code>ExcludedReason</code> · <code>ConfidenceFlag</code> · <code>VisibilityScope</code> · <code>MusicCategory</code> · <code>ReactionType</code> · <code>ProcessingStage</code> · <code>JobStatus</code> · <code>FailureClass</code></li></ul>
+<h3 id="h3">3. 모델 16개 정의 — <code>prisma/schema.prisma</code></h3>
+<ul><li>[ ] <code>User</code> · <code>SourceVideo</code> · <code>PersonTrack</code> · <code>AppearanceInterval</code> · <code>Candidate</code> · <code>Selection</code></li><li>[ ] <code>GeneratedVideo</code> · <code>Record</code> · <code>VisibilitySetting</code></li><li>[ ] <code>Group</code> · <code>GroupMember</code> · <code>FollowRelation</code></li><li>[ ] <code>MusicTrack</code> · <code>Reaction</code> · <code>ShareLink</code> · <code>ProcessingJob</code></li><li>[ ] 🔴 <strong><code>GeneratedVideo.sourceVideoId</code> 만 <code>onDelete: SetNull</code></strong> — 나머지 FK는 <code>Cascade</code></li></ul>
+<h3 id="h3">4. 인덱스 — DS §4.2 전량</h3>
+<ul><li>[ ] <code>User</code>: <code>@@unique([handle])</code> · <code>@@index([deletedAt])</code></li><li>[ ] <code>SourceVideo</code>: <code>@@index([ownerId, createdAt(sort: Desc)])</code></li><li>[ ] <code>PersonTrack</code>: <code>@@unique([videoId])</code> <em>(영상당 1회 지정 — REQ-FUNC-002)</em></li><li>[ ] <code>AppearanceInterval</code>: <code>@@index([videoId, startTcMs])</code> · <code>@@index([videoId, excludedReason])</code></li><li>[ ] <code>Candidate</code>: <code>@@index([intervalId])</code> · <code>@@unique([intervalId, rank])</code></li><li>[ ] <code>Selection</code>: <code>@@index([userId, selectedAt])</code> · <code>@@unique([candidateId, userId])</code></li><li>[ ] <code>Record</code>: <code>@@index([ownerId, createdAt(sort: Desc)])</code></li><li>[ ] <code>GroupMember</code>: <code>@@id([groupId, userId])</code> · <code>@@index([userId])</code></li><li>[ ] <code>FollowRelation</code>: <code>@@id([followerId, followeeId])</code> · <code>@@index([followeeId])</code></li><li>[ ] <code>ShareLink</code>: <code>@@unique([token])</code> · <code>@@index([recordId, revokedAt])</code></li><li>[ ] <code>ProcessingJob</code>: <code>@@index([status, createdAt])</code> · <code>@@index([videoId])</code></li></ul>
+<h3 id="h3">5. 초기 마이그레이션 생성</h3>
+<ul><li>[ ] <code>npx prisma migrate dev --name init --create-only</code> <em>(적용 전 SQL 편집을 위해 <code>--create-only</code>)</em></li></ul>
+<h3 id="h3">6. 🔴 SQL 제약 11건을 마이그레이션에 직접 추가</h3>
+<ul><li>[ ] 생성된 <code>prisma/migrations/&lt;ts&gt;_init/migration.sql</code> 하단에 §제약 SQL 블록 append</li><li>[ ] <code>visibility_settings.scope</code> 의 <code>DEFAULT 'private'</code> 이 DDL에 실제로 들어갔는지 확인</li><li>[ ] <code>npx prisma migrate dev</code> 로 적용</li></ul>
+<h3 id="h3">7. 🔴 유실 방지 — 스키마 파일에 제약 병기</h3>
+<ul><li>[ ] <code>schema.prisma</code> 상단에 제약 11건을 <strong>주석 블록</strong>으로 병기</li><li>[ ] <code>prisma/constraints.sql</code> 로 분리 보관하고 마이그레이션에서 참조 경로를 주석으로 남김</li></ul>
+<h3 id="h3">8. 시드 및 검증</h3>
+<ul><li>[ ] <code>prisma/seed.ts</code> — 개발용 최소 데이터 <em>(User 2 · Group 1 · MusicTrack 3)</em></li><li>[ ] <code>npx prisma migrate reset</code> 으로 클린 재현 확인</li><li>[ ] 검증 스크립트 <code>scripts/verify-schema.ts</code> 작성 — §AC의 Scenario 1·3·7을 자동 검사</li></ul>
+<h3 id="h3">🔴 열거형 10종 — 기존 명세의 "4종"은 오류였다</h3>
+<div class="tw"><table><thead><tr><th style="text-align:center">#</th><th>열거형</th><th>값</th><th>근거</th></tr></thead><tbody><tr><td style="text-align:center">1</td><td><code>UserRole</code></td><td><code>user</code> · <code>operator</code></td><td>DS §4.2 User</td></tr><tr><td style="text-align:center">2</td><td><code>SourceVideoStatus</code></td><td><code>UPLOADING</code> · <code>UPLOADED</code> · <code>PROCESSING</code> · <code>READY</code> · <code>FAILED</code></td><td>DS §4.2 SourceVideo</td></tr><tr><td style="text-align:center">3</td><td><code>ExcludedReason</code></td><td><code>LOW_CONFIDENCE</code> <em>(nullable)</em></td><td>DS §4.2 AppearanceInterval</td></tr><tr><td style="text-align:center">4</td><td><code>ConfidenceFlag</code></td><td><code>NORMAL</code> · <code>LOW</code> · <code>EXCLUDED</code></td><td>DS §4.2 Candidate</td></tr><tr><td style="text-align:center">5</td><td><code>VisibilityScope</code></td><td><code>private</code> · <code>group</code> · <code>public</code></td><td>REQ-FUNC-010</td></tr><tr><td style="text-align:center">6</td><td><code>MusicCategory</code></td><td>감성 · 여행 · 일상 · 운동 · 추억</td><td>REQ-FUNC-007</td></tr><tr><td style="text-align:center">7</td><td><code>ReactionType</code></td><td><code>like</code> · <code>comment</code></td><td>DS §4.2 Reaction</td></tr><tr><td style="text-align:center">8</td><td><code>ProcessingStage</code></td><td><code>UPLOADING</code> · <code>SUBJECT_ANCHORED</code> · <code>DETECTING</code> · <code>SELECTION_READY</code> · <code>RENDERING</code> · <code>COMPLETED</code> · <code>FAILED</code></td><td>DS §4.2 ProcessingJob</td></tr><tr><td style="text-align:center">9</td><td><code>JobStatus</code></td><td><code>QUEUED</code> · <code>RUNNING</code> · <code>SUCCEEDED</code> · <code>FAILED</code></td><td>동일</td></tr><tr><td style="text-align:center">10</td><td><code>FailureClass</code></td><td><code>CAPTURE</code> · <code>MODEL</code> · <code>UX</code> · <code>INFRA</code> · <code>POLICY</code></td><td>동일</td></tr></tbody></table></div>
+<blockquote><p>🔺 <strong>정정 사유</strong> — 이전 명세는 <code>VisibilityScope · ProcessingStage · FailureClass · ConfidenceFlag</code> 4종만 적었으나, <strong>DS §4.2를 전수 대조하니 10종</strong>이다. 6종이 누락돼 있었다. <strong>REQ-NF-015(열거형 확장 패턴)가 이 10종 전부에 적용된다.</strong></p></blockquote>
+<h3 id="h3">🔴 SQL 제약 11건 — 마이그레이션에 append</h3>
+<pre class="code"><code class="language-sql">-- prisma/constraints.sql
+-- 🔴 Prisma 스키마로 표현할 수 없어 SQL로 직접 강제하는 제약이다.
+-- 🔴 migrate 재생성 시 유실되므로 schema.prisma 상단 주석과 함께 관리한다.
+
+-- 1·2. SourceVideo — 90분 · 6GB 상한 [PROPOSED]
+ALTER TABLE source_videos
+  ADD CONSTRAINT chk_sv_duration CHECK (duration_sec &gt; 0 AND duration_sec &lt;= 5400),
+  ADD CONSTRAINT chk_sv_size     CHECK (size_bytes &lt;= 6442450944);
+
+-- 3·4. AppearanceInterval — 구간 유효성 · 신뢰도 정규화
+ALTER TABLE appearance_intervals
+  ADD CONSTRAINT chk_ai_range      CHECK (start_tc_ms &lt; end_tc_ms),
+  ADD CONSTRAINT chk_ai_confidence CHECK (confidence &gt;= 0 AND confidence &lt;= 1);
+
+-- 5. GeneratedVideo — 숏폼 상한
+ALTER TABLE generated_videos
+  ADD CONSTRAINT chk_gv_duration CHECK (duration_sec &lt;= 60);
+
+-- 6. 🔴 Group — REQ-FUNC-013 · SC-5.F1. 동시 초대에서 정원이 넘지 않게 하는 최종 방어선
+ALTER TABLE groups
+  ADD CONSTRAINT chk_grp_member_count CHECK (member_count &gt;= 0 AND member_count &lt;= 20);
+
+-- 7. VisibilitySetting — 그룹 공개인데 대상 그룹이 없는 상태 방지
+ALTER TABLE visibility_settings
+  ADD CONSTRAINT chk_vs_group_ids
+  CHECK (scope &lt;&gt; 'group' OR array_length(group_ids, 1) &gt;= 1);
+
+-- 8. FollowRelation — 자기 팔로우 금지
+ALTER TABLE follow_relations
+  ADD CONSTRAINT chk_fr_self CHECK (follower_id &lt;&gt; followee_id);
+
+-- 9. ProcessingJob — REQ-NF-008 재시도 3회를 DB에서 강제
+ALTER TABLE processing_jobs
+  ADD CONSTRAINT chk_pj_retry CHECK (retry_count &gt;= 0 AND retry_count &lt;= 3);
+
+-- 10. Reaction — 빈 댓글 방지
+ALTER TABLE reactions
+  ADD CONSTRAINT chk_rx_comment_text
+  CHECK (type &lt;&gt; 'comment' OR text IS NOT NULL);
+
+-- 11. Reaction — 중복 좋아요 방지 (댓글은 중복 허용이므로 부분 UNIQUE)
+CREATE UNIQUE INDEX uq_rx_like_once
+  ON reactions (record_id, user_id) WHERE type = 'like';
+
+-- 🔴 ADR-4 — 애플리케이션이 아니라 DDL에 기본값이 있어야 한다
+ALTER TABLE visibility_settings
+  ALTER COLUMN scope SET DEFAULT 'private';</code></pre>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1 (정상): 공개 범위 기본값이 DDL에 존재한다</strong> <em>(SC-4.1 · ADR-4)</em></p>
+<ul><li><strong>Given</strong>: 마이그레이션이 적용된 DB</li><li><strong>When</strong>: 아래를 실행함 ``<code>sql SELECT column_default FROM information_schema.columns WHERE table_name = 'visibility_settings' AND column_name = 'scope'; </code>``</li><li><strong>Then</strong>: <code>'private'::"VisibilityScope"</code> 가 반환된다. 🔴 <strong>애플리케이션 코드가 아니라 DDL에 있어야 한다</strong></li></ul>
+<p><strong>Scenario 2 (정상): 원본을 삭제해도 결과물이 남는다</strong> <em>(REQ-FUNC-019)</em></p>
+<ul><li><strong>Given</strong>: <code>generated_videos</code> 가 <code>source_videos</code> 를 참조하는 행 1건</li><li><strong>When</strong>: 참조된 <code>source_videos</code> 행을 <code>DELETE</code> 함</li><li><strong>Then</strong>: <code>generated_videos</code> 행이 유지되고 <code>source_video_id IS NULL</code> 이 된다 — <strong><code>ON DELETE SET NULL</code></strong></li></ul>
+<p><strong>Scenario 3 (예외): 그룹 정원이 동시 초대에서도 지켜진다</strong> <em>(SC-5.F1)</em></p>
+<ul><li><strong>Given</strong>: <code>member_count = 19</code> 인 그룹</li><li><strong>When</strong>: 두 세션이 동시에 <code>UPDATE groups SET member_count = member_count + 1</code> + <code>INSERT group_members</code> 를 한 트랜잭션으로 시도함 <em>(20 → 21 경합)</em></li><li><strong>Then</strong>: 🔴 <strong>한 쪽만 커밋되고 다른 쪽은 <code>chk_grp_member_count</code> 위반으로 롤백</strong>된다. <code>group_members</code> 에 부분 삽입이 남지 않는다</li></ul>
+<p><strong>Scenario 4 (정상): 제외된 구간이 사유와 함께 보존된다</strong> <em>(REQ-FUNC-027 · 003)</em></p>
+<ul><li><strong>Given</strong>: <code>appearance_intervals</code> 행</li><li><strong>When</strong>: <code>excluded_reason = 'LOW_CONFIDENCE'</code> 로 갱신함</li><li><strong>Then</strong>: 행이 삭제되지 않고 <code>@@index([videoId, excludedReason])</code> 로 조회된다. 🔴 <strong>제외 전/후 탐지율 분리 집계의 근거이므로 삭제하면 안 된다</strong></li></ul>
+<p><strong>Scenario 5 (정상): 얼굴 특징 벡터를 저장할 자리가 없다</strong> <em>(REQ-NF-010 · DD-5)</em></p>
+<ul><li><strong>Given</strong>: <code>person_tracks</code> 스키마</li><li><strong>When</strong>: <code>SELECT column_name FROM information_schema.columns WHERE table_name='person_tracks'</code> 를 실행함</li><li><strong>Then</strong>: <code>anchor_bbox</code> · <code>bbox_timeline</code>(좌표)만 있고 <strong>얼굴 임베딩·특징 벡터 컬럼이 존재하지 않는다</strong></li></ul>
+<p><strong>Scenario 6 (예외): 좋아요는 중복이 막히고 댓글은 허용된다</strong></p>
+<ul><li><strong>Given</strong>: 동일 <code>(record_id, user_id)</code> 로 <code>type='like'</code> 1건이 존재</li><li><strong>When</strong>: 같은 조합으로 <code>type='like'</code> 를 다시 삽입함 → <strong>거부</strong> / 같은 조합으로 <code>type='comment'</code> 를 두 번 삽입함 → <strong>허용</strong></li><li><strong>Then</strong>: 부분 UNIQUE <code>uq_rx_like_once</code> 가 정확히 <code>like</code> 에만 적용된다</li></ul>
+<p><strong>Scenario 7 (예외): 제약이 마이그레이션 재생성에서 살아남는다</strong></p>
+<ul><li><strong>Given</strong>: 스키마를 변경하고 <code>npx prisma migrate dev</code> 를 다시 실행함</li><li><strong>When</strong>: <code>SELECT conname FROM pg_constraint WHERE conname LIKE 'chk_%'</code> 를 실행함</li><li><strong>Then</strong>: 🔴 <strong>10건이 전부 남아 있고 <code>uq_rx_like_once</code> 인덱스도 존재한다</strong> <em>(주석 병기와 <code>constraints.sql</code> 분리가 이를 위한 것이다)</em></li></ul>
+<p><strong>Scenario 8 (예외): 잘못된 구간과 범위 밖 신뢰도가 거부된다</strong></p>
+<ul><li><strong>Given</strong>: <code>start_tc_ms &gt;= end_tc_ms</code> 인 행 / <code>confidence = 1.5</code> 인 행</li><li><strong>When</strong>: 삽입을 시도함</li><li><strong>Then</strong>: 각각 <code>chk_ai_range</code> · <code>chk_ai_confidence</code> 위반으로 거부된다</li></ul>
+<p><strong>Scenario 9 (예외): 클린 DB에서 재현된다</strong></p>
+<ul><li><strong>Given</strong>: 빈 데이터베이스</li><li><strong>When</strong>: <code>npx prisma migrate reset --force</code> 를 실행함</li><li><strong>Then</strong>: 오류 없이 완주하고 시드가 적용된다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<h3 id="h5">데이터 설계</h3>
+<ul><li><strong>PK</strong>: <code>uuid</code> — <code>gen_random_uuid()</code> ✅ <strong>확정 (2026-08-30)</strong> · <code>DS §4.1</code> · <code>v2.2 §4.1</code> 갱신 완료</li><li>🔺 <strong>감수사항</strong> — DS가 ULID를 제안한 근거는 <em>"시간 정렬 가능"</em> 이었다. <strong><code>gen_random_uuid()</code> 는 v4(무작위)라 이 성질을 잃는다.</strong></li><li>🟢 <strong>조회에는 영향이 없다</strong> — 모든 목록 인덱스가 <code>createdAt DESC</code> 를 명시하므로(§4 인덱스) 정렬을 PK에 의존하지 않는다</li><li>🔺 <strong>남는 비용은 삽입 시 B-tree 지역성 저하</strong>뿐이다. MVP 물량(연 12만 편 <code>[HYPOTHESIS]</code>)에서 문제가 될 규모가 아니다</li><li>🔺 <strong>시간 정렬이 필요해지면 uuid v7로 전환한다</strong> — 컬럼 타입이 같아 마이그레이션 없이 생성 함수만 바꾸면 된다</li><li><strong>시각</strong>: <code>TIMESTAMPTZ</code> · <strong>UTC 저장</strong> · 표시 변환은 클라이언트 책임</li><li><strong>명명</strong>: Prisma 모델은 PascalCase, 물리 테이블·컬럼은 <code>@@map</code> · <code>@map</code> 으로 snake_case</li></ul>
+<h3 id="h5">보안 (REQ-NF-011 · REQ-NF-019)</h3>
+<ul><li>🔴 <strong>삭제 정책 — 개인정보·영상은 물리 삭제</strong>, 사업 자원만 <code>deleted_at</code> 논리 삭제. **논리 삭제는 REQ-NF-019의 <em>"전량 삭제"</em> 를 만족하지 않는다**</li><li>🔴 <strong><code>User.birth_year</code> · <code>guardian_consent_at</code> 은 개인정보다</strong> — 로그·에러 메시지에 노출되지 않게 한다</li><li><strong>영상 자체가 개인정보</strong> — 객체 스토리지 at-rest 암호화는 NF-008 소관이나, <code>storage_uri</code> 가 추측 가능한 규칙이면 안 된다</li><li><strong>RLS 활성화는 CT-003 소관</strong> — 이 태스크는 <code>ENABLE ROW LEVEL SECURITY</code> 를 켜지 않는다. 정책 없이 켜면 모든 접근이 막힌다</li></ul>
+<h3 id="h5">성능 (REQ-NF-005)</h3>
+<ul><li>인덱스는 <strong>DS §4.2에 명시된 것만</strong> — 조회 패턴이 확정되지 않은 곳에 선제 인덱스를 만들지 않는다</li><li>🔺 <strong><code>FR-021</code> 의 멤버 필터 p95 ≤ 300ms 가 가장 빡빡하다</strong> — <code>GroupMember.@@index([userId])</code> 와 <code>Record.@@index([ownerId, createdAt])</code> 조합이 이를 받친다. <strong>RLS 정책이 걸린 뒤 실행 계획을 재확인해야 한다</strong>(CT-003에서 검증)</li></ul>
+<h3 id="h5">운영</h3>
+<ul><li>🔴 <strong><code>prisma migrate deploy</code> 를 빌드 단계에 넣지 않는다</strong> — 롤백이 불가능하다. <strong>수동 실행 후 배포</strong>(v2.2 §8 배포 파이프라인)</li><li><strong><code>member_count</code> 갱신은 원자 증가</strong> — <code>UPDATE ... SET member_count = member_count + 1</code> 과 <code>CHECK</code> 를 <strong>같은 트랜잭션</strong>에서. 조회 후 삽입 금지</li><li>제약 위반은 애플리케이션에서 <strong>PostgreSQL 오류 코드(<code>23514</code> CHECK · <code>23505</code> UNIQUE)로 판별</strong>해 CT-004의 오류 코드로 변환한다</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria(9건)를 충족하는가?</li><li>[ ] 🔴 <strong>SQL 제약 11건이 마이그레이션에 있고 <code>schema.prisma</code> 주석과 <code>constraints.sql</code> 양쪽에 병기되었는가?</strong></li><li>[ ] 🔴 <strong>열거형이 10종 전부 정의되었는가?</strong> <em>(기존 명세의 4종은 오류였다)</em></li><li>[ ] 동시성 테스트로 Scenario 3이 검증되었는가?</li><li>[ ] <code>information_schema</code> · <code>pg_constraint</code> 조회로 Scenario 1·7이 자동 검사되는가? <em>(<code>scripts/verify-schema.ts</code>)</em></li><li>[ ] <code>npx prisma migrate reset --force</code> 가 클린 DB에서 오류 없이 완주하는가?</li><li>[ ] 🔺 <strong><code>DS/[DS]hilit-DSv1.1.md</code> §4.2와 실제 스키마가 일치하는가?</strong> <em>(PK 타입은 uuid로 확정·반영 완료)</em></li><li>[ ] <code>npx prisma generate</code> 결과 타입이 <code>SRS §6.2</code> 엔티티명과 일치하는가?</li><li>[ ] RLS를 <strong>켜지 않았는가?</strong> <em>(CT-003 소관)</em></li><li>[ ] ESLint · TypeScript strict 경고가 없는가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: 없음 — 🔴 <strong>Wave 1의 시작점</strong></li><li><strong>Blocks</strong>: <strong>CT-003</strong>(RLS) · <strong>CT-004</strong>(API 계약) · FR 21건 · TS 4건 · NF 다수</li><li><strong>병렬 가능</strong>: 🟢 <strong>CT-006</strong>(Provider 인터페이스)과 무관하므로 동시 진행 가능</li></ul>
+<p class="meta">CT-001 스키마 제약 인덱스 · 원본 CT-001_DB_스키마-제약-인덱스.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

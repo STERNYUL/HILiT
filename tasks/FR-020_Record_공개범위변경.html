@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-020 공개범위변경</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command] FR-020: 공개 범위 변경 (3단 · 기본값 private)" labels: 'backend, command, record, priority:critical, step-2, blocked-by-legal' assignees: ''</p>
+<hr>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-020] 기록마다 누구에게 보일지 정한다</strong></li><li>목적: <strong>공개를 선택지로 만든다. 기본이 아니라.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 태스크는 두 개의 법무 게이트가 막고 있다.</strong></p>
+<div class="tw"><table><thead><tr><th>게이트</th><th>차단 대상</th><th>근거</th></tr></thead><tbody><tr><td><strong>NF-017</strong> 얼굴 정보 4종</td><td><code>PUBLIC_PUBLISH</code> · <code>GROUP_PUBLISH</code></td><td>REQ-NF-010</td></tr><tr><td><strong>NF-018</strong> 영상 내 미성년자 3종</td><td>동일</td><td>REQ-NF-017</td></tr></tbody></table></div>
+<p>🟢 <strong>그러나 <code>private</code> 유지는 막히지 않는다.</strong> 게이트 미승인 상태에서도 <strong>기록을 만들고 나만 보는 것은 가능</strong>하다 — <strong>D4가 법무 게이트와 독립적으로 성립하도록 설계된 결과다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-010</strong> — 3단 · 🔴 <strong>기본값 나만 보기</strong> · <strong>글자 배지</strong> · 사후 변경 가능</li><li><strong>ADR-4</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §1.5.2 — 🔴 <strong>확정</strong> <em>(프로토타입 v0.6이 확정한 사항)</em></li><li><strong>보안</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-009</strong> — 🔴 <strong>서버 강제 · 우회 0건 · 건수 유추 금지</strong></li><li><strong>시나리오</strong>: <strong>SC-4.2</strong>(월말 비공개 비율) · <strong>SC-4.3</strong>(배지) · <strong>SC-4.4</strong>(타인 프로필) · <strong>SC-4.F1</strong>(우회 차단)</li><li><strong>RLS</strong>: <code>tasks/CT-003_DB_RLS정책.md</code> · <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §4.2</li><li><strong>게이트</strong>: <code>tasks/NF-017_Legal_얼굴정보처리.md</code> · <code>tasks/NF-018_Legal_영상내미성년자.md</code></li><li><strong>미성년 이용자 추가 확인</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-016 ②</strong></li><li>검증: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §5.3 <strong>TC-ADR-04</strong></li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] Server Action <strong><code>setVisibility({ recordId, visibility })</code></strong> — 3단 열거형</li><li>[ ] 🔴 <strong>기본값을 바꾸지 않는다</strong> — 미선택은 <code>private</code> 유지</li><li>[ ] 소유권 검증 — RLS + 애플리케이션 이중</li><li>[ ] 🔴 <strong>미성년 이용자의 전체공개 전환 시 추가 확인</strong> — REQ-NF-016 ②</li><li>[ ] 🔴 <strong>게이트 연동</strong> — 미승인 시 공개 전환 경로가 빌드에 없다</li><li>[ ] 사후 변경 지원 — 마이페이지에서 언제든</li><li>[ ] <strong>공개 → 비공개 전환 시 파생 상태 정리</strong> — 공유 링크 · 반응</li><li>[ ] 계측 — <code>visibility_changed</code>(<strong>이전 값 · 이후 값</strong>)</li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 미선택은 나만 보기다</strong> <em>(ADR-4 · SC-4.1)</em></p>
+<ul><li><strong>Given</strong>: 공개 범위를 정하지 않은 기록</li><li><strong>When</strong>: 상태를 확인함</li><li><strong>Then</strong>: 🔴 <strong><code>private</code> 이다.</strong> 편의를 위해 <em>"마지막에 고른 범위를 기억"</em> 하는 구현은 <strong>ADR-4 위반</strong>이다</li></ul>
+<p><strong>Scenario 2: 배지가 영상을 가리지 않는다</strong> <em>(REQ-FUNC-010 · ADR-4)</em></p>
+<ul><li><strong>Given</strong>: 기록 목록</li><li><strong>When</strong>: 공개 범위 표시를 확인함</li><li><strong>Then</strong>: 🔴 <strong>글자 배지이며 영상을 가리지 않는다.</strong> 프로토타입 v0.6이 확정한 형태다</li></ul>
+<p><strong>Scenario 3: 서버가 강제한다</strong> <em>(REQ-NF-009 · SC-4.F1)</em></p>
+<ul><li><strong>Given</strong>: 조작된 요청으로 타인의 비공개 기록에 접근</li><li><strong>When</strong>: 요청을 보냄</li><li><strong>Then</strong>: 🔴 <strong>우회 성공 0건.</strong> 클라이언트 필터링이 아니라 <strong>RLS가 막는다</strong></li></ul>
+<p><strong>Scenario 4: 비공개는 개수에도 잡히지 않는다</strong> <em>(SC-4.4 · REQ-NF-009)</em></p>
+<ul><li><strong>Given</strong>: 타인의 프로필에 비공개 기록 5건이 있음</li><li><strong>When</strong>: 프로필을 조회함</li><li><strong>Then</strong>: 🔴 <strong>기록 수에 포함되지 않는다.</strong> <strong>RLS는 <code>count(*)</code> 도 필터하므로 구조적으로 해결</strong>된다 — 애플리케이션에서 세면 반드시 새어나간다</li></ul>
+<p><strong>Scenario 5: 사후에 바꿀 수 있다</strong> <em>(REQ-FUNC-010)</em></p>
+<ul><li><strong>Given</strong>: 이미 전체공개로 발행한 기록</li><li><strong>When</strong>: 마이페이지에서 나만 보기로 바꿈</li><li><strong>Then</strong>: 즉시 반영되고 <strong>공유 링크 접근이 차단</strong>된다</li></ul>
+<p><strong>Scenario 6: 미성년 이용자는 한 단계 더 거친다</strong> <em>(REQ-NF-016 ②)</em></p>
+<ul><li><strong>Given</strong>: 미성년으로 확인된 이용자</li><li><strong>When</strong>: 전체공개로 전환함</li><li><strong>Then</strong>: 🔴 <strong>추가 확인을 거친다.</strong> 성인과 같은 한 번의 탭으로 공개되지 않는다</li></ul>
+<p><strong>Scenario 7 (실패): 게이트 미승인 시 공개 경로가 없다</strong> <em>(NF-017 · NF-018)</em></p>
+<ul><li><strong>Given</strong>: <code>FACE_CONSENT</code> 또는 <code>MINOR_SUBJECT</code> 가 <code>PENDING</code></li><li><strong>When</strong>: 배포된 앱에서 전체공개를 시도함</li><li><strong>Then</strong>: 🔴 <strong>라우트가 존재하지 않는다.</strong> 🟢 <strong>그러나 <code>private</code> 기록 생성과 조회는 정상 동작한다</strong></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>RLS가 진실 원천</strong> — 애플리케이션 검증은 이중 방어일 뿐이며, <strong>RLS 없이 애플리케이션만으로는 SC-4.4를 만족할 수 없다</strong></li><li>🔴 <strong>ADR-4는 확정 사항</strong> — 프로토타입 v0.6 · 팀 PRD · 팀 SRS 세 문서가 일치한다. <strong>재논의 대상이 아니다</strong></li><li>🔺 <strong>SC-4.2(월말 비공개 비율)의 기준값이 <code>[TBD]</code></strong> — Gate B의 판정 입력이며 이 태스크는 <strong>계측 가능성</strong>까지 책임진다</li><li>🔺 <strong>공개 → 비공개 전환 시 이미 받은 좋아요·댓글의 처리가 <code>[TBD]</code></strong> — 삭제인가 보존 후 비노출인가</li><li>열거형 확장 패턴 준수 — REQ-NF-015</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>미선택이 <code>private</code> 로 유지되는가?</strong> <em>(TC-ADR-04)</em></li><li>[ ] 🔴 <strong>우회 성공 0건인가?</strong> <em>(NF-007 우회 테스트로 확인)</em></li><li>[ ] 🔴 <strong>비공개가 타인 프로필의 개수에서 제외되는가?</strong></li><li>[ ] 미성년 이용자의 전체공개 전환에 추가 확인이 있는가?</li><li>[ ] 게이트 미승인 시 공개 경로가 빌드에서 제외되는가?</li><li>[ ] 🔴 <strong>게이트 미승인 상태에서도 <code>private</code> 경로가 동작하는가?</strong></li><li>[ ] <code>visibility_changed</code> 에 이전/이후 값이 담기는가?</li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li>🔴 <strong>Blocked by (공개 경로만)</strong>: <strong>NF-017</strong> · <strong>NF-018</strong> — 법무 승인</li><li><strong>Depends on</strong>: <strong>CT-003</strong>(RLS) · <strong>FR-019</strong>(기록 생성)</li><li><strong>Blocks</strong>: <strong>FR-027</strong>(좋아요) · <strong>FR-028</strong>(공유) · <strong>FR-026</strong>(피드) · <strong>FE-006</strong> · <strong>TS-004</strong> · <strong>TS-007</strong> · <strong>TS-002</strong></li><li>🟢 <strong>부분 진행 가능</strong>: <code>private</code> 경로는 게이트와 무관하게 완성할 수 있다</li></ul>
+<p class="meta">FR-020 공개범위변경 · 원본 FR-020_Record_공개범위변경.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

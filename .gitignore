@@ -10,13 +10,18 @@ desktop.ini
 # 사내 양식 참조본
 reference/
 
-# Node
+# 빌드 산출물 · 의존성
 node_modules/
 .next/
+*.tsbuildinfo
+
+# 환경 변수 · 로그
 .env
 .env.local
 *.log
 
 # Prisma
 prisma/generated/
-tsconfig.tsbuildinfo
+
+# 개인 스크린샷 — 🔴 PUBLIC 저장소이므로 기본 제외
+KakaoTalk_*.png

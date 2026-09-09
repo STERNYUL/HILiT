@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-008 추론어댑터구현</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (수렴 판정)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Convergence Task about: 임계 도달로 판정하는 수렴형 태스크 (구현 완료가 종료 조건이 아님) title: "[Command] FR-008: 추론 어댑터 구현 (SP-1 선정 후보)" labels: 'backend, command, vision, convergence, priority:critical, step-2, blocked-by-spike' assignees: ''</p>
+<hr>
+<blockquote><h3 class="bq-h">⚠️ 이것은 수렴형 태스크다</h3>
+<p><strong>"구현됐다"가 아니라 "임계 도달"이 종료 조건이다.</strong> 어댑터 코드는 며칠이면 되지만 <strong>Gate A(제외 후 탐지율 ≥ 85%) 도달에는 반복이 필요</strong>하다. 코드 완성을 완료로 보고하면 안 된다.</p>
+<p>🔴 <strong>미달의 결과가 이 태스크를 넘어선다</strong> — v1.8 §6.4.1: <em>"Gate A 미달 시 <strong>이후 개발 전면 중단</strong>"</em>. <strong>제품 전체의 존폐가 걸린 지점이다.</strong></p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-008] 선정된 추론 API를 <code>TrackingProvider</code> 로 감싼다</strong></li><li>목적: <strong>Gate A를 실제로 달성할 수 있는지 판가름한다.</strong></li></ul>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>인터페이스</strong>: <code>tasks/CT-006_APISpec_TrackingProvider.md</code> — 🔴 <strong>이 계약을 바꾸지 않고 구현한다</strong></li><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-002</strong>(재식별 ≥ 90% · 오인식 ≤ 2%) · <strong>REQ-FUNC-003</strong>(제외 후 ≥ 85%)</li><li><strong>성능</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-003</strong> — p95 ≤ 8분 <code>[PROPOSED]</code></li><li><strong>Gate A</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.4.1 — 🔴 <strong>미달 시 개발 전면 중단</strong></li><li><strong>실험 설계</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.4.2 — 🔴 <strong>정답셋 n=100편 · 촬영 거리·조도·복장 유사도 다양성 필수</strong></li><li><strong>후보 조사</strong>: <code>실행 계획/04_SP-1_API후보조사.md</code> — GCVI(탈락) · AWS(조건부) · Replicate+SAM2(조건부)</li><li><strong>스파이크</strong>: <code>실행 계획/03_스파이크_실행계획.md</code> <strong>SP-1</strong> · 평가 항목 <strong>B1~B8</strong></li><li>리스크: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §1.5.3 <strong>RISK-04</strong>(단일 조건 검증)</li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] 🔴 <strong>SP-1 선정 확정을 대기</strong> — 선정 전 구현하면 폐기된다</li><li>[ ] 선정 공급자용 <strong><code>TrackingProvider</code> 구현체</strong> 작성 — <code>submit()</code> · <code>parseWebhook()</code></li><li>[ ] 인증·자격 증명 관리 — 환경 변수</li><li>[ ] 응답 형태 → <code>TrackingResult</code> 매핑 <em>(FR-005가 소비)</em></li><li>[ ] 오류 분류 매핑 — 어떤 오류가 재시도 대상인가</li><li>[ ] 🔴 <strong>학습 옵트아웃 설정 적용</strong> — NF-014와 연동</li><li>[ ] <strong>정답셋 회귀 배치 실행</strong> — 제외 전/후 분리 집계</li><li>[ ] 🔺 <strong>B8 해상도별 측정</strong> — <code>original</code> / <code>half</code> / <code>quarter</code> 각각의 탐지율</li><li>[ ] Gate A 판정 보고 — 🔴 <strong>제외 후 탐지율로 판정 · 제외 전은 진단</strong></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: Gate A를 통과한다</strong> <em>(REQ-FUNC-003)</em></p>
+<ul><li><strong>Given</strong>: 정답셋 <strong>n=100편</strong>(40분급)</li><li><strong>When</strong>: 회귀 배치를 실행함</li><li><strong>Then</strong>: 🔴 <strong>제외 후 탐지 구간 비율 ≥ 85%.</strong> 제외 전 값도 함께 집계하되 <strong>판정에 쓰지 않는다</strong></li></ul>
+<p><strong>Scenario 2: 판정 지표를 바꿔서 통과시키지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 제외 후 값이 미달하고 제외 전 값은 충족하는 상황</li><li><strong>When</strong>: 판정을 수행함</li><li><strong>Then</strong>: 🔴 <strong>미달이다.</strong> 제외 전 탐지율은 임계 τ와 <strong>독립</strong>이므로 τ를 올려 오탐률을 개선해도 저항하지 않는다. <strong>제외 후로 걸어야 브레이크가 걸린다</strong></li></ul>
+<p><strong>Scenario 3: 단일 조건에서만 검증하지 않는다</strong> <em>(RISK-04)</em></p>
+<ul><li><strong>Given</strong>: 정답셋 구성</li><li><strong>When</strong>: 조건 분포를 확인함</li><li><strong>Then</strong>: 🔴 <strong>촬영 거리 · 조도 · 복장 유사도가 다른 케이스가 포함</strong>되어 있다. 한 조건에서만 85%를 넘긴 것은 통과가 아니다</li></ul>
+<p><strong>Scenario 4: 재식별 정확도와 오인식률이 함께 보고된다</strong> <em>(REQ-FUNC-002)</em></p>
+<ul><li><strong>Given</strong>: 회귀 배치 결과</li><li><strong>When</strong>: 지표를 확인함</li><li><strong>Then</strong>: 재식별 정확도 <strong>≥ 90%</strong> · 오인식 <strong>≤ 2%</strong> 가 각각 산출된다. 🔴 <strong>오인식률이 REQ-FUNC-027의 임계 τ를 정하는 근거다</strong></li></ul>
+<p><strong>Scenario 5: 처리 시간이 측정된다</strong> <em>(REQ-NF-003)</em></p>
+<ul><li><strong>Given</strong>: 40분 원본 배치</li><li><strong>When</strong>: <code>detection_started → detection_completed</code> 를 집계함</li><li><strong>Then</strong>: p95가 산출된다. 🔺 <strong>8분은 <code>[PROPOSED]</code></strong> 이므로 이 태스크는 <strong>측정과 보고</strong>까지 책임진다</li></ul>
+<p><strong>Scenario 6 (실패): 미달 시 계약을 바꿔 통과시키지 않는다</strong></p>
+<ul><li><strong>Given</strong>: Gate A 미달</li><li><strong>When</strong>: 대응을 결정함</li><li><strong>Then</strong>: 🔴 <strong><code>TrackingProvider</code> 인터페이스를 공급자에 맞춰 변형하지 않는다.</strong> 대응은 <strong>ADR-1 재검토 · 공급자 교체 · τ 하향</strong> 중 하나이며, <strong>인터페이스를 흔들면 교체 가능성 자체가 사라진다</strong></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong><code>TrackingProvider</code> 계약을 변경하지 않는다</strong> — 계약이 흔들리면 CT-007 Mock과 FR-005가 함께 깨지고 <strong>다음 공급자로 갈아탈 수 없게 된다</strong></li><li>🔴 <strong>학습 옵트아웃이 없는 공급자는 채택 불가</strong> — <code>04_SP-1_API후보조사.md</code> §5-2. 사용자 영상이 학습 데이터가 되면 REQ-NF-010의 처리 위탁 범위를 넘는다</li><li>🔺 <strong>얼굴 대조 기반을 선정하면 NF-017의 범위가 넓어진다</strong> — <code>face collection</code> 은 생체정보다. <strong>선정이 법무 부담을 결정한다</strong></li><li>🔺 정답셋 <strong>n=100편</strong>은 §6.4.2 값이다. SP-1 단계의 10~15편은 <strong>선별용이지 Gate A 판정용이 아니다</strong></li><li>원가 상한 초과 시 처리 방식 재설계(ADR-2 · ADR-3)</li></ul>
+<h2 id="h5">🏁 Definition of Done (수렴 판정)</h2>
+<ul><li>[ ] 🔴 <strong>Gate A(제외 후 ≥ 85%)를 통과했는가?</strong> — <strong>이것이 종료 조건이다</strong></li><li>[ ] 🔴 <strong>정답셋에 촬영 조건 다양성이 있는가?</strong></li><li>[ ] 재식별 정확도 · 오인식률이 보고되었는가?</li><li>[ ] 🔴 <strong>오인식률을 근거로 τ 초안이 제시되었는가?</strong> <em>(FR-009의 입력)</em></li><li>[ ] p95 처리 시간이 측정되었는가?</li><li>[ ] 🔴 <strong>학습 옵트아웃이 설정되고 NF-014에 등재</strong>되었는가?</li><li>[ ] B8 해상도별 탐지율이 측정되었는가?</li><li>[ ] <code>TrackingProvider</code> 인터페이스가 <strong>변경 없이</strong> 구현되었는가?</li><li>[ ] 미달 시 대응 판단이 문서로 남았는가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li>🔴 <strong>Depends on</strong>: <strong>SP-1</strong>(공급자 선정) — <strong>선정 전에는 착수 불가</strong></li><li><strong>Depends on</strong>: <strong>CT-006</strong>(인터페이스) · 정답셋 구축</li><li><strong>Blocks</strong>: <strong>FR-010</strong>(리프레이밍) · <strong>NF-006</strong>(원가) · <strong>NF-014</strong>(옵트아웃) · <strong>TS-001</strong> · <strong>TS-002</strong></li><li>🔴 <strong>Blocks (제품 전체)</strong>: <strong>Gate A 미달 시 이후 개발 전면 중단</strong>(§6.4.1)</li><li><strong>병렬 수단</strong>: 🟢 <strong>CT-007 Mock으로 FR-005·009·012가 먼저 완성</strong>되어 있어야 한다. 그래야 이 태스크가 <strong>탐지율에만 집중</strong>할 수 있다</li></ul>
+<p class="meta">FR-008 추론어댑터구현 · 원본 FR-008_Vision_추론어댑터구현.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

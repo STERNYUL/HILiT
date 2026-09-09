@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UX-001 앱셸3탭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ 산출물 (설계 항목)</a><a class="lv2" href="#h3">🧪 설계 인수 기준</a><a class="lv2" href="#h4">⚙️ 설계 제약</a><a class="lv2" href="#h5">🏁 Definition of Done</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Design Task about: 화면 구조·상태·흐름 설계 (구현 태스크 아님) title: "[UX] UX-001: 앱 셸 3탭 내비게이션 및 진입 재생 화면 설계" labels: 'design, ux, priority:high' assignees: ''</p>
+<hr>
+<blockquote><h3 class="bq-h">🎨 이것은 구현 태스크가 아니다</h3>
+<p>산출물은 <strong>코드가 아니라 화면 설계</strong>다. 완료 판정은 테스트 통과가 아니라 <strong>화면 상태가 빠짐없이 정의되었는가</strong>이며, 구현은 <strong>FE-001</strong>이 받는다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>화면명: <strong>[UX-001] 앱 셸 — 팔로잉·추천·그룹 3탭과 가운데 <code>+</code></strong></li><li>목적: <strong>앱을 열자마자 볼 것이 있고, 만들러 가는 길이 한 번에 보이게 한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 화면이 첫인상 전체다.</strong></p>
+<p>REQ-FUNC-011: <em>"앱 진입 시 <strong>로그인 화면 없이 팔로잉 탭</strong>에서 영상이 재생되어야 한다."</em> 그리고 <strong>p95 ≤ 1.5초</strong>(REQ-NF-001).</p>
+<p>🔴 <strong>웹에서는 소리가 바로 나지 않는다</strong> — 브라우저 자동재생 정책 때문에 <strong>음소거로 시작</strong>하고 <strong>첫 조작 시 소리를 활성화</strong>한다(v2.2 §6.5.1). <strong>이 제약을 화면 설계가 흡수해야 하며, 사용자가 "소리가 안 난다"고 느끼는 순간을 만들면 안 된다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-011</strong> — 3탭 · 가운데 <code>+</code> · 🔴 <strong>음소거 시작 후 첫 조작 시 소리</strong></li><li><strong>웹 제약</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §6.5.1 — 🔴 <strong>채택: 첫 조작 시 소리 활성 · 세션 내 유지</strong></li><li><strong>성능</strong>: <strong>REQ-NF-001</strong> — 첫 프레임 p95 ≤ 1.5초 · 빈 피드 노출률 &lt; 5%</li><li><strong>시나리오</strong>: <strong>SC-6.1</strong>(로그인 화면 없이 재생) · <strong>SC-6.F1</strong>(빈 피드 대체)</li><li><strong>UI 구성</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §6 — <code>Tabs</code> + 하단 고정 네비</li><li><strong>프로토타입</strong>: <strong>REF-13</strong> <code>prototype_v0_6.html</code></li><li><strong>미해결</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.8 <strong>Q17</strong> — 🔴 <strong>무음 소비 비율이 높으면 진입 방식을 바꿀 것인가</strong></li></ul>
+<h2 id="h2">✅ 산출물 (설계 항목)</h2>
+<ul><li>[ ] <strong>3탭 구조</strong> — 팔로잉 · 추천 · 그룹 · 가운데 <code>+</code></li><li>[ ] <strong>진입 상태</strong> — 로그인 화면 없이 첫 영상이 재생 중</li><li>[ ] 🔴 <strong>음소거 표시 설계</strong> — 지금 소리가 꺼져 있다는 사실이 <strong>부작용이 아니라 상태로 읽히게</strong></li><li>[ ] 🔴 <strong>첫 조작 → 소리 켜짐 전환</strong> 의 시각적 피드백</li><li>[ ] <strong>빈 피드 대체 상태</strong> — SC-6.F1</li><li>[ ] <strong>로딩 상태</strong> — 1.5초 안에 무엇이 보이는가</li><li>[ ] 탭 전환 상태 · 활성 표시</li><li>[ ] <code>+</code> 진입점의 위계 — 다른 탭과 다른 성격임을 드러낸다</li><li>[ ] 🔺 <strong>계측 훅 위치</strong> — <code>first_unmute</code> 가 어느 조작에 붙는지</li></ul>
+<h2 id="h3">🧪 설계 인수 기준</h2>
+<p><strong>항목 1: 로그인 화면이 없다</strong> <em>(SC-6.1)</em></p>
+<ul><li>진입 흐름 어디에도 로그인 화면이 선행하지 않는다. 🔴 <strong>로그인은 필요해질 때 요청한다</strong></li></ul>
+<p><strong>항목 2: 음소거가 결함으로 보이지 않는다</strong> <em>(v2.2 §6.5.1)</em></p>
+<ul><li>🔴 <strong>"소리 켜기"가 명확한 행동으로 제시</strong>된다. 무음 재생을 그냥 두면 사용자는 <strong>앱이 고장 났다고 판단</strong>한다</li></ul>
+<p><strong>항목 3: 첫 조작의 범위가 정의된다</strong></p>
+<ul><li>스크롤 · 탭 중 <strong>무엇이 소리를 켜는가</strong>가 정해져 있다. 🔺 <strong>스크롤로 켜면 의도치 않은 소리가 나고, 탭으로만 켜면 대부분 무음으로 소비한다</strong> — Q17이 이 선택의 실측 대상이다</li></ul>
+<p><strong>항목 4: 빈 피드 상태가 설계되어 있다</strong> <em>(SC-6.F1)</em></p>
+<ul><li>팔로잉 0명일 때 <strong>빈 화면이 아니라 추천</strong>이 나오며, <strong>그 사실이 사용자에게 혼란을 주지 않는다</strong></li></ul>
+<p><strong>항목 5: 1.5초 안에 무엇이 보이는지 정해져 있다</strong> <em>(REQ-NF-001)</em></p>
+<ul><li>🔴 <strong>첫 프레임이 늦을 때의 대체 표시</strong>(스켈레톤 · 썸네일)가 설계에 있다. <strong>흰 화면은 설계가 아니다</strong></li></ul>
+<p><strong>항목 6: <code>+</code>가 탭이 아님이 드러난다</strong></p>
+<ul><li>세 탭이 <strong>보는 곳</strong>이고 <code>+</code>는 <strong>만드는 곳</strong>이다. 같은 모양으로 나열하면 이 차이가 사라진다</li></ul>
+<p><strong>항목 7 (경계): 개인화 추천 UI를 만들지 않는다</strong> <em>(REQ-FUNC-014)</em></p>
+<ul><li>취향 설문·관심사 선택 화면은 🔴 <strong>MVP 범위 밖</strong>이다. 설계에 넣지 않는다</li></ul>
+<h2 id="h4">⚙️ 설계 제약</h2>
+<ul><li>🔴 <strong>웹 자동재생 정책은 우회할 수 없다</strong> — 설계가 제약에 맞춰야 한다</li><li>🔴 <strong>소리 활성은 세션 내 유지</strong> — 매 영상마다 다시 켜게 하지 않는다</li><li>🔺 <strong>Q17의 실측 결과가 이 설계를 바꿀 수 있다</strong> — 무음 소비 비율이 높으면 <strong>음악(REQ-FUNC-007)의 가치 전달 자체가 흔들린다</strong>. 설계를 고정하기 전에 이 가능성을 열어 둔다</li><li>shadcn/ui <code>Tabs</code> + 하단 고정 네비 (v2.2 §6)</li><li>프로토타입 v0.6의 확정 사항을 뒤집지 않는다</li></ul>
+<h2 id="h5">🏁 Definition of Done</h2>
+<ul><li>[ ] 산출물 9항목이 전부 정의되었는가?</li><li>[ ] 🔴 <strong>음소거 시작이 결함이 아니라 상태로 읽히는가?</strong></li><li>[ ] 🔴 <strong>첫 조작의 범위가 정해졌는가?</strong> <em>(Q17의 입력)</em></li><li>[ ] 빈 피드 · 로딩 · 오류 상태가 전부 있는가?</li><li>[ ] <code>+</code>의 위계가 탭과 구분되는가?</li><li>[ ] 🔴 <strong>개인화 추천 UI가 없는가?</strong> <em>(범위 준수)</em></li><li>[ ] FE-001이 추가 질문 없이 구현할 수 있는가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: 🟢 <strong>없음 — 지금 착수 가능</strong> · 백엔드 계약과 무관</li><li><strong>Blocks</strong>: <strong>FE-001</strong></li><li>🔺 <strong>재검토 유발</strong>: <strong>Q17</strong>(무음 소비 비율) 실측 — 베타 2주차</li></ul>
+<p class="meta">UX-001 앱셸3탭 · 원본 UX-001_Shell_앱셸3탭.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

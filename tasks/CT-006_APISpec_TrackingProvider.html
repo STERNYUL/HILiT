@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CT-006 TrackingProvider</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[API Spec] CT-006: TrackingProvider 인터페이스 · 팩토리 · 타입 가드" labels: 'api-spec, contract, ai, priority:critical, step-1, wave-1' assignees: ''</p>
+<hr>
+<blockquote><p>🔧 <strong>v2 개정 (2026-08-30)</strong> — 실행 명세로 구체화. 파일 경로 · 타입 정의 · 검증 방법을 확정했다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[CT-006] 외부 추론 서비스 추상화 계층</strong></li><li>목적: <strong>추론 API를 갈아 끼울 수 있는 인터페이스를 SP-1 전에 확정한다.</strong> 이 인터페이스로 벤치마크 하니스를 짜면 <strong>선정된 어댑터가 그대로 프로덕션 코드가 된다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이것이 이 아키텍처의 유일한 실질 잠금이다.</strong> 다른 외부 의존(Supabase·Vercel·Gemini)은 대체가 쉽지만, <strong>추론 API는 API 스펙이 아니라 정확도 특성에 잠긴다</strong> — 바꾸면 O9·오탐률이 달라져 <strong>Gate A를 다시 통과해야 한다</strong>.</p>
+<p>🟢 <strong>그리고 이 태스크는 SP-1 결과와 무관하게 지금 쓸 수 있다.</strong> 후보가 정해지기 전에 인터페이스를 먼저 정하는 것이 순서상 맞다.</p></blockquote>
+<h3 id="h1">🔴 이 태스크가 끊는 사슬</h3>
+<pre class="code"><code>CT-006 없음 → CT-007 Mock 못 만듦
+            → 프론트가 SP-1 완료를 기다림
+            → SP-1은 정답셋 10~15편이 선행
+            → 정답셋은 실제 농구 영상 수급이 선행</code></pre>
+<p><strong>M 규모의 타입 정의 하나가 프론트 전체를 영상 수급 대기에서 풀어낸다.</strong></p>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<div class="tw"><table><thead><tr><th>문서</th><th>절</th><th>내용</th></tr></thead><tbody><tr><td><code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code></td><td><strong>§7.4</strong></td><td>🔴 <strong>T1 확정 연동 시퀀스 — <code>submit</code> → 202 → webhook</strong></td></tr><tr><td><code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code></td><td><strong>§7.3</strong></td><td>🔴 <strong>신뢰도 이름 충돌 경고 — 두 값을 같은 이름으로 쓰면 요구가 조용히 바뀐다</strong></td></tr><tr><td><code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code></td><td>§1.5.2</td><td>파생 전제 <strong>A-T1</strong>(함수 실행 시간) · <strong>A-T4</strong>(GPU 직접 사용 불가)</td></tr><tr><td><code>SRS/[SRS]hilit-SRSv1.8.md</code></td><td>REQ-FUNC-002·003·027</td><td>1회 지정 · 탐지율 · 저신뢰 제외</td></tr><tr><td><code>SRS/[SRS]hilit-SRSv1.8.md</code></td><td>§1.5.2 <strong>ADR-2</strong></td><td>모델 갱신이 앱 배포에 종속되지 않는다</td></tr><tr><td><code>실행 계획/04_SP-1_API후보조사.md</code></td><td>§2 · §5-1</td><td>🔴 <strong>후보별 응답 형태 차이 — 마스크 vs bbox</strong></td></tr><tr><td><code>실행 계획/03_스파이크_실행계획.md</code></td><td>§1.3</td><td>벤치마크 항목 <strong>B1~B8</strong> <em>(B3 신뢰도 제공 · B8 해상도)</em></td></tr><tr><td><code>DS/[DS]hilit-DSv1.1.md</code></td><td>§4.2 PersonTrack</td><td><code>anchor_bbox</code> 정규화 0~1 · 🔴 <strong>DD-5 특징 벡터 미저장</strong></td></tr></tbody></table></div>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<h3 id="h3">1. 타입 정의 — <code>lib/inference/types.ts</code></h3>
+<ul><li>[ ] <code>NormalizedBBox</code> · <code>BBoxFrame</code> · <code>DetectedInterval</code> 기본 타입</li><li>[ ] <code>TrackingProvider</code> 인터페이스</li><li>[ ] <code>TrackingResult</code> 결과 타입 — 🔴 <strong><code>reidConfidence: number[] | null</code></strong></li><li>[ ] <code>SubmitInput</code> · <code>SubmitResult</code> · <code>InferenceError</code> 보조 타입</li><li>[ ] 🔴 <strong>JSDoc으로 신뢰도 의미를 명시</strong> — 아래 §신뢰도 참조</li></ul>
+<h3 id="h3">2. 팩토리 — <code>lib/inference/provider.ts</code></h3>
+<ul><li>[ ] <code>PROVIDERS</code> 레지스트리 (<code>Record&lt;string, () =&gt; TrackingProvider&gt;</code>)</li><li>[ ] <code>getTrackingProvider()</code> — <code>process.env.INFERENCE_PROVIDER</code> 로 선택</li><li>[ ] 🔴 <strong>미등록 프로바이더는 모듈 로드 시점에 throw</strong> — 첫 요청까지 지연되지 않게</li></ul>
+<h3 id="h3">3. 런타임 검증 — <code>lib/inference/schema.ts</code></h3>
+<ul><li>[ ] <code>TrackingResultSchema</code> — Zod. <code>parseWebhook()</code> 구현체가 반환값을 이 스키마로 검증</li><li>[ ] 🔴 <strong><code>bbox</code> 값이 0~1 범위인지 Zod에서 강제</strong> — 픽셀 좌표 혼입 차단</li><li>[ ] 🔴 <strong><code>intervals[].startMs &lt; endMs</code> refine</strong> — CT-001의 <code>chk_ai_range</code> 와 같은 불변식을 경계에서도 막는다</li></ul>
+<h3 id="h3">4. 골격 구현체 — <code>lib/inference/providers/</code></h3>
+<ul><li>[ ] <code>mock.ts</code> — 🔺 <strong>선언만.</strong> 픽스처 본체는 CT-007 소관</li><li>[ ] 🔴 <strong>실제 어댑터(AWS·Replicate)는 이 태스크의 범위가 아니다</strong> — FR-008이 SP-1 선정 후 구현</li></ul>
+<h3 id="h3">5. 타입 테스트 — <code>lib/inference/types.test-d.ts</code></h3>
+<ul><li>[ ] <code>expectTypeOf</code> 또는 <code>@ts-expect-error</code> 로 <strong>불완전 구현이 컴파일 오류인지</strong> 검증</li><li>[ ] <code>reidConfidence</code> 를 <code>null</code> 체크 없이 인덱싱하면 오류인지 검증</li></ul>
+<h3 id="h3">6. 문서 반영</h3>
+<ul><li>[ ] 🔺 <strong><code>DS/[DS]hilit-DSv1.1.md</code> §3에 이 인터페이스를 추가</strong> — 현재 DS에 없다</li></ul>
+<h3 id="h3">인터페이스 — 확정안</h3>
+<pre class="code"><code class="language-ts">// lib/inference/types.ts
+
+/** 정규화 좌표. 🔴 픽셀 좌표를 이 경계에 노출하지 않는다 (B8 해상도 실험 전제) */
+export interface NormalizedBBox {
+  x: number; y: number; w: number; h: number;   // 각 0~1
+}
+
+export interface BBoxFrame {
+  frameMs: number;
+  bbox: NormalizedBBox | null;                  // null = 해당 프레임에 대상 미검출
+}
+
+export interface DetectedInterval {
+  startMs: number;
+  endMs: number;                                // 🔴 startMs &lt; endMs
+}
+
+export interface SubmitInput {
+  videoUrl: string;                             // Storage 읽기용 Signed URL
+  anchor: { frameMs: number; bbox: NormalizedBBox };
+  callbackUrl: string;                          // POST /api/webhooks/inference
+  /** B8 — 해상도별 탐지율 실험. 코드 변경 없이 전송량을 조절한다 */
+  resolution?: 'original' | 'half' | 'quarter';
+}
+
+export interface TrackingProvider {
+  readonly name: string;
+
+  /** 🔴 즉시 반환한다. 결과를 기다리지 않는다 (A-T1) */
+  submit(input: SubmitInput): Promise&lt;{ inferenceId: string }&gt;;
+
+  /** 공급자별 페이로드를 공통 형태로 정규화한다 */
+  parseWebhook(body: unknown): TrackingResult;
+}
+
+export interface TrackingResult {
+  inferenceId: string;
+  intervals: DetectedInterval[];
+  bboxTimeline: BBoxFrame[];
+
+  /**
+   * 🔴 재식별 신뢰도 — "이 사람이 지정한 그 대상인가"
+   *    REQ-FUNC-027의 제외 판정 입력이며, intervals 와 같은 길이·순서다.
+   *
+   * 🔴 null = 공급자가 이 값을 제공하지 않는다 (B3 실패).
+   *    이때 FR-009는 제외를 수행하지 않고 그 사실을 표면화해야 한다.
+   *    🔴 0으로 채우면 전량 제외, 1로 채우면 전량 통과 — 둘 다 틀리다.
+   *
+   * ⚠️ Gemini 보조 경로의 semanticScore("이 구간이 볼 만한가")와 다른 값이다.
+   *    두 값을 같은 필드에 담으면 요구사항이 조용히 바뀐다 (v2.2 §7.3).
+   */
+  reidConfidence: number[] | null;
+}</code></pre>
+<pre class="code"><code class="language-ts">// lib/inference/provider.ts
+import type { TrackingProvider } from './types';
+
+const PROVIDERS: Record&lt;string, () =&gt; TrackingProvider&gt; = {
+  mock: () =&gt; require('./providers/mock').mockProvider,
+  // aws / replicate — 🔴 FR-008이 SP-1 선정 후 등록한다
+};
+
+export function getTrackingProvider(): TrackingProvider {
+  const key = process.env.INFERENCE_PROVIDER ?? 'mock';
+  const factory = PROVIDERS[key];
+  // 🔴 기동 시점 실패. 첫 요청까지 지연되지 않는다
+  if (!factory) {
+    throw new Error(
+      `[inference] 등록되지 않은 프로바이더: "${key}". 사용 가능: ${Object.keys(PROVIDERS).join(', ')}`,
+    );
+  }
+  return factory();
+}</code></pre>
+<h3 id="h3">🔴 신뢰도 — 두 값을 같은 이름으로 쓰면 안 된다</h3>
+<div class="tw"><table><thead><tr><th>값</th><th>뜻</th><th>쓰이는 곳</th><th>타입 위치</th></tr></thead><tbody><tr><td><strong><code>reidConfidence</code></strong></td><td><em>"이 사람이 <strong>당신</strong>인가"</em></td><td><strong>REQ-FUNC-027 제외 판정</strong></td><td><code>TrackingResult</code></td></tr><tr><td><code>semanticScore</code></td><td><em>"이 구간이 <strong>볼 만한가</strong>"</em></td><td>후보 정렬</td><td>Gemini 보조 경로(FR-012 §C)</td></tr></tbody></table></div>
+<blockquote><p><strong>v2.2 §7.3이 명시적으로 경고한 지점이다.</strong> 타입 이름과 JSDoc으로 구분을 강제한다.</p></blockquote>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1 (정상): 후보 두 개가 같은 인터페이스로 호출된다</strong></p>
+<ul><li><strong>Given</strong>: 서로 다른 두 구현체 <em>(마스크 반환 · bbox 반환)</em></li><li><strong>When</strong>: 동일한 <code>SubmitInput</code> 으로 <code>submit()</code> 을 호출함</li><li><strong>Then</strong>: 호출 코드에 분기가 없다. <strong>어댑터 내부에서만 요청 형태가 달라진다</strong></li></ul>
+<p><strong>Scenario 2 (정상): 응답 형태가 달라도 결과 타입이 같다</strong></p>
+<ul><li><strong>Given</strong>: 두 공급자의 서로 다른 webhook 페이로드</li><li><strong>When</strong>: 각 어댑터의 <code>parseWebhook()</code> 을 호출함</li><li><strong>Then</strong>: 둘 다 동일한 <code>TrackingResult</code> 를 반환한다. 🔺 <strong>마스크는 외접 사각형으로 변환해 <code>bboxTimeline</code> 을 채운다</strong></li></ul>
+<p><strong>Scenario 3 (정상): 해상도 선택이 인터페이스에 있다</strong> <em>(B8)</em></p>
+<ul><li><strong>Given</strong>: <code>resolution: 'half'</code></li><li><strong>When</strong>: <code>submit()</code> 을 호출함</li><li><strong>Then</strong>: 어댑터가 저해상도 입력을 전달한다. <strong>B8 측정이 같은 코드로 반복 가능하다</strong></li></ul>
+<p><strong>Scenario 4 (정상): 환경 변수만으로 구현체가 바뀐다</strong> <em>(ADR-2)</em></p>
+<ul><li><strong>Given</strong>: <code>INFERENCE_PROVIDER=mock</code></li><li><strong>When</strong>: <code>getTrackingProvider()</code> 를 호출함</li><li><strong>Then</strong>: Mock 구현체가 반환된다. <strong>코드 변경·재배포 없이 값만 바꿔 교체된다</strong></li></ul>
+<p><strong>Scenario 5 (예외): 신뢰도 미제공이 타입으로 드러난다</strong> <em>(B3)</em></p>
+<ul><li><strong>Given</strong>: <code>reidConfidence: null</code> 을 반환하는 구현체</li><li><strong>When</strong>: 호출부가 <code>result.reidConfidence[0]</code> 처럼 <strong>null 체크 없이</strong> 접근하는 코드를 작성함</li><li><strong>Then</strong>: 🔴 <strong>TypeScript strict가 컴파일 오류로 막는다.</strong> REQ-FUNC-027의 제외 로직이 성립하지 않는 경우를 <strong>개발자가 반드시 다루게 된다</strong></li></ul>
+<p><strong>Scenario 6 (예외): 픽셀 좌표가 경계를 통과하지 못한다</strong></p>
+<ul><li><strong>Given</strong>: <code>bbox: { x: 640, y: 360, w: 100, h: 200 }</code> <em>(픽셀 좌표)</em></li><li><strong>When</strong>: <code>TrackingResultSchema.parse()</code> 를 실행함</li><li><strong>Then</strong>: 🔴 <strong>Zod가 거부한다.</strong> 0~1 범위 밖이므로 <strong>B8 해상도 실험을 깨뜨리기 전에 막힌다</strong></li></ul>
+<p><strong>Scenario 7 (예외): 뒤집힌 구간이 거부된다</strong></p>
+<ul><li><strong>Given</strong>: <code>{ startMs: 5000, endMs: 3000 }</code></li><li><strong>When</strong>: <code>TrackingResultSchema.parse()</code> 를 실행함</li><li><strong>Then</strong>: refine 위반으로 거부된다. <strong>CT-001의 <code>chk_ai_range</code> 에 도달하기 전에 경계에서 걸린다</strong></li></ul>
+<p><strong>Scenario 8 (예외): 어댑터 없는 프로바이더 지정</strong></p>
+<ul><li><strong>Given</strong>: <code>INFERENCE_PROVIDER=nonexistent</code></li><li><strong>When</strong>: <code>getTrackingProvider()</code> 를 호출함</li><li><strong>Then</strong>: 🔴 <strong>사용 가능한 목록을 담은 명확한 오류로 즉시 실패한다.</strong> 런타임 첫 요청까지 지연되지 않는다</li></ul>
+<p><strong>Scenario 9 (예외): 불완전 구현이 컴파일에서 걸린다</strong></p>
+<ul><li><strong>Given</strong>: <code>parseWebhook</code> 을 빠뜨린 객체를 <code>TrackingProvider</code> 로 선언함</li><li><strong>When</strong>: <code>tsc --noEmit</code> 을 실행함</li><li><strong>Then</strong>: 타입 오류가 발생한다 <em>(<code>types.test-d.ts</code> 가 이를 고정한다)</em></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<h3 id="h5">아키텍처</h3>
+<ul><li>🔴 <strong>비동기 필수</strong> — <code>submit()</code> 은 <code>inferenceId</code> 만 반환하고 결과는 webhook으로 온다. <strong>A-T1(함수 실행 시간 상한) 때문에 동기 대기는 구조적으로 불가능하다</strong></li><li>🔴 <strong>좌표는 정규화 0~1</strong> — 픽셀 좌표를 인터페이스에 노출하지 않는다. <strong>노출하면 B8(해상도별 탐지율) 실험이 불가능해진다</strong></li><li><strong>타임아웃</strong> — <code>submit()</code> 동기 구간 <strong>5초</strong> <code>[PROPOSED]</code>. webhook 미수신은 FR-011의 재시도로 처리</li></ul>
+<h3 id="h5">보안 · 개인정보</h3>
+<ul><li>🔴 <strong>얼굴 임베딩을 인터페이스에 두지 않는다</strong> — DD-5(특징 벡터 미저장). <strong>얼굴 대조 방식 후보를 채택하면 이 제약과 NF-017의 범위를 함께 재검토해야 한다</strong></li><li>🔴 <strong><code>videoUrl</code> 은 만료가 있는 Signed URL</strong> — 인터페이스가 영구 URL을 전제하지 않는다. 만료는 추론 상한보다 길게(FR-005 소관)</li><li><strong><code>callbackUrl</code> 검증은 수신 측 책임</strong> — 서명 검증은 CT-004의 webhook 계약에 있다</li></ul>
+<h3 id="h5">유지보수</h3>
+<ul><li>🔴 <strong>이 계약을 FR-008이 변경하지 않는다</strong> — 계약이 흔들리면 CT-007 Mock과 FR-005가 함께 깨지고 <strong>다음 공급자로 갈아탈 수 없게 된다</strong></li><li>🔺 <strong>어댑터 구현은 범위 밖</strong> — 인터페이스 · 팩토리 · Zod 스키마 · 타입 테스트까지다</li><li>🔺 <strong><code>name</code> 필드는 계측용</strong> — <code>detection_started</code> 이벤트에 공급자를 남겨 NF-006(원가 추적)이 공급자별로 집계할 수 있게 한다</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria(9건)를 충족하는가?</li><li>[ ] 🔴 <strong><code>reidConfidence</code> 가 <code>number[] | null</code> 이고, null 미처리가 컴파일 오류인가?</strong> <em>(Scenario 5)</em></li><li>[ ] 🔴 <strong>JSDoc에 <code>semanticScore</code> 와의 구분이 명시되었는가?</strong></li><li>[ ] 🔴 <strong>Zod가 픽셀 좌표와 뒤집힌 구간을 거부하는가?</strong> <em>(Scenario 6·7)</em></li><li>[ ] B8(해상도 3단)이 <code>SubmitInput</code> 으로 표현되었는가?</li><li>[ ] 미등록 프로바이더가 <strong>기동 시점에</strong> 실패하는가?</li><li>[ ] 🔴 <strong>SP-1 벤치마크 하니스가 이 인터페이스로 후보를 돌릴 수 있는가?</strong> <em>(설계 검토로 확인)</em></li><li>[ ] <code>types.test-d.ts</code> 가 불완전 구현을 잡는가?</li><li>[ ] 🔺 <strong><code>DS/[DS]hilit-DSv1.1.md</code> §3에 인터페이스를 반영했는가?</strong> <em>(현재 DS에 없다)</em></li><li>[ ] <code>tsc --noEmit</code> · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: 없음 — 🟢 <strong>CT-001과 병렬 가능</strong> <em>(파일도 담당도 겹치지 않는다)</em></li><li><strong>Blocks</strong>: <strong>CT-004</strong>(webhook 결과 타입) · <strong>CT-007</strong>(Mock) · <strong>FR-005</strong> · <strong>SP-1 벤치마크 하니스</strong></li><li>🔴 <strong>Blocked by (구현 단계만)</strong>: <strong>SP-1 완료</strong> — 실제 어댑터는 FR-008</li><li><strong>참고</strong>: 이 태스크가 늦어지면 <strong>SP-1 하니스를 임시 코드로 짜게 되고, 그 코드는 버려진다</strong></li></ul>
+<p class="meta">CT-006 TrackingProvider · 원본 CT-006_APISpec_TrackingProvider.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-033 프로필이중뷰</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Query] FR-033: 프로필 조회 — 소유자 / 타인 이중 뷰" labels: 'backend, query, record, security, priority:critical, step-2' assignees: ''</p>
+<hr>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-033] 남이 보는 내 프로필에는 비공개 기록의 흔적조차 없다</strong></li><li>목적: <strong>REQ-NF-009의 가장 어려운 조항 — "건수·존재 여부를 유추할 수 있는 정보를 반환해서는 안 된다"를 만족한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>"안 보여준다"와 "없는 것처럼 보인다"는 다르다.</strong></p>
+<p>REQ-NF-009: <em>"권한 없는 자원은 <strong>응답에서 완전히 제외</strong>해야 하며, <strong>건수·존재 여부를 유추할 수 있는 정보를 반환해서는 안 된다</strong>."</em></p>
+<p>흔한 구현은 목록만 거르고 <strong>개수는 전체로 센다.</strong> 그러면 <em>"기록 27개"</em> 인데 3개만 보이는 프로필이 나오고, <strong>비공개 기록이 24개 있다는 사실이 노출된다.</strong> SC-4.4가 정확히 이 지점을 검사한다.</p>
+<p>🟢 <strong>RLS가 이 문제를 구조적으로 푼다</strong> — <code>count(*)</code> 도 정책의 영향을 받으므로 <strong>애플리케이션이 따로 신경 쓸 필요가 없어진다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-009</strong> — 🔴 <strong>완전 제외 · 건수 유추 금지 · 우회 0건 · 감사 로그 100%</strong></li><li><strong>시나리오</strong>: <strong>SC-4.4</strong> — 🔴 <strong>타인 프로필: 전체공개만 · 비공개는 개수에도 미포함</strong> · <strong>SC-4.F1</strong>(우회 차단)</li><li><strong>RLS 설계</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §4.2 · <code>tasks/CT-003_DB_RLS정책.md</code></li><li><strong>소유자 뷰</strong>: <code>tasks/FR-032_Query_마이페이지기록목록.md</code> — 🔴 <strong>별도 태스크</strong></li><li><strong>팔로우 경계</strong>: <code>tasks/FR-026_Social_팔로우-피드.md</code> — 팔로우가 가시성을 바꾸지 않는다</li><li><strong>성능</strong>: <strong>REQ-NF-005</strong> — p95 ≤ 400ms</li><li>감사 로그: <code>tasks/NF-009_Sec_접근거부감사로그.md</code></li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] <strong><code>getProfile(userId, viewerId)</code></strong> — 조회자에 따라 다른 결과</li><li>[ ] 🔴 <strong>집계를 RLS 하에서 수행</strong> — 애플리케이션에서 세지 않는다(§제약)</li><li>[ ] <strong>조회자 4유형 대응</strong> — 본인 / 팔로워 / 그룹 구성원 / 완전한 타인</li><li>[ ] 팔로워·팔로잉 수 — 🔺 가시성 영향 여부 확인</li><li>[ ] 🔴 <strong>접근 거부 감사 로그</strong> — <code>visibility_denied</code></li><li>[ ] 존재하지 않는 사용자와 접근 불가 사용자의 응답 일치 여부 판단</li><li>[ ] 계측 — <code>profile_viewed</code></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 타인에게는 전체공개만 보인다</strong> <em>(SC-4.4)</em></p>
+<ul><li><strong>Given</strong>: 전체공개 3건 · 그룹 5건 · 비공개 19건인 사용자</li><li><strong>When</strong>: 완전한 타인이 프로필을 봄</li><li><strong>Then</strong>: <strong>3건만 보인다</strong></li></ul>
+<p><strong>Scenario 2: 개수도 3이다</strong> <em>(REQ-NF-009 · SC-4.4)</em></p>
+<ul><li><strong>Given</strong>: 위와 같은 상황</li><li><strong>When</strong>: 기록 수를 확인함</li><li><strong>Then</strong>: 🔴 <strong>"3"이다.</strong> <em>"27"</em> 이나 <em>"3 / 27"</em> 이 아니다. <strong>개수 하나가 비공개 24건의 존재를 알려준다</strong></li></ul>
+<p><strong>Scenario 3: 그룹 구성원에게는 그룹 기록도 보인다</strong></p>
+<ul><li><strong>Given</strong>: 같은 그룹의 구성원이 조회함</li><li><strong>When</strong>: 프로필을 봄</li><li><strong>Then</strong>: <strong>전체공개 3 + 그룹 5 = 8건</strong>이 보이고 개수도 8이다</li></ul>
+<p><strong>Scenario 4: 팔로워라고 더 보이지 않는다</strong> <em>(규칙 8)</em></p>
+<ul><li><strong>Given</strong>: 팔로워지만 같은 그룹이 아닌 사용자</li><li><strong>When</strong>: 프로필을 봄</li><li><strong>Then</strong>: 🔴 <strong>전체공개 3건만.</strong> 팔로우는 가시성을 바꾸지 않는다</li></ul>
+<p><strong>Scenario 5: 본인에게는 전부 보인다</strong></p>
+<ul><li><strong>Given</strong>: 자기 프로필</li><li><strong>When</strong>: 조회함</li><li><strong>Then</strong>: <strong>27건 전부</strong>. 소유자 조건이 RLS 정책에 포함돼 있다</li></ul>
+<p><strong>Scenario 6: 조작된 요청이 통하지 않는다</strong> <em>(SC-4.F1)</em></p>
+<ul><li><strong>Given</strong>: 비공개 기록의 ID를 직접 지정한 요청</li><li><strong>When</strong>: 조회를 시도함</li><li><strong>Then</strong>: 🔴 <strong>우회 성공 0건</strong>이고 <strong><code>visibility_denied</code> 감사 로그가 남는다.</strong> 기록률 <strong>100%</strong></li></ul>
+<p><strong>Scenario 7 (실패): 애플리케이션에서 세지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 집계 구현</li><li><strong>When</strong>: 코드를 확인함</li><li><strong>Then</strong>: 🔴 <strong><code>count(*)</code> 가 RLS가 적용된 쿼리로 실행</strong>된다. <strong>애플리케이션에서 전체를 가져와 필터링 후 세는 구현은 성능도 나쁘고 반드시 새어나간다</strong></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>RLS가 유일한 진실 원천</strong> — 애플리케이션 필터는 이중 방어이지 대체가 아니다</li><li>🔴 <strong>집계도 RLS를 통과</strong> — 이것이 v2.2 §4.2가 <em>"SC-4.4를 구조적으로 해결"</em> 이라고 표현한 이유다</li><li>🔺 <strong>존재하지 않는 사용자 vs 접근 불가 사용자의 응답이 같아야 하는지 <code>[TBD]</code></strong> — 다르면 계정 존재 여부가 유추된다. <strong>요구 문구의 "존재 여부 유추 금지"가 계정 단위에도 적용되는지 확인 필요</strong></li><li>🔺 <strong>팔로워·팔로잉 수의 가시성이 <code>[TBD]</code></strong> — 요구사항에 명시가 없다</li><li>감사 로그 기록률 100% — 누락이 있으면 REQ-NF-009 미충족</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>타인 뷰의 개수가 보이는 건수와 일치하는가?</strong> <em>(SC-4.4)</em></li><li>[ ] 🔴 <strong>집계가 RLS 하에서 수행되는가?</strong></li><li>[ ] 조회자 4유형이 각각 검증되었는가?</li><li>[ ] 🔴 <strong>우회 성공 0건 · 감사 로그 100%인가?</strong> <em>(NF-007이 교차 검증)</em></li><li>[ ] 팔로워에게 추가 노출이 없는가?</li><li>[ ] p95 ≤ 400ms인가?</li><li>[ ] 🔺 <strong>계정 존재 여부 유추 방지 여부가 결정되었는가?</strong></li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-003</strong>(RLS — 🔴 <strong>이 태스크의 성패가 여기 달렸다</strong>)</li><li><strong>Blocks</strong>: <strong>FE-006</strong> · <strong>TS-004</strong> · <strong>TS-007</strong></li><li><strong>교차 검증</strong>: <strong>NF-007</strong>(RLS 우회 시도 테스트)이 이 태스크를 공격한다</li></ul>
+<p class="meta">FR-033 프로필이중뷰 · 원본 FR-033_Query_프로필이중뷰.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

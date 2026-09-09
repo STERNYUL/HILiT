@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-005 지정 탐지왕복</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command] FR-005: 추적 대상 지정 · 탐지 요청 · 결과 수신 (한 왕복)" labels: 'backend, command, vision, priority:critical, step-2' assignees: ''</p>
+<hr>
+<blockquote><p>🔀 <strong>FR-006(탐지 요청) · FR-007(결과 수신)을 흡수했다</strong> <em>(축약 2026-08-30)</em> — <strong><code>submit</code> → <code>callback</code> 이 한 왕복</strong>이고 셋 다 같은 모듈이다. 두 ID는 폐번이며 이 문서를 가리킨다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-005] 사용자가 자기를 한 번 가리키면, 40분 전체가 외부에서 분석되어 돌아온다</strong></li><li>목적: <strong>A-T1 안에서 장시간 추론을 시작시키고, 공급자마다 다른 결과를 하나의 형태로 정규화한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>"1회"가 요구사항의 본문이다.</strong> REQ-FUNC-002: <em>"사용자가 자기를 <strong>1회 지정</strong>하면"</em>.</p>
+<p>여러 번 지정하게 만들면 정확도는 올라가지만 <strong>차별점 D1이 사라진다</strong> — <em>"긴 영상을 직접 뒤지지 않아도 된다"</em> 가 제품의 주장인데, 여러 번 지정하는 것은 결국 영상을 뒤지는 일이다.</p>
+<p>🔴 <strong>그리고 성공 조건은 "결과를 받는 것"이 아니라 "기다리지 않는 것"이다.</strong> 탐지는 p95 ≤ 8분을 목표로 하는데 Vercel 함수는 그만큼 살아 있지 못한다(A-T1). <strong>요청을 보내고 <code>inferenceId</code> 만 받고 즉시 반환</strong>해야 하며, 결과는 <strong>webhook</strong>으로 돌아온다.</p>
+<p>🔴 <strong>정규화가 수신 측의 본체다.</strong> SP-1 후보들은 응답 형태가 다르다 — 프레임 인덱스 vs 밀리초, 재식별 신뢰도 제공 vs <strong>미제공(B3 실패)</strong>. <strong>여기서 정규화하지 않으면 공급자 차이가 파이프라인 전체로 번진다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-002</strong>(🔴 <strong>1회 지정</strong> · 재식별 ≥ 90% · 오인식 ≤ 2% <code>[SOURCE]</code>) · <strong>REQ-FUNC-003</strong></li><li><strong>시퀀스</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §7.4 — 🔴 <strong>T1 확정 구조</strong></li><li><strong>파생 전제</strong>: §1.5.2 <strong>A-T1 · A-T3</strong></li><li><strong>Provider 계약</strong>: <code>tasks/CT-006_APISpec_TrackingProvider.md</code> — <code>submit()</code> · <code>parseWebhook()</code> · <strong><code>resolution</code> 옵션(B8)</strong></li><li><strong>Webhook 계약</strong>: <code>tasks/CT-004_APISpec_API계약.md</code> — 서명 · 멱등 · 순서 역전 · 🔴 <strong><code>failure_class = CAPTURE</code></strong></li><li><strong>신뢰도 구분</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §7.3 — 🔴 <strong>재식별 신뢰도 ≠ 구간 점수</strong></li><li><strong>시나리오</strong>: <strong>SC-1.2</strong>(가림 후 재식별) · <strong>SC-1.F2</strong>(대상 미등장)</li><li><strong>전송 비용</strong>: <code>실행 계획/03_스파이크_실행계획.md</code> <strong>B8</strong> · <strong>REQ-NF-013</strong></li><li><strong>차별점</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §1.2 <strong>D1</strong></li><li>후보 API 특성: <code>실행 계획/04_SP-1_API후보조사.md</code> §2</li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<h3 id="h3">A. 대상 지정</h3>
+<ul><li>[ ] Server Action <strong><code>setTrackingAnchor({ videoId, frameMs, bbox })</code></strong></li><li>[ ] 🔴 <strong>정규화 좌표 0~1로 저장</strong> — 원본 해상도와 무관하게 유효해야 한다(§제약)</li><li>[ ] 유효성 — <code>frameMs</code> 범위 · <code>bbox</code> 0~1 · 폭·높이 &gt; 0 · 소유권</li><li>[ ] 🔴 <strong>재지정 경로</strong> — SC-1.F2 이후 다시 지정 가능 · <strong>이전 탐지 결과 무효화</strong></li><li>[ ] 계측 — <code>anchor_set</code> · <code>anchor_reset</code></li></ul>
+<h3 id="h3">B. 탐지 요청 <em>(← FR-006)</em></h3>
+<ul><li>[ ] Server Action <strong><code>startDetection(videoId)</code></strong></li><li>[ ] 사전 조건 — <code>status = UPLOADED</code> <strong>and</strong> anchor 존재</li><li>[ ] Storage <strong>읽기용 Signed URL</strong> 발급 — 만료가 추론 상한보다 길게</li><li>[ ] <code>TrackingProvider.submit()</code> 호출 — <code>{ videoUrl, anchor, callbackUrl, resolution }</code></li><li>[ ] 🔴 <strong><code>resolution</code> 을 설정으로 분리</strong> — B8 결과에 따라 코드 변경 없이 바꾼다</li><li>[ ] <code>processing_jobs</code> 등록 — <code>stage = DETECTING</code> · <code>inferenceId</code> 보관</li><li>[ ] 🔴 <strong>즉시 반환</strong> · <strong>중복 요청 방지</strong></li><li>[ ] 계측 — <code>detection_started</code>(<strong>해상도·전송 바이트 포함</strong>)</li></ul>
+<h3 id="h3">C. 결과 수신 및 정규화 <em>(← FR-007)</em></h3>
+<ul><li>[ ] Route Handler <strong><code>POST /api/webhooks/inference</code></strong> — 🔴 <strong>서명 검증 우선</strong></li><li>[ ] <code>TrackingProvider.parseWebhook()</code> 위임 — 🔴 <strong>공급자별 파싱은 어댑터(FR-008)의 몫</strong></li><li>[ ] <strong>시간 단위 정규화</strong>(프레임 → <code>frameMs</code>) · <strong>좌표 정규화</strong>(0~1)</li><li>[ ] <code>appearance_intervals</code> INSERT · <code>bbox_timeline</code> 저장</li><li>[ ] 🔴 <strong><code>reidConfidence</code> 를 별도 필드로</strong> — 구간 점수와 절대 섞지 않는다</li><li>[ ] 🔴 <strong>등장 구간 0건 → <code>failure_class = CAPTURE</code></strong> (<code>INFRA</code> 아님)</li><li>[ ] 상태 전이 <code>DETECTING → SELECTION_READY</code> 또는 <code>FAILED</code> · 멱등 · 순서 역전 방어</li><li>[ ] 계측 — <code>detection_completed</code>(<strong>소요 시간 · 구간 수 · 신뢰도 제공 여부</strong>)</li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 한 번의 지정으로 탐지가 시작된다</strong> <em>(REQ-FUNC-002)</em></p>
+<ul><li><strong>Given</strong>: 업로드가 완료된 40분 원본</li><li><strong>When</strong>: 사용자가 한 프레임에서 자기를 1회 지정함</li><li><strong>Then</strong>: 🔴 <strong>추가 지정 요구 없이</strong> anchor가 저장되고 탐지 요청이 가능해진다</li></ul>
+<p><strong>Scenario 2: 좌표가 해상도에 의존하지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 1080p 원본에서 지정한 anchor</li><li><strong>When</strong>: 🔺 B8에 따라 절반 해상도로 다운스케일해 추론 API로 보냄</li><li><strong>Then</strong>: 🔴 <strong>anchor가 그대로 유효하다.</strong> 픽셀 좌표로 저장했다면 여기서 어긋난다</li></ul>
+<p><strong>Scenario 3: 찾지 못했을 때 다시 지정할 수 있다</strong> <em>(SC-1.F2)</em></p>
+<ul><li><strong>Given</strong>: 탐지 결과 등장 구간 0건</li><li><strong>When</strong>: 다른 프레임에서 재지정함</li><li><strong>Then</strong>: 🔴 <strong>새 anchor가 저장되고 이전 탐지 결과가 무효화</strong>된다. 두 결과가 섞이지 않는다</li></ul>
+<p><strong>Scenario 4: 요청 후 즉시 반환한다</strong> <em>(A-T1)</em></p>
+<ul><li><strong>Given</strong>: 40분 원본과 anchor</li><li><strong>When</strong>: <code>startDetection</code> 을 호출함</li><li><strong>Then</strong>: 🔴 <strong>초 단위로 반환</strong>되고 <code>stage = DETECTING</code> 이 기록된다. 함수가 추론 시간만큼 살아 있지 않는다</li></ul>
+<p><strong>Scenario 5: 사전 조건 없이 · 중복으로 탐지가 나가지 않는다</strong></p>
+<ul><li><strong>Given</strong>: anchor가 없거나, 이미 <code>DETECTING</code> 인 원본</li><li><strong>When</strong>: 탐지를 요청함</li><li><strong>Then</strong>: 🔴 <strong>거부되고 새 추론이 발생하지 않는다.</strong> <strong>비용이 발생하는 호출이므로 중복은 원가를 두 배로 만든다</strong>(REQ-NF-013)</li></ul>
+<p><strong>Scenario 6: 해상도를 코드 변경 없이 바꿀 수 있다</strong> <em>(B8)</em></p>
+<ul><li><strong>Given</strong>: <code>resolution</code> 설정</li><li><strong>When</strong>: <code>original → half</code> 로 변경함</li><li><strong>Then</strong>: 🔴 <strong>전송 바이트가 줄고 코드는 그대로다.</strong> B8 실험이 배포 없이 반복 가능하다</li></ul>
+<p><strong>Scenario 7: 전송량이 계측된다</strong> <em>(REQ-NF-013)</em></p>
+<ul><li><strong>Given</strong>: 탐지 요청</li><li><strong>When</strong>: <code>detection_started</code> 를 확인함</li><li><strong>Then</strong>: 🔴 <strong>전송 바이트와 해상도가 담긴다.</strong> <strong>원본 전송 비용은 REQ-NF-013이 처음에 빠뜨렸던 항목</strong>이므로 계측이 없으면 다시 보이지 않게 된다</li></ul>
+<p><strong>Scenario 8: 결과가 저장되고 다음 단계가 열린다</strong></p>
+<ul><li><strong>Given</strong>: <code>stage = DETECTING</code> 인 작업</li><li><strong>When</strong>: 추론 API가 <code>intervals</code> 를 포함한 결과를 보냄</li><li><strong>Then</strong>: <code>appearance_intervals</code> 가 저장되고 <code>stage = SELECTION_READY</code> 로 전이된다</li></ul>
+<p><strong>Scenario 9: 등장 구간 0건이 촬영 실패로 분류된다</strong> <em>(SC-1.F2)</em></p>
+<ul><li><strong>Given</strong>: <code>intervals</code> 가 빈 배열</li><li><strong>When</strong>: webhook을 수신함</li><li><strong>Then</strong>: 🔴 <strong><code>failure_class = CAPTURE</code>.</strong> <strong><code>INFRA</code> 로 분류하면 인프라 실패율 지표가 오염되고 진짜 장애가 묻힌다</strong></li></ul>
+<p><strong>Scenario 10: 두 신뢰도가 섞이지 않는다</strong> <em>(v2.2 §7.3)</em></p>
+<ul><li><strong>Given</strong>: 추론 결과의 <code>reidConfidence</code> 와 Gemini의 구간 점수</li><li><strong>When</strong>: 저장된 스키마를 확인함</li><li><strong>Then</strong>: 🔴 <strong>서로 다른 컬럼이다.</strong> <em>"이 사람이 당신인가"</em> 와 <em>"이 구간이 볼 만한가"</em> 는 다른 질문이며, <strong>섞이면 REQ-FUNC-027의 제외 판정이 조용히 틀린다</strong></li></ul>
+<p><strong>Scenario 11: 신뢰도 미제공이 명시적으로 드러난다</strong> <em>(B3)</em></p>
+<ul><li><strong>Given</strong>: <code>reidConfidence</code> 가 <code>null</code> 인 결과</li><li><strong>When</strong>: 저장을 수행함</li><li><strong>Then</strong>: 🔴 <strong><code>null</code> 이 그대로 보존되고 0으로 채우지 않는다.</strong> 0으로 채우면 FR-009가 전부 제외해 버린다</li></ul>
+<p><strong>Scenario 12: 시간 단위가 통일된다</strong></p>
+<ul><li><strong>Given</strong>: 프레임 인덱스로 응답하는 공급자</li><li><strong>When</strong>: 정규화를 수행함</li><li><strong>Then</strong>: <strong>밀리초로 환산되어 저장</strong>된다. 이후 어떤 코드도 프레임률을 알 필요가 없다</li></ul>
+<p><strong>Scenario 13 (실패): 지정 횟수를 늘려 정확도를 올리지 않는다</strong> <em>(D1)</em></p>
+<ul><li><strong>Given</strong>: 재식별 정확도가 목표에 미달하는 상황</li><li><strong>When</strong>: 해결책을 검토함</li><li><strong>Then</strong>: 🔴 <strong>"여러 번 지정하게 하기"는 이 태스크의 해법이 아니다.</strong> 대응은 ADR-1 재검토 또는 임계 조정이며, <strong>지정 횟수 증가는 제품 결정이지 구현 결정이 아니다</strong></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>정규화 좌표 0~1</strong> — B8 실험이 다운스케일 전송을 검토 중이므로 <strong>픽셀 좌표는 이 실험을 불가능하게 만든다</strong></li><li>🔴 <strong>A-T1이 비동기 설계의 원인</strong> — 동기 대기는 구조적으로 불가능하다</li><li>🔴 <strong>파싱을 Handler에 하드코딩하지 않는다</strong> — <code>parseWebhook()</code> 위임이 공급자 교체를 가능하게 하는 지점이다</li><li>🔴 <strong>Webhook은 RLS 우회 경로</strong> — CT-003의 우회 목록에 등재. <strong>Handler 안에서 후보 생성까지 하지 않는다</strong>(A-T1) — FR-012는 분리</li><li>🔺 <strong><code>resolution</code> 기본값은 <code>[TBD]</code></strong> — B8이 <strong>탐지율 손실 대비 전송 절감</strong>을 재기 전까지 <code>original</code> 로 두고 설정값으로 분리</li><li>🔺 <strong>입력 형태가 SP-1 결과에 종속</strong> — 클릭 좌표 기반은 점 하나로 충분하고 얼굴 대조 기반은 얼굴이 보이는 프레임을 요구한다. <strong><code>bbox</code> 는 두 경우를 모두 담는 상위 형태</strong>이므로 이 계약을 유지한다</li><li>🔺 <strong>대량 INSERT 주의</strong> — 40분 영상의 bbox 시계열은 행 수가 크다. 벌크 삽입·트랜잭션 경계 설계 필요 <code>[TBD]</code></li><li>재시도는 FR-011 소관 — 이 태스크는 <strong>1회 발신</strong>만 책임진다</li><li>재식별 정확도·오인식률은 이 태스크가 달성하지 않는다 — <strong>FR-008과 SP-1의 몫</strong></li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>좌표가 정규화 0~1로 저장되는가?</strong> <em>(픽셀 좌표가 코드 어디에도 없는가)</em></li><li>[ ] 🔴 <strong>재지정 시 이전 결과가 무효화되는가?</strong></li><li>[ ] 🔴 <strong>추론 완료를 기다리는 코드가 없는가?</strong></li><li>[ ] 🔴 <strong><code>resolution</code> 이 설정값으로 분리되었는가?</strong></li><li>[ ] 🔴 <strong><code>reidConfidence</code> 가 구간 점수와 별도 컬럼이고 <code>null</code> 이 0으로 치환되지 않는가?</strong></li><li>[ ] 🔴 <strong>0건이 <code>CAPTURE</code> 로 분류되는가?</strong></li><li>[ ] 공급자별 파싱이 어댑터에 위임되어 있는가?</li><li>[ ] 멱등 · 순서 역전 방어가 둘 다 있는가?</li><li>[ ] <code>detection_started</code> 에 <strong>해상도 · 전송 바이트</strong>가 포함되는가?</li><li>[ ] 유효성 검증 4종(범위·크기·시각·소유권)이 있는가?</li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-004</strong>(Action·Webhook 계약) · <strong>CT-006</strong>(Provider 인터페이스)</li><li><strong>Blocks</strong>: <strong>FR-009</strong>(제외) · <strong>FR-011</strong>(체크포인트) · <strong>FR-012</strong>(후보) · <strong>FR-036</strong>(Realtime) · <strong>TS-001</strong></li><li><strong>테스트 수단</strong>: 🟢 <strong>CT-007 Mock의 6종 픽스처로 SP-1 없이 완성 가능</strong>하다</li><li><strong>연관</strong>: <strong>NF-006</strong>(원가 추적)이 <code>detection_started</code> 를 소비한다</li></ul>
+<p class="meta">FR-005 지정 탐지왕복 · 원본 FR-005_Vision_지정-탐지왕복.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

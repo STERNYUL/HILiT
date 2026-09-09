@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-032 마이페이지기록목록</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Query] FR-032: 마이페이지 기록 목록 및 종목·공개범위 필터" labels: 'backend, query, record, priority:high, step-2' assignees: ''</p>
+<hr>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-032] 내 기록이 쌓인 것을 내가 본다</strong></li><li>목적: <strong>Gate B(기록 공간 수용성)가 판정할 대상, 즉 "기록 공간" 그 자체를 만든다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 화면이 D4의 결과물이다.</strong></p>
+<p>앞의 모든 태스크는 <em>"공개하지 않아도 기록이 남는다"</em> 를 <strong>가능하게</strong> 했다. 이 화면은 그 기록이 <strong>쌓인 것을 사용자가 실제로 보는 유일한 자리</strong>다. <strong>Gate B가 판정하는 것은 기술이 아니라 이 화면이 주는 느낌</strong>이다.</p>
+<p>🔺 <strong>그래서 "목록이 나온다"만으로는 이 태스크가 끝나지 않는다</strong> — SC-6.4(D30 기록 3편 이상 코호트)가 이 화면의 실질 지표다.</p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-020</strong>(기록 타임라인 · 날짜별 축적 뷰) · <strong>REQ-FUNC-010</strong>(배지)</li><li><strong>시나리오</strong>: <strong>SC-4.3</strong>(격자 · 공개 범위 배지) · <strong>SC-4.5</strong> 🆕(<strong>종목별 · 공개 범위별 필터</strong>) · <strong>SC-6.4</strong>(D30 코호트)</li><li><strong>성능</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-005</strong> — 목록 API <strong>p95 ≤ 400ms</strong></li><li><strong>RLS</strong>: <code>tasks/CT-003_DB_RLS정책.md</code> — 🔴 <strong>소유자 뷰</strong></li><li><strong>이중 뷰 대응</strong>: <code>tasks/FR-033_Query_프로필이중뷰.md</code> — 🔴 <strong>타인 뷰는 별개 태스크</strong></li><li><strong>게이트</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.4 — <strong>Gate B</strong></li><li>화면: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §6 — 마이페이지 <code>Tabs</code> + <code>ToggleGroup</code></li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] <strong><code>listMyRecords({ sport?, visibility?, cursor? })</code></strong> — RSC 직접 조회</li><li>[ ] 🔴 <strong>소유자 뷰 — 비공개 포함 전부</strong> 보인다</li><li>[ ] <strong>종목 필터</strong> · <strong>공개 범위 필터</strong> — SC-4.5</li><li>[ ] <strong>날짜별 축적 뷰</strong> — REQ-FUNC-020</li><li>[ ] 각 기록에 <strong>공개 범위 글자 배지</strong> — 🔴 <strong>영상을 가리지 않는다</strong>(ADR-4)</li><li>[ ] 페이지네이션 — 기록이 쌓일수록 늘어난다</li><li>[ ] 🔺 <strong>SC-6.4 코호트 집계의 입력</strong> — 사용자별 기록 수</li><li>[ ] 계측 — <code>mypage_opened</code> · <code>record_filter_applied</code></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 비공개 기록이 내게는 보인다</strong> <em>(D4)</em></p>
+<ul><li><strong>Given</strong>: <code>private</code> 기록 12건</li><li><strong>When</strong>: 마이페이지를 엶</li><li><strong>Then</strong>: 🔴 <strong>12건이 전부 보인다.</strong> 소유자 뷰에서는 공개 범위가 가시성을 제한하지 않는다</li></ul>
+<p><strong>Scenario 2: 공개 범위가 배지로 표시된다</strong> <em>(SC-4.3 · ADR-4)</em></p>
+<ul><li><strong>Given</strong>: 세 가지 범위가 섞인 목록</li><li><strong>When</strong>: 격자를 확인함</li><li><strong>Then</strong>: 🔴 <strong>글자 배지로 표시되고 영상을 가리지 않는다</strong></li></ul>
+<p><strong>Scenario 3: 종목·공개 범위로 거를 수 있다</strong> <em>(SC-4.5)</em></p>
+<ul><li><strong>Given</strong>: 여러 종목의 기록</li><li><strong>When</strong>: 필터를 적용함</li><li><strong>Then</strong>: <strong>해당 조건의 기록만 남는다.</strong> 두 필터를 함께 적용할 수 있다</li></ul>
+<p><strong>Scenario 4: 날짜별로 쌓인 것이 보인다</strong> <em>(REQ-FUNC-020)</em></p>
+<ul><li><strong>Given</strong>: 3개월간의 기록</li><li><strong>When</strong>: 타임라인 뷰를 봄</li><li><strong>Then</strong>: <strong>날짜별 축적</strong>이 확인된다. 🔴 <strong>"쌓였다"는 감각이 Gate B의 판정 대상이다</strong></li></ul>
+<p><strong>Scenario 5: 400ms 안에 응답한다</strong> <em>(REQ-NF-005)</em></p>
+<ul><li><strong>Given</strong>: 기록이 많은 계정</li><li><strong>When</strong>: 목록을 조회함</li><li><strong>Then</strong>: <strong>p95 ≤ 400ms</strong>. 🔺 <strong>RLS 정책이 걸린 쿼리의 성능을 인덱스로 받쳐야 한다</strong>(CT-001)</li></ul>
+<p><strong>Scenario 6: 원본이 삭제된 기록도 보인다</strong> <em>(FR-004)</em></p>
+<ul><li><strong>Given</strong>: 원본을 지운 기록</li><li><strong>When</strong>: 목록을 봄</li><li><strong>Then</strong>: 🔴 <strong>정상 표시되고 재생된다.</strong> <code>source_video_id</code> 가 <code>NULL</code> 이어도 기록은 온전하다</li></ul>
+<p><strong>Scenario 7 (실패): 타인 뷰 로직을 이 함수에 섞지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 프로필 조회 요구</li><li><strong>When</strong>: 구현을 검토함</li><li><strong>Then</strong>: 🔴 <strong>FR-033이 별도로 담당한다.</strong> 한 함수에 <code>if (isOwner)</code> 분기를 넣으면 <strong>SC-4.4(개수에도 미포함)를 실수로 깨뜨리기 쉽다</strong></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>소유자 뷰와 타인 뷰를 분리</strong> — FR-033과 함수를 나눈다</li><li>🔴 <strong>RLS 하에서 소유자는 전부 본다</strong> — 정책이 소유자 조건을 포함해야 한다(CT-003)</li><li>🔺 <strong>인덱스가 성능을 좌우</strong> — 사용자 · 종목 · 공개 범위 · 날짜 조합 (CT-001)</li><li>🔺 <strong>SC-6.4(D30 기록 3편 이상)의 집계 위치가 <code>[TBD]</code></strong> — 이 조회가 아니라 분석 파이프라인 소관일 수 있다</li><li>열거형 확장 패턴 준수 — 종목 추가 시 코드 변경 최소화(REQ-NF-015)</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>소유자에게 비공개 기록이 전부 보이는가?</strong></li><li>[ ] 🔴 <strong>배지가 영상을 가리지 않는가?</strong></li><li>[ ] 종목·공개 범위 필터가 함께 동작하는가?</li><li>[ ] 날짜별 축적 뷰가 있는가?</li><li>[ ] p95 ≤ 400ms인가?</li><li>[ ] 원본 삭제된 기록이 정상 표시되는가?</li><li>[ ] 🔴 <strong>타인 뷰 로직이 섞이지 않았는가?</strong></li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-003</strong>(RLS) · <strong>CT-001</strong>(인덱스) · <strong>FR-019</strong>(기록)</li><li><strong>Blocks</strong>: <strong>FE-006</strong>(마이페이지 UI) · <strong>TS-004</strong>(Gate B)</li><li>🔴 <strong>Gate B 판정 대상</strong>: 이 화면이 <em>"기록 공간 수용성"</em> 이 측정되는 자리다</li></ul>
+<p class="meta">FR-032 마이페이지기록목록 · 원본 FR-032_Query_마이페이지기록목록.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-014 선택확정 자동확정차단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command] FR-014: 선택 확정 및 자동 확정 차단" labels: 'backend, command, composer, priority:critical, step-2' assignees: ''</p>
+<hr>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-014] 사람이 고르지 않으면 아무것도 확정되지 않는다</strong></li><li>목적: <strong>차별점 D2 "사람이 선택한다"를 코드 수준에서 강제한다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 태스크는 기능을 추가하는 것이 아니라 기능이 생기지 않게 막는 것이다.</strong></p>
+<p>REQ-FUNC-005: <em>"<strong>최종 선택권은 사람에게 있어야 한다.</strong> 사용자의 명시적 선택 없이 결과물이 확정되어서는 안 된다."</em></p>
+<p><strong>편의 개선의 얼굴로 이 요구가 무너진다</strong> — <em>"후보가 1개뿐이니 자동 선택"</em>, <em>"상위 5개를 미리 체크"</em>, <em>"아무것도 안 고르면 추천분으로"</em>. 셋 다 합리적으로 들리고, <strong>셋 다 D2를 없앤다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-005</strong> — 🔴 <strong>자동 확정 금지</strong> · <strong>후보 100% 전부에 선택·제외 가능</strong></li><li><strong>시나리오</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-3.3</strong> — 명시적 선택 없이 결과물이 확정되지 않는다</li><li><strong>다시 고르기</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-3.F2</strong> — 🔴 <strong>선택 상태 보존</strong></li><li><strong>차별점</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §1.2 <strong>D2</strong> — 사람이 선택한다(모방 난이도 낮음이나 <strong>정체성</strong>)</li><li><strong>API</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §5.4 — <code>POST /records</code></li><li><strong>계측</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.4.3 — <code>selection_confirmed</code> · <code>reselection_started</code></li><li>검증: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §5.2 <strong>TC-SC-3.3</strong></li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<ul><li>[ ] Server Action <strong><code>confirmSelection({ videoId, candidateIds })</code></strong> 구현</li><li>[ ] 🔴 <strong>빈 선택 거부</strong> — <code>candidateIds</code> 가 비면 확정하지 않는다</li><li>[ ] 🔴 <strong>기본 선택 상태를 만들지 않는다</strong> — 미리 체크된 후보가 없다</li><li>[ ] 선택 유효성 — 존재하는 후보인지 · 소유자의 것인지</li><li>[ ] <strong>선택 상태 서버 저장</strong> — SC-3.F2 복귀 시 보존(FR-016과 연동)</li><li>[ ] 확정 후 리프레이밍(FR-010) 트리거</li><li>[ ] 계측 — <code>selection_confirmed</code>(<strong>선택 개수 · 소요 시간 · 실험군</strong>) · <code>reselection_started</code></li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 선택 없이 결과물이 만들어지지 않는다</strong> <em>(SC-3.3)</em></p>
+<ul><li><strong>Given</strong>: 사용자가 아무 후보도 선택하지 않음</li><li><strong>When</strong>: 확정을 시도하거나 시간이 경과함</li><li><strong>Then</strong>: 🔴 <strong>결과물이 생성되지 않는다.</strong> 자동 확정 <strong>0건</strong></li></ul>
+<p><strong>Scenario 2: 미리 체크된 후보가 없다</strong> <em>(REQ-FUNC-005)</em></p>
+<ul><li><strong>Given</strong>: 후보 목록을 처음 열었을 때</li><li><strong>When</strong>: 선택 상태를 확인함</li><li><strong>Then</strong>: 🔴 <strong>선택된 항목이 0개다.</strong> <em>"추천 5개 자동 선택"</em> 은 명시적 선택이 아니다 — <strong>사용자가 그대로 확정하면 시스템이 고른 것이 된다</strong></li></ul>
+<p><strong>Scenario 3: 후보가 하나여도 자동 선택하지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 제외 후 후보가 1개만 남음(SC-1.F6 상황)</li><li><strong>When</strong>: 화면에 진입함</li><li><strong>Then</strong>: 🔴 <strong>여전히 사용자가 눌러야 한다.</strong> 후보 개수가 D2를 면제하지 않는다</li></ul>
+<p><strong>Scenario 4: 모든 후보에 선택·제외가 가능하다</strong> <em>(REQ-FUNC-005)</em></p>
+<ul><li><strong>Given</strong>: 제시된 후보 전체</li><li><strong>When</strong>: 각각을 선택하거나 제외함</li><li><strong>Then</strong>: <strong>100% 전부에 대해 가능</strong>하다. 시스템이 <em>"이건 고르면 안 된다"</em> 고 막는 후보가 없다</li></ul>
+<p><strong>Scenario 5: 다시 고르기가 선택을 지우지 않는다</strong> <em>(SC-3.F2)</em></p>
+<ul><li><strong>Given</strong>: 5개를 선택하고 확정해 리프레이밍 결과를 봄</li><li><strong>When</strong>: 다시 고르기로 복귀함</li><li><strong>Then</strong>: 🔴 <strong>기존 선택 5개가 그대로 있다.</strong> 선택 상태 유실 <strong>0건</strong> · <code>reselection_started</code> 발행</li></ul>
+<p><strong>Scenario 6: 남의 후보를 확정할 수 없다</strong></p>
+<ul><li><strong>Given</strong>: 타인 소유 원본의 <code>candidateIds</code></li><li><strong>When</strong>: 확정을 시도함</li><li><strong>Then</strong>: 거부된다</li></ul>
+<p><strong>Scenario 7 (실패): 편의 기능이 D2를 우회하지 않는다</strong></p>
+<ul><li><strong>Given</strong>: <em>"전체 선택"</em> 버튼 같은 편의 기능 제안</li><li><strong>When</strong>: 요구 정합성을 검토함</li><li><strong>Then</strong>: 🔴 <strong>사용자가 누르는 전체 선택은 허용</strong>된다(명시적 조작이다). <strong>시스템이 미리 선택해두는 것은 불가</strong>하다. <strong>경계는 "누가 눌렀는가"이며 "몇 개인가"가 아니다</strong></li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>자동 확정 차단은 서버에서 강제한다</strong> — UI에서만 막으면 조작된 요청으로 우회된다</li><li>🔴 <strong>선택 상태를 서버에 저장하는 이유는 SC-3.F2다</strong> — 웹에서는 탭 종료로 클라이언트 상태가 사라진다(v2.2 §6.5.3). <strong>선택은 서버에, 렌더는 클라이언트에</strong></li><li>🔺 <strong>선택 상한이 <code>[TBD]</code></strong> — 30개 후보 전부를 선택하면 결과물 길이가 15초를 크게 넘는다. <strong>음악 자동 맞춤(REQ-FUNC-007)이 15초 기준이므로 상한 정의가 필요하다</strong></li><li><code>selection_confirmed</code> 에 <strong>실험군을 담는다</strong> — Q7(후보 개수) 실측의 짝이 되는 이벤트다</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>자동 확정 0건인가?</strong> <em>(서버에서 강제되는가)</em></li><li>[ ] 🔴 <strong>초기 선택 상태가 0개인가?</strong></li><li>[ ] 🔴 <strong>후보 1개일 때도 자동 선택하지 않는가?</strong></li><li>[ ] 다시 고르기 후 <strong>선택 상태 유실 0건</strong>인가?</li><li>[ ] <code>selection_confirmed</code> 에 선택 개수 · 소요 시간 · 실험군이 담기는가?</li><li>[ ] <code>reselection_started</code> 가 발행되는가? <em>(ADR-3 판정 지표)</em></li><li>[ ] 🔺 <strong>선택 상한이 결정되었는가?</strong></li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-004</strong>(Action 계약) · <strong>FR-012</strong>(후보 산출)</li><li><strong>Blocks</strong>: <strong>FR-016</strong>(렌더 · 이탈 대응) · <strong>FE-003</strong> · <strong>TS-002</strong></li><li><strong>연관</strong>: <strong>FR-016</strong>이 이 태스크가 저장한 선택 상태를 복원한다</li></ul>
+<p class="meta">FR-014 선택확정 자동확정차단 · 원본 FR-014_Composer_선택확정-자동확정차단.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

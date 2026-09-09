@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NF-018 영상내미성년자</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (승인 절차)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (게이트 판정)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (게이트 통과)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Gate Task about: 산출물 승인으로 판정하는 배포 게이트 (개발 태스크 아님) title: "[Legal] NF-018: 영상 내 미성년자 산출물 3종 승인" labels: 'legal, gate, blocker, priority:critical, step-4' assignees: ''</p>
+<hr>
+<blockquote><h3 class="bq-h">⚠️ 이것은 개발 태스크가 아니다</h3>
+<p>완료 판정은 <code>gates/minor-subject.gate.json</code> 의 <code>status</code> 가 <code>APPROVED</code> 가 되고 <strong>빌드 검증(NF-011)이 통과</strong>하는 것이다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[NF-018] 영상에 함께 잡힌 미성년자 보호 방침 확정</strong></li><li>목적: <strong>업로더가 성인이어도 피촬영자는 미성년자일 수 있다는 사실을 제도로 다룬다.</strong></li></ul>
+<blockquote><p>🔴 <strong>이 서비스 특유의 위험이다.</strong> 첫 카테고리의 B2B 경로가 정확히 이 문제 위에 있다 — <strong>체육교습업은 법령상 만 13세 미만을 교습 대상</strong>으로 하고 농구는 지정 종목이다. <strong>클럽 파일럿에서 다루는 영상은 대부분 미성년자가 주요 피사체다.</strong></p>
+<p>그리고 이 제품은 그 영상에서 <strong>특정 인물을 추적해 얼굴이 크게 나오도록 구도를 재구성</strong>한 뒤 공개 발행 경로에 올린다. <strong>일반 영상 서비스보다 노출 강도가 높다.</strong></p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-NF-017</strong> — 산출물 3종 · <strong>단계별 적용 범위</strong></li><li><strong>시나리오</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>SC-0.F1</strong> — 동의 미확보 시 비공개 한정</li><li><strong>파일럿 연계</strong>: <code>실행 계획/01_파일럿_실행계획_wizard-of-oz.md</code> §7-1 — 🔴 <strong>이 게이트의 실측 입력원</strong></li><li><strong>접촉 단계 고지</strong>: <code>실행 계획/02_클럽-접촉_문구초안.md</code> §0 원칙 04 · §5</li><li><strong>대상 선정 조건</strong>: <code>실행 계획/01_파일럿_실행계획_wizard-of-oz.md</code> §3-2 — 전원 동의 가능한 반</li><li>미해결: <code>SRS/[SRS]hilit-SRSv1.8.md</code> §6.8 <strong>Q10-b · Q10-c</strong></li></ul>
+<h2 id="h2">✅ Task Breakdown (승인 절차)</h2>
+<ul><li>[ ] <strong>① 적용 대상 판별 기준</strong> — 🔴 <strong>자동 판별인가 신고 기반인가</strong>(Q10-b)</li><li>[ ] <strong>② 동의 확보 절차</strong> — 법정대리인 동의 획득·보관·확인</li><li>[ ] <strong>③ 미확보 시 차단 로직</strong> 명세 — 공개 경로만 닫고 기록 생성은 진행</li><li>[ ] 🔺 <strong>파일럿 산출물 4-b 수령 후 ①③ 확정</strong> — §단계별 적용</li><li>[ ] 법무 검토 및 승인</li><li>[ ] <code>gates/minor-subject.gate.json</code> 등재 및 <code>APPROVED</code> 전환 <em>(CODEOWNERS PR)</em></li></ul>
+<h3 id="h3">🔴 단계별 적용 — 네 항목이 동시에 필요하지 않다</h3>
+<div class="tw"><table><thead><tr><th>단계</th><th style="text-align:center">① 고지</th><th style="text-align:center">② 동의 확보</th><th style="text-align:center">③ 공개 차단</th><th style="text-align:center">④ 게이트</th></tr></thead><tbody><tr><td><strong>클럽 파일럿</strong> (공개 발행 없음)</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">➖</td><td style="text-align:center">➖</td></tr><tr><td>Phase 0~1 (내부 검증)</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">➖</td><td style="text-align:center">➖</td></tr><tr><td><strong>Phase 2~3</strong> (공개 발행 포함)</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td></tr></tbody></table></div>
+<blockquote><p><strong>따라서 이 게이트가 미승인이어도 파일럿과 Phase 0~1은 착수할 수 있다.</strong> 선행 조건은 ①②의 확정뿐이다.</p>
+<p>🔴 <strong>그리고 ③④의 설계 근거는 파일럿에서만 나온다</strong> — 클럽이 이미 보유한 동의의 범위, 동의 거부 발생률, 한 영상에 여러 아동이 혼재할 때의 실제 처리 방식. <strong>셋 다 실측이 필요하며 책상에서 만들 수 없다.</strong></p></blockquote>
+<h2 id="h3">🧪 Acceptance Criteria (게이트 판정)</h2>
+<p><strong>Scenario 1: 동의 미확보 시 공개 경로만 닫힌다</strong> <em>(SC-0.F1)</em></p>
+<ul><li><strong>Given</strong>: 미성년자가 포함된 영상이고 동의가 확보되지 않음</li><li><strong>When</strong>: 전체공개·그룹 공개를 시도함</li><li><strong>Then</strong>: 🔴 <strong>비공개까지만 허용된다.</strong> 동의 미확보 공개 발행 <strong>0건</strong> · <strong>기록 생성은 정상 진행</strong></li></ul>
+<p><strong>Scenario 2: 기록 자체를 막지 않는다</strong> <em>(D4 정합)</em></p>
+<ul><li><strong>Given</strong>: 위와 동일한 상황</li><li><strong>When</strong>: 완성 영상을 저장함</li><li><strong>Then</strong>: <strong>기록이 생성되고 본인은 볼 수 있다.</strong> 🔴 **안전을 이유로 기록을 막으면 <em>"기록이 먼저고 공개가 선택"</em> 이라는 제품 주장이 무너진다**</li></ul>
+<p><strong>Scenario 3: 판별 기준이 실측에 근거한다</strong> <em>(Q10-b)</em></p>
+<ul><li><strong>Given</strong>: 파일럿 산출물 4-b(클럽 보유 동의 범위 · 거부 발생률 · 혼재 영상 처리 실태)</li><li><strong>When</strong>: ① 판별 기준을 작성함</li><li><strong>Then</strong>: <strong>실측 결과를 근거로 자동 판별 / 신고 기반 중 하나가 선택</strong>된다. 추정으로 정하지 않는다</li></ul>
+<p><strong>Scenario 4: 자동 판별을 택하면 그 자체가 얼굴 정보 처리다</strong></p>
+<ul><li><strong>Given</strong>: ①에서 자동 판별을 선택한 경우</li><li><strong>When</strong>: NF-017(얼굴 정보)과 대조함</li><li><strong>Then</strong>: 🔴 <strong>연령 추정도 생체정보 처리이므로 NF-017의 범위가 함께 넓어진다.</strong> 두 게이트를 함께 검토해야 한다</li></ul>
+<p><strong>Scenario 5 (실패): 파일럿 단계에서 ③④를 요구하지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 파일럿은 공개 발행을 하지 않음</li><li><strong>When</strong>: 이 게이트의 승인 여부를 확인함</li><li><strong>Then</strong>: ①② 확정만으로 <strong>파일럿 착수가 가능하다.</strong> ③④ 미승인이 파일럿을 막지 않는다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li><strong>차단 대상</strong>: <code>PUBLIC_PUBLISH</code> · <code>GROUP_PUBLISH</code> <em>(Phase 2~3에서만)</em></li><li>🔴 <strong>차단 방식은 "막는 것"이 아니라 "비공개로 남기는 것"</strong> — D4와 정합</li><li>🔺 <strong>혼재 영상 문제</strong> — 한 영상에 20명이 찍혔는데 한 명이 미동의면 <strong>그 한 명만 지울 방법이 없다.</strong> 구간을 잘라내도 배경에 남는다. <strong>영상 단위 처리</strong>가 현재 결론이다</li><li>법령 근거는 법무가 확정한다 <code>[TBD]</code></li></ul>
+<h2 id="h5">🏁 Definition of Done (게이트 통과)</h2>
+<ul><li>[ ] 산출물 <strong>3종이 전부 존재하고 승인</strong>되었는가?</li><li>[ ] 🔴 <strong>① 판별 기준이 파일럿 실측(산출물 4-b)에 근거하는가?</strong></li><li>[ ] ③ 차단 로직이 <strong>기록 생성은 허용</strong>하고 공개 경로만 닫는가?</li><li>[ ] 🔺 <strong>자동 판별을 택했다면 NF-017의 범위를 함께 갱신했는가?</strong></li><li>[ ] <code>gates/minor-subject.gate.json</code> 이 <code>APPROVED</code> 인가?</li><li>[ ] CODEOWNERS 승인 PR로 전환되었는가?</li><li>[ ] SC-0.F1 테스트(TS-007)가 통과하는가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: ①② 없음 — 🟢 <strong>지금 착수 가능</strong> / ③④는 🔴 <strong>파일럿 8주 산출물 4-b</strong></li><li><strong>Blocks</strong>: <strong>FR-020</strong> 공개 발행 경로 <em>(Phase 2~3)</em> · TS-007</li><li>🔴 <strong>Blocks (별도)</strong>: <strong>클럽 파일럿 0주차</strong> — Q10-c(동의 주체)가 확정돼야 착수 가능</li><li><strong>관련</strong>: <strong>NF-017</strong>과 범위가 겹치지 않는다 — NF-017은 성인 포함 일반 규정, 이 게이트는 <strong>미성년자 가중 요건</strong>이다</li></ul>
+<p class="meta">NF-018 영상내미성년자 · 원본 NF-018_Legal_영상내미성년자.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FR-021 그룹</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ Task Breakdown (실행 계획)</a><a class="lv2" href="#h3">🧪 Acceptance Criteria (BDD/GWT)</a><a class="lv2" href="#h4">⚙️ Technical &amp; Non-Functional Constraints</a><a class="lv2" href="#h5">🏁 Definition of Done (DoD)</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Feature Task about: SRS 기반의 구체적인 개발 태스크 명세 title: "[Command/Query] FR-021: 그룹 — 생성 · 초대 · 이탈 · 구성원 조회" labels: 'backend, command, query, social, priority:high, step-2' assignees: ''</p>
+<hr>
+<blockquote><p>🔀 <strong>FR-022(초대) · FR-023(이탈·회수) · FR-034(구성원 조회)를 흡수했다</strong> <em>(축약 2026-08-30)</em> — <strong>그룹 생명주기 하나</strong>이고 셋이 <strong>인원 상한 검증 경로를 공유</strong>한다. 세 ID는 폐번이며 이 문서를 가리킨다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>기능명: <strong>[FR-021] 승인 없이 만들어지고 20명을 넘지 않으며, 나가면 그 그룹에서만 사라지는 공간</strong></li><li>목적: <strong>팔로우로는 열 수 없는 비공개 공유 경로를 만든다.</strong></li></ul>
+<blockquote><p>🔴 <strong>그룹은 "작은 소셜"이 아니라 "관계와 공개의 분리 장치"다.</strong></p>
+<p>§6.3 규칙 8: <em>"팔로우 관계는 <strong>공개 기록만</strong> 정한다. <strong>비공개 공유는 그룹이 맡는다</strong>."</em></p>
+<p>흔한 소셜 설계에서는 팔로우가 곧 접근 권한이지만, 이 제품에서는 <strong>팔로우해도 그룹 기록에 절대 접근할 수 없어야</strong> 한다(SC-5.5).</p>
+<p>🔴 <strong>초대와 이탈이 각각 어려운 순간을 갖는다.</strong></p>
+<p><strong>초대</strong> — 링크는 아무에게나 보낼 수 있지만 <strong>참여는 가입자만</strong> 한다(규칙 7). 비가입자 흐름이 매끄럽지 않으면 <strong>동호회 단톡방 배포라는 유일한 확산 경로가 막힌다.</strong></p>
+<p><strong>이탈</strong> — 요구사항이 <strong>"회수될 개수를 실제 값으로 경고"</strong> 하라고 못박았다(규칙 6). <em>"일부 기록이 내려갑니다"</em> 는 <strong>요구 위반</strong>이다.</p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 AI Agent &amp; Dev Note: 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-013</strong> — 🔴 <strong>승인 없음 · 상한 20명(생성자 포함) · 초과 시 부분 생성 없이 롤백 · 링크 7일 · 가입자 한정 · 이름 중복 허용 · 회수 개수 경고</strong> <code>[SOURCE]</code></li><li><strong>비즈니스 규칙</strong>: §6.3 <strong>5</strong>(상한) · <strong>6</strong>(회수) · <strong>7</strong>(링크) · <strong>8</strong>(관계와 공개의 분리)</li><li><strong>시나리오</strong>: <strong>SC-5.1</strong>(승인 없이 생성) · <strong>SC-5.2</strong>(3경로 차단) · <strong>SC-5.3</strong>(가입자 한정) · <strong>SC-5.4</strong> · <strong>SC-5.5</strong> · <strong>SC-5.F1</strong>(21번째 거부) · <strong>SC-2.1</strong>(🔴 <strong>필터 p95 ≤ 300ms · 오표시 0건</strong>) · <strong>SC-2.F1</strong>(N개 회수 고지) · <strong>SC-2.F2</strong>(본인 기록 유지)</li><li><strong>SQL 제약</strong>: <code>tasks/CT-001_DB_스키마-제약-인덱스.md</code> — 🔴 <strong>원자 증가 + CHECK · 인덱스</strong></li><li><strong>RLS</strong>: <code>tasks/CT-003_DB_RLS정책.md</code> — 그룹 멤버십 기반 가시성</li><li><strong>성능</strong>: <strong>REQ-NF-005</strong> — 멤버 필터 p95 ≤ 300ms · 그룹 생성 p95 ≤ 500ms</li><li><strong>공유 링크</strong>: <code>tasks/FR-028_Engagement_공유링크.md</code> — 🔴 <strong>만료 30일 · 다른 개념</strong> · <strong>REQ-NF-012</strong>(회수 ≤ 60초)</li><li>화면: REF-13 화면 03</li></ul>
+<h2 id="h2">✅ Task Breakdown (실행 계획)</h2>
+<h3 id="h3">A. 생성</h3>
+<ul><li>[ ] Server Action <strong><code>createGroup({ name })</code></strong> — 승인 절차 없음</li><li>[ ] 🔴 <strong>이름 중복 허용</strong> — UNIQUE 제약을 걸지 않는다</li><li>[ ] 생성자를 <strong>첫 구성원으로 등록</strong> — 상한 20에 포함</li><li>[ ] 🔴 <strong>인원 수 원자 증가 + CHECK 제약</strong> — 애플리케이션 카운트 금지(§제약)</li><li>[ ] 🔴 <strong>초과 시 부분 생성 없이 롤백</strong></li><li>[ ] 계측 — <code>group_created</code> · <code>group_member_added</code></li></ul>
+<h3 id="h3">B. 초대 <em>(← FR-022)</em></h3>
+<ul><li>[ ] Server Action <strong><code>createGroupInvite(groupId)</code></strong> — 🔴 <strong>유효기간 7일</strong></li><li>[ ] Server Action <strong><code>acceptGroupInvite(token)</code></strong></li><li>[ ] 🔴 <strong>미로그인 시 가입·로그인 유도 후 복귀</strong> — 링크를 버리지 않는다</li><li>[ ] 🔴 <strong>참여 시 인원 상한 재검증</strong> — A와 동일 경로</li><li>[ ] 만료·사용된 토큰 · 이미 구성원인 경우 처리</li><li>[ ] 토큰은 추측 불가능하게 — 순번·그룹 ID 노출 금지</li><li>[ ] 계측 — <code>group_invite_created</code> · <code>group_invite_accepted</code> · <code>group_invite_expired</code></li></ul>
+<h3 id="h3">C. 이탈 및 회수 <em>(← FR-023)</em></h3>
+<ul><li>[ ] Query <strong><code>countRecordsToWithdraw(groupId, userId)</code></strong> — 🔴 <strong>회수될 실제 개수</strong></li><li>[ ] Server Action <strong><code>leaveGroup(groupId)</code></strong></li><li>[ ] <strong>그룹 공개 기록의 가시성 회수</strong> — 🔴 <strong>기록을 지우지 않는다</strong></li><li>[ ] 🔴 <strong>본인 기록에는 유지</strong> — 마이페이지에서 그대로</li><li>[ ] <strong>회수된 기록의 공개 범위 처리</strong> — <code>GROUP</code> → 무엇으로 가는가(§제약)</li><li>[ ] 🔴 <strong>그룹 경유 공유 링크 회수</strong> — <strong>반영 지연 ≤ 60초</strong>(REQ-NF-012)</li><li>[ ] 인원 수 원자 감소</li><li>[ ] 계측 — <code>group_left</code>(<strong>회수 개수 포함</strong>)</li></ul>
+<h3 id="h3">D. 구성원 조회 <em>(← FR-034)</em></h3>
+<ul><li>[ ] <strong><code>listGroupMembers(groupId)</code></strong> — RSC 직접 조회 · 🔴 <strong>비구성원 접근 차단</strong></li><li>[ ] <strong>멤버별 기록 필터</strong> — 특정 구성원의 그룹 공개 기록만</li><li>[ ] 🔴 <strong>인덱스 설계</strong> — p95 ≤ 300ms 달성 수단</li><li>[ ] 멤버 검색 — 이름 기준</li><li>[ ] 계측 — <code>group_member_filter_applied</code>(<strong>응답 시간 포함</strong>)</li></ul>
+<h2 id="h3">🧪 Acceptance Criteria (BDD/GWT)</h2>
+<p><strong>Scenario 1: 승인 없이 즉시 만들어진다</strong> <em>(SC-5.1)</em></p>
+<ul><li><strong>Given</strong>: 로그인한 사용자</li><li><strong>When</strong>: 그룹을 생성함</li><li><strong>Then</strong>: <strong>승인 대기 없이 즉시 생성</strong>되고 생성자가 구성원이 된다</li></ul>
+<p><strong>Scenario 2: 이름이 겹쳐도 된다</strong> <em>(REQ-FUNC-013)</em></p>
+<ul><li><strong>Given</strong>: 이미 "수요농구"라는 그룹이 있음</li><li><strong>When</strong>: 같은 이름으로 생성함</li><li><strong>Then</strong>: 🔴 <strong>생성된다.</strong> 동호회 이름은 흔하고 <strong>중복 금지는 사용자에게 아무 이득이 없다</strong></li></ul>
+<p><strong>Scenario 3: 동시 참여가 상한을 넘기지 못한다</strong> <em>(SC-5.F1 · 규칙 5)</em></p>
+<ul><li><strong>Given</strong>: 구성원 19명 그룹에 두 명이 동시에 참여를 시도함</li><li><strong>When</strong>: 두 요청이 동시에 도착함</li><li><strong>Then</strong>: 🔴 <strong>한 명만 성공하고 부분 생성이 남지 않는다.</strong> <strong><code>SELECT count(*)</code> 후 INSERT 하는 구현은 여기서 21명을 만든다</strong></li></ul>
+<p><strong>Scenario 4: 초대 링크가 상한을 우회하지 못한다</strong> <em>(SC-5.F1)</em></p>
+<ul><li><strong>Given</strong>: 구성원 20명 그룹의 <strong>유효한</strong> 초대 링크</li><li><strong>When</strong>: 참여를 시도함</li><li><strong>Then</strong>: 🔴 <strong>거부된다.</strong> 발급 시점에 유효했어도 <strong>참여 시점에 재검증</strong>한다</li></ul>
+<p><strong>Scenario 5: 참여는 가입자만 한다</strong> <em>(SC-5.3 · 규칙 7)</em></p>
+<ul><li><strong>Given</strong>: 비가입자가 초대 링크를 엶</li><li><strong>When</strong>: 참여를 시도함</li><li><strong>Then</strong>: 🔴 <strong>가입·로그인을 거쳐야 참여된다.</strong> 링크 전달 자체는 막지 않는다 — <strong>단톡방이 배포 경로이므로 그것이 정상 흐름</strong>이다</li></ul>
+<p><strong>Scenario 6: 가입 후 원래 초대로 돌아온다</strong></p>
+<ul><li><strong>Given</strong>: 링크를 열었다가 가입 흐름으로 이동함</li><li><strong>When</strong>: 가입을 마침</li><li><strong>Then</strong>: 🔴 <strong>해당 그룹 참여로 이어진다.</strong> 링크를 잃고 처음 화면으로 떨어지면 <strong>확산 경로가 실패한다</strong></li></ul>
+<p><strong>Scenario 7: 7일이 지나면 무효다</strong></p>
+<ul><li><strong>Given</strong>: 발급 후 8일이 지난 링크</li><li><strong>When</strong>: 참여를 시도함</li><li><strong>Then</strong>: 🔴 <strong>거부되고 재발급 안내</strong>가 나온다. <strong>그룹 초대는 7일, 기록 공유 링크는 30일</strong> — 상수를 공유하면 한쪽이 조용히 틀린다</li></ul>
+<p><strong>Scenario 8: 팔로우로는 열리지 않는다</strong> <em>(SC-5.5 · 규칙 8)</em></p>
+<ul><li><strong>Given</strong>: 그룹 구성원을 팔로우하는 비구성원</li><li><strong>When</strong>: 그룹 공개 기록에 접근을 시도함</li><li><strong>Then</strong>: 🔴 <strong>차단된다.</strong> 검색 · 피드 · <strong>직접 URL 세 경로 전부</strong>(SC-5.2). 구성원 명단도 보이지 않는다</li></ul>
+<p><strong>Scenario 9: 나가기 전에 정확한 개수를 본다</strong> <em>(SC-2.F1 · 규칙 6)</em></p>
+<ul><li><strong>Given</strong>: 그 그룹에 7개의 기록을 올린 사용자</li><li><strong>When</strong>: 나가기를 누름</li><li><strong>Then</strong>: 🔴 <strong>"7개"라는 실제 값이 경고에 표시</strong>된다. <em>"일부"</em> 나 근사치("9+")는 <strong>요구 위반</strong>이다</li></ul>
+<p><strong>Scenario 10: 그룹에서만 사라진다</strong> <em>(SC-2.F2 · SC-5.4 · D4)</em></p>
+<ul><li><strong>Given</strong>: 이탈을 완료함</li><li><strong>When</strong>: 마이페이지를 확인함</li><li><strong>Then</strong>: 🔴 <strong>7개가 그대로 있다.</strong> 그룹에서만 내려갔다. <strong>기록이 함께 지워지면 D4가 무너진다</strong></li></ul>
+<p><strong>Scenario 11: 공유 링크가 함께 회수된다</strong> <em>(REQ-NF-012)</em></p>
+<ul><li><strong>Given</strong>: 그룹 공개 기록의 공유 링크가 유통 중</li><li><strong>When</strong>: 이탈함</li><li><strong>Then</strong>: 🔴 <strong>접근이 거부되고 반영 지연 ≤ 60초.</strong> <strong>그룹에서는 내려갔는데 링크로는 보이는 상태가 남으면 회수가 무의미하다</strong></li></ul>
+<p><strong>Scenario 12: 회수된 기록의 범위가 정해진다</strong></p>
+<ul><li><strong>Given</strong>: <code>visibility = GROUP</code> 이던 기록 7개</li><li><strong>When</strong>: 이탈 후 상태를 확인함</li><li><strong>Then</strong>: 🔺 <strong><code>PRIVATE</code> 로 전이하는 것이 D4·ADR-4와 정합적이다.</strong> 🔴 <strong><code>PUBLIC</code> 으로 승격시키는 구현은 명백히 틀리다</strong></li></ul>
+<p><strong>Scenario 13: 멤버 필터가 빠르고 정확하다</strong> <em>(SC-2.1 · REQ-NF-005)</em></p>
+<ul><li><strong>Given</strong>: 기록이 많은 20명 그룹</li><li><strong>When</strong>: 특정 구성원으로 필터함</li><li><strong>Then</strong>: 🔴 <strong>p95 ≤ 300ms · 오표시 0건.</strong> <strong>다른 사람의 기록이 하나라도 섞이면 실패</strong>다 — 이 제품에서 <em>"누구의 영상인가"</em> 는 핵심 정보다</li></ul>
+<p><strong>Scenario 14 (실패): 개인의 비공개 기록이 그룹 필터로 새지 않는다</strong></p>
+<ul><li><strong>Given</strong>: 구성원 A의 <code>private</code> 기록</li><li><strong>When</strong>: 다른 구성원이 A로 필터함</li><li><strong>Then</strong>: 🔴 <strong>보이지 않는다.</strong> <strong>그룹 구성원이라는 사실이 A의 비공개 기록에 대한 권한이 아니다</strong> — 그룹은 <code>visibility = GROUP</code> 인 기록만 연다</li></ul>
+<h2 id="h4">⚙️ Technical &amp; Non-Functional Constraints</h2>
+<ul><li>🔴 <strong>원자 증가 + CHECK가 상한의 최종 방어선</strong> — CT-001의 제약을 사용한다. <strong>애플리케이션 카운트로 대체하면 동시성에서 반드시 뚫린다</strong></li><li>🔴 <strong>20명은 생성자 포함</strong> — 경계값이 19가 아니라 20이다. 오프바이원이 SC-5.F1을 실패시킨다</li><li>🔴 <strong>롤백은 트랜잭션으로</strong> — <em>"부분 생성 없이"</em> 가 요구 문구다</li><li>🔴 <strong>회수는 가시성의 변경이지 삭제가 아니다</strong></li><li>🔴 <strong>7일(초대)과 30일(공유 링크)을 분리</strong> — 상수·테이블·만료 경로를 나눈다</li><li>🔴 <strong>300ms는 인덱스로 달성</strong> — RLS 정책이 걸린 쿼리의 실행 계획을 확인한다. 정책 조건이 인덱스를 못 쓰게 만들면 지킬 수 없다</li><li>🔺 <strong>회수 후 공개 범위가 <code>[TBD]</code></strong> — <code>PRIVATE</code> 전이를 제안하되 확정은 제품 결정</li><li>🔺 <strong>토큰 재사용 정책이 <code>[TBD]</code></strong> — 단톡방 배포를 전제하면 다회용이 자연스럽지만 요구사항에 없다</li><li>🔺 <strong>빈 그룹(마지막 사람 이탈) 처리가 <code>[TBD]</code></strong> · <strong>재참여 시 이전 기록 복원 여부 <code>[TBD]</code></strong></li><li>🔺 <strong>그룹 수 상한 · 1인당 참여 그룹 수 · 관리자/강퇴는 요구사항에 없다</strong> — 임의로 추가하지 않는다</li></ul>
+<h2 id="h5">🏁 Definition of Done (DoD)</h2>
+<ul><li>[ ] 모든 Acceptance Criteria를 충족하는가?</li><li>[ ] 🔴 <strong>동시 참여 시에도 21명이 되지 않는가?</strong> <em>(동시성 테스트)</em></li><li>[ ] 🔴 <strong>초대 링크가 상한 검증을 우회하지 못하는가?</strong></li><li>[ ] 🔴 <strong>비가입자 링크 → 가입 → 그룹 참여 흐름이 끊기지 않는가?</strong></li><li>[ ] 🔴 <strong>이탈 경고에 실제 개수가 표시되는가?</strong></li><li>[ ] 🔴 <strong>이탈 후 본인 마이페이지에 기록이 남는가?</strong></li><li>[ ] 🔴 <strong>공유 링크 회수가 60초 안에 반영되는가?</strong></li><li>[ ] 🔴 <strong>멤버 필터 p95 ≤ 300ms · 오표시 0건인가?</strong> <em>(실행 계획 확인)</em></li><li>[ ] 팔로우 관계로 3경로 전부 차단되는가? <em>(SC-5.2)</em></li><li>[ ] 이름 중복 오류를 만들지 않았는가?</li><li>[ ] 🔺 <strong>회수 후 공개 범위 · 빈 그룹 · 토큰 재사용이 결정되었는가?</strong></li><li>[ ] TypeScript strict · ESLint 경고 0건인가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: <strong>CT-001</strong>(원자 증가 + CHECK · 인덱스) · <strong>CT-003</strong>(RLS) · <strong>FR-028</strong>(공유 링크 — 회수 대상)</li><li><strong>Blocks</strong>: <strong>FE-008</strong> · <strong>TS-002</strong> · <strong>TS-002</strong> · <strong>TS-007</strong></li><li>🔴 <strong>확산 경로</strong>: 초대 흐름이 이 제품의 유일한 유기적 확산 수단이다</li><li>🔴 <strong>혼동 주의</strong>: <strong>FR-028</strong>(공유 링크 30일)은 별개 개념이다</li></ul>
+<p class="meta">FR-021 그룹 · 원본 FR-021_Social_그룹.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>

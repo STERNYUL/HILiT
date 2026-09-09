@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UX-002 편집플로우</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#1b1a18; --muted:#6b6862; --line:#e3e0da;
+  --accent:#c2410c; --accent-soft:#fdf0e9; --ok:#15803d; --warn:#b45309; --crit:#b91c1c;
+  --code-bg:#f5f3ef; --shadow:0 1px 2px rgba(20,18,15,.05), 0 8px 24px rgba(20,18,15,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+    --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+    --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1c1b19; --ink:#eae7e1; --muted:#9b968d; --line:#302e2a;
+  --accent:#fb923c; --accent-soft:#2a1c12; --ok:#4ade80; --warn:#fbbf24; --crit:#f87171;
+  --code-bg:#211f1c; --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr);max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:1000px){.wrap{grid-template-columns:250px minmax(0,1fr);gap:44px;padding:0 32px}}
+nav{display:none}
+@media(min-width:1000px){
+  nav{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:44px 0 44px;font-size:13px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:4px 10px;border-left:2px solid transparent;line-height:1.45}
+  nav a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+  nav a.lv1{font-weight:700;color:var(--ink);margin-top:14px}
+  nav a.lv2{padding-left:20px}
+}
+main{padding:44px 0 100px;min-width:0}
+h1,h2,h3,h4,h5,h6{line-height:1.3;text-wrap:balance;margin:2.2em 0 .7em;font-weight:700}
+h1{font-size:2.05rem;margin-top:0;letter-spacing:-.02em}
+h2{font-size:1.5rem;padding-bottom:.35em;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+h3{font-size:1.18rem;color:var(--accent)}
+h4{font-size:1.02rem}
+p{margin:.85em 0}
+a{color:var(--accent)}
+hr{border:0;border-top:1px solid var(--line);margin:2.6em 0}
+ul,ol{padding-left:1.35em;margin:.85em 0}
+li{margin:.3em 0}
+code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.87em;background:var(--code-bg);padding:.14em .42em;border-radius:4px;
+  border:1px solid var(--line);white-space:nowrap}
+pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;overflow-x:auto;margin:1.3em 0;box-shadow:var(--shadow)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:.84rem;line-height:1.6}
+.tw{overflow-x:auto;margin:1.3em 0;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;font-size:.85rem;
+  letter-spacing:.01em;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--accent-soft)}
+td code,th code{white-space:nowrap}
+blockquote{margin:1.4em 0;padding:14px 20px;background:var(--surface);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;box-shadow:var(--shadow)}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+blockquote .bq-h{margin:.2em 0 .5em;font-size:1rem;color:var(--accent);border:0;padding:0}
+blockquote .tw{box-shadow:none}
+pre.mermaid{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:20px;margin:1.5em 0;overflow-x:auto;text-align:center;box-shadow:var(--shadow)}
+.meta{color:var(--muted);font-size:.82rem;margin:2em 0 0;padding-top:1.2em;border-top:1px solid var(--line)}
+</style>
+</head><body>
+<div class="wrap">
+<nav><a class="lv2" href="#h0">🎯 Summary</a><a class="lv2" href="#h1">🔗 References (Spec &amp; Context)</a><a class="lv2" href="#h2">✅ 산출물 (설계 항목)</a><a class="lv2" href="#h3">🧪 설계 인수 기준</a><a class="lv2" href="#h4">⚙️ 설계 제약</a><a class="lv2" href="#h5">🏁 Definition of Done</a><a class="lv2" href="#h6">🚧 Dependencies &amp; Blockers</a></nav>
+<main>
+<hr>
+<p>name: Design Task about: 화면 구조·상태·흐름 설계 (구현 태스크 아님) title: "[UX] UX-002: 편집 플로우 설계 (원본 선택 → 후보 선택 → 구도 확인 → 음악)" labels: 'design, ux, priority:high' assignees: ''</p>
+<hr>
+<blockquote><p>🔀 <strong>UX-003(후보 목록) · UX-004(구도 보정) · UX-005(음악)를 흡수했다</strong> <em>(축약 2026-08-30)</em> — <strong>5단계 마법사 하나</strong>이고 <strong>화면 간 상태 연결이 설계의 본체</strong>다. 세 ID는 폐번이며 이 문서를 가리킨다.</p>
+<h3 class="bq-h">🎨 이것은 구현 태스크가 아니다</h3>
+<p>산출물은 화면 설계이며 구현은 <strong>FE-002 · FE-003 · FE-004</strong>가 받는다.</p></blockquote>
+<h2 id="h0">🎯 Summary</h2>
+<ul><li>플로우명: <strong>[UX-002] 편집 — 이미 찍은 영상에서 15초를 뽑아내기까지</strong></li><li>목적: <strong>"긴 영상을 뒤지지 않게 한다"는 약속이 이 플로우에서 지켜지거나 무너진다.</strong></li></ul>
+<blockquote><p>🔴 <strong>§3의 이탈 분석이 이 플로우를 직접 지목했다</strong> — <em>"④ 편집: 30분 초과 시 포기"</em> · <em>"지하철에서 한 손으로 30개는 많다"</em>.</p>
+<p><strong>탐지가 아무리 정확해도 고르는 일이 힘들면 2차 이탈이 그대로 재현된다.</strong> 원본을 뒤지는 대신 목록을 뒤지게 된 것뿐이다.</p></blockquote>
+<h2 id="h1">🔗 References (Spec &amp; Context)</h2>
+<blockquote><p>💡 작업 시작 전 아래 문서를 반드시 먼저 Read/Evaluate 할 것.</p></blockquote>
+<ul><li><strong>요구사항</strong>: <code>SRS/[SRS]hilit-SRSv1.8.md</code> <strong>REQ-FUNC-001</strong>(🔴 <strong>OS 갤러리 그대로</strong>) · <strong>004</strong>(약 30개 · 타임코드 · 온전도 우선) · <strong>005</strong>(🔴 <strong>자동 확정 금지 · 100% 전부에 선택·제외</strong>) · <strong>006</strong>(중앙·확대 · <strong>주관 평가 5점</strong>) · <strong>007</strong>(5갈래 500곡 · 15초 자동 맞춤 · 🔴 <strong>외부 반입 금지</strong>)</li><li><strong>제약</strong>: §1.5.1 <strong>C3</strong> — 사용자 음원 반입 금지</li><li><strong>이탈 분석</strong>: §3 — 🔴 <strong>④ 편집 2차 이탈</strong></li><li><strong>가정·미해결</strong>: §1.5 <strong>A3</strong> · §6.8 <strong>Q7</strong>(후보 개수) · <strong>Q16</strong>(음악 배분) · <strong>Q17</strong>(🔴 <strong>무음 소비 비율</strong>)</li><li><strong>실패 시나리오</strong>: <strong>SC-1.F1</strong>(코덱) · <strong>SC-1.F2</strong>(0건) · <strong>SC-1.F3</strong>(중단) · <strong>SC-1.F6</strong>(🔴 <strong>제외로 부족</strong>) · <strong>SC-3.1</strong>(<em>"잘 잡혔다" ≥ 80%</em>) · <strong>SC-3.2</strong>(<strong>재업로드 0건</strong>) · <strong>SC-3.F2</strong>(🔴 <strong>다시 고르기 · 선택 보존</strong>)</li><li><strong>설계 결정</strong>: <strong>ADR-3</strong> · <strong>TC-ADR-03</strong> — 🔴 <strong><code>reselection_started</code> 가 판정 지표</strong></li><li><strong>성능</strong>: <strong>REQ-NF-002</strong>(업로드 p95 ≤ 6분) · <strong>REQ-NF-005</strong>(후보 렌더 p95 ≤ 1초)</li><li><strong>업로드 설계</strong>: <code>SRS/[SRS]hilit-SRSv2.0-nextjs.md</code> §5.3 · <strong>UI 구성</strong>: §6 · <strong>자동재생</strong>: §6.5.1</li><li><strong>게이트</strong>: <code>tasks/NF-016_Legal_음원라이선스.md</code> — 🔴 <strong>미승인 시 음악 단계가 빌드에서 제외</strong></li><li><strong>프로토타입</strong>: <strong>REF-13</strong> 화면 06 · 화면 10</li></ul>
+<h2 id="h2">✅ 산출물 (설계 항목)</h2>
+<h3 id="h3">1단계 — 원본 선택 <em>(← UX-002 원안)</em></h3>
+<ul><li>[ ] <strong>OS 갤러리 호출 흐름</strong> — 🔴 <strong>앱 내 목록을 만들지 않는다</strong></li><li>[ ] 선택 후 <strong>확인 화면</strong> — 무엇을 고르는지 · 재생 시간</li><li>[ ] 🔴 <strong>코덱 거부 화면</strong> — SC-1.F1 · <strong>변환 방법 안내 포함</strong></li><li>[ ] <strong>업로드 진행 상태</strong> — 4GB가 몇 분 걸린다는 것을 알린다</li><li>[ ] 🔴 <strong>중단·재개 상태</strong> — SC-1.F3. <strong>처음부터 다시가 아님을 보여준다</strong></li><li>[ ] 이탈 가능 여부 안내 · 취소 경로</li></ul>
+<h3 id="h3">2단계 — 후보 선택 <em>(← UX-003)</em></h3>
+<ul><li>[ ] <strong>후보 카드</strong> — 썸네일 · 시작·종료 타임코드 · 선택 상태</li><li>[ ] 🔴 <strong>초기 선택 0개</strong> — 미리 체크된 항목이 없다</li><li>[ ] <strong>한 손 조작 설계</strong> — 엄지 도달 범위 안에 선택 조작</li><li>[ ] 🔴 <strong>개수 가변 대응</strong> — 15 / 30 / 50 전부에서 성립하는 레이아웃</li><li>[ ] <strong>온전도 순 배열이 드러나게</strong></li><li>[ ] 🔴 <strong>SC-1.F6 사유 안내</strong> · <strong>SC-1.F2 0건 화면</strong>(원인 + 재지정)</li><li>[ ] 선택 개수 표시 · 확정 버튼 · 로딩 상태</li></ul>
+<h3 id="h3">3단계 — 구도 확인 <em>(← UX-004)</em></h3>
+<ul><li>[ ] <strong>보정 결과 재생 화면</strong> — 세로 숏폼</li><li>[ ] 🔺 <strong>원본과의 비교 방식</strong> — 나란히 / 전환 / 없음 중 선택(§제약)</li><li>[ ] 🔴 <strong>"다시 고르기" 진입점</strong> — <strong>눈에 띄되 기본 경로는 아니게</strong></li><li>[ ] <strong>주관 평가 5점 척도</strong> — 🔴 <strong>SC-3.1의 측정 도구</strong> · 건너뛸 수 있게</li><li>[ ] 다시 고르기 후 <strong>선택 상태가 보존됨을 보여주는 화면</strong></li><li>[ ] 처리 대기 상태</li></ul>
+<h3 id="h3">4단계 — 음악 <em>(← UX-005)</em></h3>
+<ul><li>[ ] <strong>5갈래 카테고리</strong> — 감성 · 여행 · 일상 · 운동 · 추억</li><li>[ ] 곡 목록 · <strong>미리듣기</strong> — 🔴 <strong>무음 환경 안내 포함</strong></li><li>[ ] 🔴 <strong>건너뛰기 경로</strong> — 눈에 잘 띄게</li><li>[ ] 선택 곡의 <strong>15초 적용 결과 확인</strong></li><li>[ ] 🔴 <strong>외부 반입 경로 없음</strong>(C3) · 🔺 <strong>곡 수 가변 대응</strong>(Q16)</li><li>[ ] 🔴 <strong>게이트 미승인 시 이 단계 자체가 없는 흐름</strong></li></ul>
+<h3 id="h3">플로우 공통</h3>
+<ul><li>[ ] 🔴 <strong>단계 간 상태 연결</strong> — 뒤로 가기 · 이탈 후 복귀 시 어디로 돌아오는가</li><li>[ ] 진행 위치 표시 — 5단계 중 몇 번째인가</li></ul>
+<h2 id="h3">🧪 설계 인수 기준</h2>
+<p><strong>항목 1: 앱이 갤러리를 만들지 않는다</strong> <em>(REQ-FUNC-001)</em></p>
+<ul><li>🔴 <strong>OS 갤러리로 넘어간다.</strong> 자체 그리드·날짜 그룹핑 화면을 설계하지 않는다</li></ul>
+<p><strong>항목 2: 코덱 거부가 막다른 길이 아니다</strong> <em>(SC-1.F1)</em></p>
+<ul><li>🔴 <strong>"지원하지 않습니다"로 끝나지 않는다.</strong> <strong>어떻게 변환하면 되는지</strong>가 화면에 있다. 없으면 사용자는 여기서 이탈하고 다시 오지 않는다</li></ul>
+<p><strong>항목 3: 재개가 재시작으로 보이지 않는다</strong> <em>(SC-1.F3)</em></p>
+<ul><li>🔴 <strong>"이어서 올리는 중"임이 드러난다.</strong> 진행률이 0%로 돌아간 것처럼 보이면 <strong>재개 성공률 99%가 무의미</strong>하다</li></ul>
+<p><strong>항목 4: 아무것도 선택되어 있지 않다</strong> <em>(REQ-FUNC-005)</em></p>
+<ul><li>🔴 <strong>초기 상태 0개.</strong> <em>"추천 5개 미리 체크"</em> 는 <strong>자동 확정과 사실상 같다</strong> — 사용자가 그대로 확정하면 시스템이 고른 것이 된다</li></ul>
+<p><strong>항목 5: 한 손으로 30개를 넘길 수 있다</strong> <em>(§3 이탈 분석)</em></p>
+<ul><li>🔴 <strong>엄지 도달 범위</strong> 안에서 스크롤과 선택이 모두 가능하다. 상단에만 조작이 있으면 이 화면에서 이탈이 발생한다</li></ul>
+<p><strong>항목 6: 개수가 바뀌어도 무너지지 않는다</strong> <em>(A3 · Q7)</em></p>
+<ul><li>15개일 때 허전하지 않고, 50개일 때 지치지 않는다. 🔴 <strong>개수는 실측으로 정해질 값이므로 설계가 특정 숫자에 의존하면 안 된다</strong></li></ul>
+<p><strong>항목 7: 후보가 적을 때 이유가 있다</strong> <em>(SC-1.F6)</em></p>
+<ul><li>🔴 <strong>"2개뿐"이 아니라 "28개는 확신이 낮아 제외했다"</strong>가 전달된다. <strong>이유 없이 짧은 목록은 탐지 실패로 읽힌다</strong></li></ul>
+<p><strong>항목 8: "잘 잡혔다"를 물어보고, 그것이 흐름을 막지 않는다</strong> <em>(SC-3.1)</em></p>
+<ul><li>🔴 <strong>5점 척도가 화면에 있고 건너뛸 수 있다.</strong> 묻지 않으면 SC-3.1의 80%를 측정할 방법이 없고, 강제하면 완주율이 떨어진다</li></ul>
+<p><strong>항목 9: 다시 고르기가 손실로 보이지 않는다</strong> <em>(SC-3.F2 · ADR-3)</em></p>
+<ul><li>🔴 <strong>"기존 선택이 남아 있다"가 전달</strong>된다. 처음부터 다시라고 느끼면 <strong>아무도 누르지 않고 ADR-3 판정 데이터가 0이 된다</strong></li><li>🔺 <strong>시각적 무게 조절</strong> — 너무 숨기면 데이터가 안 모이고, 너무 강조하면 <strong>재선택률이 인위적으로 올라 판정이 오염</strong>된다</li></ul>
+<p><strong>항목 10: 세션 내 재업로드가 0건이다</strong> <em>(SC-3.2)</em></p>
+<ul><li>🔴 <strong>재업로드 시도가 나온다는 것은 이 플로우가 "다시 고르기"를 전달하지 못했다는 뜻</strong>이다</li></ul>
+<p><strong>항목 11: 음악을 건너뛰기 쉽고, 500곡을 다 보게 하지 않는다</strong></p>
+<ul><li>🔴 <strong>곡을 고르지 않고 넘어가는 길이 명확</strong>하다. 🔺 <strong>500곡을 스크롤하게 만들면 여기가 새로운 이탈 지점</strong>이 된다</li></ul>
+<p><strong>항목 12: 반입 경로가 없다</strong> <em>(C3)</em></p>
+<ul><li>🔴 <strong>"내 음악 추가" 같은 입구를 설계하지 않는다.</strong> 사용자 요청이 있어도 <strong>저작권 리스크가 사용자 경유로 들어온다</strong></li></ul>
+<p><strong>항목 13: 음악 단계가 없어도 흐름이 이어진다</strong> <em>(NF-016)</em></p>
+<ul><li>🔴 <strong>게이트 미승인 시 화면이 통째로 없다.</strong> 그때 <strong>선택 확정 → 렌더</strong> 로 자연스럽게 이어지는 흐름이 설계에 있어야 한다</li></ul>
+<p><strong>항목 14 (경계): 편집 기능을 늘리지 않는다</strong></p>
+<ul><li>🔴 <strong>원본 자르기·회전, 후보 구간 직접 조정, 수동 구도 조정은 요구사항에 없다.</strong> 넣는 순간 <em>"30분 넘는 편집"</em> 이라는 이탈 지점을 되살린다</li></ul>
+<h2 id="h4">⚙️ 설계 제약</h2>
+<ul><li>🔴 <strong>선택은 명시적 조작이어야 한다</strong> — 사용자가 누르는 "전체 선택"은 허용, 시스템이 미리 고르는 것은 불가</li><li>🔴 <strong>저신뢰 후보는 목록에 없다</strong>(REQ-FUNC-027) — <strong>저신뢰 배지를 설계하지 않는다.</strong> 제외된 것은 존재하지 않는다</li><li>🔴 <strong>코덱 판정은 선택 직후 · 전송 전</strong> — 흐름이 이 순서를 따라야 SC-1.F1의 <em>"GPU 작업 0건"</em> 이 성립한다</li><li>🔴 <strong><code>reselection_started</code> 가 발행되어야 한다</strong> — ADR-3의 유일한 판정 경로다</li><li>🔺 <strong>지원 코덱 목록 <code>[TBD]</code></strong>(SP-3 후) — 거부 문구가 목록에 종속되지 않게 설계</li><li>🔺 <strong>웹 파일 선택은 네이티브 갤러리 피커와 다르다</strong> — <em>"날짜별 썸네일과 재생 시간"</em> 은 브라우저·OS가 제공하는 범위 안에서만 가능</li><li>🔺 <strong>가상 스크롤이 전제</strong> — 50개 + 썸네일에서 p95 ≤ 1초를 지키려면 필요</li><li>🔺 <strong>비교 UI가 요구사항에 없다</strong> — 임의로 넣지 말고 결정을 요청한다</li><li>🔺 <strong>15초 자동 맞춤 규칙 <code>[TBD]</code></strong> — 설계가 특정 규칙을 전제하지 않게</li><li>🔺 <strong>Q17의 결과가 음악 단계의 가치를 바꾼다</strong> — 무음 소비가 지배적이면 과투자를 피한다</li></ul>
+<h2 id="h5">🏁 Definition of Done</h2>
+<blockquote><p>🔴 <strong>단계별 부분 승인을 허용한다.</strong> 이 태스크는 <strong>FE-002 · FE-003 · FE-004 셋을 동시에 막으므로</strong>, 전량 완료를 기다리면 <strong>디자인이 프론트 전체의 임계 경로가 된다.</strong></p>
+<div class="tw"><table><thead><tr><th>부분 승인</th><th>해제되는 것</th></tr></thead><tbody><tr><td><strong>1단계</strong>(원본 선택) 승인</td><td>🟢 <strong>FE-002 착수 가능</strong></td></tr><tr><td><strong>2단계</strong>(후보 선택) 승인</td><td>🟢 <strong>FE-003 착수 가능</strong></td></tr><tr><td><strong>3·4단계</strong>(구도·음악) 승인</td><td>🟢 <strong>FE-004 착수 가능</strong></td></tr></tbody></table></div>
+<p>🔺 <strong>단, "플로우 공통" 항목(단계 간 상태 연결 · 진행 위치 표시)은 전량 승인 시점에 확정</strong>한다 — 단계별로 정하면 뒤로 가기 동작이 어긋난다.</p></blockquote>
+<ul><li>[ ] 4단계 산출물과 플로우 공통 항목이 전부 정의되었는가?</li><li>[ ] 🔴 <strong>자체 갤러리 화면을 만들지 않았는가?</strong></li><li>[ ] 🔴 <strong>코덱 거부 화면에 변환 안내가 있는가?</strong></li><li>[ ] 🔴 <strong>초기 선택이 0개이고 저신뢰 배지가 없는가?</strong></li><li>[ ] 🔴 <strong>15/30/50 전부에서 레이아웃이 성립하는가?</strong></li><li>[ ] 🔴 <strong>다시 고르기가 손실이 아님을 전달하는가?</strong></li><li>[ ] 🔴 <strong>외부 음원 반입 경로를 설계하지 않았는가?</strong></li><li>[ ] 🔴 <strong>음악 단계가 없을 때의 흐름이 설계되었는가?</strong></li><li>[ ] 한 손 조작 범위가 검증되었는가?</li><li>[ ] SC-1.F6 · SC-1.F2 화면이 있는가?</li><li>[ ] 5점 척도가 있고 건너뛸 수 있는가?</li><li>[ ] 🔴 <strong>편집 기능(자르기·구간 조정·수동 구도)이 없는가?</strong> <em>(범위 준수)</em></li><li>[ ] 🔺 <strong>비교 방식이 결정되었는가?</strong></li><li>[ ] FE-002 · FE-003 · FE-004가 추가 질문 없이 구현할 수 있는가?</li></ul>
+<h2 id="h6">🚧 Dependencies &amp; Blockers</h2>
+<ul><li><strong>Depends on</strong>: 🟢 <strong>없음 — 지금 착수 가능</strong> · 백엔드 계약과 무관</li><li><strong>Blocks</strong>: <strong>FE-002</strong> · <strong>FE-003</strong> · <strong>FE-004</strong></li><li>🔴 <strong>ADR-3 판정 경로</strong>: 3단계의 다시 고르기가 없으면 저해상도 1차 처리 결정을 검증할 수 없다</li><li>🔺 <strong>재검토 유발</strong>: <strong>Q7</strong>(후보 개수) · <strong>Q16</strong>(음악 배분) · <strong>Q17</strong>(무음 소비)</li></ul>
+<p class="meta">UX-002 편집플로우 · 원본 UX-002_Editing_편집플로우.md · 이 HTML은 마크다운 원본에서 자동 변환되었습니다.</p>
+</main>
+</div>
+
+</body></html>
