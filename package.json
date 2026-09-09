@@ -1,0 +1,59 @@
+{
+  "name": "hilit",
+  "version": "0.1.0",
+  "description": "HILiT — SNS 기반 숏폼 스포츠 영상 서비스",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:format": "prisma format",
+    "db:validate": "prisma validate",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset --force",
+    "db:diff": "prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:verify": "tsx scripts/verify-schema.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STERNYUL/HILiT.git"
+  },
+  "bugs": {
+    "url": "https://github.com/STERNYUL/HILiT/issues"
+  },
+  "homepage": "https://github.com/STERNYUL/HILiT#readme",
+  "private": true,
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.6",
+    "@types/node": "^26.4.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.3",
+    "jsdom": "^30.0.1",
+    "postcss": "^8.5.26",
+    "prisma": "^8.0.0-rc.12",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "next": "^16.3.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  }
+}

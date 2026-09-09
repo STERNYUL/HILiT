@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+/* HILiT 셸 토큰 — 숏폼 소비 화면이므로 어두운 바탕을 기본으로 둔다 */
+@theme {
+  --color-shell-bg: #0b0d10;
+  --color-shell-surface: #14181d;
+  --color-shell-line: #262c34;
+  --color-shell-text: #f2f4f7;
+  --color-shell-muted: #98a2b3;
+  --color-shell-accent: #ff6b3d;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-shell-bg);
+  color: var(--color-shell-text);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
